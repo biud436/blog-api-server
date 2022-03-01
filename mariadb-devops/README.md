@@ -13,7 +13,7 @@ MYSQL_USER=admin
 MYSQL_PASSWORD=1234
 ```
 
-and then next you have to run `docker-compose up --build -d` after chaning the password of admin user. if you wish to see tables such as `mysql` and `performance_schema` in the mariadb-server, you connect a database docker container as bash, as follows.
+and then next you have to run `docker-compose up --build -d` after chaning the password of admin user. if you wish to see tables such as `mysql` and `performance_schema` in the mariadb-server, you connect a database docker container via bash, as follows.
 
 ```bash
 sudo docker ps -al
