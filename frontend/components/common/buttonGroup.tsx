@@ -1,5 +1,5 @@
 import { useRecoilState } from "recoil";
-import { authState } from "../../recoil/atoms/auth";
+import { authState } from "../../recoil/auth";
 
 export const buttomMaker = {
     beforeLoginButtonGroup() {

@@ -1,4 +1,4 @@
-import { atom } from "recoil";
+import { atom, selector } from "recoil";
 
 export const authState = atom({
     key: "authState",
@@ -10,4 +10,9 @@ export const authState = atom({
             username: "",
         },
     },
+});
+
+export const isLoggedIn = selector({
+    key: "isLoggedIn",
+    get: ({ get }) => get(authState).isLoggedIn,
 });

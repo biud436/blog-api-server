@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useRecoilState } from "recoil";
-import { authState } from "../../recoil/atoms/auth";
+import { authState } from "../../recoil/auth";
 
 export default function LoginForm() {
     const [user, setUser] = useRecoilState(authState);

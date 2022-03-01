@@ -5,8 +5,8 @@ import utilStyles from "../styles/utils.module.css";
 import Link from "next/link";
 import Navigation from "./common/navigation";
 import { useRecoilState } from "recoil";
-import { authState } from "../recoil/atoms/auth";
-import { isLoggedIn } from "../recoil/selectors/auth";
+import { authState } from "../recoil/auth";
+import { isLoggedIn } from "../recoil/auth";
 import { buttomMaker as buttonFactory } from "./common/buttonGroup";
 
 export const siteTitle = "블로그";
