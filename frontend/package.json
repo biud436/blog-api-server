@@ -1,0 +1,33 @@
+{
+    "private": true,
+    "scripts": {
+        "dev": "next dev -p 8080",
+        "build": "next build",
+        "start": "next start -p 8080"
+    },
+    "dependencies": {
+        "add": "^2.0.6",
+        "axios": "^0.26.0",
+        "date-fns": "^2.11.1",
+        "dotenv-webpack": "^7.1.0",
+        "gray-matter": "^4.0.2",
+        "next": "latest",
+        "next-transpile-modules": "^9.0.0",
+        "react": "17.0.2",
+        "react-dom": "17.0.2",
+        "recoil": "^0.6.1",
+        "remark": "^14.0.1",
+        "remark-html": "^15.0.0",
+        "swr": "^1.2.2",
+        "yarn": "^1.22.17"
+    },
+    "devDependencies": {
+        "@types/node": "^16.3.3",
+        "@types/react": "^17.0.14",
+        "autoprefixer": "^10.4.2",
+        "postcss": "^8.4.7",
+        "sass": "^1.49.9",
+        "tailwindcss": "^3.0.23",
+        "typescript": "^4.3.5"
+    }
+}

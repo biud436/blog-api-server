@@ -1,0 +1,43 @@
+version: "3"
+x-logging: &default-logging
+    options:
+        max-size: "1m"
+        max-file: "3"
+    driver: "json-file"
+
+services:
+    api-server:
+        container_name: api-server
+        image: api-server:latest
+        restart: always
+        build:
+            dockerfile: Dockerfile
+            context: ../backend
+        links:
+            - redis
+        expose:
+            - 3000
+        volumes:
+            - ../upload:/usr/src/app/upload
+        logging: *default-logging
+    redis:
+        image: redis
+        restart: always
+        ports:
+            - "6379:6379"
+        volumes:
+            - ./data:/data
+    proxy:
+        container_name: nginx_proxy
+        restart: always
+        image: nginx_proxy
+        build:
+            dockerfile: Dockerfile
+            context: ./reverse-proxy
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./certbot/conf:/etc/nginx/ssl
+            - ./certbot/data:/var/www/certbot
+        logging: *default-logging
