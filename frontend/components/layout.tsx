@@ -5,11 +5,10 @@ import utilStyles from "../styles/utils.module.css";
 import Link from "next/link";
 import Navigation from "./common/navigation";
 import { useRecoilState } from "recoil";
-import { authState } from "../atoms/auth";
-import { isLoggedIn } from "../selectors/auth";
+import { authState } from "../recoil/atoms/auth";
+import { isLoggedIn } from "../recoil/selectors/auth";
 import { buttomMaker as buttonFactory } from "./common/buttonGroup";
 
-const name = "[Your Name]";
 export const siteTitle = "블로그";
 
 export type ReactLayoutProps = {
