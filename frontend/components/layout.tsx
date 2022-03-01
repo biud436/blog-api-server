@@ -4,6 +4,8 @@ import styles from "./layout.module.css";
 import utilStyles from "../styles/utils.module.css";
 import Link from "next/link";
 import Navigation from "./common/navigation";
+import { useRecoilState } from "recoil";
+import { authState } from "../atoms/auth";
 
 const name = "[Your Name]";
 export const siteTitle = "블로그";
@@ -14,6 +16,8 @@ export type ReactLayoutProps = {
 };
 
 export default function Layout({ children, home }: ReactLayoutProps) {
+    const [user, setUser] = useRecoilState(authState);
+
     return (
         <div className={styles.container}>
             <Head>
@@ -33,9 +37,15 @@ export default function Layout({ children, home }: ReactLayoutProps) {
             </Head>
             <header>
                 <Navigation>
-                    <div className="flex-1 text-right">
-                        <span>로그인</span>
-                    </div>
+                    {user.isLoggedIn ? (
+                        <div className="flex-1 text-right">
+                            <span className="pr-2">글 작성</span>
+                        </div>
+                    ) : (
+                        <div className="flex-1 text-right">
+                            <span className="pr-2">로그인</span>
+                        </div>
+                    )}
                 </Navigation>
             </header>
             <main>{children}</main>
