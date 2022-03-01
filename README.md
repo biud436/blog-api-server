@@ -17,7 +17,7 @@
 
 ## 개발 환경 구축
 
-`devops` 폴더에는 `Docker` 기반 개발 환경 구축을 위한 파일들이 있습니다.
+`devops`와 `rdb-devops` 폴더에는 `Docker` 기반 개발 환경 구축을 위한 파일들이 있습니다.
 
 -   Nginx
 -   Docker
