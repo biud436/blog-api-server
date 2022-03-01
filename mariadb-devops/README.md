@@ -2,7 +2,7 @@
 
 ## 구성 방법
 
-You must create a file named `.env` for setting database connection in here.
+You must create a file named `.env` for setting database connection.
 
 ```bash
 MYSQL_HOST=localhost
@@ -13,7 +13,7 @@ MYSQL_USER=admin
 MYSQL_PASSWORD=1234
 ```
 
-and then next you have to run `docker-compose up build -d` after chaning the password of admin user. if you wish to see tables such as `mysql` and `performance_schema` in the mariadb-server, you connect a database docker container as bash, as follows.
+and then next you have to run `docker-compose up --build -d` after chaning the password of admin user. if you wish to see tables such as `mysql` and `performance_schema` in the mariadb-server, you connect a database docker container as bash, as follows.
 
 ```bash
 sudo docker ps -al
