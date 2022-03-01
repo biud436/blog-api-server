@@ -40,7 +40,7 @@ export default function Post({ postData }: PostDataProp) {
                         댓글 <span className="text-red-600 px-1">1</span>개{" "}
                     </div>
                     <div className="p-2 mt-4">
-                        <div className="border rounded p-2 m-1 w-32 bg-[rgba(255,255,255,0.5)]">
+                        <div className="border rounded p-2 m-1 w-32 bg-[rgba(255,255,255,0.5)] text-center">
                             댓글 작성자
                         </div>
                         <div className="border rounded p-2 m-1 bg-[rgba(255,255,255,0.5)]">
