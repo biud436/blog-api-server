@@ -19,7 +19,7 @@ export const buttomMaker = {
         );
     },
 
-    getButtonGroup() {
+    build() {
         const [user, setUser] = useRecoilState(authState);
 
         return user.isLoggedIn
