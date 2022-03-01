@@ -30,7 +30,6 @@ export default function Post({ postData }: PostDataProp) {
                     <Date dateString={postData.date} />
                 </div>
                 <div
-                    className="text-sm border rounded p-2 mt-4"
                     dangerouslySetInnerHTML={{ __html: postData.contentHtml }}
                 />
             </article>
@@ -49,16 +48,16 @@ export default function Post({ postData }: PostDataProp) {
                         </div>
                     </div>
                 </div>
-                <div className="mt-2 text-right">
+                <div className="mt-2 text-right m-2">
                     <span className="hover:underline cursor-pointer border rounded p-2 bg-[rgba(255,255,255,0.5)]">
                         댓글 쓰기
                     </span>
                 </div>
             </section>
-            <section className="text-right m-2 p-2">
+            <section className="text-left m-2 p-2">
                 <Link href="/">
                     <a className="hover:underline border rounded p-2 w-32 text-black">
-                        포스트 목록 보기
+                        목록
                     </a>
                 </Link>
             </section>
