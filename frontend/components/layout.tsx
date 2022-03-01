@@ -7,7 +7,7 @@ import Navigation from "./common/navigation";
 import { useRecoilState } from "recoil";
 import { authState } from "../atoms/auth";
 import { isLoggedIn } from "../selectors/auth";
-import { buttomMaker } from "./common/buttonGroup";
+import { buttomMaker as buttonFactory } from "./common/buttonGroup";
 
 const name = "[Your Name]";
 export const siteTitle = "블로그";
@@ -42,7 +42,7 @@ export default function Layout({ children, home }: ReactLayoutProps) {
         <div className={styles.container}>
             <Head>{getMetadata()}</Head>
             <header>
-                <Navigation>{buttomMaker.getButtonGroup()}</Navigation>
+                <Navigation>{buttonFactory.build()}</Navigation>
             </header>
             <main>{children}</main>
         </div>
