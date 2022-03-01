@@ -4,7 +4,7 @@ import utilStyles from "../styles/utils.module.css";
 import { getSortedPostsData } from "../lib/posts";
 import LoginForm from "../components/tools/login-form";
 import Link from "next/link";
-import Date from "../components/date";
+import Date from "../components/tools/date";
 import { GetStaticProps } from "next";
 import Navigation from "../components/common/navigation";
 
