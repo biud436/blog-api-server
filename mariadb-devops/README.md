@@ -35,3 +35,11 @@ and next try to do below sql command.
 grant all privileges on *.* to 'admin'@'%';
 flush privileges;
 ```
+
+```sh
+FROM mariadb:latest
+
+RUN mysql -u root -e "grant all privileges on *.* to 'admin'@'%';"
+RUN mysql -u root -e "flush privileges;"
+
+```
