@@ -19,6 +19,9 @@ const nextConfig = {
     config.plugins.push(new Dotenv({ silent: true }));
     return config;
   },
+  publicRuntimeConfig: {
+    backendUrl: process.env.NEXT_PUBLIC_SERVER_IP,
+  },
 };
 
 module.exports = nextConfig;
