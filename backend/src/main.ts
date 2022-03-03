@@ -58,7 +58,7 @@ export class NestBootstrapApplication {
         dismissDefaultMessages: true,
       }),
     );
-    app.use('/images', express.static('/usr/src/app/upload/'));
+    // app.use('/images', express.static('/usr/src/app/upload/'));
     app.setBaseViewsDir(path.join(__dirname, '..', 'views'));
     app.useStaticAssets(path.join(__dirname, '..', 'public'));
     app.setViewEngine('hbs');
@@ -113,14 +113,7 @@ export class NestBootstrapApplication {
   }
 
   private isDelvelopment(): boolean {
-    const env = process.env;
-    if ('npm_config_argv' in env) {
-      const argv = JSON.parse(env.npm_config_argv);
-      if (argv.cooked.includes('start:dev')) {
-        return true;
-      }
-    }
-    return false;
+    return process.env.NODE_ENV !== 'production';
   }
 
   public static getInstance() {

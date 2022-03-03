@@ -6,8 +6,10 @@ import { Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { DateTimeUtil } from 'src/utils/DateTimeUtil';
 import { ChronoUnit, TemporalField, TemporalUnit } from '@js-joda/core';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('auth')
+@ApiTags('인증 API')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,

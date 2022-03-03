@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PostModule } from './entities/post/post.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfiguredDatabaseModule } from './modules/configured-database/configured-database.module';
 import { UserModule } from './entities/user/user.module';
 import { ProfileModule } from './entities/profile/profile.module';
@@ -14,6 +14,9 @@ import { RolesGuard } from './controllers/auth/guards/roles.guard';
 import { AllExceptionFilter } from './exceptions/AllExceptionFilter.filter';
 import { EnvFileMap } from '@app/env/libs/types';
 import { PostsModule } from './controllers/posts/posts.module';
+import { MailModule } from './modules/mail/mail.module';
+import { TerminusModule } from '@nestjs/terminus';
+import { HealthCheckController } from './controllers/health-check/health-check.controller';
 
 @Module({
   imports: [
@@ -24,15 +27,17 @@ import { PostsModule } from './controllers/posts/posts.module';
       ),
       isGlobal: true,
     }),
-    ServeStaticModule.forRoot(),
     ConfiguredDatabaseModule,
+    TerminusModule,
+    HttpModule,
     UserModule,
     ProfileModule,
     AuthModule,
     AdminModule,
     PostsModule,
+    MailModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, HealthCheckController],
   providers: [
     AppService,
     {
@@ -47,13 +52,6 @@ import { PostsModule } from './controllers/posts/posts.module';
 })
 export class AppModule {
   public static isDelvelopment(): boolean {
-    const env = process.env;
-    if ('npm_config_argv' in env) {
-      const argv = JSON.parse(env.npm_config_argv);
-      if (argv.cooked.includes('start:dev')) {
-        return true;
-      }
-    }
-    return false;
+    return process.env.NODE_ENV !== 'production';
   }
 }
