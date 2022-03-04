@@ -1,10 +1,5 @@
-import chalk from 'chalk';
 import { ServerLog } from 'src/utils/ServerLog';
-import { CryptoUtil } from 'src/utils/CryptoUtil';
 import * as fs from 'fs';
-import * as inquirer from 'inquirer';
-import * as dotenv from 'dotenv';
-import * as path from 'path';
 import { IEnvFile, TerminalList } from './tools/types';
 import { Command } from './commands/command';
 import { Mutex } from 'src/utils/Mutex';
