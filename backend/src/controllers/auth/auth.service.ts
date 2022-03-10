@@ -11,7 +11,7 @@ import { JwtPayload } from './validator/response.dto';
 import * as validator from 'class-validator';
 import { DownStreamInternalServerErrorException } from './validator/upstream.error';
 import { ProfileService } from 'src/entities/profile/profile.service';
-import { Redis } from 'src/micro-services/redis/Redis';
+import { Redis, RedisService } from 'src/micro-services/redis/redis.service';
 
 const CONFIG = {
   KOREAN: {
@@ -36,6 +36,7 @@ export class AuthService {
     private readonly profileService: ProfileService,
     private readonly adminService: AdminService,
     private readonly configService: ConfigService,
+    private readonly redisService: RedisService,
     private connection: Connection,
   ) {}
 
@@ -141,7 +142,7 @@ export class AuthService {
       }
 
       // 인증 코드를 확인합니다.
-      const authValue = await Redis.get(KEY);
+      const authValue = await this.redisService.get(KEY);
 
       if (authValue !== 'true') {
         throw new DownStreamInternalServerErrorException(
@@ -154,7 +155,7 @@ export class AuthService {
       await queryRunner.commitTransaction();
 
       // 레디스에 저장된 키를 제거합니다.
-      const deletedOK = await Redis.del(KEY);
+      const deletedOK = await this.redisService.del(KEY);
       console.log(deletedOK);
 
       return {

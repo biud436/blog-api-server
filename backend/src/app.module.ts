@@ -17,6 +17,7 @@ import { PostsModule } from './controllers/posts/posts.module';
 import { MailModule } from './modules/mail/mail.module';
 import { TerminusModule } from '@nestjs/terminus';
 import { HealthCheckController } from './controllers/health-check/health-check.controller';
+import { MicroServicesModule } from './micro-services/micro-services.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { HealthCheckController } from './controllers/health-check/health-check.c
     AdminModule,
     PostsModule,
     MailModule,
+    MicroServicesModule,
   ],
   controllers: [AppController, HealthCheckController],
   providers: [

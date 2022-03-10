@@ -9,6 +9,7 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { AdminModule } from 'src/entities/admin/admin.module';
 import { ProfileModule } from 'src/entities/profile/profile.module';
+import { MicroServicesModule } from 'src/micro-services/micro-services.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ProfileModule } from 'src/entities/profile/profile.module';
     ConfigModule,
     AdminModule,
     ProfileModule,
+    MicroServicesModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
