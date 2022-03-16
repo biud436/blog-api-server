@@ -23,7 +23,7 @@ export class PostService {
     const items = await this.postRepository
       .createQueryBuilder('post')
       .select()
-      .where('post.deletedAt = :deletedAt', { deletedAt: null })
+      .where('post.deletedAt IS NULL')
       .orderBy('post.uploadDate', 'DESC')
       .offset(offset)
       .take(limit)
@@ -32,3 +32,10 @@ export class PostService {
     return items;
   }
 }
+
+export const dynamicOrmModule = TypeOrmModule.forFeature([
+  AdminRepository,
+  PostRepository,
+  ProfileRepository,
+  UserRepository,
+]);
