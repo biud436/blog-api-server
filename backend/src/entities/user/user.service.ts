@@ -6,6 +6,7 @@ import { UserRepository } from './entities/user.repository';
 import * as bcrypt from 'bcrypt';
 import { User } from './entities/user.entity';
 import { Profile } from '../profile/entities/profile.entity';
+import { QueryRunner } from 'typeorm';
 
 type SafedUser = Omit<User, 'password' | 'hashPassword' | 'savePassword'>;
 
@@ -16,11 +17,15 @@ export class UserService {
     private readonly userRepository: UserRepository,
   ) {}
 
-  async create(createUserDto: CreateUserDto, profile: Profile) {
+  async create(
+    createUserDto: CreateUserDto,
+    profile: Profile,
+    queryRunner: QueryRunner,
+  ): Promise<User> {
     const model = await this.userRepository.create(createUserDto);
     model.profile = profile;
 
-    return await this.userRepository.save(model);
+    return await queryRunner.manager.save(model);
   }
 
   async validateUser(

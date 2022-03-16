@@ -124,7 +124,10 @@ export class AuthService {
       };
 
       // 프로필 모델 저장
-      const profileModel = await this.profileService.addProfile(profileDto);
+      const profileModel = await this.profileService.addProfile(
+        profileDto,
+        queryRunner,
+      );
 
       if (!profileModel) {
         throw new DownStreamInternalServerErrorException(
@@ -133,7 +136,11 @@ export class AuthService {
       }
 
       // 유저 모델을 저장합니다.
-      const userModel = await this.userService.create(userDto, profileModel);
+      const userModel = await this.userService.create(
+        userDto,
+        profileModel,
+        queryRunner,
+      );
 
       if (!userModel) {
         throw new DownStreamInternalServerErrorException(

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { QueryRunner } from 'typeorm';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { ProfileRepository } from './entities/profile.repository';
@@ -17,8 +18,12 @@ export class ProfileService {
     return !!entity;
   }
 
-  async addProfile(createProfileDto: CreateProfileDto): Promise<any> {
+  async addProfile(
+    createProfileDto: CreateProfileDto,
+    queryRunner: QueryRunner,
+  ): Promise<any> {
     const profileModel = this.profileRepository.create(createProfileDto);
-    return this.profileRepository.save(profileModel);
+
+    return await queryRunner.manager.save(profileModel);
   }
 }
