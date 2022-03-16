@@ -32,10 +32,3 @@ export class PostService {
     return items;
   }
 }
-
-export const dynamicOrmModule = TypeOrmModule.forFeature([
-  AdminRepository,
-  PostRepository,
-  ProfileRepository,
-  UserRepository,
-]);

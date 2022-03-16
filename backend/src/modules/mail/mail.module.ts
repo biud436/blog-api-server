@@ -9,4 +9,6 @@ import { MailSender } from './mailSender';
   providers: [MailService, MailSender],
   exports: [MailService],
 })
-export class MailModule {}
+export class MailModule {
+  // 동적 모듈로 만드는 방법도 있다.
+}
