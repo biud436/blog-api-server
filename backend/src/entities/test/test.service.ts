@@ -22,7 +22,7 @@ export class TestService {
     const items = await this.postRepository
       .createQueryBuilder('post')
       .select()
-      .where('post.deletedAt IS NOT NULL')
+      .where('post.deletedAt IS NULL')
       .orderBy('post.uploadDate', 'DESC')
       .offset(offset)
       .take(limit)
