@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { TestService } from './test.service';
 import { TestController } from './test.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PostRepositoryModule } from '../post/post.module';
+import { OrmModule } from 'src/modules/orm/orm.module';
 
 @Module({
-  imports: [PostRepositoryModule],
+  imports: [OrmModule],
   controllers: [TestController],
   providers: [TestService],
 })

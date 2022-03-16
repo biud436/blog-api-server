@@ -19,6 +19,7 @@ import { TerminusModule } from '@nestjs/terminus';
 import { HealthCheckController } from './controllers/health-check/health-check.controller';
 import { MicroServicesModule } from './micro-services/micro-services.module';
 import { TestModule } from './entities/test/test.module';
+import { OrmModule } from './modules/orm/orm.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { TestModule } from './entities/test/test.module';
     MailModule,
     // MicroServicesModule,
     TestModule,
+    OrmModule,
   ],
   controllers: [AppController, HealthCheckController],
   providers: [

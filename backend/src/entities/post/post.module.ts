@@ -3,11 +3,10 @@ import { PostService } from './post.service';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostRepository } from './entities/post.repository';
-
-export const PostRepositoryModule = TypeOrmModule.forFeature([PostRepository]);
+import { OrmModule } from 'src/modules/orm/orm.module';
 
 @Module({
-  imports: [PostRepositoryModule],
+  imports: [OrmModule],
   providers: [PostService],
   exports: [PostService],
 })
