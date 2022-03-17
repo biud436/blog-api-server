@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { createClient } from 'redis';
 import { promisify, format } from 'util';
 
@@ -16,7 +16,7 @@ export namespace Redis {
 }
 
 @Injectable()
-export class RedisService implements OnModuleInit {
+export class RedisService implements OnModuleInit, OnModuleDestroy {
   private client = createClient({
     socket: {
       host: process.platform === 'linux' ? 'redis' : 'localhost',
@@ -29,6 +29,10 @@ export class RedisService implements OnModuleInit {
    */
   async onModuleInit(): Promise<void> {
     await this.connect();
+  }
+
+  async onModuleDestroy(): Promise<void> {
+    await this.client.quit();
   }
 
   async connect() {
