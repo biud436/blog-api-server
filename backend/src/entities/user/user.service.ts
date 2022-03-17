@@ -34,7 +34,7 @@ export class UserService {
   ): Promise<SafedUser | boolean | null> {
     const user = await this.userRepository.findOne({
       username,
-      isActive: true,
+      isValid: true,
     });
 
     if (!user) {

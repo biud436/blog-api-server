@@ -3,11 +3,19 @@ export { ApiProperty } from '@nestjs/swagger';
 import { applyDecorators } from '@nestjs/common';
 import * as Validator from 'class-validator';
 
+/**
+ * @author Jinseok Eo
+ */
 export namespace Assert {
   export function IsOptional() {
     return applyDecorators(Validator.IsOptional());
   }
 
+  /**
+   * 지정된 값이 비어 있지 않은지 확인합니다. (!== '', !== null, !== undefined)
+   * @param message
+   * @returns
+   */
   export function IsNotEmpty(message?: string) {
     if (!message) {
       message = '내용을 입력해주세요.';
@@ -20,6 +28,11 @@ export namespace Assert {
     );
   }
 
+  /**
+   * 숫자 값인지 확인합니다.
+   *
+   * @returns
+   */
   export function IsNumber() {
     return applyDecorators(
       Validator.IsNumber(
@@ -33,6 +46,11 @@ export namespace Assert {
     );
   }
 
+  /**
+   * 문자열인지 확인합니다.
+   *
+   * @returns
+   */
   export function IsString() {
     return applyDecorators(
       Validator.IsString({
@@ -90,4 +108,6 @@ export namespace Assert {
       }),
     );
   }
+
+  export const IsPhoneNumber = Validator.IsPhoneNumber;
 }

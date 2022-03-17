@@ -15,6 +15,11 @@ export class User {
   })
   profileId: number;
 
+  @typeorm.Column({
+    default: true,
+  })
+  isValid: boolean;
+
   @typeorm.OneToOne(() => Profile, {
     onUpdate: 'RESTRICT',
     onDelete: 'RESTRICT',
