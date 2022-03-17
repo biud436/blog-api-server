@@ -33,6 +33,14 @@ export namespace Assert {
     );
   }
 
+  export function IsString() {
+    return applyDecorators(
+      Validator.IsString({
+        message: '문자열만 입력하세요',
+      }),
+    );
+  }
+
   export function Matches(pattern: RegExp, options: { message: string }) {
     return applyDecorators(
       Validator.Matches(pattern, {
@@ -49,7 +57,12 @@ export namespace Assert {
     );
   }
 
-  export function MinLength(min: number, options: { message: string }) {
+  export function MinLength(min: number, options?: { message: string }) {
+    if (!options) {
+      options = {
+        message: '최소 ' + min + '자 이상 입력해주세요.',
+      };
+    }
     return applyDecorators(
       Validator.MinLength(min, {
         message: options.message,
@@ -57,10 +70,23 @@ export namespace Assert {
     );
   }
 
-  export function MaxLength(max: number, options: { message: string }) {
+  export function MaxLength(max: number, options?: { message: string }) {
+    if (!options) {
+      options = {
+        message: '내용은 ' + max + '자 이내로 입력해주세요.',
+      };
+    }
     return applyDecorators(
       Validator.MaxLength(max, {
         message: options.message,
+      }),
+    );
+  }
+
+  export function IsDate() {
+    return applyDecorators(
+      Validator.IsDate({
+        message: '날짜 형식이 아닙니다.',
       }),
     );
   }

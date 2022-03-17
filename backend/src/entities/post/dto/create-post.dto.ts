@@ -10,11 +10,10 @@ export class CreatePostDto {
   @Assert.MaxLength(1, {
     message: '내용을 입력해주세요.',
   })
-  @Assert.MaxLength(4000, {
-    message: '내용은 4000자 이내로 입력해주세요.',
-  })
+  @Assert.MaxLength(4000)
   content: string;
 
   @ApiProperty()
+  @Assert.IsDate()
   uploadDate: Date;
 }
