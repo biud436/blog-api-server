@@ -7,9 +7,8 @@ export class User {
   @typeorm.PrimaryGeneratedColumn()
   id: number;
 
+  @typeorm.Column()
   username: string;
-
-  isActive: boolean;
 
   @typeorm.Column({
     name: 'profile_id',
