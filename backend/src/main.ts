@@ -55,7 +55,7 @@ export class NestBootstrapApplication {
   ): NestBootstrapApplication {
     app.useGlobalPipes(
       new ValidationPipe({
-        dismissDefaultMessages: true,
+        dismissDefaultMessages: false,
       }),
     );
     // app.use('/images', express.static('/usr/src/app/upload/'));
