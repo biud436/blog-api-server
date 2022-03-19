@@ -22,6 +22,7 @@ import { OrmModule } from './modules/orm/orm.module';
 import { ImageModule } from './controllers/image/image.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { getMyMulterOption } from './common/multer.config';
+import { AesModule } from './modules/aes/aes.module';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { getMyMulterOption } from './common/multer.config';
     MicroServicesModule,
     OrmModule,
     ImageModule,
+    AesModule,
   ],
   controllers: [AppController, HealthCheckController],
   providers: [
