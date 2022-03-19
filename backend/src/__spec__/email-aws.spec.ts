@@ -35,7 +35,7 @@ describe('이메일 전송', () => {
       Destination: {
         BccAddresses: [],
         CcAddresses: [],
-        ToAddresses: ['js.eo@harven.co.kr'],
+        ToAddresses: [process.env.TO_EMAIL_ADDRESS],
       },
       Message: {
         Body: {
