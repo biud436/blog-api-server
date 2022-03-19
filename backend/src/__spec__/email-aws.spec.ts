@@ -3,9 +3,26 @@ import * as AWS from 'aws-sdk';
 import { Container, Service } from 'typedi';
 const dotenv = require('dotenv');
 
+type KeyMapOfConfigService =
+  | 'TO_EMAIL_ADDRESS'
+  | 'ACCESS_KEY_ID'
+  | 'SECRET_ACCESS_KEY';
+
+@Service()
+class ConfigService {
+  constructor() {
+    dotenv.config({ path: 'aws.env' });
+  }
+
+  get<T = string>(key: KeyMapOfConfigService): string {
+    return process.env[key];
+  }
+}
+
 @Service()
 class EmailService {
   private static CLIENT_INSTANCE?: AWS.SES;
+  private configService: ConfigService = Container.get(ConfigService);
 
   async sendMail(client: AWS.SES, config: AWS.SES.SendEmailRequest) {
     return new Promise((resolve, reject) => {
@@ -25,8 +42,8 @@ class EmailService {
       EmailService.CLIENT_INSTANCE = new AWS.SES({
         region: 'ap-northeast-2',
         credentials: {
-          accessKeyId: process.env.ACCESS_KEY_ID,
-          secretAccessKey: process.env.SECRET_ACCESS_KEY,
+          accessKeyId: this.configService.get('ACCESS_KEY_ID'),
+          secretAccessKey: this.configService.get('SECRET_ACCESS_KEY'),
         },
         apiVersion: '2012-10-17',
       });
@@ -37,13 +54,15 @@ class EmailService {
   get options(): AWS.SES.SendEmailRequest {
     // 한글 처리
     const base64ToName = Buffer.from(`관리자`).toString('base64');
-    const finalToName = `=?UTF-8?B?${base64ToName}?= <${process.env.TO_EMAIL_ADDRESS}>`;
+    const finalToName = `=?UTF-8?B?${base64ToName}?= <${this.configService.get(
+      'TO_EMAIL_ADDRESS',
+    )}>`;
 
     const config = {
       Destination: {
         BccAddresses: [],
         CcAddresses: [],
-        ToAddresses: [process.env.TO_EMAIL_ADDRESS],
+        ToAddresses: [this.configService.get('TO_EMAIL_ADDRESS')],
       },
       Message: {
         Body: {
@@ -78,8 +97,6 @@ describe('이메일 전송', () => {
   const emailService: EmailService = Container.get(EmailService);
 
   it('AWS SES로 메일 발송', async () => {
-    const value = dotenv.config({ path: 'aws.env' });
-
     const client = await emailService.createSMTPClient();
     const config = emailService.options;
 
