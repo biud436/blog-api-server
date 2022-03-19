@@ -14,7 +14,7 @@ class ConfigService {
     dotenv.config({ path: 'aws.env' });
   }
 
-  get<T = string>(key: KeyMapOfConfigService): string {
+  get(key: KeyMapOfConfigService): string {
     return process.env[key];
   }
 }
