@@ -5,6 +5,8 @@ const dotenv = require('dotenv');
 
 @Service()
 class EmailService {
+  private static CLIENT_INSTANCE?: AWS.SES;
+
   async sendMail(client: AWS.SES, config: AWS.SES.SendEmailRequest) {
     return new Promise((resolve, reject) => {
       client.sendEmail(config, (err, data) => {
@@ -19,14 +21,17 @@ class EmailService {
   }
 
   async createSMTPClient(): Promise<AWS.SES> {
-    return new AWS.SES({
-      region: 'ap-northeast-2',
-      credentials: {
-        accessKeyId: process.env.ACCESS_KEY_ID,
-        secretAccessKey: process.env.SECRET_ACCESS_KEY,
-      },
-      apiVersion: '2012-10-17',
-    });
+    if (!EmailService.CLIENT_INSTANCE) {
+      EmailService.CLIENT_INSTANCE = new AWS.SES({
+        region: 'ap-northeast-2',
+        credentials: {
+          accessKeyId: process.env.ACCESS_KEY_ID,
+          secretAccessKey: process.env.SECRET_ACCESS_KEY,
+        },
+        apiVersion: '2012-10-17',
+      });
+    }
+    return EmailService.CLIENT_INSTANCE;
   }
 
   get options(): AWS.SES.SendEmailRequest {
