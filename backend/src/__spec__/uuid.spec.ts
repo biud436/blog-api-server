@@ -1,5 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
+import * as validator from 'class-validator';
 
 describe('create uuid v4', () => {
   let logger: Logger;
@@ -24,8 +25,6 @@ describe('create uuid v4', () => {
 
     logger.log(normalizeUUID); // 3d9eddd73e2647e894c4dc8091416312
 
-    expect(value).toMatch(
-      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/,
-    );
+    expect(validator.isUUID(value, '4')).toBeTruthy();
   });
 });
