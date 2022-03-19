@@ -18,6 +18,17 @@ class EmailService {
     });
   }
 
+  async createSMTPClient(): Promise<AWS.SES> {
+    return new AWS.SES({
+      region: 'ap-northeast-2',
+      credentials: {
+        accessKeyId: process.env.ACCESS_KEY_ID,
+        secretAccessKey: process.env.SECRET_ACCESS_KEY,
+      },
+      apiVersion: '2012-10-17',
+    });
+  }
+
   get options(): AWS.SES.SendEmailRequest {
     // 한글 처리
     const base64ToName = Buffer.from(`관리자`).toString('base64');
@@ -64,15 +75,7 @@ describe('이메일 전송', () => {
   it('AWS SES로 메일 발송', async () => {
     const value = dotenv.config({ path: 'aws.env' });
 
-    const client = new AWS.SES({
-      region: 'ap-northeast-2',
-      credentials: {
-        accessKeyId: process.env.ACCESS_KEY_ID,
-        secretAccessKey: process.env.SECRET_ACCESS_KEY,
-      },
-      apiVersion: '2012-10-17',
-    });
-
+    const client = await emailService.createSMTPClient();
     const config = emailService.options;
 
     const result = await emailService.sendMail(client, config);
