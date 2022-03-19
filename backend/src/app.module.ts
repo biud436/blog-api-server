@@ -21,6 +21,7 @@ import { MicroServicesModule } from './micro-services/micro-services.module';
 import { OrmModule } from './modules/orm/orm.module';
 import { ImageModule } from './controllers/image/image.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { getMyMulterOption } from './common/multer.config';
 
 @Module({
   imports: [
@@ -37,7 +38,7 @@ import { MulterModule } from '@nestjs/platform-express';
         const isProduction = process.env.NODE_ENV === 'production';
 
         return {
-          dest: isProduction ? '/usr/src/app/upload/' : './upload',
+          ...getMyMulterOption(isProduction),
         };
       },
     }),
