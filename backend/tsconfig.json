@@ -12,6 +12,7 @@
     "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
+    "resolveJsonModule": true,
     "paths": {
       "@app/env": ["libs/env/src"],
       "@app/env/*": ["libs/env/src/*"]
