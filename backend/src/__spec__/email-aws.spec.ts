@@ -1,17 +1,22 @@
+import 'reflect-metadata';
 import * as AWS from 'aws-sdk';
+import { Container, Service } from 'typedi';
 const dotenv = require('dotenv');
 
-async function sendMail(client: AWS.SES, config: AWS.SES.SendEmailRequest) {
-  return new Promise((resolve, reject) => {
-    client.sendEmail(config, (err, data) => {
-      if (err) {
-        reject(err);
-        return;
-      }
+@Service()
+class EmailService {
+  async sendMail(client: AWS.SES, config: AWS.SES.SendEmailRequest) {
+    return new Promise((resolve, reject) => {
+      client.sendEmail(config, (err, data) => {
+        if (err) {
+          reject(err);
+          return;
+        }
 
-      resolve(data);
+        resolve(data);
+      });
     });
-  });
+  }
 }
 
 describe('이메일 전송', () => {
@@ -62,7 +67,7 @@ describe('이메일 전송', () => {
       Source: finalToName /* required */,
     };
 
-    const result = await sendMail(client, config);
+    const result = await Container.get(EmailService).sendMail(client, config);
     if (result) {
       expect(result).toBeTruthy();
     }
