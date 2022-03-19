@@ -35,6 +35,7 @@
     "@nestjs/typeorm": "^8.0.3",
     "@types/bcrypt": "^5.0.0",
     "@types/passport-local": "^1.0.34",
+    "aws-sdk": "^2.1096.0",
     "bcrypt": "^5.0.1",
     "chalk": "^4",
     "class-transformer": "^0.5.1",
