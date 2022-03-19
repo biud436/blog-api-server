@@ -24,7 +24,7 @@ class EmailService {
   private static CLIENT_INSTANCE?: AWS.SES;
   private configService: ConfigService = Container.get(ConfigService);
 
-  async sendMail(client: AWS.SES, config: AWS.SES.SendEmailRequest) {
+  async sendEmail(client: AWS.SES, config: AWS.SES.SendEmailRequest) {
     return new Promise((resolve, reject) => {
       client.sendEmail(config, (err, data) => {
         if (err) {
@@ -93,14 +93,25 @@ class EmailService {
   }
 }
 
+@Service()
+class EmailController {
+  private emailService: EmailService = Container.get(EmailService);
+
+  async sendEmail() {
+    const client = await this.emailService.createSMTPClient();
+    const config = this.emailService.options;
+    const result = await this.emailService.sendEmail(client, config);
+    console.log(result);
+
+    return result;
+  }
+}
+
 describe('이메일 전송', () => {
-  const emailService: EmailService = Container.get(EmailService);
+  const emailController: EmailController = Container.get(EmailController);
 
   it('AWS SES로 메일 발송', async () => {
-    const client = await emailService.createSMTPClient();
-    const config = emailService.options;
-
-    const result = await emailService.sendMail(client, config);
+    const result = await emailController.sendEmail();
     if (result) {
       expect(result).toBeTruthy();
     }
