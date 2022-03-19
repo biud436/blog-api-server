@@ -12,7 +12,7 @@ import * as validator from 'class-validator';
 import { DownStreamInternalServerErrorException } from './validator/upstream.error';
 import { ProfileService } from 'src/entities/profile/profile.service';
 import { Redis, RedisService } from 'src/micro-services/redis/redis.service';
-import CONFIG from './i18n/ko.json';
+import CONFIG from 'src/i18n/auth.json';
 
 @Injectable()
 export class AuthService {
