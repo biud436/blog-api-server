@@ -20,8 +20,14 @@ export class AES256Provider implements OnModuleInit {
    * 멤버 초기화
    */
   onModuleInit() {
-    const KEY = this.configService.get<string>('AES_256_KEY');
-    const IV = this.configService.get<string>('AES_256_IV');
+    const tempStorage: Record<'KEY' | 'IV', string> = {
+      KEY: this.KEY.toString('utf-8'),
+      IV: this.IV.toString('utf-8'),
+    };
+
+    const KEY =
+      this.configService.get<string>('AES_256_KEY') || tempStorage.KEY;
+    const IV = this.configService.get<string>('AES_256_IV') || tempStorage.IV;
 
     this.KEY = Buffer.from(KEY, 'utf-8');
     this.IV = Buffer.from(IV, 'hex');
