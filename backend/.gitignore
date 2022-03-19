@@ -34,5 +34,6 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 *.env
+./upload
 
 .DS_Store

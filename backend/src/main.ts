@@ -58,7 +58,11 @@ export class NestBootstrapApplication {
         dismissDefaultMessages: false,
       }),
     );
-    // app.use('/images', express.static('/usr/src/app/upload/'));
+    const isProduction = process.env.NODE_ENV === 'production';
+    app.use(
+      '/images',
+      express.static(isProduction ? '/usr/src/app/upload/' : './upload'),
+    );
     app.setBaseViewsDir(path.join(__dirname, '..', 'views'));
     app.useStaticAssets(path.join(__dirname, '..', 'public'));
     app.setViewEngine('hbs');

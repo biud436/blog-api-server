@@ -19,6 +19,8 @@ import { TerminusModule } from '@nestjs/terminus';
 import { HealthCheckController } from './controllers/health-check/health-check.controller';
 import { MicroServicesModule } from './micro-services/micro-services.module';
 import { OrmModule } from './modules/orm/orm.module';
+import { ImageModule } from './controllers/image/image.module';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
@@ -30,6 +32,15 @@ import { OrmModule } from './modules/orm/orm.module';
       isGlobal: true,
     }),
     ConfiguredDatabaseModule,
+    MulterModule.registerAsync({
+      useFactory: () => {
+        const isProduction = process.env.NODE_ENV === 'production';
+
+        return {
+          dest: isProduction ? '/usr/src/app/upload/' : './upload',
+        };
+      },
+    }),
     TerminusModule,
     HttpModule,
     UserModule,
@@ -40,6 +51,7 @@ import { OrmModule } from './modules/orm/orm.module';
     MailModule,
     MicroServicesModule,
     OrmModule,
+    ImageModule,
   ],
   controllers: [AppController, HealthCheckController],
   providers: [
