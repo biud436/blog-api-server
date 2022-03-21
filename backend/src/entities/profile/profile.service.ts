@@ -13,9 +13,9 @@ export class ProfileService {
   ) {}
 
   async isValidEmail(email: string): Promise<boolean> {
-    const entity = await this.profileRepository.findOne({ email });
+    const entity = await this.profileRepository.count({ email });
 
-    return !!entity;
+    return entity > 0;
   }
 
   async addProfile(
