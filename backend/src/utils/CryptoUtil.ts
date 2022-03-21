@@ -1,5 +1,6 @@
 import * as crypto from 'crypto';
 import * as zlib from 'zlib';
+import { v4 as uuidv4 } from 'uuid';
 
 export namespace CryptoUtil {
   // const iv = crypto.randomBytes(16);
@@ -109,5 +110,9 @@ export namespace CryptoUtil {
     });
 
     return await zlibProc;
+  }
+
+  export function uuidv4(): string {
+    return <string>uuidv4();
   }
 }
