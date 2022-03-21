@@ -112,7 +112,7 @@ export namespace CryptoUtil {
     return await zlibProc;
   }
 
-  export function uuidv4(): string {
+  export function uuid(): string {
     return <string>uuidv4();
   }
 }

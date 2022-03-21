@@ -13,7 +13,10 @@ export class ProfileService {
   ) {}
 
   async isValidEmail(email: string): Promise<boolean> {
-    const entity = await this.profileRepository.count({ email });
+    const entity = await this.profileRepository
+      .createQueryBuilder('profile')
+      .where('profile.email = :email', { email })
+      .getCount();
 
     return entity > 0;
   }
@@ -22,7 +25,7 @@ export class ProfileService {
     createProfileDto: CreateProfileDto,
     queryRunner: QueryRunner,
   ): Promise<any> {
-    const profileModel = this.profileRepository.create(createProfileDto);
+    const profileModel = await this.profileRepository.create(createProfileDto);
 
     return await queryRunner.manager.save(profileModel);
   }

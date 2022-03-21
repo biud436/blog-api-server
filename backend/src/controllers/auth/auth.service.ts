@@ -12,12 +12,14 @@ import * as validator from 'class-validator';
 import { DownStreamInternalServerErrorException } from './validator/upstream.error';
 import { ProfileService } from 'src/entities/profile/profile.service';
 import { Redis, RedisService } from 'src/micro-services/redis/redis.service';
-import CONFIG from 'src/i18n/auth.json';
+import * as CONFIG from 'src/i18n/auth.json';
 import { CryptoUtil } from 'src/utils/CryptoUtil';
 import { MailService } from 'src/modules/mail/mail.service';
 import { ResponseUtil } from 'src/utils/ResponseUtil';
 import { RESPONSE_MESSAGE } from 'src/utils/response';
 import { IResponsableData } from 'src/utils/response.interface';
+import { ApiProperty } from '@nestjs/swagger';
+import { InjectConnection } from '@nestjs/typeorm';
 
 export type AvailableEmailList =
   | `${string}@gmail.com`
@@ -50,7 +52,7 @@ export class AuthService {
     private readonly configService: ConfigService,
     private readonly redisService: RedisService,
     private readonly mailService: MailService,
-    private connection: Connection,
+    @InjectConnection() private connection: Connection,
   ) {}
 
   /**
@@ -95,16 +97,16 @@ export class AuthService {
    * @param options
    * @returns
    */
-  async sendAuthCodeByEmail(email: EmailAddress): Promise<IResponsableData> {
+  async sendAuthCodeByEmail(email: EmailAddress) {
     // 가입된 이메일이 있을 때,
-    const isValidEmail = this.profileService.isValidEmail(email);
+    const isValidEmail = await this.profileService.isValidEmail(email);
     if (isValidEmail) {
       throw new DownStreamInternalServerErrorException(
         '이미 가입된 이메일입니다.',
       );
     }
 
-    const isValidEmailFromMap = EMAIL_KEYS.find((e) => e === email);
+    const isValidEmailFromMap = EMAIL_KEYS.find((e) => e !== email);
     if (!isValidEmailFromMap) {
       throw new DownStreamInternalServerErrorException(
         '지원하지 않는 이메일입니다.',
@@ -121,15 +123,6 @@ export class AuthService {
       2,
     );
 
-    if (!isSavedOK) {
-      this.logger.error(
-        `레디스에 ${email}에 대한 인증 코드 저장 중 오류가 발생하였습니다.`,
-      );
-      throw new DownStreamInternalServerErrorException(
-        '인증번호 발송 중에 오류가 발생하였습니다.',
-      );
-    }
-
     // 이메일 전송
     await this.mailService.sendAsync({
       from: this.configService.get('GMAIL_USERNAME'),
@@ -138,11 +131,11 @@ export class AuthService {
       html: `<h1>인증 코드는 <strong>${randomCode}</strong></h1> 입니다.`,
     });
 
-    return ResponseUtil.success(RESPONSE_MESSAGE.SAVE_SUCCESS, {
+    return {
       email,
-      seed: CryptoUtil.uuidv4(),
-      success: isSavedOK,
-    });
+      seed: CryptoUtil.uuid(),
+      success: true,
+    };
   }
 
   /**
@@ -152,17 +145,14 @@ export class AuthService {
    * @param authCode
    * @returns
    */
-  async verifyAuthCode(
-    email: EmailAddress,
-    authCode: string,
-  ): Promise<IResponsableData> {
+  async verifyAuthCode(email: EmailAddress, authCode: string) {
     if (!validator.isEmail(email)) {
       throw new DownStreamInternalServerErrorException(
         '이메일 형식이 올바르지 않습니다.',
       );
     }
 
-    const checkAuthCode = /[a-zA-Z]{6}/;
+    const checkAuthCode = /[a-zA-Z0-7]{6}/;
     if (checkAuthCode.exec(authCode) === null) {
       throw new DownStreamInternalServerErrorException(
         '인증번호 형식이 올바르지 않습니다.',
@@ -178,7 +168,7 @@ export class AuthService {
       );
     }
 
-    await this.redisService.set(`auth_code_ok:${email}`, authCode);
+    await this.redisService.set(`auth_code_ok:${email}`, 'true');
 
     return ResponseUtil.success(RESPONSE_MESSAGE.SAVE_SUCCESS, {
       email,
@@ -278,17 +268,18 @@ export class AuthService {
 
       await queryRunner.commitTransaction();
 
-      // 레디스에 저장된 키를 제거합니다.
-      const deletedOK = await this.redisService.del(KEY);
-      console.log(deletedOK);
-
       return {
         user: safelyUserModel,
         profile: profileModel,
       };
     } catch (e) {
       await queryRunner.rollbackTransaction();
+      throw e;
     } finally {
+      // 레디스에 저장된 키를 제거합니다.
+      const deletedOK = await this.redisService.del(KEY);
+      console.log(deletedOK);
+
       await queryRunner.release();
     }
   }

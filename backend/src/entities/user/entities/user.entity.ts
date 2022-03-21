@@ -41,9 +41,13 @@ export class User {
     await this.hashPassword(this.password);
   }
 
-  @typeorm.CreateDateColumn()
+  @typeorm.CreateDateColumn({
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   createdAt: Date;
 
-  @typeorm.UpdateDateColumn()
+  @typeorm.CreateDateColumn({
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   updatedAt: Date;
 }

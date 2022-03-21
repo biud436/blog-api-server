@@ -23,6 +23,8 @@ import { ImageModule } from './controllers/image/image.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { getMyMulterOption } from './common/multer.config';
 import { AesModule } from './modules/aes/aes.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -43,6 +45,13 @@ import { AesModule } from './modules/aes/aes.module';
         };
       },
     }),
+    // ServeStaticModule.forRoot({
+    //   rootPath:
+    //     process.env.NODE_ENV === 'production'
+    //       ? '/usr/src/app/upload/'
+    //       : join(__dirname, '..', 'images'),
+    //   renderPath: '/images',
+    // }),
     TerminusModule,
     HttpModule,
     UserModule,

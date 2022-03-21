@@ -20,6 +20,18 @@ export namespace ResponseUtil {
     };
   }
 
+  export function successWrap<T extends IResponse>(
+    resMessage: T,
+    data: any,
+  ): IResponsableData {
+    return {
+      ...resMessage,
+      message: resMessage.message,
+      result: 'success',
+      data,
+    };
+  }
+
   /**
    * 응답을 받지 못했을 때, 실패 메시지를 반환합니다.
    * @param resMessage
@@ -32,6 +44,15 @@ export namespace ResponseUtil {
       message: resMessage.message,
       result: 'failure',
       error: resMessage.error,
+    };
+  }
+
+  export function failureWrap<T extends IResponse>(customMessage: T) {
+    return {
+      name: 'customError',
+      statusCode: customMessage.statusCode,
+      message: customMessage.message,
+      result: 'failure',
     };
   }
 }

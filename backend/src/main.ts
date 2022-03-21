@@ -3,12 +3,12 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import express from 'express';
 import { AppModule } from './app.module';
 import { ServerLog } from './utils/ServerLog';
 import * as path from 'path';
 import * as cookieParser from 'cookie-parser';
 import * as basicAuth from 'express-basic-auth';
+import * as express from 'express';
 
 export class NestBootstrapApplication {
   private static INSTANCE: NestBootstrapApplication;
@@ -58,10 +58,13 @@ export class NestBootstrapApplication {
         dismissDefaultMessages: false,
       }),
     );
-    const isProduction = process.env.NODE_ENV === 'production';
     app.use(
       '/images',
-      express.static(isProduction ? '/usr/src/app/upload/' : './upload'),
+      express.static(
+        process.env.NODE_ENV === 'production'
+          ? '/usr/src/app/upload/'
+          : './images',
+      ),
     );
     app.setBaseViewsDir(path.join(__dirname, '..', 'views'));
     app.useStaticAssets(path.join(__dirname, '..', 'public'));
@@ -129,10 +132,10 @@ export class NestBootstrapApplication {
 }
 
 process.on('uncaughtException', (err) => {
-  ServerLog.error(err.message);
+  ServerLog.error(err.stack);
 });
 process.on('unhandledRejection', (err) => {
-  ServerLog.error(err as any);
+  ServerLog.error((err as any).stack);
 });
 
 NestBootstrapApplication.getInstance().start();

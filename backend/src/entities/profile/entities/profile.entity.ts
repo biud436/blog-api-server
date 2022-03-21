@@ -11,9 +11,13 @@ export class Profile {
   })
   email: string;
 
-  @typeorm.CreateDateColumn()
+  @typeorm.CreateDateColumn({
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   createdAt: Date;
 
-  @typeorm.UpdateDateColumn()
+  @typeorm.UpdateDateColumn({
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   updatedAt: Date;
 }
