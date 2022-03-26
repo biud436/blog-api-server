@@ -20,6 +20,19 @@ services:
         volumes:
             - ../upload:/usr/src/app/upload
         logging: *default-logging
+    frontend-server:
+        container_name: frontend-server
+        image: frontend-server:latest
+        restart: always
+        build:
+            dockerfile: Dockerfile
+            context: ../frontend
+        links:
+            - api-server
+        ports:
+            - "8080:8080"
+        logging: *default-logging
+
     redis:
         image: redis
         restart: always

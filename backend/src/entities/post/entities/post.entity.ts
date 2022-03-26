@@ -1,3 +1,4 @@
+import { User } from 'src/entities/user/entities/user.entity';
 import * as typeorm from 'typeorm';
 
 @typeorm.Entity()
@@ -5,9 +6,20 @@ export class Post {
   @typeorm.PrimaryGeneratedColumn()
   id: number;
 
+  /**
+   * 작성자
+   */
+  authorId: number;
+
+  /**
+   * 제목
+   */
   @typeorm.Column()
   title: string;
 
+  /**
+   * 상세 내용
+   */
   @typeorm.Column()
   content: string;
 
@@ -21,4 +33,13 @@ export class Post {
     nullable: true,
   })
   deletedAt: Date;
+
+  @typeorm.OneToOne(() => User, {
+    onUpdate: 'RESTRICT',
+    onDelete: 'RESTRICT',
+  })
+  @typeorm.JoinColumn({
+    name: 'author_id',
+  })
+  user: User;
 }
