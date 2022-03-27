@@ -23,9 +23,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const { data } = <any>response.data;
     console.log("userData :");
 
+    const DAY = 60 * 60 * 24;
+
     res.setHeader(
         "Set-Cookie",
-        `token=${data.accessToken}; HttpOnly; Max-Age=${60 * 60 * 24 * 7}`
+        `token=${data.accessToken}; HttpOnly; Max-Age=${DAY * 7}`
     );
     res.status(200).json(data);
 };
