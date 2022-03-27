@@ -2,7 +2,7 @@ import { atom, selector } from "recoil";
 import { beforeAuthInstance } from "../../lib/axios";
 import * as validator from "class-validator";
 
-namespace FSM {
+export namespace FSM {
     export type User = {
         id: number;
         email: string;

@@ -78,10 +78,8 @@ export class AuthService {
       JwtSignOptions
     >{
       secret: this.configService.get('JWT_REFRESH_TOKEN_SECRET'),
-      signOptions: {
-        expiresIn: this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME'),
-        algorithm: 'HS384',
-      },
+      expiresIn: this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME'),
+      algorithm: 'HS384',
     });
 
     return {

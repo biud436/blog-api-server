@@ -5,6 +5,7 @@ import {
   HttpException,
   HttpStatus,
   InternalServerErrorException,
+  Logger,
   Post,
   Req,
   Res,
@@ -28,6 +29,8 @@ import { AuthRequest } from './validator/request.dto';
 @Controller('auth')
 @ApiTags('인증 API')
 export class AuthController {
+  private logger: Logger = new Logger(AuthController.name);
+
   constructor(
     private readonly authService: AuthService,
     private readonly configService: ConfigService,
@@ -57,33 +60,20 @@ export class AuthController {
     description: '로그인 성공시 토큰을 반환합니다.',
     basicAuth: true,
   })
-  async login(@Req() req: Request, @Res() res: Response): Promise<void> {
-    const token = await this.authService.login(req.user);
+  async login(@Req() req: Request) {
+    try {
+      this.logger.log('로그인 시도');
 
-    let url = this.configService.get('PUBLIC_SERVER_IP');
-    url = url.replace('http://', '');
-    url = url.replace('https://', '');
-    url = url.split(':')[0];
+      const token = await this.authService.login(req.user);
 
-    let jwtSecretExpirationTime = DateTimeUtil.extractJwtExpirationTime(
-      this.configService.get('JWT_SECRET_EXPIRATION_TIME'),
-    );
-    let jwtRefreshTokenExpirationTime = DateTimeUtil.extractJwtExpirationTime(
-      this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME'),
-    );
-
-    res
-      .cookie('access_token', token.accessToken, {
-        httpOnly: true,
-        domain: url,
-        expires: DateTimeUtil.toDate(jwtSecretExpirationTime),
-      })
-      .cookie('refresh_token', token.refreshToken, {
-        httpOnly: true,
-        domain: url,
-        expires: DateTimeUtil.toDate(jwtRefreshTokenExpirationTime),
-      })
-      .send({ success: true });
+      return ResponseUtil.success(RESPONSE_MESSAGE.LOGIN_SUCCESS, {
+        accessToken: token.accessToken,
+        refreshToken: token.refreshToken,
+      });
+    } catch (e) {
+      this.logger.error(e);
+      return ResponseUtil.failure(RESPONSE_MESSAGE.INVALID_PASSWORD);
+    }
   }
 
   @Post('send-auth-code')
