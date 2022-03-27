@@ -3,7 +3,7 @@ RUN apk --no-cache add --virtual .builds-deps build-base python3
 WORKDIR /usr/src/app
 
 # 의존성 패키지 설치
-COPY package*.json ./
+COPY package*.json yarn.lock .yarn .yarnrc.yml ./
 RUN yarn install
 COPY . .
 
