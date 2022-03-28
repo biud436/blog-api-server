@@ -2,6 +2,7 @@ import { Profile } from 'src/entities/profile/entities/profile.entity';
 import * as typeorm from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Post } from 'src/entities/post/entities/post.entity';
+import { Exclude } from 'class-transformer';
 
 @typeorm.Entity()
 export class User {
@@ -31,6 +32,7 @@ export class User {
   profile: Profile;
 
   @typeorm.Column()
+  @Exclude()
   password: string;
 
   async hashPassword(password: string) {

@@ -15,9 +15,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     const { username, password } = req.body;
 
-    console.log(username);
-    console.log(password);
-
     const response = await authActions.login(username, password);
 
     const { data } = <any>response.data;
