@@ -60,11 +60,19 @@ export class AuthController {
     description: '로그인 성공시 토큰을 반환합니다.',
     basicAuth: true,
   })
-  async login(@Req() req: Request) {
+  async login(
+    @Req() req: Request,
+    @Res({
+      passthrough: true,
+    })
+    res: Response,
+  ) {
     try {
       this.logger.log('로그인 시도');
 
       const token = await this.authService.login(req.user);
+
+      res.cookie('access_token', token.accessToken);
 
       return ResponseUtil.success(RESPONSE_MESSAGE.LOGIN_SUCCESS, {
         accessToken: token.accessToken,

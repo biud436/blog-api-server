@@ -71,7 +71,14 @@ export class NestBootstrapApplication {
     app.setViewEngine('hbs');
 
     app.use(cookieParser());
-    app.enableCors();
+    app.enableCors({
+      origin: [
+        /\.home\.biud436\.com$/,
+        'http://localhost:3000',
+        'http://localhost:8080',
+      ],
+      credentials: true,
+    });
     app.useGlobalGuards();
 
     app.use(

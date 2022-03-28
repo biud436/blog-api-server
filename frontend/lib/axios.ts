@@ -15,6 +15,7 @@ export const instance = axios.create({
  */
 export const beforeAuthInstance = axios.create({
     baseURL: publicRuntimeConfig.backendUrl,
+    withCredentials: true,
 });
 
 instance.interceptors.request.use(
