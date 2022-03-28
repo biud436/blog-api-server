@@ -5,69 +5,71 @@ import { getSortedPostsData } from "../lib/posts";
 import Link from "next/link";
 import Date from "../components/tools/date";
 import {
-  GetServerSideProps,
-  GetServerSidePropsContext,
-  GetStaticProps,
+    GetServerSideProps,
+    GetServerSidePropsContext,
+    GetStaticProps,
 } from "next";
 import Router from "next/router";
 import cookies from "next-cookies";
 
 export default function Home({
-  allPostsData,
+    allPostsData,
 }: {
-  allPostsData: {
-    date: string;
-    title: string;
-    id: string;
-  }[];
+    allPostsData: {
+        date: string;
+        title: string;
+        id: string;
+    }[];
 }) {
-  return (
-    <Layout home>
-      <Head>
-        <title>{siteTitle}</title>
-      </Head>
-      {allPostsData.map(({ id, date, title }) => {
-        return (
-          <div
-            className={`{utilStyles.card} border shadow rounded p-1 m-2 hover:shadow-md`}
-            key={id}
-          >
-            <Link href="/posts/[id]" as={`/posts/${id}`}>
-              <a>
-                <h3 className={utilStyles.headingLg}>{title}</h3>
-              </a>
-            </Link>
-            <p className={utilStyles.lightText}>
-              <Date dateString={date} />
-            </p>
-          </div>
-        );
-      })}
-    </Layout>
-  );
+    return (
+        <Layout home>
+            <Head>
+                <title>{siteTitle}</title>
+            </Head>
+            {allPostsData.map(({ id, date, title }) => {
+                return (
+                    <div
+                        className={`{utilStyles.card} border shadow rounded p-1 m-2 hover:shadow-md`}
+                        key={id}
+                    >
+                        <Link href="/posts/[id]" as={`/posts/${id}`}>
+                            <a>
+                                <h3 className={utilStyles.headingLg}>
+                                    {title}
+                                </h3>
+                            </a>
+                        </Link>
+                        <p className={utilStyles.lightText}>
+                            <Date dateString={date} />
+                        </p>
+                    </div>
+                );
+            })}
+        </Layout>
+    );
 }
 
 export const getServerSideProps: GetServerSideProps = async (
-  ctx: GetServerSidePropsContext
+    ctx: GetServerSidePropsContext
 ) => {
-  const allPostsData = getSortedPostsData();
+    const allPostsData = getSortedPostsData();
 
-  const { access_token } = cookies(ctx);
+    const { token } = cookies(ctx);
 
-  if (!access_token || access_token === "") {
-    // SSR
-    const isSSR = ctx.req && ctx.res;
-    if (isSSR) {
-      ctx.res.writeHead(302, { Location: "/login" });
-      ctx.res.end();
-    } else {
-      Router.push("/login");
+    if (!token || token === "") {
+        // SSR
+        const isSSR = ctx.req && ctx.res;
+        if (isSSR) {
+            ctx.res.writeHead(302, { Location: "/login" });
+            ctx.res.end();
+        } else {
+            Router.push("/login");
+        }
     }
-  }
 
-  return {
-    props: {
-      allPostsData,
-    },
-  };
+    return {
+        props: {
+            allPostsData,
+        },
+    };
 };
