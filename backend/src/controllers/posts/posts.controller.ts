@@ -7,8 +7,9 @@ import {
   Param,
   Delete,
   Query,
+  ParseIntPipe,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiParam, ApiTags } from '@nestjs/swagger';
 import {
   AdminOnly,
   CustomApiOkResponse,
@@ -22,6 +23,8 @@ import { PostsService } from './posts.service';
 
 @Controller('posts')
 @ApiTags('블로그 API')
+@JwtGuard()
+@AdminOnly()
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
@@ -35,8 +38,6 @@ export class PostsController {
     auth: true,
     type: CreatePostDto,
   })
-  @JwtGuard()
-  @AdminOnly()
   async create(@Body() createPostDto: CreatePostDto) {
     try {
       const data = await this.postsService.create(createPostDto);
@@ -55,7 +56,10 @@ export class PostsController {
     auth: false,
     description: '포스트 목록을 가져옵니다.',
   })
-  async findAll(@Query('offset') offset = 0, @Query('limit') limit = 15) {
+  async findAll(
+    @Query('offset', ParseIntPipe) offset = 0,
+    @Query('limit', ParseIntPipe) limit = 15,
+  ) {
     try {
       const data = await this.postsService.findAll(+offset, +limit);
       return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, data);
@@ -73,8 +77,8 @@ export class PostsController {
     auth: false,
     description: '특정 포스트를 조회합니다.',
   })
-  findOne(@Param('id') id: string) {
-    return this.postsService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.postsService.findOne(id);
   }
 
   @Patch(':id')
@@ -86,10 +90,15 @@ export class PostsController {
     auth: true,
     description: '특정 포스트를 수정합니다.',
   })
-  @JwtGuard()
-  @AdminOnly()
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postsService.update(+id, updatePostDto);
+  @ApiParam({
+    name: 'id',
+    description: '포스트 ID',
+  })
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updatePostDto: UpdatePostDto,
+  ) {
+    return this.postsService.update(id, updatePostDto);
   }
 
   @Delete(':id')
@@ -101,9 +110,11 @@ export class PostsController {
     auth: true,
     description: '특정 포스트를 삭제합니다.',
   })
-  @JwtGuard()
-  @AdminOnly()
-  remove(@Param('id') id: string) {
-    return this.postsService.remove(+id);
+  @ApiParam({
+    name: 'id',
+    description: '포스트 ID',
+  })
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.postsService.remove(id);
   }
 }
