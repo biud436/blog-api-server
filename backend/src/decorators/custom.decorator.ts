@@ -13,7 +13,7 @@ import {
   ApiOperation,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/controllers/auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/domain/auth/guards/jwt-auth.guard';
 import { Role } from './role.enum';
 import { Roles } from './roles.decorator';
 
