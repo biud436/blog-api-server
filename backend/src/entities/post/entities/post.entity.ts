@@ -42,4 +42,15 @@ export class Post {
     name: 'author_id',
   })
   user: User;
+
+  /**
+   * Build Post entity.
+   * @returns
+   */
+  static build(): Omit<Post, 'id' | 'user'> {
+    const post = new Post();
+    const { id, user, ...otherValues } = post;
+
+    return otherValues;
+  }
 }
