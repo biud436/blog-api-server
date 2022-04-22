@@ -47,6 +47,7 @@
     "hbs": "^4.2.0",
     "inquirer": "^8.2.0",
     "mysql2": "^2.3.3",
+    "nest-winston": "^1.6.2",
     "nodemailer": "^6.7.2",
     "passport": "^0.5.2",
     "passport-http": "^0.3.0",
@@ -60,7 +61,9 @@
     "typedi": "^0.10.0",
     "typeorm": "^0.2.44",
     "typeorm-naming-strategies": "^3.0.0",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "winston": "^3.7.2",
+    "winston-daily-rotate-file": "^4.6.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",
