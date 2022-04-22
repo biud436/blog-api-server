@@ -115,4 +115,10 @@ export namespace CryptoUtil {
   export function uuid(): string {
     return <string>uuidv4();
   }
+
+  export async function decodeBase64(encoded: string) {
+    const buff = Buffer.from(encoded, 'base64');
+
+    return buff.toString('utf8');
+  }
 }
