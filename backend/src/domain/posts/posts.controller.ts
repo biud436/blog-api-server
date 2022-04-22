@@ -17,6 +17,7 @@ import {
     JwtGuard,
 } from 'src/decorators/custom.decorator';
 import { Limit } from 'src/decorators/limit.decorator';
+import { Offset } from 'src/decorators/offset.decorator';
 import { CreatePostDto } from 'src/entities/post/dto/create-post.dto';
 import { UpdatePostDto } from 'src/entities/post/dto/update-post.dto';
 import { RESPONSE_MESSAGE } from 'src/utils/response';
@@ -59,7 +60,7 @@ export class PostsController {
         description: '포스트 목록을 가져옵니다.',
     })
     async findAll(
-        @Query('offset', ParseIntPipe) offset = 0,
+        @Offset('offset') offset = 0,
         @Limit('limit') limit = PaginationConfig.limit.max,
     ) {
         try {
