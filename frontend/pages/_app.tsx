@@ -1,5 +1,4 @@
 import "../styles/global.css";
-import { AppProps } from "next/app";
 import { RecoilRoot } from "recoil";
 import CssBaseline from "@mui/material/CssBaseline";
 
