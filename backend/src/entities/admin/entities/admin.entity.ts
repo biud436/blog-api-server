@@ -1,22 +1,39 @@
 import { User } from 'src/entities/user/entities/user.entity';
-import * as orm from 'typeorm';
-import { JoinColumn, OneToOne } from 'typeorm';
 
-@orm.Entity()
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    JoinColumn,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+} from 'typeorm';
+
+@Entity()
 export class Admin {
-  @orm.PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @orm.Column()
-  userId: number;
+    @Column({ nullable: false })
+    userId: number;
 
-  @orm.OneToOne(() => User)
-  @orm.JoinColumn()
-  user: User;
+    @ManyToOne(() => User, (user) => user.admins, {
+        onDelete: 'RESTRICT',
+        onUpdate: 'RESTRICT',
+    })
+    @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
+    user: User;
 
-  @orm.CreateDateColumn()
-  createdAt: Date;
+    @CreateDateColumn({
+        default: () => 'CURRENT_TIMESTAMP',
+        nullable: false,
+    })
+    createdAt: Date;
 
-  @orm.UpdateDateColumn()
-  updatedAt: Date;
+    @UpdateDateColumn({
+        default: () => 'CURRENT_TIMESTAMP',
+        nullable: false,
+    })
+    updatedAt: Date;
 }

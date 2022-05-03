@@ -1,56 +1,95 @@
+import { SecondCategory } from 'src/entities/second-category/entities/second-category.entity';
 import { User } from 'src/entities/user/entities/user.entity';
-import * as typeorm from 'typeorm';
+import {
+    Column,
+    DeleteDateColumn,
+    Entity,
+    JoinColumn,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+} from 'typeorm';
 
-@typeorm.Entity()
+@Entity()
 export class Post {
-  @typeorm.PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  /**
-   * 작성자
-   */
-  authorId: number;
+    /**
+     * 작성자
+     */
+    @Column({
+        nullable: false,
+    })
+    authorId: number;
 
-  /**
-   * 제목
-   */
-  @typeorm.Column()
-  title: string;
+    @Column({
+        nullable: false,
+    })
+    secondCategoryId: number;
 
-  /**
-   * 상세 내용
-   */
-  @typeorm.Column()
-  content: string;
+    /**
+     * 제목
+     */
+    @Column({
+        nullable: false,
+    })
+    title: string;
 
-  @typeorm.Column()
-  uploadDate: Date;
+    /**
+     * 상세 내용
+     */
+    @Column({
+        nullable: false,
+        type: 'text',
+    })
+    content: string;
 
-  @typeorm.UpdateDateColumn()
-  updatedAt: Date;
+    @Column({
+        default: () => 'CURRENT_TIMESTAMP',
+        nullable: false,
+    })
+    uploadDate: Date;
 
-  @typeorm.DeleteDateColumn({
-    nullable: true,
-  })
-  deletedAt: Date;
+    @UpdateDateColumn({
+        default: () => 'CURRENT_TIMESTAMP',
+        nullable: false,
+    })
+    updatedAt: Date;
 
-  @typeorm.OneToOne(() => User, {
-    onUpdate: 'RESTRICT',
-    onDelete: 'RESTRICT',
-  })
-  @typeorm.JoinColumn({
-    name: 'author_id',
-  })
-  user: User;
+    @DeleteDateColumn({
+        nullable: true,
+    })
+    deletedAt: Date;
 
-  /**
-   * Build Post entity.
-   * @returns
-   */
-  static build(): Omit<Post, 'id' | 'user'> {
-    const post = new Post();
-    const { id, user, ...otherValues } = post;
+    @ManyToOne(() => User, (user) => user.posts, {
+        onUpdate: 'RESTRICT',
+        onDelete: 'RESTRICT',
+    })
+    @JoinColumn({
+        name: 'author_id',
+        referencedColumnName: 'id',
+    })
+    user: User;
 
-    return otherValues;
-  }
+    @ManyToOne(() => SecondCategory, (secondCategory) => secondCategory.posts, {
+        onUpdate: 'RESTRICT',
+        onDelete: 'RESTRICT',
+    })
+    @JoinColumn({
+        name: 'secondCategoryId',
+        referencedColumnName: 'id',
+    })
+    secondCategory: SecondCategory;
+
+    /**
+     * Build Post entity.
+     * @returns
+     */
+    static build(): Omit<Post, 'id' | 'user'> {
+        const post = new Post();
+        const { id, user, ...otherValues } = post;
+
+        return otherValues;
+    }
 }

@@ -25,6 +25,8 @@ import { getMyMulterOption } from './common/multer.config';
 import { AesModule } from './modules/aes/aes.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { FirstCategoryModule } from './entities/first-category/first-category.module';
+import { SecondCategoryModule } from './entities/second-category/second-category.module';
 
 @Module({
   imports: [
@@ -64,6 +66,8 @@ import { join } from 'path';
     OrmModule,
     ImageModule,
     AesModule,
+    FirstCategoryModule,
+    SecondCategoryModule,
   ],
   controllers: [AppController, HealthCheckController],
   providers: [

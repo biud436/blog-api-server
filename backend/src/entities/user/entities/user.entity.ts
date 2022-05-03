@@ -1,56 +1,78 @@
 import { Profile } from 'src/entities/profile/entities/profile.entity';
-import * as typeorm from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { Post } from 'src/entities/post/entities/post.entity';
 import { Exclude } from 'class-transformer';
+import {
+    BeforeInsert,
+    Column,
+    CreateDateColumn,
+    Entity,
+    JoinColumn,
+    OneToMany,
+    OneToOne,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Post } from 'src/entities/post/entities/post.entity';
+import { Admin } from 'src/entities/admin/entities/admin.entity';
 
-@typeorm.Entity()
+@Entity()
 export class User {
-  @typeorm.PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @typeorm.Column()
-  username: string;
+    @Column({
+        nullable: false,
+    })
+    username: string;
 
-  @typeorm.Column({
-    name: 'profile_id',
-  })
-  profileId: number;
+    @Column({
+        name: 'profile_id',
+        nullable: false,
+    })
+    profileId: number;
 
-  @typeorm.Column({
-    default: true,
-  })
-  isValid: boolean;
+    @Column({
+        default: true,
+        nullable: false,
+    })
+    isValid: boolean;
 
-  @typeorm.OneToOne(() => Profile, {
-    onUpdate: 'RESTRICT',
-    onDelete: 'RESTRICT',
-  })
-  @typeorm.JoinColumn({
-    name: 'profile_id',
-  })
-  profile: Profile;
+    @OneToOne(() => Profile, {
+        onUpdate: 'RESTRICT',
+        onDelete: 'RESTRICT',
+    })
+    @JoinColumn({
+        name: 'profile_id',
+    })
+    profile: Profile;
 
-  @typeorm.Column()
-  @Exclude()
-  password: string;
+    @OneToMany(() => Post, (post) => post.user)
+    posts: Post[];
 
-  async hashPassword(password: string) {
-    this.password = await bcrypt.hash(password, 10);
-  }
+    @OneToMany(() => Admin, (admin) => admin.user)
+    admins: Admin[];
 
-  @typeorm.BeforeInsert()
-  async savePassword() {
-    await this.hashPassword(this.password);
-  }
+    @Column({
+        nullable: false,
+    })
+    @Exclude()
+    password: string;
 
-  @typeorm.CreateDateColumn({
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  createdAt: Date;
+    async hashPassword(password: string) {
+        this.password = await bcrypt.hash(password, 10);
+    }
 
-  @typeorm.CreateDateColumn({
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  updatedAt: Date;
+    @BeforeInsert()
+    async savePassword() {
+        await this.hashPassword(this.password);
+    }
+
+    @CreateDateColumn({
+        default: () => 'CURRENT_TIMESTAMP',
+    })
+    createdAt: Date;
+
+    @CreateDateColumn({
+        default: () => 'CURRENT_TIMESTAMP',
+    })
+    updatedAt: Date;
 }
