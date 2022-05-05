@@ -1,5 +1,11 @@
 import React from "react";
-import Document, { Html, Head, Main, NextScript } from "next/document";
+import Document, {
+    Html,
+    Head,
+    Main,
+    NextScript,
+    DocumentContext,
+} from "next/document";
 import { ServerStyleSheets } from "@mui/styles";
 
 export default class MyDocument extends Document {
@@ -15,7 +21,7 @@ export default class MyDocument extends Document {
     }
 }
 
-MyDocument.getInitialProps = async (ctx) => {
+MyDocument.getInitialProps = async (ctx: DocumentContext) => {
     const materialSheets = new ServerStyleSheets();
     const originalRenderPage = ctx.renderPage;
 
