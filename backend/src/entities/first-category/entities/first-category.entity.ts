@@ -1,5 +1,12 @@
+import { Post } from 'src/entities/post/entities/post.entity';
 import { SecondCategory } from 'src/entities/second-category/entities/second-category.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    Column,
+    Entity,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
 
 /**
  * 대분류
@@ -24,4 +31,7 @@ export class FirstCategory {
         (secondCategory) => secondCategory.firstCategory,
     )
     secondCategories: SecondCategory[];
+
+    @OneToMany(() => Post, (post) => post.firstCategory)
+    posts: Post[];
 }

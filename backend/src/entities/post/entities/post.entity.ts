@@ -1,3 +1,4 @@
+import { FirstCategory } from 'src/entities/first-category/entities/first-category.entity';
 import { SecondCategory } from 'src/entities/second-category/entities/second-category.entity';
 import { User } from 'src/entities/user/entities/user.entity';
 import {
@@ -22,6 +23,11 @@ export class Post {
         nullable: false,
     })
     authorId: number;
+
+    @Column({
+        nullable: false,
+    })
+    firstCategoryId: number;
 
     @Column({
         nullable: false,
@@ -71,6 +77,16 @@ export class Post {
         referencedColumnName: 'id',
     })
     user: User;
+
+    @ManyToOne(() => FirstCategory, (firstCategory) => firstCategory.posts, {
+        onUpdate: 'RESTRICT',
+        onDelete: 'RESTRICT',
+    })
+    @JoinColumn({
+        name: 'firstCategoryId',
+        referencedColumnName: 'id',
+    })
+    firstCategory: FirstCategory;
 
     @ManyToOne(() => SecondCategory, (secondCategory) => secondCategory.posts, {
         onUpdate: 'RESTRICT',
