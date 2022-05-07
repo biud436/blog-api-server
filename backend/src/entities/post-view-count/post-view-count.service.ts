@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { QueryRunner } from 'typeorm';
+import { QueryRunner, UpdateResult } from 'typeorm';
 import { CreatePostViewCountDto } from './dto/create-post-view-count.dto';
 import { UpdatePostViewCountDto } from './dto/update-post-view-count.dto';
 import { PostViewCount } from './entities/post-view-count.entity';
@@ -41,4 +41,22 @@ export class PostViewCountService {
 
         return model;
     }
+
+    // /**
+    //  * 조회수 증감
+    //  *
+    //  * @param id 조회수 ID 입니다.
+    //  * @returns
+    //  */
+    // async increaseCount(id: number): Promise<UpdateResult> {
+    //     const model = await this.postViewCountRepository
+    //         .createQueryBuilder('post_view_count')
+    //         .update()
+    //         .set({ count: () => 'count + 1' })
+    //         .where('post_view_count.id = :id', { id })
+    //         .andWhere('post_view_count.deletedAt IS NULL')
+    //         .execute();
+
+    //     return model;
+    // }
 }

@@ -8,8 +8,10 @@ import {
     Delete,
     Query,
     ParseIntPipe,
+    Logger,
 } from '@nestjs/common';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { InjectConnection } from '@nestjs/typeorm';
 import { PaginationConfig } from 'src/common/list-config';
 import {
     AdminOnly,
@@ -22,6 +24,7 @@ import { CreatePostDto } from 'src/entities/post/dto/create-post.dto';
 import { UpdatePostDto } from 'src/entities/post/dto/update-post.dto';
 import { RESPONSE_MESSAGE } from 'src/utils/response';
 import { ResponseUtil } from 'src/utils/ResponseUtil';
+import { Connection } from 'typeorm';
 import { PostsService } from './posts.service';
 
 @Controller('posts')
@@ -29,47 +32,12 @@ import { PostsService } from './posts.service';
 @JwtGuard()
 @AdminOnly()
 export class PostsController {
-    constructor(private readonly postsService: PostsService) {}
+    private logger: Logger = new Logger(PostsController.name);
 
-    @Post()
-    @CustomApiOkResponse({
-        operation: {
-            summary: '새로운 포스트 작성',
-            description: '새로운 포스트를 작성합니다',
-        },
-        description: '새로운 포스트를 작성합니다',
-        auth: true,
-        type: CreatePostDto,
-    })
-    async create(@Body() createPostDto: CreatePostDto) {
-        try {
-            const data = await this.postsService.create(createPostDto);
-            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, data);
-        } catch (e) {
-            return ResponseUtil.failure(RESPONSE_MESSAGE.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @Get()
-    @CustomApiOkResponse({
-        operation: {
-            summary: '포스트 목록 가져오기',
-            description: '포스트 목록을 가져옵니다.',
-        },
-        auth: false,
-        description: '포스트 목록을 가져옵니다.',
-    })
-    async findAll(
-        @Offset('offset') offset = 0,
-        @Limit('limit') limit = PaginationConfig.limit.max,
-    ) {
-        try {
-            const data = await this.postsService.findAll(offset, limit);
-            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, data);
-        } catch {
-            return ResponseUtil.failure(RESPONSE_MESSAGE.NULL_VALUE);
-        }
-    }
+    constructor(
+        private readonly postsService: PostsService,
+        @InjectConnection() private readonly connection: Connection,
+    ) {}
 
     @Get(':id')
     @CustomApiOkResponse({
@@ -80,8 +48,14 @@ export class PostsController {
         auth: false,
         description: '특정 포스트를 조회합니다.',
     })
-    findOne(@Param('id', ParseIntPipe) id: number) {
-        return this.postsService.findOne(id);
+    async findOne(@Param('id', ParseIntPipe) id: number) {
+        try {
+            const model = await this.postsService.findOne(id);
+
+            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, model);
+        } catch (e) {
+            return ResponseUtil.failureWrap(e);
+        }
     }
 
     @Patch(':id')
@@ -119,5 +93,65 @@ export class PostsController {
     })
     remove(@Param('id', ParseIntPipe) id: number) {
         return this.postsService.remove(id);
+    }
+
+    // !==========================================================
+    // ! Post와 Get Mapping은 맨 아래에 배치해야 합니다.
+    // !==========================================================
+
+    @Post()
+    @CustomApiOkResponse({
+        operation: {
+            summary: '새로운 포스트 작성',
+            description: '새로운 포스트를 작성합니다',
+        },
+        description: '새로운 포스트를 작성합니다',
+        auth: true,
+        type: CreatePostDto,
+    })
+    async create(@Body() createPostDto: CreatePostDto) {
+        const queryRunner = this.connection.createQueryRunner();
+        await queryRunner.connect();
+
+        try {
+            const data = await this.postsService.create(
+                createPostDto,
+                queryRunner,
+            );
+
+            this.logger.log(data);
+
+            await queryRunner.commitTransaction();
+
+            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, data);
+        } catch (e) {
+            this.logger.debug(e);
+
+            await queryRunner.rollbackTransaction();
+            return ResponseUtil.failure(RESPONSE_MESSAGE.INTERNAL_SERVER_ERROR);
+        } finally {
+            await queryRunner.release();
+        }
+    }
+
+    @Get()
+    @CustomApiOkResponse({
+        operation: {
+            summary: '포스트 목록 가져오기',
+            description: '포스트 목록을 가져옵니다.',
+        },
+        auth: false,
+        description: '포스트 목록을 가져옵니다.',
+    })
+    async findAll(
+        @Offset('offset') offset = 0,
+        @Limit('limit') limit = PaginationConfig.limit.max,
+    ) {
+        try {
+            const data = await this.postsService.findAll(offset, limit);
+            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, data);
+        } catch {
+            return ResponseUtil.failure(RESPONSE_MESSAGE.NULL_VALUE);
+        }
     }
 }

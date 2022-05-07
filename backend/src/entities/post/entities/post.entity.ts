@@ -73,7 +73,7 @@ export class Post {
     @DeleteDateColumn({
         nullable: true,
     })
-    deletedAt: Date;
+    deletedAt?: Date;
 
     @ManyToOne(() => User, (user) => user.posts, {
         onUpdate: 'RESTRICT',
@@ -85,6 +85,9 @@ export class Post {
     })
     user: User;
 
+    /**
+     * 대분류
+     */
     @ManyToOne(() => FirstCategory, (firstCategory) => firstCategory.posts, {
         onUpdate: 'RESTRICT',
         onDelete: 'RESTRICT',
@@ -95,6 +98,9 @@ export class Post {
     })
     firstCategory: FirstCategory;
 
+    /**
+     * 중분류
+     */
     @ManyToOne(() => SecondCategory, (secondCategory) => secondCategory.posts, {
         onUpdate: 'RESTRICT',
         onDelete: 'RESTRICT',
@@ -105,6 +111,9 @@ export class Post {
     })
     secondCategory: SecondCategory;
 
+    /**
+     * 조회수
+     */
     @OneToOne(() => PostViewCount, {
         onUpdate: 'RESTRICT',
         onDelete: 'RESTRICT',
