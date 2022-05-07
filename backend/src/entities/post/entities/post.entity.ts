@@ -1,4 +1,5 @@
 import { FirstCategory } from 'src/entities/first-category/entities/first-category.entity';
+import { PostViewCount } from 'src/entities/post-view-count/entities/post-view-count.entity';
 import { SecondCategory } from 'src/entities/second-category/entities/second-category.entity';
 import { User } from 'src/entities/user/entities/user.entity';
 import {
@@ -7,6 +8,7 @@ import {
     Entity,
     JoinColumn,
     ManyToOne,
+    OneToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
@@ -33,6 +35,11 @@ export class Post {
         nullable: false,
     })
     secondCategoryId: number;
+
+    @Column({
+        nullable: false,
+    })
+    viewCountId: number;
 
     /**
      * 제목
@@ -97,6 +104,15 @@ export class Post {
         referencedColumnName: 'id',
     })
     secondCategory: SecondCategory;
+
+    @OneToOne(() => PostViewCount, {
+        onUpdate: 'RESTRICT',
+        onDelete: 'RESTRICT',
+    })
+    @JoinColumn({
+        name: 'viewCountId',
+    })
+    viewCount: PostViewCount;
 
     /**
      * Build Post entity.

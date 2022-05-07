@@ -27,6 +27,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { FirstCategoryModule } from './entities/first-category/first-category.module';
 import { SecondCategoryModule } from './entities/second-category/second-category.module';
+import { PostViewCountModule } from './entities/post-view-count/post-view-count.module';
 
 @Module({
   imports: [
@@ -68,6 +69,7 @@ import { SecondCategoryModule } from './entities/second-category/second-category
     AesModule,
     FirstCategoryModule,
     SecondCategoryModule,
+    PostViewCountModule,
   ],
   controllers: [AppController, HealthCheckController],
   providers: [
