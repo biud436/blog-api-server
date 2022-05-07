@@ -23,69 +23,67 @@ import { ImageModule } from './domain/image/image.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { getMyMulterOption } from './common/multer.config';
 import { AesModule } from './modules/aes/aes.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
 import { FirstCategoryModule } from './entities/first-category/first-category.module';
 import { SecondCategoryModule } from './entities/second-category/second-category.module';
 import { PostViewCountModule } from './entities/post-view-count/post-view-count.module';
 
 @Module({
-  imports: [
-    PostModule,
-    ConfigModule.forRoot({
-      envFilePath: <EnvFileMap>(
-        (AppModule.isDelvelopment() ? '.development.env' : '.env')
-      ),
-      isGlobal: true,
-    }),
-    ConfiguredDatabaseModule,
-    MulterModule.registerAsync({
-      useFactory: () => {
-        const isProduction = process.env.NODE_ENV === 'production';
+    imports: [
+        PostModule,
+        ConfigModule.forRoot({
+            envFilePath: <EnvFileMap>(
+                (AppModule.isDelvelopment() ? '.development.env' : '.env')
+            ),
+            isGlobal: true,
+        }),
+        ConfiguredDatabaseModule,
+        MulterModule.registerAsync({
+            useFactory: () => {
+                const isProduction = process.env.NODE_ENV === 'production';
 
-        return {
-          ...getMyMulterOption(isProduction),
-        };
-      },
-    }),
-    // ServeStaticModule.forRoot({
-    //   rootPath:
-    //     process.env.NODE_ENV === 'production'
-    //       ? '/usr/src/app/upload/'
-    //       : join(__dirname, '..', 'images'),
-    //   renderPath: '/images',
-    // }),
-    TerminusModule,
-    HttpModule,
-    UserModule,
-    ProfileModule,
-    AuthModule,
-    AdminModule,
-    PostsModule,
-    MailModule,
-    MicroServicesModule,
-    OrmModule,
-    ImageModule,
-    AesModule,
-    FirstCategoryModule,
-    SecondCategoryModule,
-    PostViewCountModule,
-  ],
-  controllers: [AppController, HealthCheckController],
-  providers: [
-    AppService,
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    },
-    {
-      provide: APP_FILTER,
-      useClass: AllExceptionFilter,
-    },
-  ],
+                return {
+                    ...getMyMulterOption(isProduction),
+                };
+            },
+        }),
+        // ServeStaticModule.forRoot({
+        //   rootPath:
+        //     process.env.NODE_ENV === 'production'
+        //       ? '/usr/src/app/upload/'
+        //       : join(__dirname, '..', 'images'),
+        //   renderPath: '/images',
+        // }),
+        TerminusModule,
+        HttpModule,
+        UserModule,
+        ProfileModule,
+        AuthModule,
+        AdminModule,
+        PostsModule,
+        MailModule,
+        MicroServicesModule,
+        OrmModule,
+        ImageModule,
+        AesModule,
+        FirstCategoryModule,
+        SecondCategoryModule,
+        PostViewCountModule,
+    ],
+    controllers: [AppController, HealthCheckController],
+    providers: [
+        AppService,
+        {
+            provide: APP_GUARD,
+            useClass: RolesGuard,
+        },
+        {
+            provide: APP_FILTER,
+            useClass: AllExceptionFilter,
+        },
+    ],
 })
 export class AppModule {
-  public static isDelvelopment(): boolean {
-    return process.env.NODE_ENV !== 'production';
-  }
+    public static isDelvelopment(): boolean {
+        return process.env.NODE_ENV !== 'production';
+    }
 }

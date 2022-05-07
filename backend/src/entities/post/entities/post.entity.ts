@@ -80,7 +80,7 @@ export class Post {
         onDelete: 'RESTRICT',
     })
     @JoinColumn({
-        name: 'author_id',
+        name: 'authorId',
         referencedColumnName: 'id',
     })
     user: User;
