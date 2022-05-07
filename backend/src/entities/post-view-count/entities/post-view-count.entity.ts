@@ -1,4 +1,5 @@
 import {
+    Column,
     CreateDateColumn,
     Entity,
     PrimaryGeneratedColumn,
@@ -19,4 +20,9 @@ export class PostViewCount {
         nullable: false,
     })
     updatedAt: Date;
+
+    @Column({
+        nullable: false,
+    })
+    count: number;
 }
