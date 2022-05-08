@@ -1,19 +1,19 @@
 # Introduction
 
-프론트엔드 페이지를 만들기 위한 프로젝트입니다. 목표는 서버 사이드 렌더링 프레임워크를 이용하여 최종적으로 정적 페이지를 생성해야 합니다.
+This project allows you to build a static page for island dashboard using famous library named `react.js` and `Material UI`
 
-## 설치 방법
+# Usage
 
-before starting the fronent development, you need to install the following dependencies:
-
-```
-yarn install
-```
-
-## 개발 서버 실행 방법
-
-To start the develoment server, run the following command:
+To start the server on linux system, you have to clone this repository using below command in the linux terminal.
 
 ```bash
-yarn dev
+git clone git@github.com:HarvenDev/island-frontend-react.git
 ```
+
+and next you have to apply `ssh-id` in this system, on your `Github Account`. you can copy the file content that ends with `*.pub` and paste it on your `Github Account` (`ssh-copy-id`)
+
+```bash
+cd ~/.ssh/
+```
+
+Note that do not install node_modules manually. In this project, we will be used `Dockerfile` and build the image using `docker build` command or `docker-compose`.
