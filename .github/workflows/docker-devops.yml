@@ -1,21 +1,21 @@
 name: CI
 
 on:
-  push:
-    branches: [ main ]
+    push:
+        branches: [main]
 
 jobs:
+    build:
+        runs-on: ubuntu-latest
 
-  build:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: |
-        cd ./rdb-devops
-        docker-compose up --build -d
-        cd ..
-        cd ./devops
-        docker-compose up --build -d
+        steps:
+            - uses: actions/checkout@v3
+            - name: Build the Docker image
+              run: |
+                  echo pwd
+                  echo ls -al
+                  cd ./rdb-devops
+                  docker-compose up --build -d
+                  cd ..
+                  cd ./devops
+                  docker-compose up --build -d
