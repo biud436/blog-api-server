@@ -63,7 +63,7 @@ The certification file didn't contain in this project, because it performs a man
 
 ## Frontend application
 
-In this frontend application will finish off the look and feel of our blog by adding a lot of Components, Stylesheet files, Redux and Recoil state management system of NextJS.
+In this frontend application will finish off the look and feel of our blog by adding a lot of Components, Stylesheet files, Redux and Recoil state management system of React.
 
 -   API Proxy
 -   SWR
