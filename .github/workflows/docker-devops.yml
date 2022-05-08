@@ -15,6 +15,7 @@ jobs:
                   echo pwd
                   echo ls -al
                   cd ./rdb-devops
+                  touch .env
                   docker-compose up --build -d
                   cd ..
                   cd ./devops
