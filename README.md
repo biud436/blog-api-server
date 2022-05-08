@@ -1,6 +1,6 @@
 # Introduction
 
-This project will introduce you to the basic elements of blog. Learning something new is always a little daunting at first. but I think that things will start to become familiar in no time.
+This project will introduce you to the basic elements of blog implementation. Learning something new is always a little daunting at first. but I think that things will start to become familiar in no time.
 
 ## Server application
 
