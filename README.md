@@ -13,30 +13,32 @@ In this directory named `backend` will finish off the features of our server by 
 
 Before start the server application, you have to create some file such as `.development.env` and `.env` and then you should set the following environment variables.
 
-```shell
-DB_HOST=
-DB_PASSWORD=
-DB_USER=
-DB_NAME=
-DB_PORT=
-DOCS_USERNAME=
-DOCS_PASSWORD=
-JWT_SECRET=
-JWT_SECRET_EXPIRATION_TIME=
-JWT_REFRESH_TOKEN_SECRET=
-JWT_REFRESH_TOKEN_EXPIRATION_TIME=
-PUBLIC_SERVER_IP=
-PASSWORD_JWT_SECRET=
-MAIL_XOR_KEY=
-GMAIL_USERNAME=
-GMAIL_PASSWORD=
-DAUM_USERNAME=
-DAUM_PASSWORD=
-NAVER_USERNAME=
-NAVER_PASSWORD=
-AES_256_KEY=
-AES_256_IV=
+```bash
+DB_HOST=localhost
+DB_PASSWORD=1234
+DB_USER=admin
+DB_NAME=test
+DB_PORT=3306
+DOCS_USERNAME=admin
+DOCS_PASSWORD=1234
+JWT_SECRET=<YOUR_SECRET>
+JWT_SECRET_EXPIRATION_TIME=2h
+JWT_REFRESH_TOKEN_SECRET=<YOUR_SECRET>
+JWT_REFRESH_TOKEN_EXPIRATION_TIME=14d
+PUBLIC_SERVER_IP=http://localhost:3000
+PASSWORD_JWT_SECRET=<YOUR_SECRET>
+MAIL_XOR_KEY=<6_digit_number>
+GMAIL_USERNAME=<YOUR_ID>@gmail.com
+GMAIL_PASSWORD=<ENCRYPTED_PASSWORD>
+DAUM_USERNAME=<YOUR_ID>@daum.net
+DAUM_PASSWORD=<ENCRYPTED_PASSWORD>
+NAVER_USERNAME=<YOUR_ID>@naver.com
+NAVER_PASSWORD=<ENCRYPTED_PASSWORD>
+AES_256_KEY=<YOUR_SECRET>
+AES_256_IV=<YOUR_SECRET>
 ```
+
+However it is hard to set the environment variables manually, so I recommend you to use terminal command that can set them automatically.
 
 To set the environment variables automatically, you can use the command line.
 
