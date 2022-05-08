@@ -4,7 +4,7 @@ This project will introduce you to the basic elements of blog implementation. Le
 
 ## Server application
 
-`backend` 폴더에는 블로그 API 서버가 `Nest.js`라는 서버 프레임워크로 구현되어있습니다.
+In this directory named `backend` will finish off the features of our server by adding a lot of controllers, services, pipes of `Nest.js` for blog service.
 
 -   Nest.js
 -   TypeORM
@@ -30,11 +30,11 @@ This project will introduce you to the basic elements of blog implementation. Le
 
 ## Frontend application
 
-`frontend` 폴더에는 `Next.js`로 생성한 프로젝트 파일들이 있습니다.
+In this frontend application will finish off the look and feel of our blog by adding a lot of Components, Stylesheet files, Redux and Recoil state management system of NextJS.
 
 -   API Proxy
 -   SWR
--   TOAST UI Editor (문서 편집을 위한 자바스크립트 라이브러리)
+-   TOAST UI Editor
 -   Recoil
 -   TailwindCSS
 -   Typescript
