@@ -1,3 +1,5 @@
+![Docker CI](https://github.com/biud436/blog/actions/workflows/docker-devops.yml/badge.svg)
+
 # Introduction
 
 This project will introduce you to the basic elements of blog implementation. Learning something new is always a little daunting at first. but I think that things will start to become familiar in no time.
