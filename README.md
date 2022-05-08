@@ -50,16 +50,14 @@ The Nest.js version is using a version released in March 2021.
 
 ## Devops environment
 
-`devops`와 `rdb-devops` 폴더에는 `Docker` 기반 개발 환경 구축을 위한 파일들이 있습니다.
+In directories called `devops` and `rdb-devops`, there is the yaml file ends with `docker-compose.yml` that can use in the the Docker. These files will create and execute a docker image in your linux or macos due to a Dockerfile of corresponding folder.
 
 -   Nginx
 -   Docker
 
-웹 서버는 도커를 사용할 수 있는 리눅스(**우분투 서버 20.04**)나 맥 환경에서 실행해야 합니다.
+You can run the web server, database, and others in certain environments such as `linux (Ubuntu Server 20.04)` or `MacOS (Apple M1 Silicon)` only. (Do not run it on Windows)
 
-실무와는 거리가 먼 구성이지만 블로그 서버를 돌리기에는 적합하다고 생각합니다.
-
-하지만 인증서는 직접 연동해야 합니다. 보안 문제로 일부로 제외하였습니다.
+The certification file didn't contain in this project, because it performs a many of security issues.
 
 ## Frontend application
 
@@ -71,9 +69,3 @@ In this frontend application will finish off the look and feel of our blog by ad
 -   Recoil
 -   TailwindCSS
 -   Typescript
-
-잘 쓸 수 있는 프론트엔드 프레임워크는 뷰이지만, 일부로 지금까지 전혀 사용해보지 않았던 전혀 모르는 리액트 라이브러리로 구성했습니다.
-
-써드 파티 라이브러리들도 지금까지 전혀 써보지 않았던 것으로 구성하였습니다.
-
-전혀 모르는 분야에서 새로운 것을 배울 수 있을 거라고 생각했습니다.
