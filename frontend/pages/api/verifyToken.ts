@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { JwtProvider } from "../providers/jwt.providers";
+import { JwtProvider } from "../../lib/jwt.providers";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (!req.headers.authorization) {

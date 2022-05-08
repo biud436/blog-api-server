@@ -1,8 +1,6 @@
-import dotenv from "dotenv";
-
 class ConfigServiceImpl {
     constructor() {
-        dotenv.config();
+        // dotenv.config();
     }
 
     get(key: string): string {

@@ -6,7 +6,11 @@ export function useAuth() {
     return useContext(AuthContext);
 }
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+export default function AuthProvider({
+    children,
+}: {
+    children: React.ReactNode;
+}) {
     const auth = useAuth();
 
     return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;

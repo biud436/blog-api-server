@@ -1,5 +1,4 @@
 // @ts-check
-
 const Dotenv = require("dotenv-webpack");
 const withTM = require("next-transpile-modules");
 
