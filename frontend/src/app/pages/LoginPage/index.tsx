@@ -11,7 +11,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
-import { CardHeader, Typography } from '@mui/material';
+import { CardHeader, Switch, Typography } from '@mui/material';
 import Link from '@mui/material/Link';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import FormControl from '@mui/material/FormControl';
@@ -26,6 +26,11 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { userState, User, userProfile } from '../../../store/user';
 import { AuthProvider, RequireAuth, useAuth } from 'app/providers/authProvider';
 import { useLocation, useNavigate } from 'react-router';
+import {
+  getThemeFromStorage,
+  isSystemDark,
+  saveTheme,
+} from 'styles/theme/utils';
 
 interface State {
   amount: string;
