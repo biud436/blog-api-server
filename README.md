@@ -11,9 +11,40 @@ In this directory named `backend` will finish off the features of our server by 
 -   MariaDB
 -   Redis
 
-데이터베이스 연결과 스웨거 문서 생성에 대한 모든 개인 정보 설정은 `nest build env` 와 `yarn start env` 명령을 통해 수행할 수 있습니다.
+Before start the server application, you have to create some file such as `.development.env` and `.env` and then you should set the following environment variables.
 
-오랜 기간 사용해왔기 때문에 레거시한 코드가 많으며, Nest.js 버전도 21년 03월에 출시된 버전을 쓰고 있습니다.
+```shell
+DB_HOST=
+DB_PASSWORD=
+DB_USER=
+DB_NAME=
+DB_PORT=
+DOCS_USERNAME=
+DOCS_PASSWORD=
+JWT_SECRET=
+JWT_SECRET_EXPIRATION_TIME=
+JWT_REFRESH_TOKEN_SECRET=
+JWT_REFRESH_TOKEN_EXPIRATION_TIME=
+PUBLIC_SERVER_IP=
+PASSWORD_JWT_SECRET=
+MAIL_XOR_KEY=
+GMAIL_USERNAME=
+GMAIL_PASSWORD=
+DAUM_USERNAME=
+DAUM_PASSWORD=
+NAVER_USERNAME=
+NAVER_PASSWORD=
+AES_256_KEY=
+AES_256_IV=
+```
+
+To set the environment variables automatically, you can use the command line.
+
+```
+yarn start env
+```
+
+The Nest.js version is using a version released in March 2021.
 
 ## Devops environment
 
