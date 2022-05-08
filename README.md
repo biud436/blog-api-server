@@ -1,8 +1,8 @@
-# 소개
+# Introduction
 
-NestJS, NextJS 그리고 Docker를 사용하여 만든 블로그 프로젝트입니다.
+This project will introduce you to the basic elements of blog using `Nest.js`, `React`, `Docker`. I'm not familiar in famous web front library called `React`. Learning something new is always a little daunting at first. but I think that things will start to become familiar in no time.
 
-## 서버
+## Server application
 
 `backend` 폴더에는 블로그 API 서버가 `Nest.js`라는 서버 프레임워크로 구현되어있습니다.
 
@@ -15,7 +15,7 @@ NestJS, NextJS 그리고 Docker를 사용하여 만든 블로그 프로젝트입
 
 오랜 기간 사용해왔기 때문에 레거시한 코드가 많으며, Nest.js 버전도 21년 03월에 출시된 버전을 쓰고 있습니다.
 
-## 개발 환경 구축
+## Devops environment
 
 `devops`와 `rdb-devops` 폴더에는 `Docker` 기반 개발 환경 구축을 위한 파일들이 있습니다.
 
@@ -28,7 +28,7 @@ NestJS, NextJS 그리고 Docker를 사용하여 만든 블로그 프로젝트입
 
 하지만 인증서는 직접 연동해야 합니다. 보안 문제로 일부로 제외하였습니다.
 
-## 프론트엔드
+## Frontend application
 
 `frontend` 폴더에는 `Next.js`로 생성한 프로젝트 파일들이 있습니다.
 
