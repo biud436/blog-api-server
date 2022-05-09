@@ -1,9 +1,9 @@
 describe('날짜 변환 테스트', () => {
     it('정수 타입으로 변환', () => {
-        expect((220509224700 / 10000000000) % 100 >> 0).toBe(22);
-        expect((220509224700 / 100000000) % 100 >> 0).toBe(5);
-        expect((220509224700 / 1000000) % 100 >> 0).toBe(9);
-        expect((220509224700 / 10000) % 100 >> 0).toBe(22);
+        expect((220509224700 / 100_0000_0000) % 100 >> 0).toBe(22);
+        expect((220509224700 / 1_0000_0000) % 100 >> 0).toBe(5);
+        expect((220509224700 / 100_0000) % 100 >> 0).toBe(9);
+        expect((220509224700 / 1_0000) % 100 >> 0).toBe(22);
         expect((220509224700 / 100) % 100 >> 0).toBe(47);
         expect((220509224700 / 1) % 100 >> 0).toBe(0);
     });
@@ -13,7 +13,7 @@ describe('날짜 변환 테스트', () => {
         if (isNaN(target)) {
             throw new Error('날짜 타입이 잘못되었습니다');
         }
-        let max = 10000000000;
+        let max = 100_0000_0000;
         let ret = [];
 
         for (let i = 0; i < 6; i++) {
@@ -30,7 +30,7 @@ describe('날짜 변환 테스트', () => {
         if (isNaN(target)) {
             throw new Error('날짜 타입이 잘못되었습니다');
         }
-        let max = 10000000000;
+        let max = 100_0000_0000;
         let ret = [];
 
         for (let i = 0; i < 6; i++) {
@@ -46,7 +46,7 @@ describe('날짜 변환 테스트', () => {
         if (isNaN(target)) {
             throw new Error('날짜 타입이 잘못되었습니다');
         }
-        let max = 10000000000;
+        let max = 100_0000_0000;
         let ret = [];
 
         for (let i = 0; i < 6; i++) {
@@ -71,7 +71,7 @@ describe('날짜 변환 테스트', () => {
         if (isNaN(target)) {
             throw new Error('날짜 타입이 잘못되었습니다');
         }
-        let max = 10000000000;
+        let max = 10_000_000_000;
         let ret = [];
 
         for (let i = 0; i < 6; i++) {
@@ -101,7 +101,7 @@ describe('날짜 변환 테스트', () => {
         if (isNaN(target)) {
             throw new Error('날짜 타입이 잘못되었습니다');
         }
-        let max = 10000000000;
+        let max = 100_0000_0000;
         let ret = [];
 
         for (let i = 0; i < 6; i++) {
