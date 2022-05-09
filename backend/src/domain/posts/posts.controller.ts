@@ -112,6 +112,7 @@ export class PostsController {
     async create(@Body() createPostDto: CreatePostDto) {
         const queryRunner = this.connection.createQueryRunner();
         await queryRunner.connect();
+        await queryRunner.startTransaction();
 
         try {
             const data = await this.postsService.create(
