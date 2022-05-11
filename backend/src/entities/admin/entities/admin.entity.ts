@@ -1,3 +1,4 @@
+import { plainToClass } from 'class-transformer';
 import { User } from 'src/entities/user/entities/user.entity';
 
 import {
