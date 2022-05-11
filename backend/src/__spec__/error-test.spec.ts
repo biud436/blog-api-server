@@ -1,11 +1,28 @@
-class RaiseConditionError extends Error {}
+import { HttpException, InternalServerErrorException } from '@nestjs/common';
+
+class RaiseConditionError extends HttpException {
+    constructor() {
+        super(
+            HttpException.createBody(
+                '경쟁 조건이 발생하였습니다.',
+                'RAISE_CONDITION_ERROR',
+                700,
+            ),
+            700,
+        );
+    }
+}
 class StageError extends Error {}
 class ProgramError extends Error {}
 class YoutubeError extends Error {}
 
 function errorInterceptor<T extends Error = Error>(e: T) {
     if (e instanceof RaiseConditionError) {
-        console.log('RaiseConditionError');
+        console.log(
+            'RaiseConditionError:%s [%d]',
+            e.getResponse(),
+            e.getStatus(),
+        );
     } else if (e instanceof StageError) {
         console.log('StageError');
     } else if (e instanceof ProgramError) {
@@ -18,7 +35,7 @@ function errorInterceptor<T extends Error = Error>(e: T) {
 describe('오류 테스트', () => {
     it('RaiseConditionError', () => {
         try {
-            throw new RaiseConditionError('오류 발생');
+            throw new RaiseConditionError();
         } catch (e: any) {
             errorInterceptor(e);
         }
