@@ -5,7 +5,7 @@ export interface Type<T> extends Function {
 }
 
 export class EntityBuilder {
-    static of<T>(clsRef: Type<T>, entity: T): T {
+    static of<T>(clsRef: Type<T>, entity: Partial<T>): T {
         return plainToClass(clsRef, entity);
     }
 }
