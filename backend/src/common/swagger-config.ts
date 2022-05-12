@@ -38,6 +38,10 @@ export type DefaultMapper<T> = {
     };
 };
 
+export type DefaultMapperWithoutHttpMethod<T> = {
+    [key in keyof Partial<T>]: ApiOkResponseDescriptor;
+};
+
 export namespace DocsMapper {
     export const auth: DefaultMapper<AuthController> = {
         _post: {
