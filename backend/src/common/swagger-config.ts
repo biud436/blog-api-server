@@ -1,5 +1,27 @@
+export type ApiOperationData = {
+    summary: string;
+    description: string;
+    requestBody?: any;
+};
+
+export type ApiOkResponseDescriptor = {
+    operation: ApiOperationData;
+    description: string;
+    auth?: boolean;
+    basicAuth?: boolean;
+    requestBody?: any;
+    type?: any;
+    schema?: any;
+};
+
+export type DefaultMapper = {
+    [key: string]: {
+        [key: string]: ApiOkResponseDescriptor;
+    };
+};
+
 export namespace DocsMapper {
-    export const auth = {
+    export const auth: DefaultMapper = {
         post: {
             login: {
                 operation: {
