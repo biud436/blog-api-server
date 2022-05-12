@@ -39,7 +39,7 @@ export class AuthController {
 
     @Post('/login')
     @UseGuards(new LocalAuthGuard())
-    @CustomApiOkResponse(DocsMapper.auth.post.login)
+    @CustomApiOkResponse(DocsMapper.auth._post.login)
     async login(
         @Req() req: Request,
         @Res({
@@ -68,7 +68,7 @@ export class AuthController {
     }
 
     @Post('send-auth-code')
-    @CustomApiOkResponse(DocsMapper.auth.post.sendAuthCode)
+    @CustomApiOkResponse(DocsMapper.auth._post.sendAuthCodeByEmail)
     async sendAuthCodeByEmail(@Body() data: SendAuthCodeRequestDto) {
         try {
             const res = await this.authService.sendAuthCodeByEmail(data.email);
@@ -82,7 +82,7 @@ export class AuthController {
     }
 
     @Post('verify-auth-code')
-    @CustomApiOkResponse(DocsMapper.auth.post.verifyAuthCode)
+    @CustomApiOkResponse(DocsMapper.auth._post.verifyAuthCode)
     async verifyAuthCode(@Body() data: VerifyAuthCodeRequestDto) {
         try {
             const res = await this.authService.verifyAuthCode(
@@ -99,7 +99,7 @@ export class AuthController {
     }
 
     @Post('/signup')
-    @CustomApiOkResponse(DocsMapper.auth.post.signup)
+    @CustomApiOkResponse(DocsMapper.auth._post.signup)
     async signup(@Body() data: AuthRequest.RequestDto) {
         try {
             const res = await this.authService.signUp(data);
