@@ -94,8 +94,6 @@ export namespace DocsMapper {
         },
     };
 
-    const GET = Symbol.for('get');
-
     export const posts: DefaultMapper<PostsController> = {
         _get: {
             findOne: {
