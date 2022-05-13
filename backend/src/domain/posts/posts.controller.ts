@@ -41,7 +41,7 @@ export class PostsController {
     ) {}
 
     @Get(':id')
-    @CustomApiOkResponse(DocsMapper.posts._get.findOne)
+    @CustomApiOkResponse(DocsMapper.posts.GET.findOne)
     async findOne(@Param('id', ParseIntPipe) id: number) {
         try {
             const model = await this.postsService.findOne(id);
@@ -53,7 +53,7 @@ export class PostsController {
     }
 
     @Patch(':id')
-    @CustomApiOkResponse(DocsMapper.posts._patch.update)
+    @CustomApiOkResponse(DocsMapper.posts.PATCH.update)
     @ApiParam({
         name: 'id',
         description: '포스트 ID',
@@ -66,7 +66,7 @@ export class PostsController {
     }
 
     @Delete(':id')
-    @CustomApiOkResponse(DocsMapper.posts._delete.remove)
+    @CustomApiOkResponse(DocsMapper.posts.DELETE.remove)
     @ApiParam({
         name: 'id',
         description: '포스트 ID',
@@ -80,7 +80,7 @@ export class PostsController {
     // !==========================================================
 
     @Post()
-    @CustomApiOkResponse(DocsMapper.posts._post.create)
+    @CustomApiOkResponse(DocsMapper.posts.POST.create)
     async create(@Body() createPostDto: CreatePostDto) {
         const queryRunner = this.connection.createQueryRunner();
         await queryRunner.connect();
@@ -108,7 +108,7 @@ export class PostsController {
     }
 
     @Get()
-    @CustomApiOkResponse(DocsMapper.posts._get.findAll)
+    @CustomApiOkResponse(DocsMapper.posts.GET.findAll)
     async findAll(
         @Offset('offset') offset = 0,
         @Limit('limit') limit = PaginationConfig.limit.max,

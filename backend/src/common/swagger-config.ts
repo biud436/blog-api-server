@@ -22,18 +22,10 @@ export type ApiOkResponseDescriptor = {
     schema?: any;
 };
 
-export type HttpMethod = {
-    _get: 'GET';
-    _post: 'POST';
-    _put: 'PUT';
-    _delete: 'DELETE';
-    _patch: 'PATCH';
-    _options: 'OPTIONS';
-    _head: 'HEAD';
-};
+export type HttpMapping = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'];
 
 export type DefaultMapper<T> = {
-    [key in keyof Partial<HttpMethod>]: {
+    [key in Partial<HttpMapping[number]>]: {
         [key in keyof Partial<T>]: ApiOkResponseDescriptor;
     };
 };
@@ -44,7 +36,11 @@ export type DefaultMapperWithoutHttpMethod<T> = {
 
 export namespace DocsMapper {
     export const auth: DefaultMapper<AuthController> = {
-        _post: {
+        DELETE: {},
+        GET: {},
+        PATCH: {},
+        PUT: {},
+        POST: {
             login: {
                 operation: {
                     summary: '로그인',
@@ -95,7 +91,8 @@ export namespace DocsMapper {
     };
 
     export const posts: DefaultMapper<PostsController> = {
-        _get: {
+        PUT: {},
+        GET: {
             findOne: {
                 operation: {
                     summary: '특정 포스트 조회',
@@ -113,7 +110,7 @@ export namespace DocsMapper {
                 description: '포스트 목록을 가져옵니다.',
             },
         },
-        _patch: {
+        PATCH: {
             update: {
                 operation: {
                     summary: '특정 포스트 수정',
@@ -123,7 +120,7 @@ export namespace DocsMapper {
                 description: '특정 포스트를 수정합니다.',
             },
         },
-        _delete: {
+        DELETE: {
             remove: {
                 operation: {
                     summary: '특정 포스트 삭제',
@@ -133,7 +130,7 @@ export namespace DocsMapper {
                 description: '특정 포스트를 삭제합니다.',
             },
         },
-        _post: {
+        POST: {
             create: {
                 operation: {
                     summary: '새로운 포스트 작성',
