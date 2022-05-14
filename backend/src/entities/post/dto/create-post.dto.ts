@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { ApiProperty, Assert } from 'src/common/create-dto-common';
 import { PostViewCount } from 'src/entities/post-view-count/entities/post-view-count.entity';
 
@@ -37,19 +38,22 @@ export class CreatePostDto {
      */
     @ApiProperty()
     @Assert.IsNumber()
-    authorId: number;
+    @Exclude()
+    authorId?: number;
 
     /**
      * 대분류 (FK)
      */
     @ApiProperty()
-    firstCategoryId: number;
+    @Exclude()
+    firstCategoryId?: number;
 
     /**
      * 중분류 (FK)
      */
     @ApiProperty()
-    secondCategoryId: number;
+    @Exclude()
+    secondCategoryId?: number;
 
     @ApiProperty({
         type: 'enum',

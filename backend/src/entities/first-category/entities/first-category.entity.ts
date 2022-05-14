@@ -1,8 +1,10 @@
+import { Exclude } from 'class-transformer';
 import { Post } from 'src/entities/post/entities/post.entity';
 import { SecondCategory } from 'src/entities/second-category/entities/second-category.entity';
 import {
     Column,
     Entity,
+    Index,
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
@@ -19,6 +21,7 @@ export class FirstCategory {
     @Column({
         nullable: false,
     })
+    @Index()
     name: string;
 
     @Column({
