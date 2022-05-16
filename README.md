@@ -63,7 +63,7 @@ The certification file didn't contain in this project, because it performs a man
 
 ## Frontend application
 
-** 🚩 I'll be separated the directory called 'frontend' in this repository and I'll be going to move to new repository. **
+🚩 I'll be separated the directory called 'frontend' in this repository and I'll be going to move to new repository.
 
 In this frontend application will finish off the look and feel of our blog by adding a lot of Components, Stylesheet files, Redux and Recoil state management system of React.
 
