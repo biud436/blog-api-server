@@ -1,6 +1,8 @@
 import { PaginationConfig } from 'src/common/list-config';
 import { VIRTUAL_COLUMN_KEY } from 'src/decorators/virtual-column.decorator';
 import { SelectQueryBuilder } from 'typeorm';
+import { QueryExpressionMap } from 'typeorm/query-builder/QueryExpressionMap';
+// import { QueryExpressionMap } from 'typeorm/query-builder/QueryExpressionMap';
 
 declare module 'typeorm' {
     interface SelectQueryBuilder<Entity> {
@@ -28,6 +30,10 @@ declare module 'typeorm' {
         setPaginationWithJoin(
             this: SelectQueryBuilder<Entity>,
             pageNumber?: number,
+        ): SelectQueryBuilder<Entity>;
+
+        paginatable(
+            this: SelectQueryBuilder<Entity>,
         ): SelectQueryBuilder<Entity>;
     }
 }
@@ -83,6 +89,18 @@ SelectQueryBuilder.prototype.setPaginationWithJoin = function (
     this.skip(PaginationConfig.limit.pagePerNumber * pageNumber).take(
         PaginationConfig.limit.pagePerNumber,
     );
+
+    return this;
+};
+
+SelectQueryBuilder.prototype.paginatable = function (
+    this: SelectQueryBuilder<any>,
+) {
+    (
+        this.expressionMap as QueryExpressionMap & {
+            usePagination: boolean;
+        }
+    ).usePagination = true;
 
     return this;
 };
