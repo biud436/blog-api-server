@@ -64,6 +64,11 @@ SelectQueryBuilder.prototype.setPagination = function (
     this: SelectQueryBuilder<any>,
     pageNumber?: number,
 ) {
+    if (this.expressionMap.joinAttributes.length > 0) {
+        console.warn(
+            '조인이 설정된 경우, setPagination이 제대로 동작하지 않을 수 있습니다. setPaginationWithJoin를 사용해주세요.',
+        );
+    }
     this.offset(PaginationConfig.limit.pagePerNumber * pageNumber).limit(
         PaginationConfig.limit.pagePerNumber,
     );
