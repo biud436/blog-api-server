@@ -26,6 +26,7 @@ import { AesModule } from './modules/aes/aes.module';
 import { FirstCategoryModule } from './entities/first-category/first-category.module';
 import { SecondCategoryModule } from './entities/second-category/second-category.module';
 import { PostViewCountModule } from './entities/post-view-count/post-view-count.module';
+import './polyfill/';
 
 @Module({
     imports: [

@@ -7,26 +7,29 @@ import { ProfileRepository } from './entities/profile.repository';
 
 @Injectable()
 export class ProfileService {
-  constructor(
-    @InjectRepository(ProfileRepository)
-    private readonly profileRepository: ProfileRepository,
-  ) {}
+    constructor(
+        @InjectRepository(ProfileRepository)
+        private readonly profileRepository: ProfileRepository,
+    ) {}
 
-  async isValidEmail(email: string): Promise<boolean> {
-    const entity = await this.profileRepository
-      .createQueryBuilder('profile')
-      .where('profile.email = :email', { email })
-      .getCount();
+    async isValidEmail(email: string): Promise<boolean> {
+        const entity = await this.profileRepository
+            .createQueryBuilder('profile')
+            .where('profile.email = :email', { email })
+            .setPagination(1)
+            .getCount();
 
-    return entity > 0;
-  }
+        return entity > 0;
+    }
 
-  async addProfile(
-    createProfileDto: CreateProfileDto,
-    queryRunner: QueryRunner,
-  ): Promise<any> {
-    const profileModel = await this.profileRepository.create(createProfileDto);
+    async addProfile(
+        createProfileDto: CreateProfileDto,
+        queryRunner: QueryRunner,
+    ): Promise<any> {
+        const profileModel = await this.profileRepository.create(
+            createProfileDto,
+        );
 
-    return await queryRunner.manager.save(profileModel);
-  }
+        return await queryRunner.manager.save(profileModel);
+    }
 }

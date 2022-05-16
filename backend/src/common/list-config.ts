@@ -10,6 +10,7 @@ export namespace Pagination {
             };
             max: number;
             min: number;
+            pagePerNumber: number;
         };
     };
 }
@@ -33,6 +34,8 @@ export const PaginationConfig = <Pagination.Config>{
          * 최소 조회 갯수
          */
         min: 1,
+
+        pagePerNumber: 10,
     },
 };
 
