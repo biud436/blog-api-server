@@ -10,7 +10,8 @@ export namespace Pagination {
             };
             max: number;
             min: number;
-            pagePerNumber: number;
+            numberPerPage: number;
+            pagePerBlock: number;
         };
     };
 }
@@ -35,9 +36,41 @@ export const PaginationConfig = <Pagination.Config>{
          */
         min: 1,
 
-        pagePerNumber: 10,
+        /**
+         * 페이지 당 게시물 수
+         */
+        numberPerPage: 10,
+
+        /**
+         * 블럭 당 페이지 수
+         *
+         */
+        pagePerBlock: 10,
     },
 };
+
+export class PaginationFlushObject {
+    /**
+     * 현재 페이지
+     */
+    currentPage: number;
+    /**
+     * 전체 페이지 수
+     */
+    maxPage: number;
+    /**
+     * 전체 게시물 수
+     */
+    totalRecord: number;
+    /**
+     * 현재 페이지 블럭
+     */
+    currentBlock: number;
+    /**
+     * 전체 블럭 수
+     */
+    totalBlock: number;
+}
 
 /**
  * 검색 옵션

@@ -1,4 +1,7 @@
-import { PaginationConfig } from 'src/common/list-config';
+import {
+    PaginationConfig,
+    PaginationFlushObject as PaginationFlags,
+} from 'src/common/list-config';
 import { VIRTUAL_COLUMN_KEY } from 'src/decorators/virtual-column.decorator';
 import { SelectQueryBuilder } from 'typeorm';
 import { QueryExpressionMap } from 'typeorm/query-builder/QueryExpressionMap';
@@ -32,9 +35,14 @@ declare module 'typeorm' {
             pageNumber?: number,
         ): SelectQueryBuilder<Entity>;
 
-        paginatable(
+        getManyWithPagination(
             this: SelectQueryBuilder<Entity>,
-        ): SelectQueryBuilder<Entity>;
+            pageNumber: number,
+        ): Promise<
+            PaginationFlags & {
+                entities: Entity[];
+            }
+        >;
     }
 }
 
@@ -70,13 +78,8 @@ SelectQueryBuilder.prototype.setPagination = function (
     this: SelectQueryBuilder<any>,
     pageNumber?: number,
 ) {
-    if (this.expressionMap.joinAttributes.length > 0) {
-        console.warn(
-            '조인이 설정된 경우, setPagination이 제대로 동작하지 않을 수 있습니다. setPaginationWithJoin를 사용해주세요.',
-        );
-    }
-    this.offset(PaginationConfig.limit.pagePerNumber * pageNumber).limit(
-        PaginationConfig.limit.pagePerNumber,
+    this.offset(PaginationConfig.limit.numberPerPage * pageNumber).limit(
+        PaginationConfig.limit.numberPerPage,
     );
 
     return this;
@@ -86,21 +89,38 @@ SelectQueryBuilder.prototype.setPaginationWithJoin = function (
     this: SelectQueryBuilder<any>,
     pageNumber?: number,
 ) {
-    this.skip(PaginationConfig.limit.pagePerNumber * pageNumber).take(
-        PaginationConfig.limit.pagePerNumber,
+    this.skip(PaginationConfig.limit.numberPerPage * pageNumber).take(
+        PaginationConfig.limit.numberPerPage,
     );
 
     return this;
 };
 
-SelectQueryBuilder.prototype.paginatable = function (
-    this: SelectQueryBuilder<any>,
+SelectQueryBuilder.prototype.getManyWithPagination = async function (
+    pageNumber: number,
 ) {
-    (
-        this.expressionMap as QueryExpressionMap & {
-            usePagination: boolean;
-        }
-    ).usePagination = true;
+    const qb = this.clone();
 
-    return this;
+    const totalRecord = await qb.getCount();
+    const totalPage = Math.ceil(
+        totalRecord / PaginationConfig.limit.numberPerPage,
+    );
+    const currentPage = pageNumber;
+    const currentBlock = Math.ceil(
+        currentPage / PaginationConfig.limit.pagePerBlock,
+    );
+    const totalBlock = Math.ceil(
+        totalPage / PaginationConfig.limit.pagePerBlock,
+    );
+
+    const entities = await qb.getMany();
+
+    return {
+        entities,
+        totalRecord,
+        currentPage,
+        maxPage: totalPage,
+        currentBlock,
+        totalBlock,
+    };
 };
