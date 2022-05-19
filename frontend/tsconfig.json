@@ -15,6 +15,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
+    "experimentalDecorators": true,
     "jsx": "react-jsx",
     "baseUrl": "./src"
   },

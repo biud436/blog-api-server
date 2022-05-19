@@ -48,8 +48,6 @@ export class AuthController {
         res: Response,
     ) {
         try {
-            this.logger.log('로그인 시도');
-
             const token = await this.authService.login(req.user);
 
             // NestJS는 response를 직접 매핑하여 반환하는데, @Res 데코레이터를 사용하면 직접 send를 해야 한다.

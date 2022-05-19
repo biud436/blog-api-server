@@ -1,5 +1,4 @@
 import { lazyLoad } from 'utils/loadable';
-import { LoadingIndicator } from 'app/components/LoadingIndicator';
 import styled from 'styled-components/macro';
 
 const LoadingWrapper = styled.div`
@@ -16,7 +15,7 @@ export const LoginPage = lazyLoad(
   {
     fallback: (
       <LoadingWrapper>
-        <LoadingIndicator />
+        <div></div>
       </LoadingWrapper>
     ),
   },
