@@ -1,5 +1,6 @@
 import { atom, RecoilValueReadOnly, selector } from 'recoil';
 import axios, { AxiosResponse } from 'axios';
+import * as validator from 'class-validator';
 
 // ! ATOM
 
@@ -64,12 +65,14 @@ export const AUTH_API = <IAUTH_API>{
     get: async ({ get }) => {
       const { email, authCode } = get(verifyAuthCode);
 
-      const res = await axios.post('/auth/verify-auth-code', <
-        VerifyAuthCodeRequestDto
-      >{
+      if (!validator.isEmail(email)) {
+        throw new Error('잘못된 이메일 형식입니다.');
+      }
+
+      const res = await axios.post('/auth/verify-auth-code', {
         authCode,
         email,
-      });
+      } as VerifyAuthCodeRequestDto);
 
       return res;
     },
@@ -79,11 +82,15 @@ export const AUTH_API = <IAUTH_API>{
     get: async ({ get }) => {
       const { username, password, email } = get(signUpParameter);
 
-      const res = await axios.post('/auth/signup', <SignUpDto>{
+      if (!validator.isEmail(email)) {
+        throw new Error('잘못된 이메일 형식입니다.');
+      }
+
+      const res = await axios.post('/auth/signup', {
         username,
         password,
         email,
-      });
+      } as SignUpDto);
 
       return res;
     },
