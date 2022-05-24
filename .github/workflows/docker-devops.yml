@@ -16,10 +16,5 @@ jobs:
                   touch .env
                   docker-compose up --build -d
                   cd ..
-                  cd ./frontend
-                  touch .env
-                  echo 'NEXT_PUBLIC_SERVER_IP=http://host.docker.internal' >> .env
-                  echo 'JWT_SECRET={{ secrets.FRONTEND_JWT_SECRET }}' >> .env
-                  cd ..
                   cd ./devops
                   docker-compose up --build -d
