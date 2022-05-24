@@ -8,10 +8,10 @@ This project will introduce you to the basic elements of blog implementation. Le
 
 In this directory named `backend` will finish off the features of our server by adding a lot of controllers, services, pipes of `Nest.js` for blog service.
 
-- Nest.js
-- TypeORM
-- MariaDB
-- Redis
+-   Nest.js
+-   TypeORM
+-   MariaDB
+-   Redis
 
 Before start the server application, you have to create some file such as `.development.env` and `.env` and then you should set the following environment variables.
 
@@ -54,22 +54,9 @@ The Nest.js version is using a version released in March 2021.
 
 In directories called `devops` and `rdb-devops`, there is the yaml file ends with `docker-compose.yml` that can use in the the Docker. These files will create and execute a docker image in your linux or macos due to a Dockerfile of corresponding folder.
 
-- Nginx
-- Docker
+-   Nginx
+-   Docker
 
 You can run the web server, database, and others in certain environments such as `linux (Ubuntu Server 20.04)` or `MacOS (Apple M1 Silicon)` only. (Do not run it on Windows)
 
 The certification file didn't contain in this project, because it performs a many of security issues.
-
-## Frontend application
-
-🚩 I'll be separated the directory called 'frontend' in this repository and I'll be going to move to new repository.
-
-In this frontend application will finish off the look and feel of our blog by adding a lot of Components, Stylesheet files, Redux and Recoil state management system of React.
-
-- API Proxy
-- SWR
-- TOAST UI Editor
-- Recoil
-- TailwindCSS
-- Typescript
