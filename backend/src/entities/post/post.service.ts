@@ -40,15 +40,14 @@ export class PostService {
         return await queuryRunner.manager.save(model);
     }
 
-    async findAll(offset: number, limit: number) {
+    async findAll(pageNumber: number) {
         const items = await this.postRepository
             .createQueryBuilder('post')
             .select()
             .where('post.deletedAt IS NULL')
             .orderBy('post.uploadDate', 'DESC')
-            .offset(offset)
-            .take(limit)
-            .getMany();
+            .setPagination(pageNumber)
+            .getManyWithPagination(pageNumber);
 
         return items;
     }

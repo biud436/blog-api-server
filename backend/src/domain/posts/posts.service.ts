@@ -12,8 +12,8 @@ export class PostsService {
         return await this.postService.create(createPostDto, queryRunner);
     }
 
-    async findAll(offset: number, limit: number) {
-        return await this.postService.findAll(offset, limit);
+    async findAll(page: number) {
+        return await this.postService.findAll(page);
     }
 
     async findOne(id: number) {}
