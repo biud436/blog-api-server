@@ -1,10 +1,7 @@
 import {
     Body,
     Controller,
-    HttpCode,
-    HttpException,
     HttpStatus,
-    InternalServerErrorException,
     Logger,
     Post,
     Req,
@@ -15,15 +12,11 @@ import { CustomApiOkResponse } from 'src/decorators/custom.decorator';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { Request, Response } from 'express';
-import { ConfigService } from '@nestjs/config';
-import { DateTimeUtil } from 'src/utils/DateTimeUtil';
-import { ChronoUnit, TemporalField, TemporalUnit } from '@js-joda/core';
 import { ApiTags } from '@nestjs/swagger';
 import { SendAuthCodeRequestDto } from './dto/send-auth-code.dto';
 import { ResponseUtil } from 'src/utils/ResponseUtil';
 import { RESPONSE_MESSAGE } from 'src/utils/response';
 import { VerifyAuthCodeRequestDto } from './dto/verify-auth-code.dto';
-import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';
 import { AuthRequest } from './validator/request.dto';
 import { DocsMapper } from 'src/common/swagger-config';
 
