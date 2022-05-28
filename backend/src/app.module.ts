@@ -46,13 +46,6 @@ import './polyfill/';
                 };
             },
         }),
-        // ServeStaticModule.forRoot({
-        //   rootPath:
-        //     process.env.NODE_ENV === 'production'
-        //       ? '/usr/src/app/upload/'
-        //       : join(__dirname, '..', 'images'),
-        //   renderPath: '/images',
-        // }),
         TerminusModule,
         HttpModule,
         UserModule,
