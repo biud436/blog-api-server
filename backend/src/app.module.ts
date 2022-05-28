@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { PostModule } from './entities/post/post.module';
 import { ConfiguredDatabaseModule } from './modules/configured-database/configured-database.module';
 import { UserModule } from './entities/user/user.module';
@@ -72,7 +71,6 @@ import './polyfill/';
     ],
     controllers: [AppController, HealthCheckController],
     providers: [
-        AppService,
         {
             provide: APP_GUARD,
             useClass: RolesGuard,

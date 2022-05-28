@@ -10,6 +10,7 @@ import * as cookieParser from 'cookie-parser';
 import * as basicAuth from 'express-basic-auth';
 import * as express from 'express';
 import winstonLogger from 'src/common/winston-config';
+import helmet from 'helmet';
 
 export class NestBootstrapApplication {
     private static INSTANCE: NestBootstrapApplication;
@@ -70,6 +71,7 @@ export class NestBootstrapApplication {
                     : './images',
             ),
         );
+        app.use(helmet());
         app.setBaseViewsDir(path.join(__dirname, '..', 'views'));
         app.useStaticAssets(path.join(__dirname, '..', 'public'));
         app.setViewEngine('hbs');
