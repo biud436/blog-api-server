@@ -21,6 +21,7 @@ import {
 } from 'src/decorators/custom.decorator';
 import { Limit } from 'src/decorators/limit.decorator';
 import { Offset } from 'src/decorators/offset.decorator';
+import { PageNumber } from 'src/decorators/page-number.decorator';
 import { CreatePostDto } from 'src/entities/post/dto/create-post.dto';
 import { UpdatePostDto } from 'src/entities/post/dto/update-post.dto';
 import { RESPONSE_MESSAGE } from 'src/utils/response';
@@ -109,12 +110,9 @@ export class PostsController {
 
     @Get()
     @CustomApiOkResponse(DocsMapper.posts.GET.findAll)
-    async findAll(
-        @Offset('offset') offset = 0,
-        @Limit('limit') limit = PaginationConfig.limit.max,
-    ) {
+    async findAll(@PageNumber('page') page: number) {
         try {
-            const data = await this.postsService.findAll(offset, limit);
+            const data = await this.postsService.findAll(page);
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, data);
         } catch {
             return ResponseUtil.failure(RESPONSE_MESSAGE.NULL_VALUE);
