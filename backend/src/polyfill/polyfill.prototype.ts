@@ -1,6 +1,8 @@
+import { BadRequestException } from '@nestjs/common';
 import {
     PaginationConfig,
     PaginationFlushObject as PaginationFlags,
+    PaginationResult,
 } from 'src/common/list-config';
 import { VIRTUAL_COLUMN_KEY } from 'src/decorators/virtual-column.decorator';
 import { SelectQueryBuilder } from 'typeorm';
@@ -34,9 +36,22 @@ declare module 'typeorm' {
             this: SelectQueryBuilder<Entity>,
             pageNumber: number,
         ): Promise<
-            PaginationFlags & {
-                entities: Entity[];
-            }
+            | {
+                  pagination: PaginationResult;
+                  entities: Entity[];
+              }
+            | undefined
+        >;
+
+        getRawManyWithPagination(
+            this: SelectQueryBuilder<Entity>,
+            pageNumber: number,
+        ): Promise<
+            | {
+                  pagination: PaginationResult;
+                  entities: Entity[];
+              }
+            | undefined
         >;
     }
 }
@@ -45,7 +60,7 @@ SelectQueryBuilder.prototype.setPagination = function (
     this: SelectQueryBuilder<any>,
     pageNumber?: number,
 ) {
-    this.offset(PaginationConfig.limit.numberPerPage * pageNumber).limit(
+    this.offset(PaginationConfig.limit.numberPerPage * (pageNumber - 1)).limit(
         PaginationConfig.limit.numberPerPage,
     );
 
@@ -56,7 +71,7 @@ SelectQueryBuilder.prototype.setPaginationWithJoin = function (
     this: SelectQueryBuilder<any>,
     pageNumber?: number,
 ) {
-    this.skip(PaginationConfig.limit.numberPerPage * pageNumber).take(
+    this.skip(PaginationConfig.limit.numberPerPage * (pageNumber - 1)).take(
         PaginationConfig.limit.numberPerPage,
     );
 
@@ -66,28 +81,66 @@ SelectQueryBuilder.prototype.setPaginationWithJoin = function (
 SelectQueryBuilder.prototype.getManyWithPagination = async function (
     pageNumber: number,
 ) {
-    const qb = this.clone();
-
-    const totalRecord = await qb.getCount();
-    const totalPage = Math.ceil(
-        totalRecord / PaginationConfig.limit.numberPerPage,
+    const cloneQueryBuilder = this.clone();
+    const totalCount = await cloneQueryBuilder.getCount();
+    const maxPage = Math.ceil(
+        totalCount / PaginationConfig.limit.numberPerPage,
     );
-    const currentPage = pageNumber;
+
+    const maxBlock = Math.ceil(maxPage / PaginationConfig.limit.pagePerBlock);
     const currentBlock = Math.ceil(
-        currentPage / PaginationConfig.limit.pagePerBlock,
-    );
-    const totalBlock = Math.ceil(
-        totalPage / PaginationConfig.limit.pagePerBlock,
+        pageNumber / PaginationConfig.limit.pagePerBlock,
     );
 
-    const entities = await qb.getMany();
+    if (pageNumber > maxPage) {
+        throw new BadRequestException('조회할 페이지가 존재하지 않습니다.');
+    }
+
+    const result = <PaginationResult>{
+        currentPage: pageNumber,
+        totalCount,
+        maxPage,
+        currentBlock,
+        maxBlock,
+    };
+    const entities = await cloneQueryBuilder.getMany();
 
     return {
+        pagination: result,
         entities,
-        totalRecord,
-        currentPage,
-        maxPage: totalPage,
+    };
+};
+
+SelectQueryBuilder.prototype.getRawManyWithPagination = async function (
+    pageNumber: number,
+) {
+    const cloneQueryBuilder = this.clone();
+
+    const totalCount = await this.getCount();
+    const entities = await cloneQueryBuilder.getRawMany();
+    const maxPage = Math.ceil(
+        totalCount / PaginationConfig.limit.numberPerPage,
+    );
+
+    const maxBlock = Math.ceil(maxPage / PaginationConfig.limit.pagePerBlock);
+    const currentBlock = Math.ceil(
+        pageNumber / PaginationConfig.limit.pagePerBlock,
+    );
+
+    if (pageNumber > maxPage) {
+        throw new BadRequestException('조회할 페이지가 존재하지 않습니다.');
+    }
+
+    const result = <PaginationResult>{
+        currentPage: pageNumber,
+        totalCount,
+        maxPage,
         currentBlock,
-        totalBlock,
+        maxBlock,
+    };
+
+    return {
+        pagination: result,
+        entities,
     };
 };
