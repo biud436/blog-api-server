@@ -14,7 +14,7 @@ import helmet from 'helmet';
 
 export class NestBootstrapApplication {
     private static INSTANCE: NestBootstrapApplication;
-    private static PORT: number = 3000;
+    private static PORT = 3000;
     private static CONFIG: ConfigService;
     private static LOGGER: Logger = new Logger(NestBootstrapApplication.name);
 
