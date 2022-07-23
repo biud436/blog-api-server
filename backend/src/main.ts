@@ -1,4 +1,4 @@
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
@@ -16,6 +16,7 @@ export class NestBootstrapApplication {
     private static INSTANCE: NestBootstrapApplication;
     private static PORT: number = 3000;
     private static CONFIG: ConfigService;
+    private static LOGGER: Logger = new Logger(NestBootstrapApplication.name);
 
     private _application: NestExpressApplication = null;
 
@@ -28,7 +29,9 @@ export class NestBootstrapApplication {
      */
     async start(): Promise<void> {
         if (this.isDelvelopment()) {
-            ServerLog.info('서버가 개발 모드에서 시작되었습니다');
+            NestBootstrapApplication.LOGGER.log(
+                '서버가 개발 모드에서 시작되었습니다',
+            );
         }
 
         this._application = await NestFactory.create<NestExpressApplication>(
