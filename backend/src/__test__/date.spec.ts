@@ -9,12 +9,12 @@ describe('날짜 변환 테스트', () => {
     });
 
     it('정수 타입으로 변환하는 경우', () => {
-        let target = parseInt('220509224700');
+        const target = parseInt('220509224700');
         if (isNaN(target)) {
             throw new Error('날짜 타입이 잘못되었습니다');
         }
         let max = 100_0000_0000;
-        let ret = [];
+        const ret = [];
 
         for (let i = 0; i < 6; i++) {
             ret.push((target / max) % 100 >> 0);
@@ -26,12 +26,12 @@ describe('날짜 변환 테스트', () => {
     });
 
     it('잘못된 데이터가 있을 경우', () => {
-        let target = parseInt('ff0509224700');
+        const target = parseInt('ff0509224700');
         if (isNaN(target)) {
             throw new Error('날짜 타입이 잘못되었습니다');
         }
         let max = 100_0000_0000;
-        let ret = [];
+        const ret = [];
 
         for (let i = 0; i < 6; i++) {
             ret.push((target / max) % 100 >> 0);
@@ -42,12 +42,12 @@ describe('날짜 변환 테스트', () => {
     });
 
     it('연도가 잘못되었을 경우', () => {
-        let target = parseInt('000509224700');
+        const target = parseInt('000509224700');
         if (isNaN(target)) {
             throw new Error('날짜 타입이 잘못되었습니다');
         }
         let max = 100_0000_0000;
-        let ret = [];
+        const ret = [];
 
         for (let i = 0; i < 6; i++) {
             ret.push((target / max) % 100 >> 0);
@@ -67,12 +67,12 @@ describe('날짜 변환 테스트', () => {
             SECOND: { min: 0, max: 59 },
         };
 
-        let target = parseInt('221432889999');
+        const target = parseInt('221432889999');
         if (isNaN(target)) {
             throw new Error('날짜 타입이 잘못되었습니다');
         }
         let max = 10_000_000_000;
-        let ret = [];
+        const ret = [];
 
         for (let i = 0; i < 6; i++) {
             const value = (target / max) % 100 >> 0;
@@ -97,12 +97,12 @@ describe('날짜 변환 테스트', () => {
             SECOND: { min: 0, max: 59 },
         };
 
-        let target = parseInt('220509235800');
+        const target = parseInt('220509235800');
         if (isNaN(target)) {
             throw new Error('날짜 타입이 잘못되었습니다');
         }
         let max = 100_0000_0000;
-        let ret = [];
+        const ret = [];
 
         for (let i = 0; i < 6; i++) {
             const value = (target / max) % 100 >> 0;
