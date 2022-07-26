@@ -20,6 +20,8 @@ export type UserLoginValidationInfo = {
     >;
 };
 
+type Optional<T> = { [P in keyof T]?: T[P] };
+
 @Injectable()
 export class UserService {
     constructor(
@@ -36,6 +38,18 @@ export class UserService {
         model.profile = profile;
 
         return await queryRunner.manager.save(model);
+    }
+
+    async createByGithub(
+        createUserDto: CreateUserDto,
+        profile: Optional<Profile>,
+    ) {
+        const model = await this.userRepository.create(createUserDto);
+        model.profile = new Profile();
+        model.profile.nickname = profile.nickname;
+        model.profile.email = profile.email;
+
+        return await this.userRepository.save(model);
     }
 
     async validateUser(

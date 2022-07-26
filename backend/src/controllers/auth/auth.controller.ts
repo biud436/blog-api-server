@@ -1,10 +1,13 @@
 import {
     Body,
     Controller,
+    Get,
+    HttpService,
     HttpStatus,
     Ip,
     Logger,
     Post,
+    Query,
     Req,
     Res,
     UseGuards,
@@ -24,13 +27,62 @@ import { UserInfo } from 'src/decorators/user.decorator';
 import { User } from 'src/entities/user/entities/user.entity';
 import { DateTimeUtil } from 'src/utils/DateTimeUtil';
 import { ServerLog } from 'src/utils/ServerLog';
+import { GithubAuthGuard } from './guards/github.guard';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')
 @ApiTags('인증 API')
 export class AuthController {
     private logger: Logger = new Logger(AuthController.name);
 
-    constructor(private readonly authService: AuthService) {}
+    constructor(
+        private readonly authService: AuthService,
+        private readonly configService: ConfigService,
+        private readonly httpService: HttpService,
+    ) {}
+
+    @Get('/github')
+    @UseGuards(GithubAuthGuard)
+    async githubLogin(@Body() data: any, @Ip() ip: string) {
+        return 'wow';
+    }
+
+    @Get('/github/authorize')
+    @UseGuards(GithubAuthGuard)
+    @ApiConsumes('application/json')
+    async authorizeGithub() {
+        return 'wow';
+    }
+
+    @Get('/github/callback')
+    @UseGuards(GithubAuthGuard)
+    async githubCallback(
+        @Query('code') code: string,
+        @Res({
+            passthrough: true,
+        })
+        res: Response,
+    ) {
+        // const authorizedCode = code;
+        // const GITHUB_CLIENT_ID = this.configService.get('GITHUB_CLIENT_ID');
+        // const GITHUB_CLIENT_SECRET = this.configService.get(
+        //     'GITHUB_CLIENT_SECRET',
+        // );
+
+        // const res = await this.httpService.axiosRef.post(
+        //     'https://github.com/login/oauth/access_token',
+        //     {
+        //         client_id: GITHUB_CLIENT_ID,
+        //         client_secret: GITHUB_CLIENT_SECRET,
+        //         code: authorizedCode,
+        //         accept: 'json',
+        //     },
+        // );
+
+        // return res.data;
+
+        return `인증되었습니다.`;
+    }
 
     @Post('/login')
     @UseGuards(new LocalAuthGuard())
