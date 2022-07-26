@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ImageModule } from 'src/controllers/image/image.module';
 import { OrmModule } from 'src/modules/orm/orm.module';
-import { UserSubscriber } from './entities/user.subscriber';
+import { UserSubscriber } from './user.subscriber';
 import { UserService } from './user.service';
 
 @Module({
