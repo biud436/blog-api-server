@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityBuilder } from 'src/common/entity-builder';
-import { CreateFirstCategoryDto } from './dto/create-first-category.dto';
-import { UpdateFirstCategoryDto } from './dto/update-first-category.dto';
 import { FirstCategory } from './entities/first-category.entity';
 import { FirstCategoryRepository } from './entities/first-category.repository';
 

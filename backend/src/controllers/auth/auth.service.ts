@@ -123,10 +123,10 @@ export class AuthService {
         url = url.replace('https://', '');
         url = url.split(':')[0];
 
-        let jwtSecretExpirationTime = DateTimeUtil.extractJwtExpirationTime(
+        const jwtSecretExpirationTime = DateTimeUtil.extractJwtExpirationTime(
             this.configService.get('JWT_SECRET_EXPIRATION_TIME'),
         );
-        let jwtRefreshTokenExpirationTime =
+        const jwtRefreshTokenExpirationTime =
             DateTimeUtil.extractJwtExpirationTime(
                 this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME'),
             );
@@ -353,6 +353,7 @@ export class AuthService {
             // 프로필 데이터 생성
             const profileDto = {
                 email: body.email,
+                nickname: body.nickname,
             };
 
             // 프로필 모델 저장
@@ -405,7 +406,7 @@ export class AuthService {
             console.log(deletedOK);
 
             throw new InternalServerErrorException({
-                message: CONFIG.KOREAN.NOTIFY_FAILED_SIGNUP,
+                message: e.message ?? CONFIG.KOREAN.NOTIFY_FAILED_SIGNUP,
             });
         } finally {
             // 레디스에 저장된 키를 제거합니다.

@@ -4,8 +4,8 @@ import { ImageController } from './image.controller';
 import { OrmModule } from 'src/modules/orm/orm.module';
 
 @Module({
-  imports: [OrmModule],
-  controllers: [ImageController],
-  providers: [ImageService],
+    imports: [OrmModule],
+    controllers: [ImageController],
+    providers: [ImageService],
 })
 export class ImageModule {}

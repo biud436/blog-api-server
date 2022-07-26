@@ -47,8 +47,8 @@ export class UserService {
             isValid: true,
         });
 
-        let isValidUser = true;
-        let isCorrectPassword = false;
+        const isValidUser = true;
+        const isCorrectPassword = false;
         const result = <UserLoginValidationInfo>{
             isValidUser,
             isCorrectPassword,

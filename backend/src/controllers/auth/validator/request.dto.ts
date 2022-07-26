@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsString, Matches } from 'class-validator';
 import { CreateProfileDto } from 'src/entities/profile/dto/create-profile.dto';
 
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace AuthRequest {
     export class RequestDto {
         @IsString({
@@ -28,6 +29,13 @@ export namespace AuthRequest {
             description: '이메일',
         })
         email: string;
+
+        @IsString({ message: '별명을 문자열이어야 합니다' })
+        @ApiProperty({
+            type: String,
+            description: '별명',
+        })
+        nickname: string;
 
         // @ApiProperty()
         // profile: CreateProfileDto;

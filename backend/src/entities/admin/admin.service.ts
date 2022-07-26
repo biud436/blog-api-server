@@ -6,19 +6,19 @@ import { AdminRepository } from './entities/admin.repository';
 
 @Injectable()
 export class AdminService {
-  constructor(
-    @InjectRepository(AdminRepository)
-    private readonly adminRepository: AdminRepository,
-  ) {}
+    constructor(
+        @InjectRepository(AdminRepository)
+        private readonly adminRepository: AdminRepository,
+    ) {}
 
-  async isAdmin(username: string): Promise<boolean> {
-    return (
-      (await this.adminRepository
-        .createQueryBuilder('admin')
-        .select()
-        .leftJoin('admin.user', 'user')
-        .where('user.username = :username', { username })
-        .getCount()) > 0
-    );
-  }
+    async isAdmin(username: string): Promise<boolean> {
+        return (
+            (await this.adminRepository
+                .createQueryBuilder('admin')
+                .select()
+                .leftJoin('admin.user', 'user')
+                .where('user.username = :username', { username })
+                .getCount()) > 0
+        );
+    }
 }

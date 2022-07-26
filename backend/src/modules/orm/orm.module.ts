@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ImageRepository } from 'src/domain/image/entities/image.repository';
+import { ImageRepository } from 'src/controllers/image/entities/image.repository';
 import { AdminRepository } from 'src/entities/admin/entities/admin.repository';
 import { FirstCategoryRepository } from 'src/entities/first-category/entities/first-category.repository';
 import { PostViewCountRepository } from 'src/entities/post-view-count/entities/post-view-count.repository';

@@ -6,8 +6,8 @@ import { PostRepository } from './entities/post.repository';
 import { OrmModule } from 'src/modules/orm/orm.module';
 
 @Module({
-  imports: [OrmModule],
-  providers: [PostService],
-  exports: [PostService],
+    imports: [OrmModule],
+    providers: [PostService],
+    exports: [PostService],
 })
 export class PostModule {}

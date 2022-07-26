@@ -1,5 +1,5 @@
-import { AuthController } from 'src/domain/auth/auth.controller';
-import { PostsController } from 'src/domain/posts/posts.controller';
+import { AuthController } from 'src/controllers/auth/auth.controller';
+import { PostsController } from 'src/controllers/posts/posts.controller';
 import { CreatePostDto } from 'src/entities/post/dto/create-post.dto';
 
 /**

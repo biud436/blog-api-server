@@ -5,8 +5,8 @@ import { AdminService } from './admin.service';
 import { AdminRepository } from './entities/admin.repository';
 
 @Module({
-  imports: [OrmModule],
-  providers: [AdminService],
-  exports: [AdminService],
+    imports: [OrmModule],
+    providers: [AdminService],
+    exports: [AdminService],
 })
 export class AdminModule {}
