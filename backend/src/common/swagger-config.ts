@@ -34,6 +34,7 @@ export type DefaultMapperWithoutHttpMethod<T> = {
     [key in keyof Partial<T>]: ApiOkResponseDescriptor;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace DocsMapper {
     export const auth: DefaultMapper<AuthController> = {
         DELETE: {},

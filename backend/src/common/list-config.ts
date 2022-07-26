@@ -2,6 +2,7 @@ import { BadRequestException, HttpCode, HttpException } from '@nestjs/common';
 import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';
 import * as validator from 'class-validator';
 
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace Pagination {
     export type Config = {
         limit: {
