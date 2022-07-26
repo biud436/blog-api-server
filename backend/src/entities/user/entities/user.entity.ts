@@ -75,14 +75,6 @@ export class User {
         await this.hashPassword(this.password);
     }
 
-    @AfterInsert()
-    async createCopyUser() {
-        const userCopy = new UserCopy();
-        userCopy.username = this.username;
-
-        await getConnection().manager.getRepository(UserCopy).save(userCopy);
-    }
-
     @CreateDateColumn({
         default: () => 'CURRENT_TIMESTAMP',
     })
