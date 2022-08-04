@@ -7,7 +7,7 @@ import { FirstCategoryRepository } from './entities/first-category.repository';
 @Injectable()
 export class FirstCategoryService {
     constructor(
-        @InjectRepository(FirstCategory)
+        @InjectRepository(FirstCategoryRepository)
         private readonly firstCategoryRepository: FirstCategoryRepository,
     ) {}
 

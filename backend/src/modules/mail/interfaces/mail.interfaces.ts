@@ -5,7 +5,6 @@ export interface TransporterAuthOptions {
 
 export interface TransporterOptions {
     service: string;
-
 }
 
 export interface MailOptions {

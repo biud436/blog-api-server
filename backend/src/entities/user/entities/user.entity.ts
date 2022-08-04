@@ -23,7 +23,7 @@ import { UserCopyService } from 'src/entities/user-copy/user-copy.service';
 import { UserCopy } from 'src/entities/user-copy/entities/user-copy.entity';
 import { CreateUserCopyDto } from 'src/entities/user-copy/dto/create-user-copy.dto';
 
-@Entity()
+@Entity('user')
 export class User {
     @PrimaryGeneratedColumn()
     id: number;

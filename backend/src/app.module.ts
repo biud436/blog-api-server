@@ -27,17 +27,33 @@ import { SecondCategoryModule } from './entities/second-category/second-category
 import { PostViewCountModule } from './entities/post-view-count/post-view-count.module';
 import { UserCopyModule } from './entities/user-copy/user-copy.module';
 import './polyfill/';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import dbconnect from './config';
+import { ServerLog } from './utils/ServerLog';
 
 @Module({
     imports: [
-        PostModule,
         ConfigModule.forRoot({
             envFilePath: <EnvFileMap>(
                 (AppModule.isDelvelopment() ? '.development.env' : '.env')
             ),
-            isGlobal: true,
         }),
-        ConfiguredDatabaseModule,
+        TypeOrmModule.forRootAsync({
+            imports: [ConfigModule],
+            useFactory: async (
+                configService: ConfigService,
+            ): Promise<TypeOrmModuleOptions> => {
+                const config = dbconnect(configService);
+                if (ConfiguredDatabaseModule.isDelvelopment()) {
+                    ServerLog.info('개발 DB입니다.');
+                    return config.dev;
+                } else {
+                    ServerLog.info('프로덕션 DB입니다.');
+                    return config.production;
+                }
+            },
+            inject: [ConfigService],
+        }),
         MulterModule.registerAsync({
             useFactory: () => {
                 const isProduction = process.env.NODE_ENV === 'production';
@@ -49,14 +65,15 @@ import './polyfill/';
         }),
         TerminusModule,
         HttpModule,
+        OrmModule,
         UserModule,
         ProfileModule,
         AuthModule,
+        PostModule,
         AdminModule,
         PostsModule,
         MailModule,
         MicroServicesModule,
-        OrmModule,
         ImageModule,
         AesModule,
         FirstCategoryModule,

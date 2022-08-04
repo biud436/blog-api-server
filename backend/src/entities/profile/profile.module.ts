@@ -5,7 +5,7 @@ import { ProfileRepository } from './entities/profile.repository';
 import { ProfileService } from './profile.service';
 
 @Module({
-    imports: [OrmModule],
+    imports: [TypeOrmModule.forFeature([ProfileRepository])],
     providers: [ProfileService],
     exports: [ProfileService],
 })
