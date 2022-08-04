@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { OrmModule } from 'src/modules/orm/orm.module';
-import { PostViewCountRepository } from './entities/post-view-count.repository';
+import { PostViewCount } from './entities/post-view-count.entity';
 import { PostViewCountService } from './post-view-count.service';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([PostViewCountRepository])],
+    imports: [TypeOrmModule.forFeature([PostViewCount])],
     providers: [PostViewCountService],
     exports: [PostViewCountService],
 })

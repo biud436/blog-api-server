@@ -1,14 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateSecondCategoryDto } from './dto/create-second-category.dto';
-import { UpdateSecondCategoryDto } from './dto/update-second-category.dto';
+import { Repository } from 'typeorm';
 import { SecondCategory } from './entities/second-category.entity';
-import { SecondCategoryRepository } from './entities/second-category.repository';
 
 @Injectable()
 export class SecondCategoryService {
     constructor(
-        @InjectRepository(SecondCategoryRepository)
-        private readonly firstCategoryRepository: SecondCategoryRepository,
+        @InjectRepository(SecondCategory)
+        private readonly secondCategoryRepository: Repository<SecondCategory>,
     ) {}
 }

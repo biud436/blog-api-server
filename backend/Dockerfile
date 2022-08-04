@@ -18,4 +18,4 @@ RUN yarn build
 COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
 EXPOSE 3000
 ENV NODE_ENV production
-CMD [ "yarn", "start:prod" ]
+CMD [ "yarn", "start" ]

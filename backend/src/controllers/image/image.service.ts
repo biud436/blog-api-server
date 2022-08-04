@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { QueryRunner } from 'typeorm';
+import { QueryRunner, Repository } from 'typeorm';
 import { CreateImageDto } from './dto/create-image.dto';
-import { ImageRepository } from './entities/image.repository';
+import { Image } from './entities/image.entity';
 
 @Injectable()
 export class ImageService {
     constructor(
-        @InjectRepository(ImageRepository)
-        private readonly imageRepository: ImageRepository,
+        @InjectRepository(Image)
+        private readonly imageRepository: Repository<Image>,
     ) {}
 
     async create(createImageDto: CreateImageDto, queryRunner?: QueryRunner) {

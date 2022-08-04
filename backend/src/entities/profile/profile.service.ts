@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { QueryRunner } from 'typeorm';
+import { QueryRunner, Repository } from 'typeorm';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
-import { ProfileRepository } from './entities/profile.repository';
+import { Profile } from './entities/profile.entity';
 
 @Injectable()
 export class ProfileService {
     constructor(
-        @InjectRepository(ProfileRepository)
-        private readonly profileRepository: ProfileRepository,
+        @InjectRepository(Profile)
+        private readonly profileRepository: Repository<Profile>,
     ) {}
 
     async isValidEmail(email: string): Promise<boolean> {

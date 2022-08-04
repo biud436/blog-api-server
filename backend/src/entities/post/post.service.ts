@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DateTimeUtil } from 'src/utils/DateTimeUtil';
-import { QueryRunner } from 'typeorm';
+import { QueryRunner, Repository } from 'typeorm';
 import { PostViewCount } from '../post-view-count/entities/post-view-count.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { PostRepository } from './entities/post.repository';
+import { Post } from './entities/post.entity';
 
 @Injectable()
 export class PostService {
     constructor(
-        @InjectRepository(PostRepository)
-        private readonly postRepository: PostRepository,
+        @InjectRepository(Post)
+        private readonly postRepository: Repository<Post>,
     ) {}
 
     async create(createPostDto: CreatePostDto, queuryRunner: QueryRunner) {

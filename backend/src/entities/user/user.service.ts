@@ -1,12 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { UserRepository } from './entities/user.repository';
 import * as bcrypt from 'bcrypt';
 import { User } from './entities/user.entity';
 import { Profile } from '../profile/entities/profile.entity';
-import { QueryRunner } from 'typeorm';
+import { QueryRunner, Repository } from 'typeorm';
 import { plainToClass } from 'class-transformer';
 
 type SafedUser = Omit<User, 'password' | 'hashPassword' | 'savePassword'>;
@@ -25,8 +23,8 @@ type Optional<T> = { [P in keyof T]?: T[P] };
 @Injectable()
 export class UserService {
     constructor(
-        @InjectRepository(UserRepository)
-        private readonly userRepository: UserRepository,
+        @InjectRepository(User)
+        private readonly userRepository: Repository<User>,
     ) {}
 
     async create(

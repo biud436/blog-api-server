@@ -54,7 +54,7 @@ export default (configService: ConfigService): DBConnectionType => {
             timezone: 'Asia/Seoul',
             synchronize: false,
             logging: ['error', 'warn'],
-            entities: ['dist/**/*.entity.{ts,js}'],
+            entities: [__dirname + '/**/*.entity{.ts,.js}'],
         },
     };
 };

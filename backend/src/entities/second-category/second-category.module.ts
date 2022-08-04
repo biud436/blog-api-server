@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { OrmModule } from 'src/modules/orm/orm.module';
-import { SecondCategoryRepository } from './entities/second-category.repository';
+import { SecondCategory } from './entities/second-category.entity';
 import { SecondCategoryService } from './second-category.service';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([SecondCategoryRepository])],
+    imports: [TypeOrmModule.forFeature([SecondCategory])],
     providers: [SecondCategoryService],
     exports: [SecondCategoryService],
 })

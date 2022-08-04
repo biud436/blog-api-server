@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityBuilder } from 'src/common/entity-builder';
+import { Repository } from 'typeorm';
 import { FirstCategory } from './entities/first-category.entity';
-import { FirstCategoryRepository } from './entities/first-category.repository';
 
 @Injectable()
 export class FirstCategoryService {
     constructor(
-        @InjectRepository(FirstCategoryRepository)
-        private readonly firstCategoryRepository: FirstCategoryRepository,
+        @InjectRepository(FirstCategory)
+        private readonly firstCategoryRepository: Repository<FirstCategory>,
     ) {}
 
     async findPKByCategoryName(name: string): Promise<number> {

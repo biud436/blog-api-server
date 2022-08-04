@@ -1,16 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { QueryRunner, UpdateResult } from 'typeorm';
+import { QueryRunner, Repository, UpdateResult } from 'typeorm';
 import { CreatePostViewCountDto } from './dto/create-post-view-count.dto';
 import { UpdatePostViewCountDto } from './dto/update-post-view-count.dto';
 import { PostViewCount } from './entities/post-view-count.entity';
-import { PostViewCountRepository } from './entities/post-view-count.repository';
 
 @Injectable()
 export class PostViewCountService {
     constructor(
-        @InjectRepository(PostViewCountRepository)
-        private readonly postViewCountRepository: PostViewCountRepository,
+        @InjectRepository(PostViewCount)
+        private readonly postViewCountRepository: Repository<PostViewCount>,
     ) {}
 
     /**
