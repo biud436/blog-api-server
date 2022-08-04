@@ -30,6 +30,7 @@ services:
         volumes:
             - ./data:/data
     database:
+        container_name: database
         image: mariadb:latest
         ports:
             - 3306:3306
