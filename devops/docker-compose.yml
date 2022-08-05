@@ -21,7 +21,16 @@ services:
             - ../upload:/usr/src/app/upload
             - ../logs:/usr/src/app/logs
         logging: *default-logging
-
+    # frontend:
+    #     container_name: frontend
+    #     image: frontend:latest
+    #     restart: always
+    #     build:
+    #         dockerfile: Dockerfile
+    #         context: ../../pharm-admin
+    #     expose:
+    #         - 8084
+    #     logging: *default-logging
     redis:
         image: redis
         restart: always
