@@ -11,6 +11,8 @@ import * as basicAuth from 'express-basic-auth';
 import * as express from 'express';
 import winstonLogger from 'src/common/winston-config';
 import helmet from 'helmet';
+import * as session from 'express-session';
+import * as passport from 'passport';
 
 export class NestBootstrapApplication {
     private static INSTANCE: NestBootstrapApplication;
@@ -79,7 +81,28 @@ export class NestBootstrapApplication {
         app.useStaticAssets(path.join(__dirname, '..', 'public'));
         app.setViewEngine('hbs');
 
-        app.use(cookieParser());
+        app.use(
+            cookieParser(NestBootstrapApplication.CONFIG.get('APP_SECRET')),
+        );
+
+        app.use(
+            session({
+                secret: NestBootstrapApplication.CONFIG.get('APP_SECRET'),
+                resave: false,
+                saveUninitialized: false,
+                store: new session.MemoryStore(),
+                cookie: {
+                    httpOnly: true,
+                    signed: true,
+                    sameSite: 'strict',
+                    secure: process.env.NODE_ENV === 'production',
+                },
+            }),
+        );
+
+        app.use(passport.initialize());
+        app.use(passport.session());
+
         app.enableCors({
             origin: [
                 /\.home\.biud436\.com$/,

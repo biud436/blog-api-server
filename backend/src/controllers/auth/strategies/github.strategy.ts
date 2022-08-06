@@ -34,7 +34,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
     }
 
     async validate(
-        request: Request,
+        request: Request, // passReqToCallback
         accessToken: string,
         refreshToken: string,
         profile: IGithubProfile,

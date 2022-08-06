@@ -14,6 +14,8 @@ import { MailModule } from 'src/modules/mail/mail.module';
 import { GithubStrategy } from './strategies/github.strategy';
 import { UserCopy } from 'src/entities/user-copy/entities/user-copy.entity';
 import { UserCopyModule } from 'src/entities/user-copy/user-copy.module';
+import { PassportModule } from '@nestjs/passport';
+import { SessionSerializer } from './session.serializer';
 
 @Module({
     imports: [
@@ -25,6 +27,7 @@ import { UserCopyModule } from 'src/entities/user-copy/user-copy.module';
         MailModule,
         UserCopyModule,
         HttpModule,
+        PassportModule.register({ defaultStrategy: 'jwt', session: true }),
         JwtModule.registerAsync({
             imports: [ConfigModule],
             inject: [ConfigService],
@@ -46,6 +49,12 @@ export class AuthModule {
      * 인증 전략을 정의합니다.
      */
     static get strategies() {
-        return [BasicStrategy, LocalStrategy, JwtStrategy, GithubStrategy];
+        return [
+            BasicStrategy,
+            LocalStrategy,
+            JwtStrategy,
+            GithubStrategy,
+            SessionSerializer,
+        ];
     }
 }

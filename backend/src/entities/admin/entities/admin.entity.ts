@@ -23,7 +23,7 @@ export class Admin {
         onDelete: 'RESTRICT',
         onUpdate: 'RESTRICT',
     })
-    @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
+    @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
     user: User;
 
     @CreateDateColumn({

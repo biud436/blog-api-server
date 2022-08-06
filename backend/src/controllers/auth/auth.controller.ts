@@ -29,6 +29,8 @@ import { DateTimeUtil } from 'src/utils/DateTimeUtil';
 import { ServerLog } from 'src/utils/ServerLog';
 import { GithubAuthGuard } from './guards/github.guard';
 import { ConfigService } from '@nestjs/config';
+import { SessionAuthGuard } from './guards/session-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('auth')
 @ApiTags('인증 API')
@@ -63,24 +65,6 @@ export class AuthController {
         })
         res: Response,
     ) {
-        // const authorizedCode = code;
-        // const GITHUB_CLIENT_ID = this.configService.get('GITHUB_CLIENT_ID');
-        // const GITHUB_CLIENT_SECRET = this.configService.get(
-        //     'GITHUB_CLIENT_SECRET',
-        // );
-
-        // const res = await this.httpService.axiosRef.post(
-        //     'https://github.com/login/oauth/access_token',
-        //     {
-        //         client_id: GITHUB_CLIENT_ID,
-        //         client_secret: GITHUB_CLIENT_SECRET,
-        //         code: authorizedCode,
-        //         accept: 'json',
-        //     },
-        // );
-
-        // return res.data;
-
         return `인증되었습니다.`;
     }
 
@@ -99,6 +83,26 @@ export class AuthController {
         const token = await this.authService.login(user);
 
         return this.authService.loginUseCookieMiddleware(token, req, res);
+    }
+
+    /**
+     * 로그아웃 (세션 사용)
+     *
+     * @param req
+     * @returns
+     */
+    @Post('/logout')
+    @UseGuards(SessionAuthGuard)
+    async lgout(@Req() req: Request) {
+        req.logout();
+
+        return ResponseUtil.successWrap(
+            {
+                message: '로그아웃 되었습니다.',
+                statusCode: HttpStatus.OK,
+            },
+            {},
+        );
     }
 
     @Post('send-auth-code')
@@ -130,6 +134,13 @@ export class AuthController {
                 statusCode: HttpStatus.BAD_REQUEST,
             });
         }
+    }
+
+    @Get('/session')
+    @UseGuards(SessionAuthGuard)
+    async session(@UserInfo() user: User) {
+        console.log('정상적으로 호출되었습니다');
+        return user;
     }
 
     @Post('/signup')
