@@ -32,6 +32,7 @@ services:
     #         - 8084
     #     logging: *default-logging
     redis:
+        container_name: redis
         image: redis
         restart: always
         ports:

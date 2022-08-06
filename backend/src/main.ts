@@ -14,8 +14,11 @@ import helmet from 'helmet';
 import * as session from 'express-session';
 import * as passport from 'passport';
 import * as mysqlSession from 'express-mysql-session';
+import * as connectRedis from 'connect-redis';
+import { createClient } from 'redis';
 
 const MySQLStore = mysqlSession(session);
+const RedisStore = connectRedis(session);
 
 export class NestBootstrapApplication {
     private static INSTANCE: NestBootstrapApplication;
@@ -88,21 +91,32 @@ export class NestBootstrapApplication {
             cookieParser(NestBootstrapApplication.CONFIG.get('APP_SECRET')),
         );
 
+        const redisStoreMiddleware = createClient({
+            socket: {
+                host: process.platform === 'linux' ? 'redis' : 'localhost',
+                port: 6379,
+            },
+            legacyMode: true,
+        });
+
+        redisStoreMiddleware.connect().catch(console.error);
+
         app.use(
             session({
                 secret: NestBootstrapApplication.CONFIG.get('APP_SECRET'),
                 resave: false,
                 saveUninitialized: false,
                 // store: new session.MemoryStore(), // redis store가 더 나아보임
-                store: new MySQLStore({
-                    host: NestBootstrapApplication.CONFIG.get('DB_HOST'),
-                    port: NestBootstrapApplication.CONFIG.get('DB_PORT'),
-                    user: NestBootstrapApplication.CONFIG.get('DB_USER'),
-                    password:
-                        NestBootstrapApplication.CONFIG.get('DB_PASSWORD'),
-                    database:
-                        NestBootstrapApplication.CONFIG.get('DB_SESSION_NAME'),
-                }),
+                store: new RedisStore({ client: redisStoreMiddleware }),
+                // store: new MySQLStore({
+                //     host: NestBootstrapApplication.CONFIG.get('DB_HOST'),
+                //     port: NestBootstrapApplication.CONFIG.get('DB_PORT'),
+                //     user: NestBootstrapApplication.CONFIG.get('DB_USER'),
+                //     password:
+                //         NestBootstrapApplication.CONFIG.get('DB_PASSWORD'),
+                //     database:
+                //         NestBootstrapApplication.CONFIG.get('DB_SESSION_NAME'),
+                // }),
                 cookie: {
                     httpOnly: true,
                     signed: true,
