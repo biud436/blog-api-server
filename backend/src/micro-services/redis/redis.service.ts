@@ -17,7 +17,7 @@ export namespace Redis {
 
 @Injectable()
 export class RedisService implements OnModuleInit, OnModuleDestroy {
-    private client = createClient({
+    public client = createClient({
         socket: {
             host: process.platform === 'linux' ? 'redis' : 'localhost',
             port: 6379,
