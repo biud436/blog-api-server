@@ -13,6 +13,9 @@ import winstonLogger from 'src/common/winston-config';
 import helmet from 'helmet';
 import * as session from 'express-session';
 import * as passport from 'passport';
+import * as mysqlSession from 'express-mysql-session';
+
+const MySQLStore = mysqlSession(session);
 
 export class NestBootstrapApplication {
     private static INSTANCE: NestBootstrapApplication;
@@ -90,7 +93,16 @@ export class NestBootstrapApplication {
                 secret: NestBootstrapApplication.CONFIG.get('APP_SECRET'),
                 resave: false,
                 saveUninitialized: false,
-                store: new session.MemoryStore(),
+                // store: new session.MemoryStore(),
+                store: new MySQLStore({
+                    host: NestBootstrapApplication.CONFIG.get('DB_HOST'),
+                    port: NestBootstrapApplication.CONFIG.get('DB_PORT'),
+                    user: NestBootstrapApplication.CONFIG.get('DB_USER'),
+                    password:
+                        NestBootstrapApplication.CONFIG.get('DB_PASSWORD'),
+                    database:
+                        NestBootstrapApplication.CONFIG.get('DB_SESSION_NAME'),
+                }),
                 cookie: {
                     httpOnly: true,
                     signed: true,
