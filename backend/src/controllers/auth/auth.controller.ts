@@ -2,6 +2,7 @@ import {
     Body,
     Controller,
     Get,
+    HttpCode,
     HttpService,
     HttpStatus,
     Ip,
@@ -31,6 +32,7 @@ import { GithubAuthGuard } from './guards/github.guard';
 import { ConfigService } from '@nestjs/config';
 import { SessionAuthGuard } from './guards/session-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { promisify } from 'util';
 
 @Controller('auth')
 @ApiTags('인증 API')
@@ -94,7 +96,12 @@ export class AuthController {
     @Post('/logout')
     @UseGuards(SessionAuthGuard)
     async lgout(@Req() req: Request) {
-        req.logout();
+        // https://discord.com/channels/520622812742811698/606125913343787008/982825765051695115
+        // @types/passport@1.0.8
+        req.logout((err) => {
+            console.warn(err);
+        });
+        await promisify(req.session.destroy.bind(req.session))();
 
         return ResponseUtil.successWrap(
             {

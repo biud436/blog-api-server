@@ -1135,6 +1135,13 @@
   dependencies:
     "@types/express" "*"
 
+"@types/passport@1.0.8":
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/@types/passport/-/passport-1.0.8.tgz#cc3ee653777365ac02f630c3c08fb755567b7387"
+  integrity sha512-Gdcvis7+7G/Mobm+25AeFi+oe5teBhHzpbCOFWeN10Bj8tnoEE1L5lkraQjzmDEKkJQuM7xSJUGIFGl/giyRfQ==
+  dependencies:
+    "@types/express" "*"
+
 "@types/prettier@^2.1.5":
   version "2.4.4"
   resolved "https://registry.yarnpkg.com/@types/prettier/-/prettier-2.4.4.tgz#5d9b63132df54d8909fce1c3f8ca260fdd693e17"
