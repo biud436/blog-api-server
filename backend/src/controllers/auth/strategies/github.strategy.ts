@@ -1,9 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
-import { Strategy } from 'passport-github';
+import { Strategy } from 'passport-github2';
 import { UserCopyService } from 'src/entities/user-copy/user-copy.service';
 import { UserService } from 'src/entities/user/user.service';
+
+interface IGithubProfile {
+    id: string;
+    displayName: string;
+    username: string;
+    profileUrl: string;
+    emails: Array<{ value: string }>;
+}
 
 @Injectable()
 export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
@@ -11,23 +19,25 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
         configService: ConfigService,
         private readonly userCopyService: UserCopyService,
     ) {
-        super(
-            {
-                clientID: configService.get('GITHUB_CLIENT_ID'),
-                clientSecret: configService.get('GITHUB_CLIENT_SECRET'),
-                callbackURL: configService.get('GITHUB_CALLBACK_URL'),
-            },
-            (accessToken, refreshToken, profile, done) => {
-                this.validate(accessToken, refreshToken, profile, done);
-            },
-        );
+        super({
+            clientID: configService.get('GITHUB_CLIENT_ID', {
+                infer: true,
+            }),
+            clientSecret: configService.get('GITHUB_CLIENT_SECRET', {
+                infer: true,
+            }),
+            callbackURL: configService.get('GITHUB_CALLBACK_URL', {
+                infer: true,
+            }),
+            passReqToCallback: true,
+        });
     }
 
     async validate(
+        request: Request,
         accessToken: string,
         refreshToken: string,
-        profile: any,
-        done: (error: any, user: any) => void,
+        profile: IGithubProfile,
     ) {
         // accessToken & refreshToken 저장 필요
 
@@ -39,12 +49,10 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
             username: profile.id,
         });
 
-        if (user) {
-            done(null, user);
-            return true;
-        }
-
-        done(new Error('User not found'), null);
-        return false;
+        return {
+            user,
+            email: profile.emails[0].value,
+            name: profile.displayName ?? profile.username,
+        };
     }
 }
