@@ -106,7 +106,7 @@ export class NestBootstrapApplication {
                 secret: NestBootstrapApplication.CONFIG.get('APP_SECRET'),
                 resave: false,
                 saveUninitialized: false,
-                // store: new session.MemoryStore(), // redis store가 더 나아보임
+                // store: new session.MemoryStore(),
                 store: new RedisStore({ client: redisStoreMiddleware }),
                 // store: new MySQLStore({
                 //     host: NestBootstrapApplication.CONFIG.get('DB_HOST'),
