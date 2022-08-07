@@ -70,36 +70,45 @@ export class AuthService {
      * @description 로그인 처리를 합니다.
      */
     async login(user: any) {
-        const payload = <JwtPayload>{ user: user, role: 'user' };
-        let isAdmin = false;
+        try {
+            const payload = <JwtPayload>{ user: user, role: 'user' };
+            let isAdmin = false;
 
-        if ('username' in user) {
-            isAdmin = await this.adminService.isAdmin(user.username);
+            if ('username' in user) {
+                isAdmin = await this.adminService.isAdmin(user.username);
+            }
+
+            if (isAdmin) {
+                payload.role = 'admin';
+            }
+
+            if (!['admin'].includes(payload.role)) {
+                throw new UnauthorizedException('로그인 권한이 없습니다');
+            }
+
+            const accessToken = await this.jwtService.signAsync(payload);
+            const refreshToken = await this.jwtService.signAsync(payload, <
+                JwtSignOptions
+            >{
+                secret: this.configService.get('JWT_REFRESH_TOKEN_SECRET'),
+                expiresIn: this.configService.get(
+                    'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
+                ),
+                algorithm: 'HS384',
+            });
+
+            return {
+                accessToken,
+                refreshToken,
+            };
+        } catch (e: any) {
+            const status = e.status || 500;
+            if ([400, 401, 403, 404, 500].includes(status)) {
+                throw new UnauthorizedException(e.message);
+            }
+
+            throw new InternalServerErrorException(e.message);
         }
-
-        if (isAdmin) {
-            payload.role = 'admin';
-        }
-
-        if (!['admin'].includes(payload.role)) {
-            throw new UnauthorizedException('로그인 권한이 없습니다');
-        }
-
-        const accessToken = await this.jwtService.signAsync(payload);
-        const refreshToken = await this.jwtService.signAsync(payload, <
-            JwtSignOptions
-        >{
-            secret: this.configService.get('JWT_REFRESH_TOKEN_SECRET'),
-            expiresIn: this.configService.get(
-                'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
-            ),
-            algorithm: 'HS384',
-        });
-
-        return {
-            accessToken,
-            refreshToken,
-        };
     }
 
     /**
