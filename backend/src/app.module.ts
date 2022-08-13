@@ -32,6 +32,7 @@ import dbconnect from './config';
 import { ServerLog } from './utils/ServerLog';
 import { ApiModule } from './controllers/api/api.module';
 import { AdminModule as AdminControllerModule } from './controllers/admin/admin.module';
+import { ApiKeyModule } from './entities/api-key/api-key.module';
 
 @Module({
     imports: [
@@ -84,6 +85,7 @@ import { AdminModule as AdminControllerModule } from './controllers/admin/admin.
         UserCopyModule,
         ApiModule,
         AdminControllerModule,
+        ApiKeyModule,
     ],
     controllers: [AppController, HealthCheckController],
     providers: [

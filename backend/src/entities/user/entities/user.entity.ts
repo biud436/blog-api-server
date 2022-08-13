@@ -14,6 +14,7 @@ import {
 } from 'typeorm';
 import { Post } from 'src/entities/post/entities/post.entity';
 import { Admin } from 'src/entities/admin/entities/admin.entity';
+import { ApiKey } from 'src/entities/api-key/entities/api-key.entity';
 
 @Entity()
 export class User {
@@ -50,6 +51,9 @@ export class User {
 
     @OneToMany(() => Admin, (admin) => admin.user)
     admins: Admin[];
+
+    @OneToMany(() => ApiKey, (apiKey) => apiKey.user)
+    apiKeys: ApiKey[];
 
     @Column({
         nullable: false,

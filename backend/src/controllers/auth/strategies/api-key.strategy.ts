@@ -18,6 +18,13 @@ export class ApiKeyStrategy extends PassportStrategy(HeaderAPIKeyStrategy) {
         );
     }
 
+    /**
+     * Check weather the access key is valid from the database.
+     *
+     * @param apiKey
+     * @param done
+     * @returns
+     */
     async validate(
         apiKey: string,
         done: (err: Error, user: any) => void,

@@ -16,6 +16,7 @@ import { UserCopy } from 'src/entities/user-copy/entities/user-copy.entity';
 import { UserCopyModule } from 'src/entities/user-copy/user-copy.module';
 import { PassportModule } from '@nestjs/passport';
 import { SessionSerializer } from './session.serializer';
+import { ApiKeyModule } from 'src/entities/api-key/api-key.module';
 
 @Module({
     imports: [
@@ -27,6 +28,7 @@ import { SessionSerializer } from './session.serializer';
         MailModule,
         UserCopyModule,
         HttpModule,
+        ApiKeyModule,
         PassportModule.register({ defaultStrategy: 'jwt', session: true }),
         JwtModule.registerAsync({
             imports: [ConfigModule],

@@ -1,4 +1,12 @@
-import { SetMetadata } from '@nestjs/common';
+import {
+    createParamDecorator,
+    ExecutionContext,
+    PipeTransform,
+    SetMetadata,
+    Type,
+} from '@nestjs/common';
+import { Request } from 'express';
+import { ParseXApiUserIdPipe } from 'src/pipes/x-api-user-id.pipe';
 
 export const XAPI_SCOPE_KEY = 'x-api-scope';
 export const MobileScopeIn = (...scopes: string[]) =>

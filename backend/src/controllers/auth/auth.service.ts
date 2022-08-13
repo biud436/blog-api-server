@@ -31,6 +31,7 @@ import { plainToClass } from 'class-transformer';
 import Handlebars from 'handlebars';
 import { FindUserNameDto } from './dto/find-username.dto';
 import { LoginAuthorizationException } from './validator/error.dto';
+import { ApiKeyService } from 'src/entities/api-key/api-key.service';
 
 export type AvailableEmailList =
     | `${string}@gmail.com`
@@ -63,6 +64,7 @@ export class AuthService {
         private readonly configService: ConfigService,
         private readonly redisService: RedisService,
         private readonly mailService: MailService,
+        private readonly apiKeyService: ApiKeyService,
         @InjectConnection() private connection: Connection,
     ) {}
 
@@ -413,7 +415,6 @@ export class AuthService {
 
             // 레디스에 저장된 키를 제거합니다.
             const deletedOK = await this.redisService.del(KEY);
-            console.log(deletedOK);
 
             throw new InternalServerErrorException({
                 message: e.message ?? CONFIG.KOREAN.NOTIFY_FAILED_SIGNUP,
@@ -421,13 +422,15 @@ export class AuthService {
         } finally {
             // 레디스에 저장된 키를 제거합니다.
             const deletedOK = await this.redisService.del(KEY);
-            console.log(deletedOK);
 
             await queryRunner.release();
         }
     }
 
-    validateApiKey(apiKey: string) {
-        return true;
+    async validateApiKey(apiKey: string) {
+        const cnt = await this.apiKeyService.getCount(apiKey);
+        const isFoundAccessKey = cnt > 0;
+
+        return isFoundAccessKey;
     }
 }
