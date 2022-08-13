@@ -30,6 +30,7 @@ import { CreateProfileDto } from 'src/entities/profile/dto/create-profile.dto';
 import { plainToClass } from 'class-transformer';
 import Handlebars from 'handlebars';
 import { FindUserNameDto } from './dto/find-username.dto';
+import { LoginAuthorizationException } from './validator/error.dto';
 
 export type AvailableEmailList =
     | `${string}@gmail.com`
@@ -83,7 +84,7 @@ export class AuthService {
             }
 
             if (!['admin'].includes(payload.role)) {
-                throw new UnauthorizedException('로그인 권한이 없습니다');
+                throw new LoginAuthorizationException();
             }
 
             const accessToken = await this.jwtService.signAsync(payload);
@@ -424,5 +425,9 @@ export class AuthService {
 
             await queryRunner.release();
         }
+    }
+
+    validateApiKey(apiKey: string) {
+        return true;
     }
 }

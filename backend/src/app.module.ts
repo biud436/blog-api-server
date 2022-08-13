@@ -30,6 +30,8 @@ import './polyfill/';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import dbconnect from './config';
 import { ServerLog } from './utils/ServerLog';
+import { ApiModule } from './controllers/api/api.module';
+import { AdminModule as AdminControllerModule } from './controllers/admin/admin.module';
 
 @Module({
     imports: [
@@ -80,6 +82,8 @@ import { ServerLog } from './utils/ServerLog';
         SecondCategoryModule,
         PostViewCountModule,
         UserCopyModule,
+        ApiModule,
+        AdminControllerModule,
     ],
     controllers: [AppController, HealthCheckController],
     providers: [
