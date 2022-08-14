@@ -12,6 +12,12 @@ export class ApiKeyService {
         private readonly apiKeyRepository: Repository<ApiKey>,
     ) {}
 
+    async create(createApiKeyDto: CreateApiKeyDto): Promise<ApiKey> {
+        const model = this.apiKeyRepository.create(createApiKeyDto);
+
+        return this.apiKeyRepository.save(model);
+    }
+
     async getUserId(apiKey: string): Promise<number> {
         const model = await this.apiKeyRepository
             .createQueryBuilder('apiKey')

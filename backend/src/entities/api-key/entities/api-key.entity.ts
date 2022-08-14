@@ -8,26 +8,31 @@ import {
 } from 'typeorm';
 import * as moment from 'moment';
 import { User } from 'src/entities/user/entities/user.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
 export class ApiKey {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @ApiProperty()
     @Column({
         unique: true,
     })
     accessKey: string;
 
+    @ApiProperty()
     @Column()
     isExpired: boolean;
 
+    @ApiProperty()
     @Column({
         type: 'datetime',
     })
     @Transform((param: TransformFnParams) => moment(param.value))
     expiresAt: moment.Moment;
 
+    @ApiProperty()
     @Column({
         name: 'user_id',
     })
