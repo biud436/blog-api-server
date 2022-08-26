@@ -36,7 +36,9 @@ export class RolesGuard implements CanActivate {
         }
 
         if (!authorization.startsWith('Bearer ')) {
-            this.logger.log('Bearer로 시작하지 않는 토큰입니다');
+            this.logger.log(
+                "The passed accessToken didn't start with the text 'Bearer '",
+            );
             return false;
         }
 
