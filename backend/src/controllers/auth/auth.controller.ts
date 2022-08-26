@@ -28,10 +28,8 @@ import { UserInfo } from 'src/decorators/user.decorator';
 import { User } from 'src/entities/user/entities/user.entity';
 import { DateTimeUtil } from 'src/utils/DateTimeUtil';
 import { ServerLog } from 'src/utils/ServerLog';
-import { GithubAuthGuard } from './guards/github.guard';
 import { ConfigService } from '@nestjs/config';
 import { SessionAuthGuard } from './guards/session-auth.guard';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { promisify } from 'util';
 
 @Controller('auth')
@@ -44,31 +42,6 @@ export class AuthController {
         private readonly configService: ConfigService,
         private readonly httpService: HttpService,
     ) {}
-
-    @Get('/github')
-    @UseGuards(GithubAuthGuard)
-    async githubLogin(@Body() data: any, @Ip() ip: string) {
-        return 'wow';
-    }
-
-    @Get('/github/authorize')
-    @UseGuards(GithubAuthGuard)
-    @ApiConsumes('application/json')
-    async authorizeGithub() {
-        return 'wow';
-    }
-
-    @Get('/github/callback')
-    @UseGuards(GithubAuthGuard)
-    async githubCallback(
-        @Query('code') code: string,
-        @Res({
-            passthrough: true,
-        })
-        res: Response,
-    ) {
-        return `인증되었습니다.`;
-    }
 
     @Post('/login')
     @UseGuards(new LocalAuthGuard())
@@ -154,8 +127,6 @@ export class AuthController {
     @CustomApiOkResponse(DocsMapper.auth.POST.signup)
     async signup(@Body() data: AuthRequest.RequestDto, @Ip() ip: string) {
         try {
-            ServerLog.info(`[${DateTimeUtil.now()}] ${ip} 회원가입 요청`);
-
             const res = await this.authService.signUp(data);
 
             return ResponseUtil.successWrap(
