@@ -15,3 +15,9 @@ yarn start env
 ```
 
 Note that this command does not support a feature that can reset for each line after reading a file named `.env`.
+
+## Upgrade package
+
+```bash
+yarn upgrade --pattern @nestjs --latest
+```

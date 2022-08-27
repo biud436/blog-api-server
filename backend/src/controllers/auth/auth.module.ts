@@ -1,8 +1,7 @@
-import { HttpModule, Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from 'src/entities/user/user.module';
 import { BasicStrategy } from './strategies/auth-basic.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
@@ -17,6 +16,8 @@ import { UserCopyModule } from 'src/entities/user-copy/user-copy.module';
 import { PassportModule } from '@nestjs/passport';
 import { SessionSerializer } from './session.serializer';
 import { ApiKeyModule } from 'src/entities/api-key/api-key.module';
+import { HttpModule } from '@nestjs/axios';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
     imports: [

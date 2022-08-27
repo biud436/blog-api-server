@@ -3,7 +3,6 @@ import {
     Controller,
     Get,
     HttpCode,
-    HttpService,
     HttpStatus,
     Ip,
     Logger,
@@ -31,6 +30,7 @@ import { ServerLog } from 'src/utils/ServerLog';
 import { ConfigService } from '@nestjs/config';
 import { SessionAuthGuard } from './guards/session-auth.guard';
 import { promisify } from 'util';
+import { HttpService } from '@nestjs/axios';
 
 @Controller('auth')
 @ApiTags('인증 API')

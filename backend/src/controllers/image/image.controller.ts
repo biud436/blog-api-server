@@ -14,7 +14,7 @@ import { ImageService } from './image.service';
 
 @Controller('image')
 export class ImageController {
-    private readonly logger = new Logger(ImageController.name, true);
+    private readonly logger = new Logger(ImageController.name);
 
     constructor(
         private readonly imageService: ImageService,
