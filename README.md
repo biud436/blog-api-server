@@ -1,6 +1,6 @@
-# Introduction
+# 소개
 
-This project will introduce you to the basic elements of blog implementation. Learning something new is always a little daunting at first. but I think that things will start to become familiar in no time.
+이 프로젝트는 NestJS(`@nestjs@v9.0.11`, 2022.08.16 버전으)로 만들어진 간단한 블로그 서버이며 인프라 파일 또한 포함되어있습니다.
 
 # 주요 기능
 
@@ -10,7 +10,7 @@ SMTP를 통해 직접 이메일을 전송하여 인증 코드를 받고 레디�
 
 ## 카테고리 계층적 관리
 
-카테고리를 계층화하여 추가하거나 부모 카테고리나 종단 카테고리 등을 조회할 수 있습니다.
+카테고리를 계층화하여 추가하거나 부모 카테고리나 종단 카테고리 등을 조회할 수 있습니다 (카테고리는 중첩 모델로 구현되어있습니다)
 
 ```json
 {
@@ -98,6 +98,10 @@ SMTP를 통해 직접 이메일을 전송하여 인증 코드를 받고 레디�
     }
 }
 ```
+
+# Introduction
+
+This project will introduce you to the basic elements of blog implementation. Learning something new is always a little daunting at first. but I think that things will start to become familiar in no time.
 
 ## Server application
 
