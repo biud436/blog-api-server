@@ -109,19 +109,6 @@ export class Post {
     })
     category: Category;
 
-    // /**
-    //  * 중분류
-    //  */
-    // @ManyToOne(() => SecondCategory, (secondCategory) => secondCategory.posts, {
-    //     onUpdate: 'RESTRICT',
-    //     onDelete: 'RESTRICT',
-    // })
-    // @JoinColumn({
-    //     name: 'secondCategoryId',
-    //     referencedColumnName: 'id',
-    // })
-    // secondCategory: SecondCategory;
-
     /**
      * 조회수
      */
