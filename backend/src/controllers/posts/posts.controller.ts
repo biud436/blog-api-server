@@ -10,7 +10,13 @@ import {
     ParseIntPipe,
     Logger,
 } from '@nestjs/common';
-import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
+import {
+    ApiBody,
+    ApiOperation,
+    ApiParam,
+    ApiQuery,
+    ApiTags,
+} from '@nestjs/swagger';
 import { InjectConnection } from '@nestjs/typeorm';
 import { PaginationConfig } from 'src/common/list-config';
 import { DocsMapper } from 'src/common/swagger-config';
@@ -22,6 +28,7 @@ import {
 import { Limit } from 'src/decorators/limit.decorator';
 import { Offset } from 'src/decorators/offset.decorator';
 import { PageNumber } from 'src/decorators/page-number.decorator';
+import { CategoryService } from 'src/entities/category/category.service';
 import { CreatePostDto } from 'src/entities/post/dto/create-post.dto';
 import { UpdatePostDto } from 'src/entities/post/dto/update-post.dto';
 import { RESPONSE_MESSAGE } from 'src/utils/response';
@@ -36,8 +43,27 @@ export class PostsController {
 
     constructor(
         private readonly postsService: PostsService,
+        private readonly categoryService: CategoryService,
         private readonly dataSource: DataSource,
     ) {}
+
+    @Get('/breadcrumbs')
+    @ApiOperation({ summary: 'Breadcrumbs 정보 조회' })
+    @ApiQuery({
+        name: 'categoryName',
+        description: '카테고리 이름',
+    })
+    async getBreadcrumbs(@Query('categoryName') categoryName: string) {
+        try {
+            const res = await this.categoryService.getBreadcrumbs(categoryName);
+            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
+        } catch {
+            return ResponseUtil.failure({
+                message: 'Breadcrumbs 정보를 조회할 수 없습니다.',
+                statusCode: 500,
+            });
+        }
+    }
 
     @Get(':id')
     @CustomApiOkResponse(DocsMapper.posts.GET.findOne)
@@ -122,8 +148,8 @@ export class PostsController {
         @Query('categoryId', ParseIntPipe) categoryId?: number,
     ) {
         try {
-            const data = await this.postsService.findAll(page, categoryId);
-            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, data);
+            const res = await this.postsService.findAll(page, categoryId);
+            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
         } catch {
             return ResponseUtil.failure({
                 message: '작성된 포스트가 없습니다',

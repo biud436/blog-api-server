@@ -162,6 +162,24 @@ export class CategoryService {
     }
 
     /**
+     * 특정 카테고리까지의 경로를 조회합니다.
+     */
+    async getBreadcrumbs(categoryName: string) {
+        const categories = await this.categoryRepository
+            .createQueryBuilder('node')
+            .addFrom(Category, 'parent')
+            .select('parent.name', 'name')
+            .where('node.left BETWEEN parent.left AND parent.right')
+            .andWhere('node.name = :name', { name: categoryName })
+            .orderBy('parent.left')
+            .getRawMany();
+
+        const breadcrumbs = categories.map(({ name }) => name);
+
+        return breadcrumbs;
+    }
+
+    /**
      * 리스트를 계층형으로 출력합니다.
      *
      * @returns
