@@ -99,6 +99,16 @@ SMTP를 통해 직접 이메일을 전송하여 인증 코드를 받고 레디�
 }
 ```
 
+## 노드 모듈 업그레이드
+
+업그레이드된 `@nestjs` 버전으로 갱신하려면 다음과 같이 해야 합니다.
+
+```bash
+yarn upgrade --pattern @nestjs --latest
+```
+
+버전 업그레이드에 따라 특정 기능이 `deprecated` 될 수도 있습니다.
+
 # Introduction
 
 This project will introduce you to the basic elements of blog implementation. Learning something new is always a little daunting at first. but I think that things will start to become familiar in no time.
