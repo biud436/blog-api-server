@@ -119,7 +119,7 @@ export class AuthController {
     @Get('/session')
     @UseGuards(SessionAuthGuard)
     async session(@UserInfo() user: User) {
-        console.log('정상적으로 호출되었습니다');
+        this.logger.log('정상적으로 호출되었습니다');
         return user;
     }
 
@@ -129,20 +129,10 @@ export class AuthController {
         try {
             const res = await this.authService.signUp(data);
 
-            return ResponseUtil.successWrap(
-                {
-                    message: '회원 가입이 완료되었습니다',
-                    statusCode: 201,
-                },
-                {
-                    ...res.user,
-                },
-            );
+            return ResponseUtil.successWrap(RESPONSE_MESSAGE.SUCCESS_SIGNUP, {
+                ...res.user,
+            });
         } catch (e) {
-            if (e) {
-                return ResponseUtil.failureWrap(e);
-            }
-
             return ResponseUtil.failureWrap({
                 message: e ? e.message : '회원가입에 실패하였습니다',
                 statusCode: HttpStatus.BAD_REQUEST,
