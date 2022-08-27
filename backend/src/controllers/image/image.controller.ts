@@ -6,7 +6,7 @@ import {
     UseInterceptors,
 } from '@nestjs/common';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
-import { ApiConsumes } from '@nestjs/swagger';
+import { ApiConsumes, ApiExcludeEndpoint } from '@nestjs/swagger';
 import { InjectConnection } from '@nestjs/typeorm';
 import { AdminOnly } from 'src/decorators/custom.decorator';
 import { Connection } from 'typeorm';
@@ -18,9 +18,10 @@ export class ImageController {
 
     constructor(
         private readonly imageService: ImageService,
-        @InjectConnection() readonly connection: Connection,
+        private readonly connection: Connection,
     ) {}
 
+    @ApiExcludeEndpoint()
     @AdminOnly()
     @Post('/upload')
     @UseInterceptors(AnyFilesInterceptor())

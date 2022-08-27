@@ -184,10 +184,10 @@ export class NestBootstrapApplication {
 
         const document = SwaggerModule.createDocument(
             this._application,
-            NestBootstrapApplication.CONFIG.get('GMAIL_USERNAME'),
+            config,
         );
         SwaggerModule.setup('docs', this._application, document, {
-            explorer: false, // 동적 로드 설정
+            explorer: true, // 동적 로드 설정
             swaggerOptions: { persistAuthorization: true },
             customfavIcon: '/favicon.png',
         });
