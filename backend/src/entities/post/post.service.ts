@@ -19,6 +19,8 @@ export class PostService {
         const now = DateTimeUtil.toDate(DateTimeUtil.now());
         model.uploadDate = now;
 
+        console.log(createPostDto);
+
         if (!model.firstCategoryId) {
             throw new Error('대분류 카테고리를 선택해주세요.');
         }
@@ -31,11 +33,12 @@ export class PostService {
             throw new Error('작성자가 없습니다.');
         }
 
-        // 조회수 생성
-        model.viewCount = new PostViewCount();
-        model.viewCount.count = 0;
-        model.viewCount.createdAt = now;
-        model.viewCount.updatedAt = now;
+        const postViewCount = await queuryRunner.manager.save(
+            new PostViewCount(),
+        );
+
+        model.viewCountId = postViewCount.id;
+        model.viewCount = postViewCount;
 
         return await queuryRunner.manager.save(model);
     }

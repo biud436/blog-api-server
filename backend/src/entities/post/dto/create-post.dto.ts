@@ -1,10 +1,16 @@
-import { Exclude } from 'class-transformer';
+import { Exclude, Transform, Type } from 'class-transformer';
+import {
+    IsEmpty,
+    IsInt,
+    IsNumber,
+    IsOptional,
+    IsString,
+} from 'class-validator';
 import { ApiProperty, Assert } from 'src/common/create-dto-common';
 import { PostViewCount } from 'src/entities/post-view-count/entities/post-view-count.entity';
 
 export class CreatePostDto {
     @ApiProperty()
-    @Assert.IsNumber()
     @Assert.IsOptional()
     id?: number;
 
@@ -13,17 +19,18 @@ export class CreatePostDto {
      */
     @ApiProperty()
     @Assert.IsNotEmpty('제목을 입력해주세요.')
+    @IsString()
     title: string;
 
     /**
      * 글 내용
      */
     @ApiProperty()
-    @Assert.IsNotEmpty('내용을 입력해주세요.')
-    @Assert.MaxLength(1, {
+    @Assert.MinLength(1, {
         message: '내용을 입력해주세요.',
     })
     @Assert.MaxLength(4000)
+    @IsString()
     content: string;
 
     /**
@@ -31,33 +38,29 @@ export class CreatePostDto {
      */
     @ApiProperty()
     @Assert.IsDate()
-    uploadDate: Date;
+    @Assert.IsOptional()
+    uploadDate?: Date;
 
     /**
      * 작성자 ID (FK)
      */
     @ApiProperty()
-    @Assert.IsNumber()
-    @Exclude()
+    @IsNumber()
     authorId?: number;
 
     /**
      * 대분류 (FK)
      */
     @ApiProperty()
-    @Exclude()
+    @IsNumber()
     firstCategoryId?: number;
 
     /**
      * 중분류 (FK)
      */
     @ApiProperty()
-    @Exclude()
+    @IsNumber()
     secondCategoryId?: number;
 
-    @ApiProperty({
-        type: 'enum',
-        enum: ['id', 'count'],
-    })
-    viewCount: Pick<PostViewCount, 'id' | 'count'>;
+    viewCount?: PostViewCount;
 }

@@ -139,7 +139,6 @@ export namespace DocsMapper {
                 },
                 description: '새로운 포스트를 작성합니다',
                 auth: true,
-                type: CreatePostDto,
             },
         },
     };

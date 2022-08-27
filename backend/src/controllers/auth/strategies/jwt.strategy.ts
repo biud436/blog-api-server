@@ -20,23 +20,10 @@ function cookieExtractor(cookieName: string): JwtFromRequestFunction {
 export class JwtStrategy extends PassportStrategy(Strategy) {
     constructor(
         private readonly authService: AuthService,
-        private configService: ConfigService,
+        configService: ConfigService,
     ) {
         super({
-            jwtFromRequest: () => {
-                const authorizationHeader: JwtFromRequestFunction =
-                    ExtractJwt.fromAuthHeaderAsBearerToken();
-
-                const mixin: JwtFromRequestFunction = ExtractJwt.fromExtractors(
-                    [
-                        authorizationHeader,
-                        cookieExtractor('access_token'),
-                        cookieExtractor('refresh_token'),
-                    ],
-                );
-
-                return mixin;
-            },
+            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: false,
             secretOrKey: configService.get('JWT_SECRET'),
         });

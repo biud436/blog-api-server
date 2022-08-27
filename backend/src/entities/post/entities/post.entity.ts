@@ -39,7 +39,7 @@ export class Post {
     @Column({
         nullable: false,
     })
-    viewCountId: number;
+    viewCountId?: number;
 
     /**
      * 제목
@@ -121,7 +121,7 @@ export class Post {
     @JoinColumn({
         name: 'viewCountId',
     })
-    viewCount: PostViewCount;
+    viewCount?: PostViewCount;
 
     /**
      * Build Post entity.

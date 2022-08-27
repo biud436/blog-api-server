@@ -9,7 +9,7 @@ import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { ApiConsumes, ApiExcludeEndpoint } from '@nestjs/swagger';
 import { InjectConnection } from '@nestjs/typeorm';
 import { AdminOnly } from 'src/decorators/custom.decorator';
-import { Connection } from 'typeorm';
+import { Connection, DataSource } from 'typeorm';
 import { ImageService } from './image.service';
 
 @Controller('image')
@@ -18,7 +18,7 @@ export class ImageController {
 
     constructor(
         private readonly imageService: ImageService,
-        private readonly connection: Connection,
+        private readonly dataSource: DataSource,
     ) {}
 
     @ApiExcludeEndpoint()
@@ -27,7 +27,7 @@ export class ImageController {
     @UseInterceptors(AnyFilesInterceptor())
     @ApiConsumes('multipart/form-data')
     async upload(@UploadedFiles() files: Express.Multer.File[]) {
-        const queryRunner = this.connection.createQueryRunner();
+        const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
 

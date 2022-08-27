@@ -11,6 +11,7 @@ import {
     OneToMany,
     OneToOne,
     PrimaryGeneratedColumn,
+    Unique,
 } from 'typeorm';
 import { Post } from 'src/entities/post/entities/post.entity';
 import { Admin } from 'src/entities/admin/entities/admin.entity';
@@ -23,6 +24,7 @@ export class User {
 
     @Column({
         nullable: false,
+        unique: true,
     })
     username: string;
 

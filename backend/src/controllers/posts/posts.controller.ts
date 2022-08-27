@@ -10,7 +10,7 @@ import {
     ParseIntPipe,
     Logger,
 } from '@nestjs/common';
-import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { InjectConnection } from '@nestjs/typeorm';
 import { PaginationConfig } from 'src/common/list-config';
 import { DocsMapper } from 'src/common/swagger-config';
@@ -26,7 +26,7 @@ import { CreatePostDto } from 'src/entities/post/dto/create-post.dto';
 import { UpdatePostDto } from 'src/entities/post/dto/update-post.dto';
 import { RESPONSE_MESSAGE } from 'src/utils/response';
 import { ResponseUtil } from 'src/utils/ResponseUtil';
-import { Connection } from 'typeorm';
+import { Connection, DataSource } from 'typeorm';
 import { PostsService } from './posts.service';
 
 @Controller('posts')
@@ -38,7 +38,7 @@ export class PostsController {
 
     constructor(
         private readonly postsService: PostsService,
-        @InjectConnection() private readonly connection: Connection,
+        private readonly dataSource: DataSource,
     ) {}
 
     @Get(':id')
@@ -82,8 +82,11 @@ export class PostsController {
 
     @Post()
     @CustomApiOkResponse(DocsMapper.posts.POST.create)
-    async create(@Body() createPostDto: CreatePostDto) {
-        const queryRunner = this.connection.createQueryRunner();
+    async create(
+        @Body()
+        createPostDto: CreatePostDto,
+    ) {
+        const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
 
@@ -102,7 +105,7 @@ export class PostsController {
             this.logger.debug(e);
 
             await queryRunner.rollbackTransaction();
-            return ResponseUtil.failure(RESPONSE_MESSAGE.INTERNAL_SERVER_ERROR);
+            return ResponseUtil.failureWrap(e);
         } finally {
             await queryRunner.release();
         }

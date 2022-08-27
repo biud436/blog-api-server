@@ -55,10 +55,8 @@ export class UserService {
         password_: string,
     ): Promise<UserLoginValidationInfo> {
         const user = await this.userRepository.findOne({
-            username,
-            isValid: true,
+            where: { username, isValid: true },
         });
-
         const isValidUser = true;
         const isCorrectPassword = false;
         const result = <UserLoginValidationInfo>{

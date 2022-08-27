@@ -72,7 +72,11 @@ export class NestBootstrapApplication {
     ): NestBootstrapApplication {
         app.useGlobalPipes(
             new ValidationPipe({
-                dismissDefaultMessages: false,
+                disableErrorMessages: false,
+                transform: true,
+                transformOptions: {
+                    enableImplicitConversion: true,
+                },
             }),
         );
         app.use(
