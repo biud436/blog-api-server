@@ -31,8 +31,6 @@ import { PostsService } from './posts.service';
 
 @Controller('posts')
 @ApiTags('블로그 API')
-@JwtGuard()
-@AdminOnly()
 export class PostsController {
     private logger: Logger = new Logger(PostsController.name);
 
@@ -54,6 +52,8 @@ export class PostsController {
     }
 
     @Patch(':id')
+    @AdminOnly()
+    @JwtGuard()
     @CustomApiOkResponse(DocsMapper.posts.PATCH.update)
     @ApiParam({
         name: 'id',
@@ -67,6 +67,8 @@ export class PostsController {
     }
 
     @Delete(':id')
+    @AdminOnly()
+    @JwtGuard()
     @CustomApiOkResponse(DocsMapper.posts.DELETE.remove)
     @ApiParam({
         name: 'id',
@@ -81,6 +83,8 @@ export class PostsController {
     // !==========================================================
 
     @Post()
+    @AdminOnly()
+    @JwtGuard()
     @CustomApiOkResponse(DocsMapper.posts.POST.create)
     async create(
         @Body()
@@ -111,7 +115,7 @@ export class PostsController {
         }
     }
 
-    @Get()
+    @Get('/')
     @CustomApiOkResponse(DocsMapper.posts.GET.findAll)
     async findAll(@PageNumber('page') page: number) {
         try {

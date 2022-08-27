@@ -22,8 +22,6 @@ import { ImageModule } from './controllers/image/image.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { getMyMulterOption } from './common/multer.config';
 import { AesModule } from './modules/aes/aes.module';
-import { FirstCategoryModule } from './entities/first-category/first-category.module';
-import { SecondCategoryModule } from './entities/second-category/second-category.module';
 import { PostViewCountModule } from './entities/post-view-count/post-view-count.module';
 import { UserCopyModule } from './entities/user-copy/user-copy.module';
 import './polyfill/';
@@ -33,6 +31,7 @@ import { ServerLog } from './utils/ServerLog';
 import { ApiModule } from './controllers/api/api.module';
 import { AdminModule as AdminControllerModule } from './controllers/admin/admin.module';
 import { ApiKeyModule } from './entities/api-key/api-key.module';
+import { CategoryModule } from './entities/category/category.module';
 
 @Module({
     imports: [
@@ -79,13 +78,12 @@ import { ApiKeyModule } from './entities/api-key/api-key.module';
         MicroServicesModule,
         ImageModule,
         AesModule,
-        FirstCategoryModule,
-        SecondCategoryModule,
         PostViewCountModule,
         UserCopyModule,
         ApiModule,
         AdminControllerModule,
         ApiKeyModule,
+        CategoryModule,
     ],
     controllers: [AppController, HealthCheckController],
     providers: [

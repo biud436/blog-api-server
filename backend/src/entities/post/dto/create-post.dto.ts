@@ -53,14 +53,7 @@ export class CreatePostDto {
      */
     @ApiProperty()
     @IsNumber()
-    firstCategoryId?: number;
-
-    /**
-     * 중분류 (FK)
-     */
-    @ApiProperty()
-    @IsNumber()
-    secondCategoryId?: number;
+    categoryId?: number;
 
     viewCount?: PostViewCount;
 }

@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import * as typeorm from 'typeorm';
 import {
     Entity,
@@ -10,6 +11,7 @@ import {
 @Entity()
 export class Profile {
     @PrimaryGeneratedColumn()
+    @Exclude()
     id: number;
 
     /**
@@ -20,6 +22,7 @@ export class Profile {
         length: 100,
         nullable: false,
     })
+    @Exclude()
     email: string;
 
     /**
@@ -29,6 +32,7 @@ export class Profile {
         default: () => 'CURRENT_TIMESTAMP',
         nullable: false,
     })
+    @Exclude()
     createdAt: Date;
 
     /**
@@ -38,6 +42,7 @@ export class Profile {
         default: () => 'CURRENT_TIMESTAMP',
         nullable: false,
     })
+    @Exclude()
     updatedAt: Date;
 
     /**
@@ -45,6 +50,7 @@ export class Profile {
      */
     @Column({
         nullable: false,
+        unique: true,
     })
     nickname: string;
 }

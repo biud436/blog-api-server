@@ -7,12 +7,64 @@ import {
     Param,
     Delete,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { AdminOnly, JwtGuard } from 'src/decorators/custom.decorator';
+import { RESPONSE_MESSAGE } from 'src/utils/response';
+import { ResponseUtil } from 'src/utils/ResponseUtil';
+import { DataSource } from 'typeorm';
 import { AdminService } from './admin.service';
+import { NewCategoryDto } from './dto/new-category.dto';
 
 @Controller('admin')
 @JwtGuard()
 @AdminOnly()
+@ApiBearerAuth()
 export class AdminController {
-    constructor(private readonly adminService: AdminService) {}
+    constructor(
+        private readonly adminService: AdminService,
+        private readonly dataSource: DataSource,
+    ) {}
+
+    @Post('/category')
+    @ApiOperation({
+        summary: '카테고리 추가',
+    })
+    async createCategory(
+        @Body()
+        createCategoryDto: NewCategoryDto,
+    ) {
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+
+        try {
+            const res = await this.adminService.addCategory(
+                queryRunner,
+                createCategoryDto.categoryName,
+                createCategoryDto.rootNodeName,
+            );
+
+            await queryRunner.commitTransaction();
+
+            return ResponseUtil.success(RESPONSE_MESSAGE.SAVE_SUCCESS, res);
+        } catch (e) {
+            await queryRunner.rollbackTransaction();
+            throw e;
+        } finally {
+            await queryRunner.release();
+        }
+    }
+
+    @Get('/category')
+    @ApiOperation({
+        summary: '카테고리 출력',
+    })
+    async getDepthList() {
+        try {
+            const res = await this.adminService.getDepthList();
+            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
+        } catch (e) {
+            return ResponseUtil.failureWrap(e);
+        }
+    }
 }

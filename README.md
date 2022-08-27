@@ -2,6 +2,103 @@
 
 This project will introduce you to the basic elements of blog implementation. Learning something new is always a little daunting at first. but I think that things will start to become familiar in no time.
 
+# 주요 기능
+
+## 관리자 회원 가입 및 로그인
+
+SMTP를 통해 직접 이메일을 전송하여 인증 코드를 받고 레디스 TTL 기능을 통해 인증 코드를 만료 및 유효성을 확인하는 기능이 포함되어 있습니다.
+
+## 카테고리 계층적 관리
+
+카테고리를 계층화하여 추가하거나 부모 카테고리나 종단 카테고리 등을 조회할 수 있습니다.
+
+```json
+{
+    "message": "데이터 조회 성공",
+    "statusCode": 200,
+    "result": "success",
+    "data": [
+        {
+            "children": [
+                {
+                    "children": [
+                        {
+                            "children": [],
+                            "left": 3,
+                            "name": "  강좌",
+                            "depth": 2
+                        }
+                    ],
+                    "left": 2,
+                    "name": " C++",
+                    "depth": 1
+                },
+                {
+                    "children": [],
+                    "left": 6,
+                    "name": " Java",
+                    "depth": 1
+                },
+                {
+                    "children": [],
+                    "left": 8,
+                    "name": " Ruby",
+                    "depth": 1
+                }
+            ],
+            "left": 1,
+            "name": "IT",
+            "depth": 0
+        }
+    ]
+}
+```
+
+## 글 작성
+
+블로그 관리자로 지정된 유저는 한 명이 아닐 수 있습니다. 다수의 관리자가 글을 작성할 수 있습니다.
+
+## 글 조회
+
+글을 페이지네이션하여 조회합니다.
+
+```json
+{
+    "message": "데이터 조회 성공",
+    "statusCode": 200,
+    "result": "success",
+    "data": {
+        "pagination": {
+            "currentPage": 1,
+            "totalCount": 1,
+            "maxPage": 1,
+            "currentBlock": 1,
+            "maxBlock": 1
+        },
+        "entities": [
+            {
+                "id": 31,
+                "title": "C++ 강좌 시작합니다~",
+                "content": "C++ 강좌 조만간 시작합니다.",
+                "uploadDate": "2022-08-27T04:29:32.000Z",
+                "user": {
+                    "username": "biud436",
+                    "profile": {
+                        "nickname": "러닝은빛"
+                    }
+                },
+                "category": {
+                    "name": "C++"
+                },
+                "viewCount": {
+                    "count": 0
+                }
+            }
+        ]
+    }
+}
+```
+
 ## Server application
 
 In this directory named `backend` will finish off the features of our server by adding a lot of controllers, services, pipes of `Nest.js` for blog service.
@@ -45,8 +142,6 @@ To set the environment variables automatically, you can use the command line.
 ```
 yarn start env
 ```
-
-The Nest.js version is using a version released in March 2021.
 
 ## Devops environment
 

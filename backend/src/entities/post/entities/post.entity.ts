@@ -1,6 +1,6 @@
-import { FirstCategory } from 'src/entities/first-category/entities/first-category.entity';
+import { Exclude, Transform, TransformFnParams } from 'class-transformer';
+import { Category } from 'src/entities/category/entities/category.entity';
 import { PostViewCount } from 'src/entities/post-view-count/entities/post-view-count.entity';
-import { SecondCategory } from 'src/entities/second-category/entities/second-category.entity';
 import { User } from 'src/entities/user/entities/user.entity';
 import {
     Column,
@@ -24,21 +24,30 @@ export class Post {
     @Column({
         nullable: false,
     })
+    @Exclude()
     authorId: number;
 
     @Column({
         nullable: false,
+        name: 'category_id',
     })
-    firstCategoryId: number;
+    @Exclude()
+    categoryId: number;
+
+    // @Column({
+    //     nullable: false,
+    // })
+    // firstCategoryId: number;
+
+    // @Column({
+    //     nullable: false,
+    // })
+    // secondCategoryId: number;
 
     @Column({
         nullable: false,
     })
-    secondCategoryId: number;
-
-    @Column({
-        nullable: false,
-    })
+    @Exclude()
     viewCountId?: number;
 
     /**
@@ -68,11 +77,13 @@ export class Post {
         default: () => 'CURRENT_TIMESTAMP',
         nullable: false,
     })
+    @Exclude()
     updatedAt: Date;
 
     @DeleteDateColumn({
         nullable: true,
     })
+    @Exclude()
     deletedAt?: Date;
 
     @ManyToOne(() => User, (user) => user.posts, {
@@ -80,7 +91,7 @@ export class Post {
         onDelete: 'RESTRICT',
     })
     @JoinColumn({
-        name: 'authorId',
+        name: 'author_id',
         referencedColumnName: 'id',
     })
     user: User;
@@ -88,28 +99,28 @@ export class Post {
     /**
      * 대분류
      */
-    @ManyToOne(() => FirstCategory, (firstCategory) => firstCategory.posts, {
+    @ManyToOne(() => Category, (firstCategory) => firstCategory.posts, {
         onUpdate: 'RESTRICT',
         onDelete: 'RESTRICT',
     })
     @JoinColumn({
-        name: 'firstCategoryId',
+        name: 'category_id',
         referencedColumnName: 'id',
     })
-    firstCategory: FirstCategory;
+    category: Category;
 
-    /**
-     * 중분류
-     */
-    @ManyToOne(() => SecondCategory, (secondCategory) => secondCategory.posts, {
-        onUpdate: 'RESTRICT',
-        onDelete: 'RESTRICT',
-    })
-    @JoinColumn({
-        name: 'secondCategoryId',
-        referencedColumnName: 'id',
-    })
-    secondCategory: SecondCategory;
+    // /**
+    //  * 중분류
+    //  */
+    // @ManyToOne(() => SecondCategory, (secondCategory) => secondCategory.posts, {
+    //     onUpdate: 'RESTRICT',
+    //     onDelete: 'RESTRICT',
+    // })
+    // @JoinColumn({
+    //     name: 'secondCategoryId',
+    //     referencedColumnName: 'id',
+    // })
+    // secondCategory: SecondCategory;
 
     /**
      * 조회수
@@ -119,7 +130,7 @@ export class Post {
         onDelete: 'RESTRICT',
     })
     @JoinColumn({
-        name: 'viewCountId',
+        name: 'view_count_id',
     })
     viewCount?: PostViewCount;
 

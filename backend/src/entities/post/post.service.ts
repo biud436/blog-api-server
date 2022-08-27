@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { plainToClass } from 'class-transformer';
 import { DateTimeUtil } from 'src/utils/DateTimeUtil';
 import { QueryRunner, Repository } from 'typeorm';
 import { PostViewCount } from '../post-view-count/entities/post-view-count.entity';
@@ -19,14 +20,8 @@ export class PostService {
         const now = DateTimeUtil.toDate(DateTimeUtil.now());
         model.uploadDate = now;
 
-        console.log(createPostDto);
-
-        if (!model.firstCategoryId) {
-            throw new Error('대분류 카테고리를 선택해주세요.');
-        }
-
-        if (!model.secondCategoryId) {
-            throw new Error('중분류 카테고리를 선택해주세요.');
+        if (!model.categoryId) {
+            throw new Error('카테고리를 선택해주세요.');
         }
 
         if (!model.authorId) {
@@ -47,10 +42,16 @@ export class PostService {
         const items = await this.postRepository
             .createQueryBuilder('post')
             .select()
+            .leftJoinAndSelect('post.user', 'user')
+            .leftJoinAndSelect('post.category', 'category')
+            .leftJoinAndSelect('user.profile', 'profile')
+            .leftJoinAndSelect('post.viewCount', 'viewCount')
             .where('post.deletedAt IS NULL')
             .orderBy('post.uploadDate', 'DESC')
             .setPagination(pageNumber)
             .getManyWithPagination(pageNumber);
+
+        items.entities = items.entities.map((e) => plainToClass(Post, e));
 
         return items;
     }

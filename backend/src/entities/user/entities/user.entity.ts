@@ -20,6 +20,7 @@ import { ApiKey } from 'src/entities/api-key/entities/api-key.entity';
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
+    @Exclude()
     id: number;
 
     @Column({
@@ -31,12 +32,14 @@ export class User {
     @Column({
         nullable: false,
     })
+    @Exclude()
     profileId: number;
 
     @Column({
         default: true,
         nullable: false,
     })
+    @Exclude()
     isValid: boolean;
 
     @OneToOne(() => Profile, {
@@ -75,10 +78,12 @@ export class User {
     @CreateDateColumn({
         default: () => 'CURRENT_TIMESTAMP',
     })
+    @Exclude()
     createdAt: Date;
 
     @CreateDateColumn({
         default: () => 'CURRENT_TIMESTAMP',
     })
+    @Exclude()
     updatedAt: Date;
 }
