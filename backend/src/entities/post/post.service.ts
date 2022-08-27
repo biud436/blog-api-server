@@ -38,16 +38,23 @@ export class PostService {
         return await queuryRunner.manager.save(model);
     }
 
-    async findAll(pageNumber: number) {
-        const items = await this.postRepository
+    async findAll(pageNumber: number, categoryId?: number) {
+        const qb = this.postRepository
             .createQueryBuilder('post')
             .select()
             .leftJoinAndSelect('post.user', 'user')
             .leftJoinAndSelect('post.category', 'category')
             .leftJoinAndSelect('user.profile', 'profile')
             .leftJoinAndSelect('post.viewCount', 'viewCount')
-            .where('post.deletedAt IS NULL')
-            .orderBy('post.uploadDate', 'DESC')
+            .where('post.deletedAt IS NULL');
+
+        if (categoryId) {
+            qb.andWhere('post.categoryId = :categoryId', { categoryId });
+        }
+
+        qb.orderBy('post.uploadDate', 'DESC');
+
+        const items = await qb
             .setPagination(pageNumber)
             .getManyWithPagination(pageNumber);
 

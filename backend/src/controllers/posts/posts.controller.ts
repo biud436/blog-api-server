@@ -117,12 +117,18 @@ export class PostsController {
 
     @Get('/')
     @CustomApiOkResponse(DocsMapper.posts.GET.findAll)
-    async findAll(@PageNumber('page') page: number) {
+    async findAll(
+        @PageNumber('page') page: number,
+        @Query('categoryId', ParseIntPipe) categoryId?: number,
+    ) {
         try {
-            const data = await this.postsService.findAll(page);
+            const data = await this.postsService.findAll(page, categoryId);
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, data);
         } catch {
-            return ResponseUtil.failure(RESPONSE_MESSAGE.NULL_VALUE);
+            return ResponseUtil.failure({
+                message: '작성된 포스트가 없습니다',
+                statusCode: 500,
+            });
         }
     }
 }
