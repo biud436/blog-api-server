@@ -10,7 +10,7 @@ import { Request, Response } from 'express';
 import { AdminService } from 'src/entities/admin/admin.service';
 import { CreateUserDto } from 'src/entities/user/dto/create-user.dto';
 import { UserService } from 'src/entities/user/user.service';
-import { Connection } from 'typeorm';
+import { Connection, DataSource } from 'typeorm';
 import { AuthRequest } from './validator/request.dto';
 import { JwtPayload } from './validator/response.dto';
 import * as validator from 'class-validator';
@@ -65,7 +65,7 @@ export class AuthService {
         private readonly redisService: RedisService,
         private readonly mailService: MailService,
         private readonly apiKeyService: ApiKeyService,
-        @InjectConnection() private connection: Connection,
+        private readonly dataSource: DataSource,
     ) {}
 
     /**
@@ -319,7 +319,7 @@ export class AuthService {
      * @returns
      */
     async signUp(body: AuthRequest.RequestDto) {
-        const connection = this.connection;
+        const connection = this.dataSource;
         const queryRunner = connection.createQueryRunner();
 
         await queryRunner.connect();
