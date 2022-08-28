@@ -2,6 +2,8 @@ import { Exclude } from 'class-transformer';
 import {
     BeforeInsert,
     Column,
+    CreateDateColumn,
+    DeleteDateColumn,
     Entity,
     JoinColumn,
     ManyToOne,
@@ -10,6 +12,7 @@ import {
     Tree,
     TreeChildren,
     TreeParent,
+    UpdateDateColumn,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Post } from 'src/entities/post/entities/post.entity';
@@ -46,6 +49,21 @@ export class PostComment {
     })
     @JoinColumn({ name: 'post_id' })
     post: Post;
+
+    @CreateDateColumn({
+        name: 'created_at',
+        default: () => 'CURRENT_TIMESTAMP',
+    })
+    createdAt: Date;
+
+    @UpdateDateColumn({
+        name: 'updated_at',
+        default: () => 'CURRENT_TIMESTAMP',
+    })
+    updatedAt: Date;
+
+    @DeleteDateColumn()
+    deletedAt: Date | null;
 
     async hashPassword(password: string) {
         this.password = await bcrypt.hash(password, 10);
