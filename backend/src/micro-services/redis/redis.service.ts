@@ -125,6 +125,12 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
         return await this.client.INCR(key);
     }
 
+    async increasePostViewCount(postId: number) {
+        const key = `post_view_count:${postId}`;
+
+        return await this.client.INCR(key);
+    }
+
     /**
      * 특정 사용자에 대한 API 사용량을 획득합니다.
      *
@@ -175,6 +181,15 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
      */
     async getAllKeys() {
         return await this.client.KEYS('*');
+    }
+
+    /**
+     * 현재 레디스에 할당되어있는 키를 반환합니다.
+     *
+     * @returns
+     */
+    async getKeys(key: string) {
+        return await this.client.KEYS(key);
     }
 
     /**

@@ -45,7 +45,6 @@ export class PostService {
             .leftJoinAndSelect('post.user', 'user')
             .leftJoinAndSelect('post.category', 'category')
             .leftJoinAndSelect('user.profile', 'profile')
-            .leftJoinAndSelect('post.viewCount', 'viewCount')
             .where('post.deletedAt IS NULL')
             .andWhere('post.id = :postId', { postId });
 
@@ -77,5 +76,20 @@ export class PostService {
         items.entities = items.entities.map((e) => plainToClass(Post, e));
 
         return items;
+    }
+
+    async updateViewCount(postId: number, count: number) {
+        const post = await this.postRepository.findOne({
+            where: { id: postId },
+            relations: ['viewCount'],
+        });
+
+        if (!post) {
+            throw new Error('존재하지 않는 게시물입니다.');
+        }
+
+        post.viewCount.count = count;
+
+        return await this.postRepository.save(post);
     }
 }
