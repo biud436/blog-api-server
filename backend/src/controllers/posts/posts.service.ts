@@ -26,6 +26,7 @@ export class PostsService {
     async redisBatchStart() {
         const keys = await this.redisService.getKeys('post_view_count:*');
         if (keys.length > 0) {
+            // TODO: bull.js 사용 필요
             for (const key of keys) {
                 const postId = parseInt(key.split(':')[1], 10);
                 const cnt = parseInt(await this.redisService.get(key), 10);
