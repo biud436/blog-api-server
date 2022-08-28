@@ -78,12 +78,14 @@ export class PostsController {
     })
     async readComments(
         @Param('id', ParseIntPipe) postId: number,
+        @PageNumber('page') pageNumber: number,
         @Query('parentCommentId', ParseIntPipe) parentCommentId?: number,
     ) {
         try {
             const res = await this.postsService.readComments(
                 postId,
                 parentCommentId,
+                pageNumber,
             );
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
         } catch (e) {

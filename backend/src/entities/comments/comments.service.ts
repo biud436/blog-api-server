@@ -42,7 +42,11 @@ export class CommentsService {
         await queryRunner.manager.save(comment);
     }
 
-    async findCommentTree(postId: number, parentCommentId: number) {
+    async findCommentTree(
+        postId: number,
+        parentCommentId: number,
+        pageNumber = 1,
+    ) {
         const parentComment = await this.findParentComment(parentCommentId);
 
         const qb = this.commentRepository.createDescendantsQueryBuilder(
@@ -62,11 +66,11 @@ export class CommentsService {
             .addSelect('node.parent_id', 'parentId')
             .addSelect('node.mpath', 'path')
             .where('node.postId = :postId', { postId })
-            .addOrderBy('node.mpath', 'ASC');
+            .addOrderBy('node.mpath', 'ASC')
+            .setPaginationWithJoin(pageNumber);
 
-        const nodes = (await qb.getRawMany()).map((e) =>
-            plainToClass(CommentNode, e),
-        );
+        const nodes = await qb.getRawManyWithPagination(pageNumber);
+        nodes.entities.map((e) => plainToClass(CommentNode, e));
 
         return nodes;
     }

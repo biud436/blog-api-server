@@ -50,10 +50,15 @@ export class PostsService {
         }
     }
 
-    async readComments(postId: number, parentCommentId: number) {
+    async readComments(
+        postId: number,
+        parentCommentId: number,
+        pageNumber = 1,
+    ) {
         const comments = await this.commentService.findCommentTree(
             postId,
             parentCommentId,
+            pageNumber,
         );
 
         // return comments.map((e) => plainToClass(PostComment, e));

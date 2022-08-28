@@ -99,6 +99,110 @@ SMTP를 통해 직접 이메일을 전송하여 인증 코드를 받고 레디�
 }
 ```
 
+## 댓글의 조회
+
+특정 포스트의 댓글을 계층형으로 조회할 수 있습니다.
+
+```json
+{
+    "message": "데이터 조회 성공",
+    "statusCode": 200,
+    "result": "success",
+    "data": {
+        "pagination": {
+            "currentPage": 1,
+            "totalCount": 9,
+            "maxPage": 1,
+            "currentBlock": 1,
+            "maxBlock": 1
+        },
+        "entities": [
+            {
+                "id": 1,
+                "username": "test",
+                "content": "댓글 테스트",
+                "postId": 31,
+                "path": "",
+                "depth": 0,
+                "parentId": null
+            },
+            {
+                "id": 2,
+                "username": "test",
+                "content": "대댓글 테스트",
+                "postId": 31,
+                "path": "",
+                "depth": 0,
+                "parentId": 1
+            },
+            {
+                "id": 3,
+                "username": "test",
+                "content": "test",
+                "postId": 31,
+                "path": "3.",
+                "depth": 1,
+                "parentId": null
+            },
+            {
+                "id": 5,
+                "username": "test",
+                "content": "test",
+                "postId": 31,
+                "path": "3.5.",
+                "depth": 2,
+                "parentId": 3
+            },
+            {
+                "id": 6,
+                "username": "test",
+                "content": "test",
+                "postId": 31,
+                "path": "3.6.",
+                "depth": 2,
+                "parentId": 3
+            },
+            {
+                "id": 9,
+                "username": "test3",
+                "content": "62154",
+                "postId": 31,
+                "path": "3.6.9.",
+                "depth": 3,
+                "parentId": 6
+            },
+            {
+                "id": 7,
+                "username": "test",
+                "content": "test",
+                "postId": 31,
+                "path": "3.7.",
+                "depth": 2,
+                "parentId": 3
+            },
+            {
+                "id": 8,
+                "username": "test",
+                "content": "test",
+                "postId": 31,
+                "path": "3.8.",
+                "depth": 2,
+                "parentId": 3
+            },
+            {
+                "id": 4,
+                "username": "test",
+                "content": "test",
+                "postId": 31,
+                "path": "4.",
+                "depth": 1,
+                "parentId": 1
+            }
+        ]
+    }
+}
+```
+
 ## 노드 모듈 업그레이드
 
 업그레이드된 `@nestjs` 버전으로 갱신하려면 다음과 같이 해야 합니다.
