@@ -8,10 +8,12 @@ import {
     Entity,
     JoinColumn,
     ManyToOne,
+    OneToMany,
     OneToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
+import { PostComment } from 'src/entities/comments/entities/comment.entity';
 
 @Entity()
 export class Post {
@@ -96,9 +98,6 @@ export class Post {
     })
     user: User;
 
-    /**
-     * 대분류
-     */
     @ManyToOne(() => Category, (firstCategory) => firstCategory.posts, {
         onUpdate: 'RESTRICT',
         onDelete: 'RESTRICT',
@@ -120,6 +119,12 @@ export class Post {
         name: 'view_count_id',
     })
     viewCount?: PostViewCount;
+
+    /**
+     * 댓글 참조
+     */
+    @OneToMany(() => PostComment, (comment) => comment.post)
+    comments: PostComment[];
 
     /**
      * Build Post entity.

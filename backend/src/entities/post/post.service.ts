@@ -38,6 +38,22 @@ export class PostService {
         return await queuryRunner.manager.save(model);
     }
 
+    async findOne(postId: number) {
+        const qb = this.postRepository
+            .createQueryBuilder('post')
+            .select()
+            .leftJoinAndSelect('post.user', 'user')
+            .leftJoinAndSelect('post.category', 'category')
+            .leftJoinAndSelect('user.profile', 'profile')
+            .leftJoinAndSelect('post.viewCount', 'viewCount')
+            .where('post.deletedAt IS NULL')
+            .andWhere('post.id = :postId', { postId });
+
+        const item = await qb.getOne();
+
+        return plainToClass(Post, item);
+    }
+
     async findAll(pageNumber: number, categoryId?: number) {
         const qb = this.postRepository
             .createQueryBuilder('post')

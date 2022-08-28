@@ -13,7 +13,6 @@ export class PostViewCountService {
     ) {}
 
     /**
-     * ! TRANSACTIONAL METHODS
      *
      * @param createPostViewCountDto
      * @param queryRunner
@@ -30,6 +29,11 @@ export class PostViewCountService {
         return await queryRunner.manager.save(model);
     }
 
+    /**
+     *
+     * @param id
+     * @returns
+     */
     async findOne(id: number): Promise<PostViewCount> {
         const model = await this.postViewCountRepository
             .createQueryBuilder('post_view_count')

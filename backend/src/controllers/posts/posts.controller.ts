@@ -29,6 +29,7 @@ import { Limit } from 'src/decorators/limit.decorator';
 import { Offset } from 'src/decorators/offset.decorator';
 import { PageNumber } from 'src/decorators/page-number.decorator';
 import { CategoryService } from 'src/entities/category/category.service';
+import { CreatePostCommentDto } from 'src/entities/comments/dto/create-comment.dto';
 import { CreatePostDto } from 'src/entities/post/dto/create-post.dto';
 import { UpdatePostDto } from 'src/entities/post/dto/update-post.dto';
 import { RESPONSE_MESSAGE } from 'src/utils/response';
@@ -65,11 +66,47 @@ export class PostsController {
         }
     }
 
+    @Get('/:id/comment')
+    @ApiOperation({ summary: '댓글 조회' })
+    @ApiParam({
+        name: 'id',
+        description: '포스트 아이디',
+    })
+    @ApiQuery({
+        name: 'parentCommentId',
+        description: '부모 댓글 아이디',
+    })
+    async readComments(
+        @Param('id', ParseIntPipe) postId: number,
+        @Query('parentCommentId', ParseIntPipe) parentCommentId?: number,
+    ) {
+        try {
+            const res = await this.postsService.readComments(
+                postId,
+                parentCommentId,
+            );
+            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
+        } catch (e) {
+            return ResponseUtil.failure(e);
+        }
+    }
+
+    @Post('/comment')
+    @ApiOperation({ summary: '댓글 작성' })
+    async writeComment(@Body() createCommentDto: CreatePostCommentDto) {
+        try {
+            const data = await this.postsService.writeComment(createCommentDto);
+            return ResponseUtil.success(RESPONSE_MESSAGE.SAVE_SUCCESS, data);
+        } catch (e) {
+            return ResponseUtil.failureWrap(e);
+        }
+    }
+
     @Get(':id')
     @CustomApiOkResponse(DocsMapper.posts.GET.findOne)
-    async findOne(@Param('id', ParseIntPipe) id: number) {
+    async findOne(@Param('id', ParseIntPipe) postid: number) {
         try {
-            const model = await this.postsService.findOne(id);
+            const model = await this.postsService.findOne(postid);
 
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, model);
         } catch (e) {
@@ -77,32 +114,32 @@ export class PostsController {
         }
     }
 
-    @Patch(':id')
-    @AdminOnly()
-    @JwtGuard()
-    @CustomApiOkResponse(DocsMapper.posts.PATCH.update)
-    @ApiParam({
-        name: 'id',
-        description: '포스트 ID',
-    })
-    update(
-        @Param('id', ParseIntPipe) id: number,
-        @Body() updatePostDto: UpdatePostDto,
-    ) {
-        return this.postsService.update(id, updatePostDto);
-    }
+    // @Patch(':id')
+    // @AdminOnly()
+    // @JwtGuard()
+    // @CustomApiOkResponse(DocsMapper.posts.PATCH.update)
+    // @ApiParam({
+    //     name: 'id',
+    //     description: '포스트 ID',
+    // })
+    // update(
+    //     @Param('id', ParseIntPipe) id: number,
+    //     @Body() updatePostDto: UpdatePostDto,
+    // ) {
+    //     return this.postsService.update(id, updatePostDto);
+    // }
 
-    @Delete(':id')
-    @AdminOnly()
-    @JwtGuard()
-    @CustomApiOkResponse(DocsMapper.posts.DELETE.remove)
-    @ApiParam({
-        name: 'id',
-        description: '포스트 ID',
-    })
-    remove(@Param('id', ParseIntPipe) id: number) {
-        return this.postsService.remove(id);
-    }
+    // @Delete(':id')
+    // @AdminOnly()
+    // @JwtGuard()
+    // @CustomApiOkResponse(DocsMapper.posts.DELETE.remove)
+    // @ApiParam({
+    //     name: 'id',
+    //     description: '포스트 ID',
+    // })
+    // remove(@Param('id', ParseIntPipe) id: number) {
+    //     return this.postsService.remove(id);
+    // }
 
     // !==========================================================
     // ! Post와 Get Mapping은 맨 아래에 배치해야 합니다.

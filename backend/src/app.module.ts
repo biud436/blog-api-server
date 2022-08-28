@@ -32,6 +32,7 @@ import { ApiModule } from './controllers/api/api.module';
 import { AdminModule as AdminControllerModule } from './controllers/admin/admin.module';
 import { ApiKeyModule } from './entities/api-key/api-key.module';
 import { CategoryModule } from './entities/category/category.module';
+import { CommentsModule } from './entities/comments/comments.module';
 
 @Module({
     imports: [
@@ -84,6 +85,7 @@ import { CategoryModule } from './entities/category/category.module';
         AdminControllerModule,
         ApiKeyModule,
         CategoryModule,
+        CommentsModule,
     ],
     controllers: [AppController, HealthCheckController],
     providers: [
