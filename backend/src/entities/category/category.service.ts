@@ -220,7 +220,7 @@ export class CategoryService {
             if (difference > 0) {
                 rootNode = prevNode;
             } else if (difference < 0) {
-                maybeDepth = lastRootNode.depth - 1;
+                maybeDepth = node.depth - 1;
 
                 for (const secondRoofNode of resultTree) {
                     if (secondRoofNode.depth === maybeDepth) {
