@@ -15,7 +15,6 @@ export class DepartmentService implements OnModuleInit {
 
     async onModuleInit() {
         // 모든 부서 삭제
-        // `SELECT UPPER_DEPT_SQ FROM department ORDER BY UPPER_DEPT_SQ DESC`
         const items = await this.departmentRepository
             .createQueryBuilder('department')
             .select()
@@ -60,6 +59,20 @@ export class DepartmentService implements OnModuleInit {
         models.push(
             this.departmentRepository.create({
                 name: '개발팀 1',
+                level: 3,
+                upperDepartmentId: 2,
+            }),
+        );
+        models.push(
+            this.departmentRepository.create({
+                name: '개발팀 2',
+                level: 3,
+                upperDepartmentId: 2,
+            }),
+        );
+        models.push(
+            this.departmentRepository.create({
+                name: '개발팀 3',
                 level: 3,
                 upperDepartmentId: 2,
             }),
