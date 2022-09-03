@@ -19,13 +19,13 @@ export class DepartmentService implements OnModuleInit {
     async onModuleInit() {
         // 모든 부서 삭제
         await this.departmentRepository.query(`
-            DELETE FROM DEPARTMENT WHERE UPPER_DEPT_SQ IN (
-                SELECT UPPER_DEPT_SQ FROM DEPARTMENT
+            DELETE FROM department WHERE UPPER_DEPT_SQ IN (
+                SELECT UPPER_DEPT_SQ FROM department
             );
         `);
 
         await this.departmentRepository.query(`
-            DELETE FROM DEPARTMENT;
+            DELETE FROM department;
         `);
 
         // AUTO_INCREMENT를 1로 재설정
