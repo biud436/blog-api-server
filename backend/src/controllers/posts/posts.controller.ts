@@ -17,24 +17,19 @@ import {
     ApiQuery,
     ApiTags,
 } from '@nestjs/swagger';
-import { InjectConnection } from '@nestjs/typeorm';
-import { PaginationConfig } from 'src/common/list-config';
 import { DocsMapper } from 'src/common/swagger-config';
 import {
     AdminOnly,
     CustomApiOkResponse,
     JwtGuard,
 } from 'src/decorators/custom.decorator';
-import { Limit } from 'src/decorators/limit.decorator';
-import { Offset } from 'src/decorators/offset.decorator';
 import { PageNumber } from 'src/decorators/page-number.decorator';
 import { CategoryService } from 'src/entities/category/category.service';
 import { CreatePostCommentDto } from 'src/entities/comments/dto/create-comment.dto';
 import { CreatePostDto } from 'src/entities/post/dto/create-post.dto';
-import { UpdatePostDto } from 'src/entities/post/dto/update-post.dto';
 import { RESPONSE_MESSAGE } from 'src/utils/response';
 import { ResponseUtil } from 'src/utils/ResponseUtil';
-import { Connection, DataSource } from 'typeorm';
+import { DataSource } from 'typeorm';
 import { PostsService } from './posts.service';
 
 @Controller('posts')
