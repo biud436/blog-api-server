@@ -14,24 +14,16 @@ export class DepartmentService implements OnModuleInit {
     ) {}
 
     async onModuleInit() {
-        // 모든 부서 삭제
-        const items = await this.departmentRepository
-            .createQueryBuilder('department')
-            .select()
-            .orderBy('department.upperDepartmentId', 'DESC')
-            .getMany();
+        // 가장 깊은 노드부터 삭제할 수 있게 위상 정렬 시작
+        const items = await this.getTopologicalSortByLevel();
 
         if (items && items.length > 0) {
             for (const item of items) {
                 await this.departmentRepository.delete({
-                    upperDepartmentId: item.upperDepartmentId,
+                    id: item.id,
                 });
             }
         }
-
-        await this.departmentRepository.query(`
-            DELETE FROM department;
-        `);
 
         // AUTO_INCREMENT를 1로 재설정
         await this.departmentRepository.query(
