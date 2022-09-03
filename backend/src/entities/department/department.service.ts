@@ -78,17 +78,54 @@ export class DepartmentService implements OnModuleInit {
             }),
         );
 
+        models.push(
+            this.departmentRepository.create({
+                name: '마케팅부',
+                level: 2,
+                upperDepartmentId: 1,
+            }),
+        );
+
+        models.push(
+            this.departmentRepository.create({
+                name: '마케팅팀 1',
+                level: 3,
+                upperDepartmentId: 6,
+            }),
+        );
+
+        models.push(
+            this.departmentRepository.create({
+                name: '마케팅팀 2',
+                level: 3,
+                upperDepartmentId: 6,
+            }),
+        );
+
+        models.push(
+            this.departmentRepository.create({
+                name: '마케팅팀 3',
+                level: 3,
+                upperDepartmentId: 6,
+            }),
+        );
+
         await this.departmentRepository.save(models);
 
         const children = this.getTree(await this.departmentRepository.find());
 
         this.logger.log(JSON.stringify(children, null, 2));
 
-        this.logger.log(
+        console.log(
             JSON.stringify(await this.getTopologicalSortByLevel(), null, 2),
         );
     }
 
+    /**
+     * 깊이가 가장 깊은 노드부터 출력합니다.
+     *
+     * @returns
+     */
     async getTopologicalSortByLevel() {
         const items = await this.departmentRepository
             .createQueryBuilder('department')
@@ -119,12 +156,20 @@ export class DepartmentService implements OnModuleInit {
                 visit(item);
             });
 
-            return sorted;
+            visited.sort((a, b) => a.level - b.level);
+
+            return visited;
         };
 
-        const sortedItems = topologicalSort(sortableItems);
+        const sortedItems = topologicalSort(sortableItems).map((e) => {
+            return {
+                id: e.id,
+                name: e.name,
+                level: e.level,
+            };
+        });
 
-        return sortedItems;
+        return sortedItems.reverse();
     }
 
     getTree(departments: Department[]) {
