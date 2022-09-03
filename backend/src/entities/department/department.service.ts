@@ -1,16 +1,13 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Repository } from 'typeorm';
 import { Department } from './entities/department.entity';
-
-type Node = {
-    id: number;
-    name: string;
-    children?: Node[];
-};
+import { DepartmentNode } from './types/department-node';
 
 @Injectable()
 export class DepartmentService implements OnModuleInit {
+    private logger: Logger = new Logger(DepartmentService.name);
+
     constructor(
         @InjectRepository(Department)
         private readonly departmentRepository: Repository<Department>,
@@ -18,11 +15,20 @@ export class DepartmentService implements OnModuleInit {
 
     async onModuleInit() {
         // 모든 부서 삭제
-        await this.departmentRepository.query(`
-            DELETE FROM department WHERE UPPER_DEPT_SQ IN (
-                SELECT UPPER_DEPT_SQ FROM department
-            );
-        `);
+        // `SELECT UPPER_DEPT_SQ FROM department ORDER BY UPPER_DEPT_SQ DESC`
+        const items = await this.departmentRepository
+            .createQueryBuilder('department')
+            .select()
+            .orderBy('department.upperDepartmentId', 'DESC')
+            .getMany();
+
+        if (items && items.length > 0) {
+            for (const item of items) {
+                await this.departmentRepository.delete({
+                    upperDepartmentId: item.upperDepartmentId,
+                });
+            }
+        }
 
         await this.departmentRepository.query(`
             DELETE FROM department;
@@ -38,6 +44,7 @@ export class DepartmentService implements OnModuleInit {
         models.push(
             this.departmentRepository.create({
                 name: '루트',
+                level: 1,
                 upperDepartmentId: null,
             }),
         );
@@ -45,7 +52,16 @@ export class DepartmentService implements OnModuleInit {
         models.push(
             this.departmentRepository.create({
                 name: '개발부',
+                level: 2,
                 upperDepartmentId: 1,
+            }),
+        );
+
+        models.push(
+            this.departmentRepository.create({
+                name: '개발팀 1',
+                level: 3,
+                upperDepartmentId: 2,
             }),
         );
 
@@ -53,17 +69,18 @@ export class DepartmentService implements OnModuleInit {
 
         const children = this.getTree(await this.departmentRepository.find());
 
-        console.log(JSON.stringify(children, null, 2));
+        this.logger.log(JSON.stringify(children, null, 2));
     }
 
     getTree(departments: Department[]) {
-        const collection: Map<number, Node[]> = new Map();
+        const collection: Map<number, DepartmentNode[]> = new Map();
         const tree = [];
 
         departments.forEach((department) => {
-            const node: Node = {
+            const node: DepartmentNode = {
                 id: department.id,
                 name: department.name,
+                level: department.level,
                 children: [],
             };
 
@@ -78,7 +95,7 @@ export class DepartmentService implements OnModuleInit {
             }
         });
 
-        const traverse = (nodes: Node[]) => {
+        const traverse = (nodes: DepartmentNode[]) => {
             nodes.forEach((node) => {
                 if (collection.has(node.id)) {
                     node.children = collection.get(node.id);

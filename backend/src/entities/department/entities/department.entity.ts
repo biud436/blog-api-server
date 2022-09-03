@@ -29,6 +29,9 @@ export class Department {
     })
     upperDepartmentId: number;
 
+    @Column()
+    level: number;
+
     // 셀프 조인 (테스트)
     @ManyToOne(() => Department, (department) => department.departments)
     @JoinColumn({
