@@ -83,6 +83,48 @@ export class DepartmentService implements OnModuleInit {
         const children = this.getTree(await this.departmentRepository.find());
 
         this.logger.log(JSON.stringify(children, null, 2));
+
+        this.logger.log(
+            JSON.stringify(await this.getTopologicalSortByLevel(), null, 2),
+        );
+    }
+
+    async getTopologicalSortByLevel() {
+        const items = await this.departmentRepository
+            .createQueryBuilder('department')
+            .select()
+            .getMany();
+
+        const sortableItems = (await this.getTree(items)) as DepartmentNode[];
+
+        const topologicalSort = (items: DepartmentNode[]) => {
+            const sorted: DepartmentNode[] = [];
+            const visited: DepartmentNode[] = [];
+
+            const visit = (item: DepartmentNode) => {
+                if (!item) {
+                    return;
+                }
+
+                visited.push(item);
+
+                item.children?.forEach((child) => {
+                    visit(child);
+                });
+
+                sorted.push(item);
+            };
+
+            items.forEach((item) => {
+                visit(item);
+            });
+
+            return sorted;
+        };
+
+        const sortedItems = topologicalSort(sortableItems);
+
+        return sortedItems;
     }
 
     getTree(departments: Department[]) {
