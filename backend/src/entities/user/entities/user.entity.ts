@@ -16,6 +16,7 @@ import {
 import { Post } from 'src/entities/post/entities/post.entity';
 import { Admin } from 'src/entities/admin/entities/admin.entity';
 import { ApiKey } from 'src/entities/api-key/entities/api-key.entity';
+import { Department } from 'src/entities/department/entities/department.entity';
 
 @Entity()
 export class User {
@@ -59,6 +60,9 @@ export class User {
 
     @OneToMany(() => ApiKey, (apiKey) => apiKey.user)
     apiKeys: ApiKey[];
+
+    @OneToMany(() => Department, (department) => department.departmentManager)
+    departments: Department[];
 
     @Column({
         nullable: false,

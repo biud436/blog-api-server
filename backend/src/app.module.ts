@@ -34,6 +34,7 @@ import { ApiKeyModule } from './entities/api-key/api-key.module';
 import { CategoryModule } from './entities/category/category.module';
 import { CommentsModule } from './entities/comments/comments.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { DepartmentModule } from './entities/department/department.module';
 
 @Module({
     imports: [
@@ -88,6 +89,7 @@ import { ScheduleModule } from '@nestjs/schedule';
         ApiKeyModule,
         CategoryModule,
         CommentsModule,
+        DepartmentModule,
     ],
     controllers: [AppController, HealthCheckController],
     providers: [

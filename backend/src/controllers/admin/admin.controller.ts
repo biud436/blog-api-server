@@ -8,6 +8,7 @@ import {
     Delete,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { InjectDataSource } from '@nestjs/typeorm';
 import { AdminOnly, JwtGuard } from 'src/decorators/custom.decorator';
 import { RESPONSE_MESSAGE } from 'src/utils/response';
 import { ResponseUtil } from 'src/utils/ResponseUtil';
@@ -22,7 +23,7 @@ import { NewCategoryDto } from './dto/new-category.dto';
 export class AdminController {
     constructor(
         private readonly adminService: AdminService,
-        private readonly dataSource: DataSource,
+        @InjectDataSource() private readonly dataSource: DataSource,
     ) {}
 
     @Post('/category')

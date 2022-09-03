@@ -17,6 +17,7 @@ import {
     ApiQuery,
     ApiTags,
 } from '@nestjs/swagger';
+import { InjectDataSource } from '@nestjs/typeorm';
 import { DocsMapper } from 'src/common/swagger-config';
 import {
     AdminOnly,
@@ -40,7 +41,7 @@ export class PostsController {
     constructor(
         private readonly postsService: PostsService,
         private readonly categoryService: CategoryService,
-        private readonly dataSource: DataSource,
+        @InjectDataSource() private readonly dataSource: DataSource,
     ) {}
 
     @Get('/breadcrumbs')

@@ -111,26 +111,8 @@ export namespace DocsMapper {
                 description: '포스트 목록을 가져옵니다.',
             },
         },
-        PATCH: {
-            update: {
-                operation: {
-                    summary: '특정 포스트 수정',
-                    description: '특정 포스트를 수정합니다.',
-                },
-                auth: true,
-                description: '특정 포스트를 수정합니다.',
-            },
-        },
-        DELETE: {
-            remove: {
-                operation: {
-                    summary: '특정 포스트 삭제',
-                    description: '특정 포스트를 삭제합니다.',
-                },
-                auth: true,
-                description: '특정 포스트를 삭제합니다.',
-            },
-        },
+        PATCH: {},
+        DELETE: {},
         POST: {
             create: {
                 operation: {

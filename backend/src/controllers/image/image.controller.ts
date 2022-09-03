@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { ApiConsumes, ApiExcludeEndpoint } from '@nestjs/swagger';
-import { InjectConnection } from '@nestjs/typeorm';
+import { InjectConnection, InjectDataSource } from '@nestjs/typeorm';
 import { AdminOnly } from 'src/decorators/custom.decorator';
 import { Connection, DataSource } from 'typeorm';
 import { ImageService } from './image.service';
@@ -18,7 +18,7 @@ export class ImageController {
 
     constructor(
         private readonly imageService: ImageService,
-        private readonly dataSource: DataSource,
+        @InjectDataSource() private readonly dataSource: DataSource,
     ) {}
 
     @ApiExcludeEndpoint()
