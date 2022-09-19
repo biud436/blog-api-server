@@ -189,8 +189,6 @@ export class CategoryService {
             plainToClass(CategoryDepthVO, e),
         );
 
-        console.log(nodes);
-
         if (!nodes || nodes.length <= 0) {
             throw new InternalServerErrorException('리스트가 비어있습니다');
         }
@@ -206,8 +204,8 @@ export class CategoryService {
         console.group(rootNode, lastRootNode, prevNode, curNode);
 
         const resultTree: CategoryDepthVO[] = [];
+        const rootNodes: CategoryDepthVO[] = [];
         let isDirty = false;
-        let maybeDepth = 0;
 
         for (const node of nodes) {
             curNode = node;
@@ -218,13 +216,14 @@ export class CategoryService {
             lastRootNode = rootNode;
 
             if (difference > 0) {
+                // 레벨이 1단계 이상 증가하였을 때, 이전 노드를 루트 노드로 설정합니다.
                 rootNode = prevNode;
+                rootNodes.push(rootNode);
             } else if (difference < 0) {
-                maybeDepth = node.depth - 1;
-
-                for (const secondRoofNode of resultTree) {
-                    if (secondRoofNode.depth === maybeDepth) {
-                        rootNode = secondRoofNode;
+                // 레벨이 1단계 이상 감소하였을 때, 루트 노드 리스트에서 적절한 루트 노드를 찾습니다.
+                for (let i = 0; i < rootNodes.length; i++) {
+                    rootNode = rootNodes.pop();
+                    if (rootNode.depth < currentDepth) {
                         break;
                     }
                 }
