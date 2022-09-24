@@ -62,7 +62,7 @@ export class AdminController {
     })
     async getDepthList() {
         try {
-            const res = await this.adminService.getDepthList();
+            const res = await this.adminService.getTreeChildren();
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
         } catch (e) {
             return ResponseUtil.failureWrap(e);

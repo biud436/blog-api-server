@@ -212,6 +212,30 @@ export class CategoryService {
     }
 
     /**
+     * 타겟 노드의 부모, 조상 노드 출력
+     * @param nodes
+     * @param targetNode
+     * @returns
+     */
+    async getAncestorsWithDepth(
+        nodes: CategoryDepthVO[],
+        targetNode: CategoryDepthVO,
+    ) {
+        const ancestors: CategoryDepthVO[] = [];
+
+        nodes.forEach((node) => {
+            if (
+                node.left <= targetNode.left &&
+                node.right >= targetNode.right
+            ) {
+                ancestors.push(node);
+            }
+        });
+
+        return ancestors;
+    }
+
+    /**
      * 자식 노드의 갯수를 출력합니다.
      *
      * @param targetNode
@@ -224,69 +248,44 @@ export class CategoryService {
     }
 
     /**
-     * 리스트를 계층형으로 출력합니다.
-     *
-     * @deprecated
+     * 트리 구조를 출력합니다.
      * @returns
      */
-    async getDepthList() {
-        const nodes = (await this.selectTreeNodeList()).map((e) =>
-            plainToClass(CategoryDepthVO, e),
-        );
-
-        if (!nodes || nodes.length <= 0) {
-            throw new InternalServerErrorException('리스트가 비어있습니다');
+    async getTreeChildren(): Promise<CategoryDepthVO[]> {
+        const nodeList: Category[] = await this.getCategoryList();
+        if (!nodeList || nodeList.length <= 0) {
+            throw new InternalServerErrorException(
+                '노드 목록을 찾을 수 없습니다',
+            );
         }
 
-        let [currentDepth, previousDepth, difference] = [0, 0, 0];
-        let [rootNode, lastRootNode, prevNode, curNode] = [
-            nodes[0],
-            nodes[0],
-            nodes[0],
-            nodes[0],
-        ];
+        const tree: CategoryDepthVO[] = [];
+        const visitied: CategoryDepthVO[] = [];
 
-        console.group(rootNode, lastRootNode, prevNode, curNode);
+        const isRootNode = (node: CategoryDepthVO) => node.left === 1;
 
-        const resultTree: CategoryDepthVO[] = [];
-        const rootNodes: CategoryDepthVO[] = [];
-        let isDirty = false;
-
-        for (const node of nodes) {
-            curNode = node;
-            currentDepth = node.depth;
-
-            difference = currentDepth - previousDepth;
-            isDirty = false;
-            lastRootNode = rootNode;
-
-            if (difference > 0) {
-                // 레벨이 1단계 이상 증가하였을 때, 이전 노드를 루트 노드로 설정합니다.
-                rootNode = prevNode;
-                rootNodes.push(rootNode);
-            } else if (difference < 0) {
-                // 레벨이 1단계 이상 감소하였을 때, 루트 노드 리스트에서 적절한 루트 노드를 찾습니다.
-                for (let i = 0; i < rootNodes.length; i++) {
-                    rootNode = rootNodes.pop();
-                    if (rootNode.depth < currentDepth) {
-                        break;
-                    }
+        for (const node of nodeList) {
+            const nodeVO = plainToClass(CategoryDepthVO, node);
+            if (isRootNode(nodeVO)) {
+                tree.push(nodeVO);
+                visitied.push(nodeVO);
+            } else {
+                const ancestors = await this.getAncestorsWithDepth(
+                    visitied,
+                    nodeVO,
+                );
+                if (!ancestors || ancestors.length <= 0) {
+                    throw new InternalServerErrorException(
+                        '조상 노드를 찾을 수 없습니다',
+                    );
                 }
-            }
 
-            if (rootNode !== curNode) {
-                isDirty = true;
-                rootNode?.addChild(curNode);
+                const parent = ancestors[ancestors.length - 1];
+                parent.addChild(nodeVO);
+                visitied.push(nodeVO);
             }
-
-            if (!isDirty) {
-                resultTree.push(node);
-            }
-
-            previousDepth = currentDepth;
-            prevNode = curNode;
         }
 
-        return resultTree;
+        return tree;
     }
 }

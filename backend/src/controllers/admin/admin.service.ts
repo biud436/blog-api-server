@@ -19,10 +19,6 @@ export class AdminService {
         );
     }
 
-    async getDepthList() {
-        return this.categoryService.getDepthList();
-    }
-
     async getAncestors(categoryName: string) {
         const nodeList = await this.categoryService.getCategoryList();
         const targetNode = nodeList.find((node) => node.name === categoryName);
@@ -34,5 +30,9 @@ export class AdminService {
         }
 
         return this.categoryService.getAncestors(nodeList, targetNode);
+    }
+
+    async getTreeChildren() {
+        return this.categoryService.getTreeChildren();
     }
 }
