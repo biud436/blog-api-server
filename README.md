@@ -25,28 +25,41 @@ SMTP를 통해 직접 이메일을 전송하여 인증 코드를 받고 레디�
                         {
                             "children": [],
                             "left": 3,
+                            "right": 4,
                             "name": "  강좌",
                             "depth": 2
                         }
                     ],
                     "left": 2,
+                    "right": 5,
                     "name": " C++",
                     "depth": 1
                 },
                 {
-                    "children": [],
+                    "children": [
+                        {
+                            "children": [],
+                            "left": 7,
+                            "right": 8,
+                            "name": "  자바 강좌",
+                            "depth": 2
+                        }
+                    ],
                     "left": 6,
+                    "right": 9,
                     "name": " Java",
                     "depth": 1
                 },
                 {
                     "children": [],
-                    "left": 8,
+                    "left": 10,
+                    "right": 11,
                     "name": " Ruby",
                     "depth": 1
                 }
             ],
             "left": 1,
+            "right": 12,
             "name": "IT",
             "depth": 0
         }

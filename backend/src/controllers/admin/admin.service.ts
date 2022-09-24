@@ -32,7 +32,33 @@ export class AdminService {
         return this.categoryService.getAncestors(nodeList, targetNode);
     }
 
-    async getTreeChildren() {
-        return this.categoryService.getTreeChildren();
+    private convrtWithData(data: CategoryDepthVO[]) {
+        const result: any[] = [];
+
+        const convertRecursive = (
+            data: CategoryDepthVO[],
+            parent: CategoryDepthVO,
+        ) => {
+            data.forEach((item) => {
+                const node = [item.name, parent?.name ?? '', item.depth];
+                result.push(node);
+                if (item.children) {
+                    convertRecursive(item.children, item);
+                }
+            }, this);
+        };
+        convertRecursive(data, null);
+
+        return result;
+    }
+
+    async getTreeChildren(isBeautify = true) {
+        const nodes = await this.categoryService.getTreeChildren();
+
+        if (isBeautify) {
+            return nodes;
+        } else {
+            return this.convrtWithData(nodes);
+        }
     }
 }

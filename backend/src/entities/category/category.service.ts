@@ -252,7 +252,7 @@ export class CategoryService {
      * @returns
      */
     async getTreeChildren(): Promise<CategoryDepthVO[]> {
-        const nodeList: Category[] = await this.getCategoryList();
+        const nodeList: CategoryDepthVO[] = await this.selectTreeNodeList();
         if (!nodeList || nodeList.length <= 0) {
             throw new InternalServerErrorException(
                 '노드 목록을 찾을 수 없습니다',

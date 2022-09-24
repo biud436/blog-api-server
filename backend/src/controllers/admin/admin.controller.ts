@@ -6,6 +6,8 @@ import {
     Patch,
     Param,
     Delete,
+    Query,
+    ParseBoolPipe,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { InjectDataSource } from '@nestjs/typeorm';
@@ -60,9 +62,11 @@ export class AdminController {
     @ApiOperation({
         summary: '카테고리 출력',
     })
-    async getDepthList() {
+    async getDepthList(
+        @Query('isBeautify', ParseBoolPipe) isBeautify: boolean,
+    ) {
         try {
-            const res = await this.adminService.getTreeChildren();
+            const res = await this.adminService.getTreeChildren(isBeautify);
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
         } catch (e) {
             return ResponseUtil.failureWrap(e);
