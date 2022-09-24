@@ -244,11 +244,31 @@ export class CategoryService {
         return n;
     }
 
+    private convrtWithData(data: CategoryDepthVO[]) {
+        const result: any[] = [];
+
+        const convertRecursive = (
+            data: CategoryDepthVO[],
+            parent: CategoryDepthVO,
+        ) => {
+            data.forEach((item) => {
+                const node = [item.name, parent?.name ?? '', item.depth];
+                result.push(node);
+                if (item.children) {
+                    convertRecursive(item.children, item);
+                }
+            }, this);
+        };
+        convertRecursive(data, null);
+
+        return result;
+    }
+
     /**
      * 트리 구조를 출력합니다.
      * @returns
      */
-    async getTreeChildren(): Promise<CategoryDepthVO[]> {
+    async getTreeChildren(isBeautify: boolean): Promise<CategoryDepthVO[]> {
         const nodeList: CategoryDepthVO[] = await this.selectTreeNodeList();
         if (!nodeList || nodeList.length <= 0) {
             throw new InternalServerErrorException(
@@ -283,6 +303,6 @@ export class CategoryService {
             }
         }
 
-        return tree;
+        return isBeautify ? tree : this.convrtWithData(tree);
     }
 }
