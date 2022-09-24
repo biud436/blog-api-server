@@ -16,6 +16,8 @@ SMTP를 통해 직접 이메일을 전송하여 인증 코드를 받고 레디�
 <img width="347" alt="image" src="https://user-images.githubusercontent.com/13586185/192088652-7b5ece18-7612-4e47-9d20-8c9796f97f20.png">
 </p>
 
+[https://jsfiddle.net/d8tuapvg/](https://jsfiddle.net/d8tuapvg/)
+
 > {{API_URL}}/admin/category?isBeautify=true
 
 ```json
