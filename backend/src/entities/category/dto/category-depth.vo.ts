@@ -1,5 +1,6 @@
 export class CategoryDepthVO {
     left: number;
+    right: number;
     name: string;
     depth: number;
 

@@ -96,6 +96,16 @@ export class CategoryService {
         return newNode;
     }
 
+    async getCategoryList(): Promise<Category[]> {
+        const items = this.categoryRepository
+            .createQueryBuilder('category')
+            .select()
+            .orderBy('category.left', 'ASC')
+            .getMany();
+
+        return items;
+    }
+
     /**
      * 카테고리를 깊이 값을 포함하여 계층형으로 출력합니다.
      *
@@ -105,6 +115,7 @@ export class CategoryService {
         const qb = this.categoryRepository.createQueryBuilder('node');
 
         qb.select('node.left', 'left')
+            .addSelect('node.right', 'right')
             .addSelect(
                 "CONCAT( REPEAT(' ', COUNT(node.name) - 1), node.name )",
                 'name',
@@ -128,7 +139,7 @@ export class CategoryService {
             .createQueryBuilder('node')
             .select()
             .where('node.right = node.left + 1')
-            .getMany();
+            .getRawMany();
 
         return categories;
     }
@@ -180,8 +191,42 @@ export class CategoryService {
     }
 
     /**
+     * 타겟 노드의 부모, 조상 노드 출력
+     * @param nodes
+     * @param targetNode
+     * @returns
+     */
+    async getAncestors(nodes: Category[], targetNode: Category) {
+        const ancestors: Category[] = [];
+
+        nodes.forEach((node) => {
+            if (
+                node.left <= targetNode.left &&
+                node.right >= targetNode.right
+            ) {
+                ancestors.push(node);
+            }
+        });
+
+        return ancestors;
+    }
+
+    /**
+     * 자식 노드의 갯수를 출력합니다.
+     *
+     * @param targetNode
+     * @returns
+     */
+    async getNumberOfChildren(targetNode: CategoryDepthVO) {
+        const n = (targetNode.right - (targetNode.left + 1)) / 2;
+
+        return n;
+    }
+
+    /**
      * 리스트를 계층형으로 출력합니다.
      *
+     * @deprecated
      * @returns
      */
     async getDepthList() {

@@ -68,4 +68,14 @@ export class AdminController {
             return ResponseUtil.failureWrap(e);
         }
     }
+
+    @Get('/category/:categoryName')
+    async getAncestors(@Param('categoryName') categoryName: string) {
+        try {
+            const res = await this.adminService.getAncestors(categoryName);
+            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
+        } catch (e) {
+            return ResponseUtil.failureWrap(e);
+        }
+    }
 }
