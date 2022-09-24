@@ -116,10 +116,7 @@ export class CategoryService {
 
         qb.select('node.left', 'left')
             .addSelect('node.right', 'right')
-            .addSelect(
-                "CONCAT( REPEAT(' ', COUNT(node.name) - 1), node.name )",
-                'name',
-            )
+            .addSelect('node.name', 'name')
             .addSelect('(COUNT(node.name) - 1)', 'depth');
 
         qb.addFrom(Category, 'parent');
