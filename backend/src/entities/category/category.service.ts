@@ -184,7 +184,7 @@ export class CategoryService {
 
         const breadcrumbs = categories.map(({ name }) => name);
 
-        return breadcrumbs;
+        return breadcrumbs.join(' > ');
     }
 
     /**
