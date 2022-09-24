@@ -12,6 +12,10 @@ SMTP를 통해 직접 이메일을 전송하여 인증 코드를 받고 레디�
 
 카테고리를 계층화하여 추가하거나 부모 카테고리나 종단 카테고리 등을 조회할 수 있습니다. 카테고리는 중첩 모델(Nested set)로 구현되어있습니다.
 
+<p align="center">
+<img width="347" alt="image" src="https://user-images.githubusercontent.com/13586185/192088652-7b5ece18-7612-4e47-9d20-8c9796f97f20.png">
+</p>
+
 > {{API_URL}}/admin/category?isBeautify=true
 
 ```json
