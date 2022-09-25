@@ -159,7 +159,8 @@ The posts are the main feature of this blog service. The posts can be created, u
 ### BreadCrumbs
 
 > [GET] {{API_URL}}/posts/breadcrumbs?categoryName=자바 강좌
-> [https://blog-api.biud436.com/posts/breadcrumbs?categoryName=javascript](https://blog-api.biud436.com/posts/breadcrumbs?categoryName=javascript)
+
+[https://blog-api.biud436.com/posts/breadcrumbs?categoryName=javascript](https://blog-api.biud436.com/posts/breadcrumbs?categoryName=javascript)
 
 ```json
 {
