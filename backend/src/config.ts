@@ -72,7 +72,7 @@ export default (configService: ConfigService): DBConnectionType => {
             dateStrings: true,
             bigNumberStrings: false,
             timezone: 'Asia/Seoul',
-            synchronize: false,
+            synchronize: true,
             logging: ['error', 'warn'],
             entities: [__dirname + '/**/*.entity{.ts,.js}'],
         },

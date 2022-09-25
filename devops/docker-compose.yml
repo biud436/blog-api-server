@@ -17,6 +17,8 @@ services:
             - redis
         expose:
             - 3000
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
         volumes:
             - ../upload:/usr/src/app/upload
             - ../logs:/usr/src/app/logs
@@ -32,6 +34,8 @@ services:
             - redis
         expose:
             - 3000
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
         volumes:
             - ../upload:/usr/src/app/upload
             - ../logs:/usr/src/app/logs
@@ -44,42 +48,7 @@ services:
             - "6379:6379"
         volumes:
             - ./data:/data
-    database:
-        container_name: database
-        image: mariadb:latest
-        ports:
-            - 3306:3306
-        restart: always
-        env_file: .env
-        volumes:
-            - ./mariadb/etc/mysql/conf.d:/etc/mysql/conf.d:ro
-            - ./mariadb/var/lib/mysql:/var/lib/mysql
-            - ./mariadb/var/log/maria:/var/log/maria
-        environment:
-            TZ: Asia/Seoul
-        networks:
-            - default
-        command:
-            [
-                "--character-set-server=utf8mb4",
-                "--collation-server=utf8mb4_unicode_ci",
-            ]
-    proxy:
-        container_name: nginx_proxy
-        restart: always
-        image: nginx_proxy
-        build:
-            dockerfile: Dockerfile
-            context: ./reverse-proxy
-        ports:
-            - "80:80"
-            - "443:443"
-        volumes:
-            - ./certbot/conf:/etc/nginx/ssl
-            - ./certbot/data:/var/www/certbot
-        logging: *default-logging
-
 networks:
     default:
         external:
-            name: web-services
+            name: my-devops-network
