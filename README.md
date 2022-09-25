@@ -1,14 +1,14 @@
-# 소개
+# Introduction
 
-이 프로젝트는 NestJS(`@nestjs@v9.0.11`) 2022.08.16 버전으로 만들어진 간단한 블로그 서버이며 인프라 파일 또한 포함되어있습니다.
+This project is the blog server that is made with the server framework called NestJS(`@nestjs@v9.0.11 - 2022.08.16`), it is also included the infra files.
 
-# 주요 기능
+# Main Features
 
-## 관리자 회원 가입 및 로그인
+## `Sign-in` and `Sign-up` with Admin Role
 
-SMTP를 통해 직접 이메일을 전송하여 인증 코드를 받고 레디스 TTL 기능을 통해 인증 코드를 만료 및 유효성을 확인하는 기능이 포함되어 있습니다.
+To sign-up the our blog members, You will have to receive the authorization code to the verified email, this server contains the feature can check whether the authorization code is expired using Redis TTL Key.
 
-## 카테고리 계층적 관리
+## Hierarchical Categories
 
 카테고리를 계층화하여 추가하거나 부모 카테고리나 종단 카테고리 등을 조회할 수 있습니다. 카테고리는 중첩 모델(Nested set)로 구현되어있습니다.
 
@@ -95,11 +95,11 @@ SMTP를 통해 직접 이메일을 전송하여 인증 코드를 받고 레디�
 }
 ```
 
-## 포스트 (Posts)
+## Posts
 
 블로그 관리자로 지정된 유저는 한 명이 아닐 수 있습니다. 다수의 관리자가 글을 작성할 수 있습니다.
 
-### BreadCrumbs 조회
+### BreadCrumbs
 
 > [GET] {{API_URL}}/posts/breadcrumbs?categoryName=자바 강좌
 
@@ -112,7 +112,7 @@ SMTP를 통해 직접 이메일을 전송하여 인증 코드를 받고 레디�
 }
 ```
 
-### 전체글 / 카테고리 별 포스트 조회
+### Lookup Posts
 
 게시글을 카테고리 별 또는 전체글로 페이지네이션하여 조회할 수 있습니다. 업데이트가 빈번한 조회수는 레디스를 통해 관리됩니다.
 
@@ -283,7 +283,7 @@ ORDER BY created_at;
 }
 ```
 
-## 노드 모듈 업그레이드
+## How to upgrade package
 
 업그레이드된 `@nestjs` 버전으로 갱신하려면 다음과 같이 해야 합니다.
 
@@ -292,6 +292,8 @@ yarn upgrade --pattern @nestjs --latest
 ```
 
 버전 업그레이드에 따라 특정 기능이 `deprecated` 될 수도 있습니다.
+
+---
 
 # Introduction
 
