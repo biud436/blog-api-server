@@ -154,7 +154,7 @@ if pass the parameter is the same as `isBeautify=false`, you can get the flat ca
 
 ## Posts
 
-블로그 관리자로 지정된 유저는 한 명이 아닐 수 있습니다. 다수의 관리자가 글을 작성할 수 있습니다.
+The posts are the main feature of this blog service. The posts can be created, updated, deleted by the Admin role, and the read by everyone. The posts can be categorized by the category that you created before. A many people can be obtained the admin role, Notice that only one person can be the owner of the blog service.
 
 ### BreadCrumbs
 
