@@ -154,7 +154,7 @@ if pass the parameter is the same as `isBeautify=false`, you can get the flat ca
 
 ## Posts
 
-The posts are the main feature of this blog service. The posts can be created, updated, deleted by the Admin role, and the read by everyone. The posts can be categorized by the category that you created before. A many people can be obtained the admin role, Notice that only one person can be the owner of the blog service.
+The posts are the main feature of this blog service. The posts can be created, updated, deleted by the Admin role, and the read by everyone. The posts can be categorized by the category that you created before. A many people can be obtained the admin role, However notice that only one person can be the owner of the blog service.
 
 ### BreadCrumbs
 
