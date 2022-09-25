@@ -65,7 +65,7 @@ To sign-up the our blog members, You will have to receive the authorization code
 
 ## Hierarchical Categories
 
-카테고리를 계층화하여 추가하거나 부모 카테고리나 종단 카테고리 등을 조회할 수 있습니다. 카테고리는 중첩 모델(Nested set)로 구현되어있습니다.
+To pass the parameter key and value named `isBeautify=true`, you can get the hierarchical categories. This feature is implemented by using data structure called Nested Set. The nested set is a data structure that allows you to store hierarchical data in a database table. It is a very efficient way to store hierarchical data in a database, so you can lookup the parent category or leaf category in the front-end efficiently.
 
 <p align="center">
 <img width="347" alt="image" src="https://user-images.githubusercontent.com/13586185/192088652-7b5ece18-7612-4e47-9d20-8c9796f97f20.png">
@@ -130,7 +130,9 @@ To sign-up the our blog members, You will have to receive the authorization code
 }
 ```
 
-배열 모드에서는 아래와 같이 출력되는데, `["현재 카테고리 명", "부모 카테고리 명", "카테고리의 깊이"]`로 표현됩니다.
+## Flat Categories
+
+if pass the parameter is the same as `isBeautify=false`, you can get the flat categories. it can be represented as a data structure such as `["Current Category", "Parent Category", "Category Depth"]`
 
 > {{API_URL}}/admin/category
 
