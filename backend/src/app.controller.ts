@@ -6,6 +6,6 @@ export class AppController {
     @Get()
     @ApiExcludeEndpoint()
     getHello(): string {
-        return '';
+        return process.platform;
     }
 }
