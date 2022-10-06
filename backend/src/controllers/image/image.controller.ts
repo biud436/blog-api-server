@@ -79,33 +79,110 @@ export class ImageController {
         version='1.1'
         preserveAspectRatio="none"
     >
-        <rect x='0' y='0' width='900' height='300' fill='#002233'></rect>
-        <text
-            x='50'
-            y='{{y}}'
-            font-size='{{textSize}}'
-            fill='#{{color}}'
-        >{{text}}</text>
-    
-        <!-- smooth wave -->
-        <path
-            d='M0,150 C150,300 300,0 450,150 C600,300 750,0 900,150 L900,300 L0,300 Z'
-            fill='currentColor'
-            fill-opacity="50%"
-        ></path>
+        <style>
 
-        <!-- offset 10 wave -->
-        <path
-            d='M0,150 C150,300 300,0 450,150 C600,300 750,0 900,150 L900,300 L0,300 Z'
-            fill='currentColor'
-            fill-opacity="40%"
-            transform="translate(10, 15)"
-        ></path>
+            .ping-pong {
+                animation: pong 1s ease-in-out infinite;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .ping-pong-2 {
+                animation: pong-1 1s ease-in-out infinite;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;                
+            }
+
+            @keyframes pong {
+                0% {
+                    fill: #fff;
+                    font-size: 1;
+                    transform: translate(0, 0);
+                }
+
+                50% {
+                    fill: #000;
+                    font-size: 1.4em;
+                    transform: translate(0, 10px);
+                }
+
+                100% {
+                    fill: #fff;
+                    font-size: 1;
+                    transform: translate(10, 0);
+                }
+            }
+
+            @keyframes pong-1 {
+                0% {
+                    fill: #fff;
+                    font-size: 1;
+                }
+
+                50% {
+                    fill: #000;
+                    font-size: 1.2em;
+                }
+
+                100% {
+                    fill: #fff;
+                    font-size: 1;
+                }
+            }
+
+            .colorize-bg {
+                animation: colorize 1s ease-in-out infinite;
+            }
+
+            @keyframes colorize {
+                0% {
+                    fill: #fff;
+                    text-shadow: 0 0 0 #fff;
+                }
+
+                100% {
+                    fill: #efefef;
+                    text-shadow: 0 0 0 #000;
+                }
+            }
+
+
+        </style>
+        
+        <rect width="900" height="300" fill="gray" class="colorize-bg">
+            <animate
+            attributeName="rx"
+            values="0;80;0"
+            dur="10s"
+            repeatCount="indefinite" />
+        </rect>
+
+        ${text
+            .split('')
+            .map((char, index) => {
+                return `
+            <text
+                x="${index * 20}"
+                y="${y}"
+                fill="#${color}"
+                font-size="${textSize}"
+                class="${index % 3 === 0 ? 'ping-pong' : 'ping-pong-2'}"
+            >
+                ${char}
+            </text>
+            `;
+            })
+            .join('')}  
     </svg>        
     `
             .replace('{{text}}', text)
             .replace('{{color}}', color)
             .replace('{{textSize}}', textSize.toString())
-            .replace('{{y}}', y.toString());
+            .replace('{{y}}', y.toString())
+            .replace('{{dy}}', (y + 50).toString());
     }
 }
