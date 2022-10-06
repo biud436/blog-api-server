@@ -66,7 +66,7 @@ To sign-up the our blog members, You will have to receive the authorization code
 ## Profile Image
 
 <p align="center">
-<img src="https://blog-api.biud436.com/image/shake-profile?text=I%27m%20a%20Backend%20Server%20Application%20Developer.&color=ffffff&textSize=20&y=150&username=Jinseok%20Eo's%20Github" />
+<img src="https://blog-api.biud436.com/image/shake-profile?text=I%27m%20a%20Backend%20Server%20Application%20Developer.&color=ffffff&textSize=20&y=150&username=biud436" />
 </p>
 
 ```
