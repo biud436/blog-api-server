@@ -88,8 +88,8 @@ export class NestBootstrapApplication {
             ),
         );
         app.use(helmet());
-        app.setBaseViewsDir(path.join(__dirname, '..', 'views'));
         app.useStaticAssets(path.join(__dirname, '..', 'public'));
+        app.setBaseViewsDir(path.join(__dirname, '..', 'views'));
         app.setViewEngine('hbs');
 
         app.use(

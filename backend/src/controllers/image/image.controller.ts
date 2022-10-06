@@ -1,7 +1,11 @@
 import {
     Controller,
+    Get,
     Logger,
+    ParseIntPipe,
     Post,
+    Query,
+    Render,
     UploadedFiles,
     UseInterceptors,
 } from '@nestjs/common';
@@ -50,5 +54,21 @@ export class ImageController {
         } finally {
             await queryRunner.release();
         }
+    }
+
+    @Get('/stats')
+    @Render('svg-wave')
+    async getStatsSvg(
+        @Query('text') text: string,
+        @Query('color') color: string,
+        @Query('textSize', ParseIntPipe) textSize = 60,
+        @Query('y', ParseIntPipe) y = 50,
+    ) {
+        return {
+            text,
+            color,
+            textSize,
+            y,
+        };
     }
 }

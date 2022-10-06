@@ -35,6 +35,8 @@ import { CategoryModule } from './entities/category/category.module';
 import { CommentsModule } from './entities/comments/comments.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { DepartmentModule } from './entities/department/department.module';
+import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
     imports: [
@@ -67,6 +69,9 @@ import { DepartmentModule } from './entities/department/department.module';
                     ...getMyMulterOption(isProduction),
                 };
             },
+        }),
+        ServeStaticModule.forRoot({
+            rootPath: join(__dirname, '..', 'public'),
         }),
         ScheduleModule.forRoot(),
         TerminusModule,
