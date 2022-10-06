@@ -77,6 +77,7 @@ export class ImageController {
         xmlns='http://www.w3.org/2000/svg'
         xmlns:xlink='http://www.w3.org/1999/xlink'
         version='1.1'
+        preserveAspectRatio="none"
     >
         <rect x='0' y='0' width='900' height='300' fill='#002233'></rect>
         <text
@@ -89,7 +90,16 @@ export class ImageController {
         <!-- smooth wave -->
         <path
             d='M0,150 C150,300 300,0 450,150 C600,300 750,0 900,150 L900,300 L0,300 Z'
-            fill='#ffffff'
+            fill='currentColor'
+            fill-opacity="50%"
+        ></path>
+
+        <!-- offset 10 wave -->
+        <path
+            d='M0,150 C150,300 300,0 450,150 C600,300 750,0 900,150 L900,300 L0,300 Z'
+            fill='currentColor'
+            fill-opacity="40%"
+            transform="translate(10, 15)"
         ></path>
     </svg>        
     `
