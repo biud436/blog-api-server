@@ -75,7 +75,7 @@ export class ImageController {
             `https://api.github.com/users/${username}`,
         )) as Record<string, any>;
 
-        const { name, public_repos, followers } = data;
+        const { login, name, public_repos, followers } = data;
 
         return `
         <svg
@@ -107,6 +107,15 @@ export class ImageController {
                 animation: smooth-text 1s ease-in-out infinite;
             }
 
+            .smooth-text-reverse {
+                font-size: 4.5em;
+                font-weight: bold;
+                font-family: 'Noto Sans KR', sans-serif;
+                text-align: center;
+                color: #0e0e0e;
+                animation: smooth-text-reverse 1s ease-in-out infinite;
+            }
+
             @keyframes smooth-text {
                 0% {
                     transform: translateX(0);
@@ -114,6 +123,20 @@ export class ImageController {
 
                 50% {
                     transform: translateX(10px);
+                }
+
+                100% {
+                    transform: translateX(0);
+                }
+            }
+
+            @keyframes smooth-text-reverse {
+                0% {
+                    transform: translateX(0);
+                }
+
+                50% {
+                    transform: translateX(-10px);
                 }
 
                 100% {
@@ -201,7 +224,7 @@ export class ImageController {
             font-weight="bold"
             fill="#000"
             class="smooth-text"
-        >${name}'s Profile</text>
+        >${name ?? login}'s Profile</text>
 
         ${text
             .split('')
@@ -227,7 +250,7 @@ export class ImageController {
             font-size="3.5em"
             font-weight="bold"
             fill="#000"
-            class="smooth-text"
+            class="smooth-text-reverse"
         >${followers} Followers</text>
     </svg>        
     `
