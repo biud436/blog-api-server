@@ -63,6 +63,16 @@ The certification file didn't contain in this project, because it performs a man
 
 To sign-up the our blog members, You will have to receive the authorization code to the verified email, this server contains the feature can check whether the authorization code is expired using Redis TTL Key.
 
+## Profile Image
+
+<p align="center">
+<img src="https://blog-api.biud436.com/image/shake-profile?text=I%27m%20a%20Backend%20Server%20Application%20Developer.&color=ffffff&textSize=20&y=150&username=Jinseok%20Eo's%20Github" />
+</p>
+
+```
+{API_URL}/image/shake-profile?text=I%27m%20a%20Backend%20Server%20Application%20Developer.&color=ffffff&textSize=20&y=150&username=biud436
+```
+
 ## Hierarchical Categories
 
 To pass the parameter key and value named `isBeautify=true`, you can get the hierarchical categories. This feature is implemented by using data structure called Nested Set. The nested set is a data structure that allows you to store hierarchical data in a database table. It is a very efficient way to store hierarchical data in a database, so you can lookup the parent category or leaf category in the front-end efficiently.
