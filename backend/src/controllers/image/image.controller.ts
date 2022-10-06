@@ -59,7 +59,7 @@ export class ImageController {
         }
     }
 
-    @Get('/stats')
+    @Get('/stats', '/shake-profile')
     @Header('Content-Type', 'image/svg+xml')
     async getStatsSvg(
         @Query('text') text: string,
