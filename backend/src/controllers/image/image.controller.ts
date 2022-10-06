@@ -57,7 +57,6 @@ export class ImageController {
     }
 
     @Get('/stats')
-    @Render('svg-wave')
     async getStatsSvg(
         @Query('text') text: string,
         @Query('color') color: string,
