@@ -18,6 +18,7 @@ import { AdminOnly } from 'src/decorators/custom.decorator';
 import { Connection, DataSource } from 'typeorm';
 import { ImageService } from './image.service';
 import { Response } from 'express';
+import { HttpService } from '@nestjs/axios';
 
 @Controller('image')
 export class ImageController {
@@ -25,6 +26,7 @@ export class ImageController {
 
     constructor(
         private readonly imageService: ImageService,
+        private readonly httpService: HttpService,
         @InjectDataSource() private readonly dataSource: DataSource,
     ) {}
 
@@ -69,6 +71,12 @@ export class ImageController {
         @Query('y', ParseIntPipe) y = 50,
         @Res({ passthrough: true }) res: Response,
     ) {
+        const { data } = (await this.httpService.axiosRef.get(
+            `https://api.github.com/users/${username}`,
+        )) as Record<string, any>;
+
+        const { name, public_repos, followers } = data;
+
         return `
         <svg
         id='visual'
@@ -193,14 +201,14 @@ export class ImageController {
             font-weight="bold"
             fill="#000"
             class="smooth-text"
-        >${username}</text>
+        >${name}'s Profile</text>
 
         ${text
             .split('')
             .map((char, index) => {
                 return `
             <text
-                x="${index * 20}"
+                x="${10 + index * 20}"
                 y="${y}"
                 fill="#${color}"
                 font-size="${textSize}"
@@ -211,6 +219,16 @@ export class ImageController {
             `;
             })
             .join('')}  
+
+        <text
+            x="50%"
+            y="80%"
+            text-anchor="middle"
+            font-size="3.5em"
+            font-weight="bold"
+            fill="#000"
+            class="smooth-text"
+        >${followers} Followers</text>
     </svg>        
     `
             .replace('{{text}}', text)
