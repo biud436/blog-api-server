@@ -6,8 +6,10 @@ import {
     Post,
     Query,
     Render,
+    Res,
     UploadedFiles,
     UseInterceptors,
+    Header,
 } from '@nestjs/common';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { ApiConsumes, ApiExcludeEndpoint } from '@nestjs/swagger';
@@ -15,6 +17,7 @@ import { InjectConnection, InjectDataSource } from '@nestjs/typeorm';
 import { AdminOnly } from 'src/decorators/custom.decorator';
 import { Connection, DataSource } from 'typeorm';
 import { ImageService } from './image.service';
+import { Response } from 'express';
 
 @Controller('image')
 export class ImageController {
@@ -57,37 +60,39 @@ export class ImageController {
     }
 
     @Get('/stats')
+    @Header('Content-Type', 'image/svg+xml')
     async getStatsSvg(
         @Query('text') text: string,
         @Query('color') color: string,
         @Query('textSize', ParseIntPipe) textSize = 60,
         @Query('y', ParseIntPipe) y = 50,
+        @Res({ passthrough: true }) res: Response,
     ) {
         return `
-            <svg
-            id='visual'
-            viewBox='0 0 900 300'
-            width='900'
-            height='300'
-            xmlns='http://www.w3.org/2000/svg'
-            xmlns:xlink='http://www.w3.org/1999/xlink'
-            version='1.1'
-        >
-            <rect x='0' y='0' width='900' height='300' fill='#002233'></rect>
-            <text
-                x='50'
-                y='{{y}}'
-                font-size='{{textSize}}'
-                fill='#{{color}}'
-            >{{text}}</text>
-        
-            <!-- smooth wave -->
-            <path
-                d='M0,150 C150,300 300,0 450,150 C600,300 750,0 900,150 L900,300 L0,300 Z'
-                fill='#ffffff'
-            ></path>
-        </svg>        
-        `
+        <svg
+        id='visual'
+        viewBox='0 0 900 300'
+        width='900'
+        height='300'
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:xlink='http://www.w3.org/1999/xlink'
+        version='1.1'
+    >
+        <rect x='0' y='0' width='900' height='300' fill='#002233'></rect>
+        <text
+            x='50'
+            y='{{y}}'
+            font-size='{{textSize}}'
+            fill='#{{color}}'
+        >{{text}}</text>
+    
+        <!-- smooth wave -->
+        <path
+            d='M0,150 C150,300 300,0 450,150 C600,300 750,0 900,150 L900,300 L0,300 Z'
+            fill='#ffffff'
+        ></path>
+    </svg>        
+    `
             .replace('{{text}}', text)
             .replace('{{color}}', color)
             .replace('{{textSize}}', textSize.toString())
