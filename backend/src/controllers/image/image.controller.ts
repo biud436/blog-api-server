@@ -63,6 +63,7 @@ export class ImageController {
     @Header('Content-Type', 'image/svg+xml')
     async getStatsSvg(
         @Query('text') text: string,
+        @Query('username') username: string,
         @Query('color') color: string,
         @Query('textSize', ParseIntPipe) textSize = 60,
         @Query('y', ParseIntPipe) y = 50,
@@ -89,6 +90,29 @@ export class ImageController {
                 align-items: center;
             }
 
+            .smooth-text {
+                font-size: 4.5em;
+                font-weight: bold;
+                font-family: 'Noto Sans KR', sans-serif;
+                text-align: center;
+                color: #0e0e0e;
+                animation: smooth-text 1s ease-in-out infinite;
+            }
+
+            @keyframes smooth-text {
+                0% {
+                    transform: translateX(0);
+                }
+
+                50% {
+                    transform: translateX(10px);
+                }
+
+                100% {
+                    transform: translateX(0);
+                }
+            }
+
             .ping-pong-2 {
                 animation: pong-1 1s ease-in-out infinite;
                 width: 100%;
@@ -107,13 +131,13 @@ export class ImageController {
                 50% {
                     fill: #000;
                     font-size: 1.4em;
-                    transform: translate(0, 10px);
+                    transform: translate(0, 2px);
                 }
 
                 100% {
                     fill: #fff;
                     font-size: 1;
-                    transform: translate(10, 0);
+                    transform: translate(0, 0);
                 }
             }
 
@@ -160,6 +184,16 @@ export class ImageController {
             dur="10s"
             repeatCount="indefinite" />
         </rect>
+
+        <text
+            x="50%"
+            y="30%"
+            text-anchor="middle"
+            font-size="4.5em"
+            font-weight="bold"
+            fill="#000"
+            class="smooth-text"
+        >${username}</text>
 
         ${text
             .split('')
