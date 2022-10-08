@@ -65,17 +65,19 @@ To sign-up the our blog members, You will have to receive the authorization code
 
 ## Github Profile Image
 
+To show in your github account's README.md below the profile image, you can use the following code.
+
 <p align="center">
 <img src="https://blog-api.biud436.com/image/shake-profile?text=I%27m%20a%20Backend%20Server%20Application%20Developer.&color=ffffff&textSize=20&y=150&username=biud436" />
 </p>
 
-```
+```markdown
 ![](https://blog-api.biud436.com/image/shake-profile?text=I%27m%20a%20Backend%20Server%20Application%20Developer.&color=ffffff&textSize=20&y=150&username=biud436)
 ```
 
 ### Parameters
 
-> text : The text that you want to display on the profile image.
+> text : The text that you want to display on the profile image (Encode the text using `encodeURIComponent`)
 
 > color : The color of the text for future use.
 
