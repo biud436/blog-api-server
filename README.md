@@ -63,15 +63,27 @@ The certification file didn't contain in this project, because it performs a man
 
 To sign-up the our blog members, You will have to receive the authorization code to the verified email, this server contains the feature can check whether the authorization code is expired using Redis TTL Key.
 
-## Profile Image
+## Github Profile Image
 
 <p align="center">
 <img src="https://blog-api.biud436.com/image/shake-profile?text=I%27m%20a%20Backend%20Server%20Application%20Developer.&color=ffffff&textSize=20&y=150&username=biud436" />
 </p>
 
 ```
-{API_URL}/image/shake-profile?text=I%27m%20a%20Backend%20Server%20Application%20Developer.&color=ffffff&textSize=20&y=150&username=biud436
+![](https://blog-api.biud436.com/image/shake-profile?text=I%27m%20a%20Backend%20Server%20Application%20Developer.&color=ffffff&textSize=20&y=150&username=biud436)
 ```
+
+### Parameters
+
+> text : The text that you want to display on the profile image.
+
+> color : The color of the text for future use.
+
+> username : The username of the github account.
+
+> textSize : The size of the text.
+
+> y: The y position of the text.
 
 ## Hierarchical Categories
 
