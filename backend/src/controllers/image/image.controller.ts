@@ -77,6 +77,8 @@ export class ImageController {
 
         const { login, name, public_repos, followers } = data;
 
+        res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate');
+
         return `
         <svg
         id='visual'
