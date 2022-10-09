@@ -63,6 +63,7 @@ export class ImageController {
 
     @Get(['/stats', '/shake-profile'])
     @Header('Content-Type', 'image/svg+xml')
+    @Header('Cache-Control', 'public, max-age=3600')
     async getStatsSvg(
         @Query('text') text: string,
         @Query('username') username: string,
@@ -76,8 +77,6 @@ export class ImageController {
         )) as Record<string, any>;
 
         const { login, name, public_repos, followers } = data;
-
-        res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate');
 
         return `
         <svg
