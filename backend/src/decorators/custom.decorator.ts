@@ -21,8 +21,8 @@ import { Roles } from './roles.decorator';
 // API DOCS
 //=====================================================================
 type ApiOperationData = {
-    summary: string;
-    description: string;
+    summary?: string;
+    description?: string;
     requestBody?: any;
 };
 type ApiOkResponseDescriptor = {
@@ -45,6 +45,15 @@ export function CustomApiOkResponse(
     option: ApiOkResponseDescriptor,
 ): MethodDecorator & ClassDecorator {
     const operation = option.operation;
+
+    if (!operation.description) {
+        operation.description = option.description;
+    }
+
+    if (!operation.summary) {
+        operation.summary = option.description;
+    }
+
     const operationOption: ApiOperationData = {
         ...operation,
     };

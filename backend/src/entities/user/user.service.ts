@@ -80,4 +80,17 @@ export class UserService {
 
         return result;
     }
+
+    async findProfileByUsername(username: string) {
+        const qb = this.userRepository
+            .createQueryBuilder('user')
+            .select()
+            .innerJoinAndSelect('user.profile', 'profile')
+            .where('user.username = :username', {
+                username,
+            })
+            .getOneOrFail();
+
+        return await qb;
+    }
 }

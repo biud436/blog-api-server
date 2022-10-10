@@ -32,6 +32,8 @@ import Handlebars from 'handlebars';
 import { FindUserNameDto } from './dto/find-username.dto';
 import { LoginAuthorizationException } from './validator/error.dto';
 import { ApiKeyService } from 'src/entities/api-key/api-key.service';
+import { User } from 'src/entities/user/entities/user.entity';
+import { Role } from 'src/decorators/role.enum';
 
 export type AvailableEmailList =
     | `${string}@gmail.com`
@@ -432,5 +434,38 @@ export class AuthService {
         const isFoundAccessKey = cnt > 0;
 
         return isFoundAccessKey;
+    }
+
+    async getProfile(payload: { user: { username: string }; role: string }) {
+        const { user } = payload;
+
+        if (!user) {
+            throw new UnauthorizedException('유저 데이터가 없습니다 [1]');
+        }
+
+        const profileUser = await this.userService.findProfileByUsername(
+            user.username,
+        );
+
+        if (!profileUser) {
+            throw new UnauthorizedException('유저 데이터가 없습니다 [2]');
+        }
+
+        let isAdmin = false;
+        let scope = Role.User;
+
+        // 권한이 있는지 확인합니다.
+        if ('username' in user) {
+            isAdmin = await this.adminService.isAdmin(user.username);
+        }
+
+        if (isAdmin) {
+            scope = Role.Admin;
+        }
+
+        return {
+            ...plainToClass(User, profileUser),
+            scope: [scope],
+        };
     }
 }

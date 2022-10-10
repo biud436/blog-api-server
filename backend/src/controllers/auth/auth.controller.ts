@@ -12,7 +12,11 @@ import {
     Res,
     UseGuards,
 } from '@nestjs/common';
-import { CustomApiOkResponse } from 'src/decorators/custom.decorator';
+import {
+    AdminOnly,
+    CustomApiOkResponse,
+    JwtGuard,
+} from 'src/decorators/custom.decorator';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { Request, Response } from 'express';
@@ -31,6 +35,7 @@ import { ConfigService } from '@nestjs/config';
 import { SessionAuthGuard } from './guards/session-auth.guard';
 import { promisify } from 'util';
 import { HttpService } from '@nestjs/axios';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('auth')
 @ApiTags('인증 API')
@@ -96,6 +101,39 @@ export class AuthController {
                 message: e ? e.message : '인증 코드가 일치하지 않습니다.',
                 statusCode: HttpStatus.BAD_REQUEST,
             });
+        }
+    }
+
+    @Get('/profile')
+    @JwtGuard()
+    @AdminOnly()
+    @CustomApiOkResponse({
+        description: '프로필 조회',
+        operation: {
+            description: '프로필 조회',
+            summary: '프로필 조회',
+        },
+        auth: true,
+    })
+    async getProfile(
+        @UserInfo() payload: { user: { username: string }; role: string },
+    ) {
+        try {
+            const { username, scope, createdAt } =
+                await this.authService.getProfile(payload);
+
+            return {
+                user: {
+                    username,
+                    scope,
+                    createdAt,
+                },
+            };
+        } catch (e) {
+            console.warn(e);
+            return {
+                user: {},
+            };
         }
     }
 
