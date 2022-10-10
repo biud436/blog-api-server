@@ -18,6 +18,7 @@ import {
     ApiTags,
 } from '@nestjs/swagger';
 import { InjectDataSource } from '@nestjs/typeorm';
+import { SearchOption } from 'src/common/list-config';
 import { DocsMapper } from 'src/common/swagger-config';
 import {
     AdminOnly,
@@ -32,6 +33,7 @@ import { RESPONSE_MESSAGE } from 'src/utils/response';
 import { ResponseUtil } from 'src/utils/ResponseUtil';
 import { DataSource } from 'typeorm';
 import { PostsService } from './posts.service';
+import { PostSearchProperty } from './types/post-search-type';
 
 @Controller('posts')
 @ApiTags('블로그 API')
@@ -62,33 +64,6 @@ export class PostsController {
         }
     }
 
-    @Get('/:id/comment')
-    @ApiOperation({ summary: '댓글 조회' })
-    @ApiParam({
-        name: 'id',
-        description: '포스트 아이디',
-    })
-    @ApiQuery({
-        name: 'parentCommentId',
-        description: '부모 댓글 아이디',
-    })
-    async readComments(
-        @Param('id', ParseIntPipe) postId: number,
-        @PageNumber('page') pageNumber: number,
-        @Query('parentCommentId', ParseIntPipe) parentCommentId?: number,
-    ) {
-        try {
-            const res = await this.postsService.readComments(
-                postId,
-                parentCommentId,
-                pageNumber,
-            );
-            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
-        } catch (e) {
-            return ResponseUtil.failure(e);
-        }
-    }
-
     @Post('/comment')
     @ApiOperation({ summary: '댓글 작성' })
     async writeComment(@Body() createCommentDto: CreatePostCommentDto) {
@@ -99,49 +74,6 @@ export class PostsController {
             return ResponseUtil.failureWrap(e);
         }
     }
-
-    @Get(':id')
-    @CustomApiOkResponse(DocsMapper.posts.GET.findOne)
-    async findOne(@Param('id', ParseIntPipe) postid: number) {
-        try {
-            const model = await this.postsService.findOne(postid);
-
-            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, model);
-        } catch (e) {
-            return ResponseUtil.failureWrap(e);
-        }
-    }
-
-    // @Patch(':id')
-    // @AdminOnly()
-    // @JwtGuard()
-    // @CustomApiOkResponse(DocsMapper.posts.PATCH.update)
-    // @ApiParam({
-    //     name: 'id',
-    //     description: '포스트 ID',
-    // })
-    // update(
-    //     @Param('id', ParseIntPipe) id: number,
-    //     @Body() updatePostDto: UpdatePostDto,
-    // ) {
-    //     return this.postsService.update(id, updatePostDto);
-    // }
-
-    // @Delete(':id')
-    // @AdminOnly()
-    // @JwtGuard()
-    // @CustomApiOkResponse(DocsMapper.posts.DELETE.remove)
-    // @ApiParam({
-    //     name: 'id',
-    //     description: '포스트 ID',
-    // })
-    // remove(@Param('id', ParseIntPipe) id: number) {
-    //     return this.postsService.remove(id);
-    // }
-
-    // !==========================================================
-    // ! Post와 Get Mapping은 맨 아래에 배치해야 합니다.
-    // !==========================================================
 
     @Post()
     @AdminOnly()
@@ -176,6 +108,46 @@ export class PostsController {
         }
     }
 
+    /**
+     * 포스트 검색
+     *
+     * @param pageNumber 1
+     * @param searchProperty title, content
+     * @param searchQuery
+     */
+    @Get('/search')
+    @CustomApiOkResponse({
+        description: '포스트의 제목 또는 내용을 검색합니다',
+        auth: false,
+        operation: {},
+    })
+    @ApiQuery({
+        name: 'searchProperty',
+        description: '검색할 속성',
+        enum: ['title', 'content'],
+    })
+    async searchPost(
+        @Query('pageNumber', ParseIntPipe) pageNumber: number,
+        @Query('searchProperty') searchProperty: PostSearchProperty,
+        @Query('searchQuery') searchQuery: string,
+    ) {
+        try {
+            const res = await this.postsService.searchPost(
+                pageNumber,
+                searchProperty,
+                SearchOption.handleQuery(searchQuery),
+            );
+
+            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
+        } catch (e) {
+            return ResponseUtil.failureWrap(e);
+        }
+    }
+
+    // !==========================================================
+    // ! Post와 Get Mapping은 맨 아래에 배치해야 합니다.
+    // !==========================================================
+
     @Get('/')
     @CustomApiOkResponse(DocsMapper.posts.GET.findAll)
     @ApiQuery({
@@ -198,6 +170,45 @@ export class PostsController {
                 message: '작성된 포스트가 없습니다',
                 statusCode: 500,
             });
+        }
+    }
+
+    @Get('/:id/comment')
+    @ApiOperation({ summary: '댓글 조회' })
+    @ApiParam({
+        name: 'id',
+        description: '포스트 아이디',
+    })
+    @ApiQuery({
+        name: 'parentCommentId',
+        description: '부모 댓글 아이디',
+    })
+    async readComments(
+        @Param('id', ParseIntPipe) postId: number,
+        @PageNumber('page') pageNumber: number,
+        @Query('parentCommentId', ParseIntPipe) parentCommentId?: number,
+    ) {
+        try {
+            const res = await this.postsService.readComments(
+                postId,
+                parentCommentId,
+                pageNumber,
+            );
+            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
+        } catch (e) {
+            return ResponseUtil.failure(e);
+        }
+    }
+
+    @Get(':id')
+    @CustomApiOkResponse(DocsMapper.posts.GET.findOne)
+    async findOne(@Param('id', ParseIntPipe) postid: number) {
+        try {
+            const model = await this.postsService.findOne(postid);
+
+            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, model);
+        } catch (e) {
+            return ResponseUtil.failureWrap(e);
         }
     }
 }

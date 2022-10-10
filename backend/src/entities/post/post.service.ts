@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
 import { encodeHtml } from 'src/common/html-escpse';
+import { PostSearchProperty } from 'src/controllers/posts/types/post-search-type';
 import { DateTimeUtil } from 'src/utils/DateTimeUtil';
 import { QueryRunner, Repository } from 'typeorm';
 import { PostViewCount } from '../post-view-count/entities/post-view-count.entity';
@@ -73,6 +74,41 @@ export class PostService {
 
         if (categoryId) {
             qb.andWhere('post.categoryId = :categoryId', { categoryId });
+        }
+
+        qb.orderBy('post.uploadDate', 'DESC');
+
+        const items = await qb
+            .setPagination(pageNumber)
+            .getManyWithPagination(pageNumber);
+
+        items.entities = items.entities.map((e) => plainToClass(Post, e));
+
+        return items;
+    }
+
+    async searchPost(
+        pageNumber: number,
+        searchProperty: PostSearchProperty,
+        searchQuery: string,
+    ) {
+        const qb = this.postRepository
+            .createQueryBuilder('post')
+            .select()
+            .leftJoinAndSelect('post.user', 'user')
+            .leftJoinAndSelect('post.category', 'category')
+            .leftJoinAndSelect('user.profile', 'profile')
+            .leftJoinAndSelect('post.viewCount', 'viewCount')
+            .where('post.deletedAt IS NULL');
+
+        if (searchProperty === 'title') {
+            qb.andWhere('post.title LIKE :searchQuery', {
+                searchQuery: `%${searchQuery}%`,
+            });
+        } else if (searchProperty === 'content') {
+            qb.andWhere('post.content LIKE :searchQuery', {
+                searchQuery: `%${searchQuery}%`,
+            });
         }
 
         qb.orderBy('post.uploadDate', 'DESC');

@@ -10,6 +10,7 @@ import { UpdatePostDto } from 'src/entities/post/dto/update-post.dto';
 import { PostService } from 'src/entities/post/post.service';
 import { RedisService } from 'src/micro-services/redis/redis.service';
 import { DataSource, QueryRunner } from 'typeorm';
+import { PostSearchProperty } from './types/post-search-type';
 
 @Injectable()
 export class PostsService {
@@ -57,6 +58,18 @@ export class PostsService {
                 count: parseInt(cnt, 10),
             },
         };
+    }
+
+    async searchPost(
+        pageNumber: number,
+        searchProperty: PostSearchProperty,
+        searchQuery: string,
+    ) {
+        return this.postService.searchPost(
+            pageNumber,
+            searchProperty,
+            searchQuery,
+        );
     }
 
     async writeComment(createCommentDto: CreatePostCommentDto) {
