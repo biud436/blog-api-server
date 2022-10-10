@@ -1,6 +1,6 @@
 # Introduction
 
-This project is the blog server that is made with the server framework called nestjs@v9.0.11, it is also included devops file that allows you to set and start the blog server using docker. This will introduce you to the basic elements of blog implementation. Learning something new is always a little daunting at first. but I think that things will start to become familiar in no time.
+This project is the blog server that is made with the server framework called nestjs@v9.1.4, it is also included devops file that allows you to set and start the blog server using docker. This will introduce you to the basic elements of blog implementation. Learning something new is always a little daunting at first. but I think that things will start to become familiar in no time.
 
 # Setting up the server
 
