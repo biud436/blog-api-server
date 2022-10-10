@@ -14,6 +14,7 @@ import {
     UpdateDateColumn,
 } from 'typeorm';
 import { PostComment } from 'src/entities/comments/entities/comment.entity';
+import { decodeHtml } from 'src/common/html-escpse';
 
 @Entity()
 export class Post {
@@ -58,6 +59,7 @@ export class Post {
     @Column({
         nullable: false,
     })
+    @Transform((value: TransformFnParams) => decodeHtml(value.value))
     title: string;
 
     /**
@@ -67,6 +69,7 @@ export class Post {
         nullable: false,
         type: 'text',
     })
+    @Transform((value: TransformFnParams) => decodeHtml(value.value))
     content: string;
 
     @Column({

@@ -114,7 +114,8 @@ export class CategoryService {
     async selectTreeNodeList(): Promise<CategoryDepthVO[]> {
         const qb = this.categoryRepository.createQueryBuilder('node');
 
-        qb.select('node.left', 'left')
+        qb.addSelect('node.id', 'id');
+        qb.addSelect('node.left', 'left')
             .addSelect('node.right', 'right')
             .addSelect('node.name', 'name')
             .addSelect('(COUNT(node.name) - 1)', 'depth');

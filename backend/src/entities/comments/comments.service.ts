@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { plainToClass } from 'class-transformer';
+import { plainToClass, Transform, TransformFnParams } from 'class-transformer';
+import { decodeHtml } from 'src/common/html-escpse';
 import { QueryRunner, TreeRepository } from 'typeorm';
 import { CreatePostCommentDto } from './dto/create-comment.dto';
 import { UpdatePostCommentDto } from './dto/update-comment.dto';
@@ -70,7 +71,9 @@ export class CommentsService {
             .setPaginationWithJoin(pageNumber);
 
         const nodes = await qb.getRawManyWithPagination(pageNumber);
-        nodes.entities.map((e) => plainToClass(CommentNode, e));
+        nodes.entities = nodes.entities.map((e) =>
+            plainToClass(PostComment, e),
+        );
 
         return nodes;
     }
@@ -79,7 +82,9 @@ export class CommentsService {
 export class CommentNode {
     id: number;
     username: string;
+
     content: string;
+
     postId: number;
     parentId: number;
     depth: number;

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { plainToClass } from 'class-transformer';
+import { decodeHtml, encodeHtml } from 'src/common/html-escpse';
 import { CommentsService } from 'src/entities/comments/comments.service';
 import { CreatePostCommentDto } from 'src/entities/comments/dto/create-comment.dto';
 import { PostComment } from 'src/entities/comments/entities/comment.entity';
@@ -64,6 +65,10 @@ export class PostsService {
         await queryRunner.startTransaction();
 
         try {
+            if (createCommentDto.content) {
+                createCommentDto.content = encodeHtml(createCommentDto.content);
+            }
+
             const res = await this.commentService.create(
                 createCommentDto,
                 queryRunner,
@@ -91,7 +96,6 @@ export class PostsService {
             pageNumber,
         );
 
-        // return comments.map((e) => plainToClass(PostComment, e));
         return comments;
     }
 }

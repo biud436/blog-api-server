@@ -178,9 +178,17 @@ export class PostsController {
 
     @Get('/')
     @CustomApiOkResponse(DocsMapper.posts.GET.findAll)
+    @ApiQuery({
+        name: 'categoryId',
+        description: '카테고리 ID',
+        required: false,
+    })
     async findAll(
         @PageNumber('page') page: number,
-        @Query('categoryId', ParseIntPipe) categoryId?: number,
+        /**
+         * optional이므로, ParseIntPipe를 제외하였음.
+         */
+        @Query('categoryId') categoryId?: number,
     ) {
         try {
             const res = await this.postsService.findAll(page, categoryId);

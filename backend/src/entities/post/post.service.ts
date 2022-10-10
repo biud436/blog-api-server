@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
+import { encodeHtml } from 'src/common/html-escpse';
 import { DateTimeUtil } from 'src/utils/DateTimeUtil';
 import { QueryRunner, Repository } from 'typeorm';
 import { PostViewCount } from '../post-view-count/entities/post-view-count.entity';
@@ -16,6 +17,13 @@ export class PostService {
     ) {}
 
     async create(createPostDto: CreatePostDto, queuryRunner: QueryRunner) {
+        if (createPostDto.title) {
+            createPostDto.title = encodeHtml(createPostDto.title);
+        }
+        if (createPostDto.content) {
+            createPostDto.content = encodeHtml(createPostDto.content);
+        }
+
         const model = this.postRepository.create(createPostDto);
         const now = DateTimeUtil.toDate(DateTimeUtil.now());
         model.uploadDate = now;

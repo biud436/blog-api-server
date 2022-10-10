@@ -1,4 +1,4 @@
-import { Exclude } from 'class-transformer';
+import { Exclude, Transform, TransformFnParams } from 'class-transformer';
 import {
     BeforeInsert,
     Column,
@@ -16,6 +16,7 @@ import {
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Post } from 'src/entities/post/entities/post.entity';
+import { decodeHtml } from 'src/common/html-escpse';
 
 @Entity()
 @Tree('materialized-path')
@@ -31,6 +32,7 @@ export class PostComment {
     password: string;
 
     @Column()
+    @Transform((value: TransformFnParams) => decodeHtml(value.value))
     content: string;
 
     @TreeChildren()
