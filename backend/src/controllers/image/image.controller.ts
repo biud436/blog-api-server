@@ -117,6 +117,10 @@ export class ImageController {
                 animation: smooth-text-reverse 1s ease-in-out infinite;
             }
 
+            date-text {
+                font-size: 1.5em;
+            }
+
             @keyframes smooth-text {
                 0% {
                     transform: translateX(0);
@@ -253,6 +257,15 @@ export class ImageController {
             fill="#000"
             class="smooth-text-reverse"
         >${followers} Followers</text>
+
+        <!-- Last Updated Text -->
+        <text
+            x="50%"
+            y="90%"
+            text-anchor="right"
+            fill="#000"
+            class="date-text"
+        >Last Updated: ${new Date().toLocaleString()}</text>
     </svg>        
     `
             .replace('{{text}}', text)
