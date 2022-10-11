@@ -93,4 +93,16 @@ export class UserService {
 
         return await qb;
     }
+
+    async getUserID(username: string) {
+        const qb = this.userRepository
+            .createQueryBuilder('user')
+            .select('user.id')
+            .where('user.username = :username', {
+                username,
+            })
+            .getOneOrFail();
+
+        return await qb;
+    }
 }

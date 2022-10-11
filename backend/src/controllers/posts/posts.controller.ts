@@ -26,12 +26,15 @@ import {
     JwtGuard,
 } from 'src/decorators/custom.decorator';
 import { PageNumber } from 'src/decorators/page-number.decorator';
+import { UserInfo } from 'src/decorators/user.decorator';
+import { UserId, XApiUserId } from 'src/decorators/x-api-key.decorator';
 import { CategoryService } from 'src/entities/category/category.service';
 import { CreatePostCommentDto } from 'src/entities/comments/dto/create-comment.dto';
 import { CreatePostDto } from 'src/entities/post/dto/create-post.dto';
 import { RESPONSE_MESSAGE } from 'src/utils/response';
 import { ResponseUtil } from 'src/utils/ResponseUtil';
 import { DataSource } from 'typeorm';
+import { JwtPayload } from '../auth/validator/response.dto';
 import { PostsService } from './posts.service';
 import { PostSearchProperty } from './types/post-search-type';
 
@@ -80,12 +83,16 @@ export class PostsController {
     @JwtGuard()
     @CustomApiOkResponse(DocsMapper.posts.POST.create)
     async create(
+        @UserId() userId: number,
         @Body()
         createPostDto: CreatePostDto,
     ) {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
+
+        delete createPostDto.authorId;
+        createPostDto.authorId = userId;
 
         try {
             const data = await this.postsService.create(

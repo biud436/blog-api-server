@@ -41,11 +41,6 @@ export class CreatePostDto {
     @Assert.IsOptional()
     uploadDate?: Date;
 
-    /**
-     * 작성자 ID (FK)
-     */
-    @ApiProperty()
-    @IsNumber()
     authorId?: number;
 
     /**

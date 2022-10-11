@@ -1,5 +1,9 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { ParseXApiUserIdPipe } from 'src/pipes/x-api-user-id.pipe';
+import {
+    ParseUserIdPipe,
+    ParseXApiUserIdPipe,
+} from 'src/pipes/x-api-user-id.pipe';
+import { UserInfo } from './user.decorator';
 
 export const XApiKey = createParamDecorator(
     (data: unknown, ctx: ExecutionContext) => {
@@ -10,6 +14,9 @@ export const XApiKey = createParamDecorator(
         return key;
     },
 );
+
+export const UserId = (additionalOptions?: any) =>
+    UserInfo(additionalOptions, ParseUserIdPipe);
 
 export const XApiUserId = (additionalOptions?: any) =>
     XApiKey(additionalOptions, ParseXApiUserIdPipe);
