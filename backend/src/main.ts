@@ -182,7 +182,12 @@ export class NestBootstrapApplication {
                 bearerFormat: 'JWT',
             })
             .setContact('the developer', null, 'biud436@gmail.com')
-            .addServer('http://localhost:3000', '로컬 서버')
+            .addServer(
+                this.isDelvelopment()
+                    ? 'http://localhost:3000'
+                    : 'https://blog-api.biud436.com',
+                this.isDelvelopment() ? '로컬 서버' : '운영 서버',
+            )
             .setVersion('1.0')
             .build();
 
