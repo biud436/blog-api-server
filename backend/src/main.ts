@@ -136,7 +136,7 @@ export class NestBootstrapApplication {
 
         app.enableCors({
             origin: [
-                /\.home\.biud436\.com$/,
+                'https://blog.biud436.com',
                 'http://localhost:3000',
                 'http://localhost:8080',
             ],
