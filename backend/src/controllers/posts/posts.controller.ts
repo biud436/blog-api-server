@@ -209,13 +209,16 @@ export class PostsController {
 
     @Get(':id')
     @CustomApiOkResponse(DocsMapper.posts.GET.findOne)
-    async findOne(@Param('id', ParseIntPipe) postid: number) {
+    async findOne(@Param('id', ParseIntPipe) postId: number) {
         try {
-            const model = await this.postsService.findOne(postid);
+            const model = await this.postsService.findOne(postId);
 
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, model);
         } catch (e) {
-            return ResponseUtil.failureWrap(e);
+            return ResponseUtil.failureWrap({
+                message: '포스트를 찾을 수 없습니다',
+                statusCode: 403,
+            });
         }
     }
 }

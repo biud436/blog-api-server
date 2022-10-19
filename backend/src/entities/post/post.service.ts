@@ -57,7 +57,7 @@ export class PostService {
             .where('post.deletedAt IS NULL')
             .andWhere('post.id = :postId', { postId });
 
-        const item = await qb.getOne();
+        const item = await qb.getOneOrFail();
 
         return plainToClass(Post, item);
     }

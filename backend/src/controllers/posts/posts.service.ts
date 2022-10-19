@@ -47,15 +47,21 @@ export class PostsService {
     }
 
     async findOne(postId: number) {
-        await this.redisService.increasePostViewCount(postId);
-        const cnt = await this.redisService.get('post_view_count:' + postId);
+        let totalCount = '0';
 
         const item = await this.postService.findOne(postId);
+
+        if (item) {
+            await this.redisService.increasePostViewCount(postId);
+            totalCount = await this.redisService.get(
+                'post_view_count:' + postId,
+            );
+        }
 
         return {
             ...item,
             viewCount: {
-                count: parseInt(cnt, 10),
+                count: parseInt(totalCount, 10),
             },
         };
     }
