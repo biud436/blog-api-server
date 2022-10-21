@@ -119,14 +119,14 @@ export class AuthController {
         @UserInfo() payload: { user: { username: string }; role: string },
     ) {
         try {
-            const { username, scope, createdAt } =
-                await this.authService.getProfile(payload);
+            const { username, scope } = await this.authService.getProfile(
+                payload,
+            );
 
             return {
                 user: {
                     username,
                     scope,
-                    createdAt,
                 },
             };
         } catch (e) {

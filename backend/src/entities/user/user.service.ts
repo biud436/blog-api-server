@@ -89,7 +89,7 @@ export class UserService {
             .where('user.username = :username', {
                 username,
             })
-            .getOneOrFail();
+            .getOne();
 
         return await qb;
     }

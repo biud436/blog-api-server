@@ -437,35 +437,43 @@ export class AuthService {
     }
 
     async getProfile(payload: { user: { username: string }; role: string }) {
-        const { user } = payload;
+        try {
+            const { user } = payload;
 
-        if (!user) {
-            throw new UnauthorizedException('유저 데이터가 없습니다 [1]');
+            if (!user) {
+                throw new UnauthorizedException('유저 데이터가 없습니다 [1]');
+            }
+
+            console.time('getProfile');
+
+            const profileUser = await this.userService.findProfileByUsername(
+                user.username,
+            );
+
+            console.timeEnd('getProfile');
+
+            if (!profileUser) {
+                throw new UnauthorizedException('유저 데이터가 없습니다 [2]');
+            }
+
+            let isAdmin = false;
+            let scope = Role.User;
+
+            // 권한이 있는지 확인합니다.
+            if ('username' in user) {
+                isAdmin = await this.adminService.isAdmin(user.username);
+            }
+
+            if (isAdmin) {
+                scope = Role.Admin;
+            }
+
+            return {
+                ...plainToClass(User, profileUser),
+                scope: [scope],
+            };
+        } catch (e) {
+            throw new UnauthorizedException(e.message);
         }
-
-        const profileUser = await this.userService.findProfileByUsername(
-            user.username,
-        );
-
-        if (!profileUser) {
-            throw new UnauthorizedException('유저 데이터가 없습니다 [2]');
-        }
-
-        let isAdmin = false;
-        let scope = Role.User;
-
-        // 권한이 있는지 확인합니다.
-        if ('username' in user) {
-            isAdmin = await this.adminService.isAdmin(user.username);
-        }
-
-        if (isAdmin) {
-            scope = Role.Admin;
-        }
-
-        return {
-            ...plainToClass(User, profileUser),
-            scope: [scope],
-        };
     }
 }
