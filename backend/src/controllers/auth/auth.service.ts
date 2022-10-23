@@ -34,6 +34,9 @@ import { LoginAuthorizationException } from './validator/error.dto';
 import { ApiKeyService } from 'src/entities/api-key/api-key.service';
 import { User } from 'src/entities/user/entities/user.entity';
 import { Role } from 'src/decorators/role.enum';
+import { HttpService } from '@nestjs/axios';
+import qs from 'qs';
+import { GithubUserData } from './validator/github.dto';
 
 export type AvailableEmailList =
     | `${string}@gmail.com`
@@ -68,6 +71,7 @@ export class AuthService {
         private readonly mailService: MailService,
         private readonly apiKeyService: ApiKeyService,
         private readonly dataSource: DataSource,
+        private readonly httpService: HttpService,
     ) {}
 
     /**
@@ -475,5 +479,128 @@ export class AuthService {
         } catch (e) {
             throw new UnauthorizedException(e.message);
         }
+    }
+
+    /**
+     * ? 1. Request a user's GitHub identity
+     * https://docs.github.com/en/developers/apps/building-oauth-apps/authorizing-oauth-apps#1-request-a-users-github-identity
+     * /auth/github/callback
+     * @returns {Promise<any>}
+     */
+    async requestGithubUserIdentity() {
+        const client_id = this.configService.get<string>('GITHUB_CLIENT_ID');
+        const redirect_uri = this.configService.get<string>(
+            'GITHUB_REDIRECT_URI',
+        );
+        const state = CryptoUtil.uuid().split('-').join('').substring(0, 6);
+
+        // 5분간 유효하게 합니다 (CSRF 방지)
+        // An unguessable random string. It is used to protect against cross-site request forgery attacks.
+        await this.redisService.set2('github_state', state, 5);
+
+        const scope = 'user:email';
+
+        const URL = 'https://github.com/login/oauth/authorize?';
+
+        const query = {
+            client_id,
+            redirect_uri,
+            state,
+            scope,
+        };
+
+        const queryString = Object.keys(query)
+            .map((key, index) => {
+                if (index === 0) {
+                    return `${key}=${query[key]}`;
+                }
+
+                return `&${key}=${query[key]}`;
+            })
+            .join('');
+
+        return URL + queryString;
+    }
+
+    /**
+     * ? 2. Users are redirected back to your site by GitHub
+     * https://docs.github.com/en/developers/apps/building-oauth-apps/authorizing-oauth-apps#2-users-are-redirected-back-to-your-site-by-github
+     * /github/login
+     */
+    async loginGithubUser(code: string, state: string) {
+        const serverState = await this.redisService.get('github_state');
+
+        console.log('serverState : %s', serverState);
+        console.log('state : %s', state);
+        console.log('code : %s', code);
+        console.log('same? : %s', serverState === state);
+
+        if (serverState !== state) {
+            throw new UnauthorizedException(
+                '잘못된 요청입니다 [상태 코드 만료]',
+            );
+        }
+
+        const URL = 'https://github.com/login/oauth/access_token';
+        const client_id = this.configService.get<string>('GITHUB_CLIENT_ID');
+        const client_secret = this.configService.get<string>(
+            'GITHUB_CLIENT_SECRET',
+        );
+        const redirect_uri = this.configService.get<string>(
+            'GITHUB_REDIRECT_URI',
+        );
+
+        const responseProm = await this.httpService.axiosRef.post(URL, null, {
+            headers: {
+                Accept: 'application/json',
+            },
+            params: {
+                client_id,
+                client_secret,
+                code,
+            },
+        });
+
+        if (responseProm.status !== 200) {
+            throw new UnauthorizedException(
+                '깃허브 서버에서 토큰을 받아오지 못했습니다',
+            );
+        }
+
+        // 유저 데이터를 취득합니다.
+        /**
+         * @link https://docs.github.com/en/rest/users/users 참고 링크
+         */
+        const githubUserData = await this.getGithubUserData(responseProm.data);
+
+        console.log('githubUserData : %o', githubUserData);
+
+        // DB에 깃허브 유저 데이터 저장 필요 (NoSQL이 적당한데, RDBMS에 매핑해서 저장해야 한다)
+
+        return githubUserData;
+    }
+
+    async getGithubUserData({
+        token_type,
+        access_token,
+    }: any): Promise<GithubUserData> {
+        const axiosInstance = this.httpService.axiosRef;
+
+        const res = await axiosInstance.get('https://api.github.com/user', {
+            headers: {
+                Accept: 'application/vnd.github.v3+json',
+                Authorization: `${token_type} ${access_token}`,
+            },
+        });
+
+        if (res.status !== 200) {
+            throw new UnauthorizedException(
+                '깃허브 서버에서 유저 데이터를 받아오지 못했습니다',
+            );
+        }
+
+        const data = res.data as any;
+
+        return data;
     }
 }

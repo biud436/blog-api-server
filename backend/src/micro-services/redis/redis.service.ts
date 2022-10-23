@@ -95,6 +95,22 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
     }
 
     /**
+     * 특정 키에 대한 값을 설정합니다.
+     * 다만, 이 값은 특정 시간 동안에만 유효합니다.
+     *
+     * @param key
+     * @param value
+     * @param minutes
+     * @returns
+     */
+    async set2(key: string, value: string, minutes: number) {
+        await this.set(key, value);
+
+        const ttl = minutes * 60;
+        return await this.client.EXPIRE(key, ttl);
+    }
+
+    /**
      * 특정 키에 대한 값을 획득합니다.
      *
      * @param userId

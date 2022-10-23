@@ -3,11 +3,13 @@ import {
     Controller,
     Get,
     HttpCode,
+    HttpException,
     HttpStatus,
     Ip,
     Logger,
     Post,
     Query,
+    Render,
     Req,
     Res,
     UseGuards,
@@ -36,6 +38,8 @@ import { SessionAuthGuard } from './guards/session-auth.guard';
 import { promisify } from 'util';
 import { HttpService } from '@nestjs/axios';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { AxiosResponse } from '@nestjs/terminus/dist/health-indicator/http/axios.interfaces';
+import { GithubTokenResponse, GithubUserData } from './validator/github.dto';
 
 @Controller('auth')
 @ApiTags('인증 API')
@@ -175,6 +179,45 @@ export class AuthController {
                 message: e ? e.message : '회원가입에 실패하였습니다',
                 statusCode: HttpStatus.BAD_REQUEST,
             });
+        }
+    }
+
+    /**
+     * ? 1. Request a user's GitHub identity
+     * https://docs.github.com/en/developers/apps/building-oauth-apps/authorizing-oauth-apps#1-request-a-users-github-identity
+     * @returns
+     */
+    @Get('/github/identity')
+    async requestGithubUserIdentity(
+        @Res({
+            passthrough: true,
+        })
+        res: Response,
+    ) {
+        try {
+            const requestUrl =
+                await this.authService.requestGithubUserIdentity();
+
+            return requestUrl;
+        } catch (e) {
+            console.warn(e);
+        }
+    }
+
+    /**
+     * ? 2. Users are redirected back to your site by GitHub
+     * https://docs.github.com/en/developers/apps/building-oauth-apps/authorizing-oauth-apps#2-users-are-redirected-back-to-your-site-by-github
+     * /github/login
+     */
+    @Get('/github/callback')
+    async loginGithubUser(
+        @Query('code') code: string,
+        @Query('state') state: string,
+    ): Promise<GithubUserData> {
+        try {
+            return await this.authService.loginGithubUser(code, state);
+        } catch (e: any) {
+            throw ResponseUtil.failureWrap(e);
         }
     }
 }
