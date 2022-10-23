@@ -53,4 +53,12 @@ export class Profile {
         unique: true,
     })
     nickname: string;
+
+    /**
+     * 깃허브 아바타 이미지
+     */
+    @Column({
+        nullable: true,
+    })
+    profileImage: string;
 }
