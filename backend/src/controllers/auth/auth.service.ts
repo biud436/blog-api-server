@@ -575,7 +575,16 @@ export class AuthService {
 
         console.log('githubUserData : %o', githubUserData);
 
+        if (!githubUserData) {
+            throw new UnauthorizedException(
+                '유저 데이터를 받아오지 못했습니다',
+            );
+        }
+
+        const { id } = githubUserData;
+
         // DB에 깃허브 유저 데이터 저장 필요 (NoSQL이 적당한데, RDBMS에 매핑해서 저장해야 한다)
+        console.log(`유저 식별 코드 : ${id}`);
 
         return githubUserData;
     }

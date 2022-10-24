@@ -31,7 +31,10 @@ export type GithubUserData = {
     company: string;
     blog: string;
     location: string;
-    email: string; // 저장 필요
+    /**
+     * 확인 결과, 프로필에 이메일 노출을 설정하지 않은 유저는 null로 응답합니다.
+     */
+    email: string | undefined | null;
     hireable: boolean;
     bio: string;
     twitter_username: string;
