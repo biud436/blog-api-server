@@ -42,17 +42,21 @@ export class NestBootstrapApplication {
             );
         }
 
+        console.log('어플리케이션 초기화 중');
         this._application = await NestFactory.create<NestExpressApplication>(
             AppModule,
             {
                 ...winstonLogger,
             },
         );
+        console.log('어플리케이션 초기화 완료');
 
         // Nest.js v8 버전에서는 "ConfigService"라고 하면 오류가 나니 다음과 같이 해야 한다.
         NestBootstrapApplication.CONFIG = <ConfigService>(
             await this._application.resolve<ConfigService>(ConfigService)
         );
+
+        console.log(NestBootstrapApplication.CONFIG.get('DB_HOST'));
 
         this.initWithMiddleware(this._application)
             .initWithApiDocs() // API 문서 설정

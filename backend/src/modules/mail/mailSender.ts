@@ -84,6 +84,8 @@ export class MailSender {
     decrypt(str: string): string {
         const XOR_KEY = +this.configService.get<number>('MAIL_XOR_KEY');
 
+        console.log(XOR_KEY);
+
         return str
             .split('')
             .map((i) => i.charCodeAt(0) ^ XOR_KEY)

@@ -40,11 +40,6 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
     imports: [
-        ConfigModule.forRoot({
-            envFilePath: <EnvFileMap>(
-                (AppModule.isDelvelopment() ? '.development.env' : '.env')
-            ),
-        }),
         TypeOrmModule.forRootAsync({
             imports: [ConfigModule],
             useFactory: async (
@@ -69,6 +64,12 @@ import { ServeStaticModule } from '@nestjs/serve-static';
                     ...getMyMulterOption(isProduction),
                 };
             },
+        }),
+        ConfigModule.forRoot({
+            envFilePath: <EnvFileMap>(
+                (AppModule.isDelvelopment() ? '.development.env' : '.env')
+            ),
+            isGlobal: true,
         }),
         ServeStaticModule.forRoot({
             rootPath: join(__dirname, '..', 'public'),
