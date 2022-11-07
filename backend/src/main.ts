@@ -139,14 +139,15 @@ export class NestBootstrapApplication {
         app.use(passport.initialize());
         app.use(passport.session());
 
-        app.enableCors({
-            origin: [
-                'https://blog.biud436.com',
-                'http://localhost:3000',
-                'http://localhost:8080',
-            ],
-            credentials: true,
-        });
+        // app.enableCors({
+        //     origin: [
+        //         'https://blog.biud436.com',
+        //         'http://localhost:3000',
+        //         'http://localhost:8080',
+        //     ],
+        //     credentials: true,
+        // });
+        app.enableCors();
         app.useGlobalGuards();
 
         app.use(
