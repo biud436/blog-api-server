@@ -147,7 +147,10 @@ export class NestBootstrapApplication {
         //     ],
         //     credentials: true,
         // });
-        app.enableCors();
+        app.enableCors({
+            allowedHeaders: '*',
+            origin: '*',
+        });
         app.useGlobalGuards();
 
         app.use(
