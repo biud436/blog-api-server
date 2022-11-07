@@ -129,7 +129,7 @@ export class NestBootstrapApplication {
                 cookie: {
                     httpOnly: true,
                     signed: true,
-                    sameSite: 'strict',
+                    sameSite: 'none',
                     secure: process.env.NODE_ENV === 'production',
                 },
             }),
@@ -145,7 +145,6 @@ export class NestBootstrapApplication {
                     ? 'https://blog.biud436.com'
                     : 'http://localhost:8080',
             credentials: true,
-            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
         });
 
         app.useGlobalGuards();
