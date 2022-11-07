@@ -152,12 +152,12 @@ export class AuthService {
         res.cookie('access_token', token.accessToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production' ? true : false,
-            sameSite: 'none',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
             expires: DateTimeUtil.toDate(jwtSecretExpirationTime),
         }).cookie('refresh_token', token.refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production' ? true : false,
-            sameSite: 'none',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
             expires: DateTimeUtil.toDate(jwtRefreshTokenExpirationTime),
         });
 
