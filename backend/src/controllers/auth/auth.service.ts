@@ -158,12 +158,12 @@ export class AuthService {
 
         res.cookie('access_token', token.accessToken, {
             httpOnly: true,
+            path: '/',
             expires: DateTimeUtil.toDate(jwtSecretExpirationTime),
-            ...domain,
         }).cookie('refresh_token', token.refreshToken, {
             httpOnly: true,
+            path: '/',
             expires: DateTimeUtil.toDate(jwtRefreshTokenExpirationTime),
-            ...domain,
         });
 
         return ResponseUtil.success(RESPONSE_MESSAGE.LOGIN_SUCCESS, {
