@@ -76,9 +76,9 @@ export class AuthController {
      * @returns
      */
     @Post('/logout')
-    @UseGuards(SessionAuthGuard)
+    // @UseGuards(SessionAuthGuard)
     async lgout(
-        @Req() req: Request,
+        // @Req() req: Request,
         @Res({
             passthrough: true,
         })
@@ -86,12 +86,13 @@ export class AuthController {
     ) {
         // https://discord.com/channels/520622812742811698/606125913343787008/982825765051695115
         // @types/passport@1.0.8
-        req.logout((err) => {
-            console.warn(err);
-        });
-        await promisify(req.session.destroy.bind(req.session))();
+        // req.logout((err) => {
+        //     console.warn(err);
+        // });
+        // await promisify(req.session.destroy.bind(req.session))();
 
         res.clearCookie('access_token');
+        res.clearCookie('refresh_token');
 
         return ResponseUtil.successWrap(
             {
