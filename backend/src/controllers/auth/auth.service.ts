@@ -151,11 +151,9 @@ export class AuthService {
 
         res.cookie('access_token', token.accessToken, {
             httpOnly: true,
-            sameSite: 'strict',
             expires: DateTimeUtil.toDate(jwtSecretExpirationTime),
         }).cookie('refresh_token', token.refreshToken, {
             httpOnly: true,
-            sameSite: 'strict',
             expires: DateTimeUtil.toDate(jwtRefreshTokenExpirationTime),
         });
 
