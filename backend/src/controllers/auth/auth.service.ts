@@ -149,12 +149,21 @@ export class AuthService {
                 this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME'),
             );
 
+        const domain = {
+            domain:
+                process.env.NODE_ENV === 'production'
+                    ? 'https://blog.biud436.com'
+                    : 'http://localhost:8080',
+        };
+
         res.cookie('access_token', token.accessToken, {
             httpOnly: true,
             expires: DateTimeUtil.toDate(jwtSecretExpirationTime),
+            ...domain,
         }).cookie('refresh_token', token.refreshToken, {
             httpOnly: true,
             expires: DateTimeUtil.toDate(jwtRefreshTokenExpirationTime),
+            ...domain,
         });
 
         return ResponseUtil.success(RESPONSE_MESSAGE.LOGIN_SUCCESS, {
