@@ -14,7 +14,7 @@ RUN apk add --no-cache tzdata
 RUN echo 'Etc/UTC' > /etc/timezone
 
 # 빌드 및 시작
-# RUN yarn build
+RUN yarn build
 COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
 EXPOSE 3000
 ENV NODE_ENV production
