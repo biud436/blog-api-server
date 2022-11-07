@@ -6,16 +6,6 @@ import { Strategy, ExtractJwt, JwtFromRequestFunction } from 'passport-jwt';
 import { AuthService } from '../auth.service';
 import { Request } from 'express';
 
-function cookieExtractor(cookieName: string): JwtFromRequestFunction {
-    return function (req) {
-        let token = null;
-        if (req && req.cookies) {
-            token = req.cookies[cookieName];
-        }
-        return token;
-    };
-}
-
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
     constructor(
@@ -23,7 +13,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         configService: ConfigService,
     ) {
         super({
-            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+            // jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+            jwtFromRequest: ExtractJwt.fromExtractors([
+                (req: Request) => {
+                    console.log(req?.cookies);
+                    return req?.cookies?.access_token;
+                },
+            ]),
             ignoreExpiration: false,
             secretOrKey: configService.get('JWT_SECRET'),
         });

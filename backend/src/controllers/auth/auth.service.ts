@@ -160,8 +160,8 @@ export class AuthService {
         });
 
         return ResponseUtil.success(RESPONSE_MESSAGE.LOGIN_SUCCESS, {
-            access_token: token.accessToken,
-            refresh_token: token.refreshToken,
+            // access_token: token.accessToken,
+            // refresh_token: token.refreshToken,
         });
     }
 

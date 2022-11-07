@@ -96,9 +96,10 @@ export class NestBootstrapApplication {
         app.setBaseViewsDir(path.join(__dirname, '..', 'views'));
         app.setViewEngine('hbs');
 
-        app.use(
-            cookieParser(NestBootstrapApplication.CONFIG.get('APP_SECRET')),
-        );
+        // app.use(
+        //     cookieParser(NestBootstrapApplication.CONFIG.get('APP_SECRET')),
+        // );
+        app.use(cookieParser());
 
         const redisStoreMiddleware = createClient({
             socket: {

@@ -11,6 +11,7 @@ import { Reflector } from '@nestjs/core';
 import { Role } from 'src/decorators/role.enum';
 import { ROLES_KEY } from 'src/decorators/roles.decorator';
 import { AuthService } from '../auth.service';
+import { Request } from 'express';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -30,21 +31,9 @@ export class RolesGuard implements CanActivate {
             return true;
         }
         const req = context.switchToHttp().getRequest() as Request;
-        const authorization = req.headers['authorization'];
-        if (!authorization) {
-            return false;
-        }
-
-        if (!authorization.startsWith('Bearer ')) {
-            this.logger.log(
-                "The passed accessToken didn't start with the text 'Bearer '",
-            );
-            return false;
-        }
 
         // 토큰을 추출합니다.
-        const token = authorization.slice(7, authorization.length);
-
+        const token = req?.cookies?.access_token;
         // 특정 API를 제외합니다.
         const isIgnoreJwt = Reflect.getOwnMetadata(
             'ignoreJwt',
