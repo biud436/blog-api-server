@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService, JwtSignOptions, JwtVerifyOptions } from '@nestjs/jwt';
-import { Request, Response } from 'express';
+import { CookieOptions, Request, Response } from 'express';
 import { AdminService } from 'src/entities/admin/admin.service';
 import { CreateUserDto } from 'src/entities/user/dto/create-user.dto';
 import { UserService } from 'src/entities/user/user.service';
@@ -37,6 +37,7 @@ import { Role } from 'src/decorators/role.enum';
 import { HttpService } from '@nestjs/axios';
 import qs from 'qs';
 import { GithubUserData } from './validator/github.dto';
+import { LocalDate, LocalDateTime } from '@js-joda/core';
 
 export type AvailableEmailList =
     | `${string}@gmail.com`
@@ -56,6 +57,28 @@ export const EMAIL_KEYS = [
     'nate.com',
     'naver.com',
 ];
+
+export function getCookieSettingWithAccessToken(
+    jwtSecretExpirationTime: LocalDateTime | LocalDate,
+) {
+    return {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production' ? true : false,
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+        expires: DateTimeUtil.toDate(jwtSecretExpirationTime),
+    };
+}
+
+export function getCookieSettingWithRefreshToken(
+    jwtRefreshTokenExpirationTime: LocalDateTime | LocalDate,
+) {
+    return {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production' ? true : false,
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+        expires: DateTimeUtil.toDate(jwtRefreshTokenExpirationTime),
+    };
+}
 
 @Injectable()
 export class AuthService {
@@ -149,22 +172,13 @@ export class AuthService {
                 this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME'),
             );
 
-        res.cookie('access_token', token.accessToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production' ? true : false,
-            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
-            expires: DateTimeUtil.toDate(jwtSecretExpirationTime),
-        }).cookie('refresh_token', token.refreshToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production' ? true : false,
-            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
-            expires: DateTimeUtil.toDate(jwtRefreshTokenExpirationTime),
+        res.cookie('access_token', token.accessToken, <CookieOptions>{
+            ...getCookieSettingWithAccessToken(jwtSecretExpirationTime),
+        }).cookie('refresh_token', token.refreshToken, <CookieOptions>{
+            ...getCookieSettingWithRefreshToken(jwtRefreshTokenExpirationTime),
         });
 
-        return ResponseUtil.success(RESPONSE_MESSAGE.LOGIN_SUCCESS, {
-            // access_token: token.accessToken,
-            // refresh_token: token.refreshToken,
-        });
+        return ResponseUtil.success(RESPONSE_MESSAGE.LOGIN_SUCCESS, {});
     }
 
     /**
@@ -318,6 +332,69 @@ export class AuthService {
         options?: JwtSignOptions,
     ) {
         return await this.jwtService.signAsync(payload, options);
+    }
+
+    /**
+     * Generate the access token using refresh token
+     * @param req
+     * @param res
+     * @param options
+     * @returns
+     */
+    async regenerateAccessToken(
+        req: Request,
+        res: Response,
+        options?: JwtSignOptions,
+    ): Promise<string> {
+        const refreshToken = req.cookies.refresh_token;
+
+        // 토큰이 없다면 오류
+        if (!refreshToken) {
+            throw new UnauthorizedException();
+        }
+
+        // 토큰이 유효한지 확인
+        const validJWT = await this.jwtService.verifyAsync(refreshToken);
+
+        if (!validJWT) {
+            throw new DownStreamInternalServerErrorException(
+                '토큰이 유효하지 않습니다.',
+            );
+        }
+
+        // 유저 값이 할당되었는지 확인
+        const user: any = req.user;
+        if (!user) {
+            throw new DownStreamInternalServerErrorException(
+                '유저 정보가 없습니다.',
+            );
+        }
+
+        const payload = <JwtPayload>{ user, role: 'user' };
+        let isAdmin = false;
+
+        if ('username' in user) {
+            isAdmin = await this.adminService.isAdmin(user.username);
+        }
+
+        if (isAdmin) {
+            payload.role = 'admin';
+        }
+
+        if (!['admin'].includes(payload.role)) {
+            throw new LoginAuthorizationException();
+        }
+
+        const accessToken = await this.jwtService.signAsync(payload);
+        const jwtSecretExpirationTime = DateTimeUtil.extractJwtExpirationTime(
+            this.configService.get('JWT_SECRET_EXPIRATION_TIME'),
+        );
+
+        res.cookie('access_token', accessToken, <CookieOptions>{
+            ...getCookieSettingWithAccessToken(jwtSecretExpirationTime),
+        });
+
+        return accessToken;
     }
 
     /**
@@ -591,6 +668,12 @@ export class AuthService {
         return githubUserData;
     }
 
+    /**
+     * 깃허브 유저 데이터를 가져옵니다.
+     *
+     * @param param0
+     * @returns
+     */
     async getGithubUserData({
         token_type,
         access_token,
