@@ -370,6 +370,7 @@ export class AuthService {
             );
         }
 
+        // 페이로드 설정
         const payload = <JwtPayload>{ user, role: 'user' };
         let isAdmin = false;
 
@@ -385,6 +386,7 @@ export class AuthService {
             throw new LoginAuthorizationException();
         }
 
+        // 액세스 토큰 재생성
         const accessToken = await this.jwtService.signAsync(payload);
         const jwtSecretExpirationTime = DateTimeUtil.extractJwtExpirationTime(
             this.configService.get('JWT_SECRET_EXPIRATION_TIME'),
