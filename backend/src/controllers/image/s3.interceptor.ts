@@ -1,0 +1,106 @@
+import {
+    CallHandler,
+    ExecutionContext,
+    Inject,
+    mixin,
+    NestInterceptor,
+    Optional,
+    Type,
+} from '@nestjs/common';
+import { MulterModuleOptions } from '@nestjs/platform-express';
+import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
+import * as multer from 'multer';
+import { Observable } from 'rxjs';
+import { transformException } from '@nestjs/platform-express/multer/multer/multer.utils';
+import { MULTER_MODULE_OPTIONS } from '@nestjs/platform-express/multer/files.constants';
+import { ConfigService } from '@nestjs/config';
+import * as AWS from 'aws-sdk';
+import * as multerS3 from 'multer-s3';
+import { CryptoUtil } from 'src/utils/CryptoUtil';
+import { ImageService } from './image.service';
+import { AES256Provider } from 'src/modules/aes/aes-256.provider';
+import { JwtPayload } from '../auth/validator/response.dto';
+
+type MulterInstance = any;
+
+export function S3FileInterceptor(
+    fieldName: string,
+    localOptions?: MulterOptions,
+): Type<NestInterceptor> {
+    class MixinInterceptor implements NestInterceptor {
+        protected multer: MulterInstance;
+        private defaultSettings: MulterOptions;
+        private s3: AWS.S3 = new AWS.S3({
+            accessKeyId: this.configService.get<string>('AWS_ACCESS_KEY_ID'),
+            secretAccessKey: this.configService.get<string>(
+                'AWS_SECRET_ACCESS_KEY',
+            ),
+        });
+
+        constructor(
+            @Optional()
+            @Inject(MULTER_MODULE_OPTIONS)
+            options: MulterModuleOptions = {},
+            private readonly configService: ConfigService,
+            private readonly imageService: ImageService,
+        ) {
+            this.initWithDefaultSettings();
+            this.multer = (multer as any)({
+                ...options,
+                ...localOptions,
+                ...this.defaultSettings,
+            });
+        }
+
+        initWithDefaultSettings() {
+            const BUCKET = this.configService.get<string>('AWS_S3_BUCKET_NAME');
+
+            this.defaultSettings = {
+                storage: multerS3({
+                    s3: this.s3 as any,
+                    bucket: BUCKET,
+                    acl: 'public-read',
+                    contentDisposition: 'inline',
+                    key: (req, file, cb) => {
+                        const { user } = req.user as JwtPayload;
+                        const { username } = user;
+
+                        this.imageService
+                            .getTempImageFileName(file.originalname, username)
+                            .then((filename) => {
+                                const extension = file.mimetype.split('/')[1];
+
+                                cb(null, `${filename}.${extension}`);
+                            });
+                    },
+                }),
+            };
+        }
+
+        async intercept(
+            context: ExecutionContext,
+            next: CallHandler,
+        ): Promise<Observable<any>> {
+            const ctx = context.switchToHttp();
+
+            await new Promise<void>((resolve, reject) => {
+                this.multer.array(fieldName)(
+                    ctx.getRequest(),
+                    ctx.getResponse(),
+                    (err: any) => {
+                        if (err) {
+                            const error = transformException(err);
+                            return reject(error);
+                        }
+                        resolve();
+                    },
+                );
+            });
+
+            return next.handle();
+        }
+    }
+
+    const Interceptor = mixin(MixinInterceptor);
+    return Interceptor;
+}

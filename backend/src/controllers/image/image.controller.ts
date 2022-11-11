@@ -10,15 +10,25 @@ import {
     UploadedFiles,
     UseInterceptors,
     Header,
+    UploadedFile,
 } from '@nestjs/common';
-import { AnyFilesInterceptor } from '@nestjs/platform-express';
+import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { ApiConsumes, ApiExcludeEndpoint } from '@nestjs/swagger';
 import { InjectConnection, InjectDataSource } from '@nestjs/typeorm';
-import { AdminOnly } from 'src/decorators/custom.decorator';
+import { AdminOnly, JwtGuard } from 'src/decorators/custom.decorator';
 import { Connection, DataSource } from 'typeorm';
 import { ImageService } from './image.service';
 import { Response } from 'express';
 import { HttpService } from '@nestjs/axios';
+import { ConfigService } from '@nestjs/config';
+import * as AWS from 'aws-sdk';
+import * as multerS3 from 'multer-s3';
+import { S3FileInterceptor } from './s3.interceptor';
+import { UserInfo } from 'src/decorators/user.decorator';
+import { JwtPayload } from '../auth/validator/response.dto';
+import { ResponseUtil } from 'src/utils/ResponseUtil';
+import { RESPONSE_MESSAGE } from 'src/utils/response';
+import { IResponsableData } from 'src/utils/response.interface';
 
 @Controller('image')
 export class ImageController {
@@ -35,7 +45,7 @@ export class ImageController {
     @Post('/upload')
     @UseInterceptors(AnyFilesInterceptor())
     @ApiConsumes('multipart/form-data')
-    async upload(@UploadedFiles() files: Express.Multer.File[]) {
+    async upload(@UploadedFiles() files: Express.MulterS3.File[]) {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
@@ -58,6 +68,24 @@ export class ImageController {
             await queryRunner.rollbackTransaction();
         } finally {
             await queryRunner.release();
+        }
+    }
+
+    @JwtGuard()
+    @AdminOnly()
+    @Post('/s3/upload')
+    @ApiConsumes('multipart/form-data')
+    @UseInterceptors(S3FileInterceptor('files'))
+    async uploadImageUsingS3(
+        @UserInfo() user: JwtPayload,
+        @UploadedFiles() files: Express.MulterS3.File[],
+    ): Promise<IResponsableData | ResponseUtil.FailureResponse> {
+        try {
+            const res = await this.imageService.upload(user, files);
+
+            return ResponseUtil.success(RESPONSE_MESSAGE.SAVE_SUCCESS, res);
+        } catch (e: any) {
+            return ResponseUtil.failure(e.message);
         }
     }
 

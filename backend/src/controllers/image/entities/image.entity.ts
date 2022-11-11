@@ -12,11 +12,6 @@ export class Image {
     @Column({
         nullable: false,
     })
-    file: string;
-
-    @Column({
-        nullable: false,
-    })
     originalname: string;
 
     @Column({
