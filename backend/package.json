@@ -21,6 +21,7 @@
         "test:e2e": "jest --config ./test/jest-e2e.json"
     },
     "dependencies": {
+        "@aws-sdk/client-s3": "^3.208.0",
         "@js-joda/core": "^5.2.0",
         "@nestjs/axios": "^0.1.0",
         "@nestjs/common": "^9.1.4",
@@ -37,7 +38,6 @@
         "@types/bcrypt": "^5.0.0",
         "@types/cron": "^2.0.0",
         "@types/express-session": "^1.17.5",
-        "@types/multer-s3": "^3.0.0",
         "@types/passport": "1.0.8",
         "@types/passport-local": "^1.0.34",
         "aws-sdk": "^2.1247.0",
@@ -56,7 +56,7 @@
         "hbs": "^4.2.0",
         "helmet": "^5.1.0",
         "inquirer": "^8.2.0",
-        "multer-s3": "^2",
+        "multer-s3": "^3.0.1",
         "mysql2": "^2.3.3",
         "nest-winston": "^1.6.2",
         "nodemailer": "^6.7.2",

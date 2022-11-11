@@ -45,7 +45,8 @@ export class ImageController {
     @Post('/upload')
     @UseInterceptors(AnyFilesInterceptor())
     @ApiConsumes('multipart/form-data')
-    async upload(@UploadedFiles() files: Express.MulterS3.File[]) {
+    // async upload(@UploadedFiles() files: Express.MulterS3.File[]) {
+    async upload(@UploadedFiles() files: any[]) {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
@@ -78,7 +79,8 @@ export class ImageController {
     @UseInterceptors(S3FileInterceptor('files'))
     async uploadImageUsingS3(
         @UserInfo() user: JwtPayload,
-        @UploadedFiles() files: Express.MulterS3.File[],
+        // @UploadedFiles() files: Express.MulterS3.File[],
+        @UploadedFiles() files: any[],
     ): Promise<IResponsableData | ResponseUtil.FailureResponse> {
         try {
             const res = await this.imageService.upload(user, files);

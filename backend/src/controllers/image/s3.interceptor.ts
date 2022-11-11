@@ -20,6 +20,7 @@ import { CryptoUtil } from 'src/utils/CryptoUtil';
 import { ImageService } from './image.service';
 import { AES256Provider } from 'src/modules/aes/aes-256.provider';
 import { JwtPayload } from '../auth/validator/response.dto';
+import { S3Client } from '@aws-sdk/client-s3';
 
 type MulterInstance = any;
 
@@ -30,11 +31,15 @@ export function S3FileInterceptor(
     class MixinInterceptor implements NestInterceptor {
         protected multer: MulterInstance;
         private defaultSettings: MulterOptions;
-        private s3: AWS.S3 = new AWS.S3({
-            accessKeyId: this.configService.get<string>('AWS_ACCESS_KEY_ID'),
-            secretAccessKey: this.configService.get<string>(
-                'AWS_SECRET_ACCESS_KEY',
-            ),
+        private s3: S3Client = new S3Client({
+            credentials: {
+                accessKeyId:
+                    this.configService.get<string>('AWS_ACCESS_KEY_ID'),
+                secretAccessKey: this.configService.get<string>(
+                    'AWS_SECRET_ACCESS_KEY',
+                ),
+            },
+            region: 'ap-northeast-2',
         });
 
         constructor(
@@ -57,7 +62,7 @@ export function S3FileInterceptor(
 
             this.defaultSettings = {
                 storage: multerS3({
-                    s3: this.s3 as any,
+                    s3: this.s3,
                     bucket: BUCKET,
                     acl: 'public-read',
                     contentDisposition: 'inline',
