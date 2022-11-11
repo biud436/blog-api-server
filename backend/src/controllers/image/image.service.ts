@@ -48,7 +48,8 @@ export class ImageService {
         return tempFileName;
     }
 
-    async upload(user: JwtPayload, files: Express.MulterS3.File[]) {
+    async upload(user: JwtPayload, files: any[]) {
+        // async upload(user: JwtPayload, files: Express.MulterS3.File[]) {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
