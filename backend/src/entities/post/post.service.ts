@@ -73,6 +73,7 @@ export class PostService {
                 };
             });
 
+            // TODO: 이 부분은 RDBMS로 변경하는 게 좋을 듯 하다.
             for (let i = 0; i < post.images.length; i++) {
                 const image = post.images[i];
                 await this.redisService.deleteTemporarilyImageIds(
