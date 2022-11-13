@@ -11,6 +11,8 @@ import {
     UseInterceptors,
     Header,
     UploadedFile,
+    Param,
+    Body,
 } from '@nestjs/common';
 import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { ApiConsumes, ApiExcludeEndpoint } from '@nestjs/swagger';
@@ -23,12 +25,16 @@ import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import * as AWS from 'aws-sdk';
 import * as multerS3 from 'multer-s3';
-import { S3FileInterceptor } from './s3.interceptor';
+import {
+    MulterS3File,
+    S3FileInterceptor,
+} from '../../interceptors/s3.upload.interceptor';
 import { UserInfo } from 'src/decorators/user.decorator';
 import { JwtPayload } from '../auth/validator/response.dto';
 import { ResponseUtil } from 'src/utils/ResponseUtil';
 import { RESPONSE_MESSAGE } from 'src/utils/response';
 import { IResponsableData } from 'src/utils/response.interface';
+import { S3ImageUploadDto } from './dto/s3-image-upload.dto';
 
 @Controller('image')
 export class ImageController {
@@ -45,7 +51,6 @@ export class ImageController {
     @Post('/upload')
     @UseInterceptors(AnyFilesInterceptor())
     @ApiConsumes('multipart/form-data')
-    // async upload(@UploadedFiles() files: Express.MulterS3.File[]) {
     async upload(@UploadedFiles() files: any[]) {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
@@ -72,18 +77,26 @@ export class ImageController {
         }
     }
 
+    /**
+     * 커스텀으로 만든 AWS S3 파일 인터셉터를 이용하여 이미지 파일을 업로드합니다.
+     *
+     * @param user
+     * @param files
+     * @param postId
+     * @returns
+     */
     @JwtGuard()
     @AdminOnly()
     @Post('/s3/upload')
     @ApiConsumes('multipart/form-data')
-    @UseInterceptors(S3FileInterceptor('files'))
+    @UseInterceptors(S3FileInterceptor('files')) // Custom Interceptor
     async uploadImageUsingS3(
         @UserInfo() user: JwtPayload,
-        // @UploadedFiles() files: Express.MulterS3.File[],
-        @UploadedFiles() files: any[],
+        @UploadedFiles() files: MulterS3File[],
+        @Body() data: S3ImageUploadDto,
     ): Promise<IResponsableData | ResponseUtil.FailureResponse> {
         try {
-            const res = await this.imageService.upload(user, files);
+            const res = await this.imageService.upload(user, files, data);
 
             return ResponseUtil.success(RESPONSE_MESSAGE.SAVE_SUCCESS, res);
         } catch (e: any) {
@@ -91,6 +104,17 @@ export class ImageController {
         }
     }
 
+    /**
+     * 깃허브 프로필용 이미지를 생성합니다.
+     *
+     * @param text
+     * @param username
+     * @param color
+     * @param textSize
+     * @param y
+     * @param res
+     * @returns
+     */
     @Get(['/stats', '/shake-profile'])
     @Header('Content-Type', 'image/svg+xml')
     @Header('Cache-Control', 'public, max-age=3600')
@@ -110,15 +134,15 @@ export class ImageController {
 
         return `
         <svg
-        id='visual'
-        viewBox='0 0 900 300'
-        width='900'
-        height='300'
-        xmlns='http://www.w3.org/2000/svg'
-        xmlns:xlink='http://www.w3.org/1999/xlink'
-        version='1.1'
-        preserveAspectRatio="none"
-    >
+            id='visual'
+            viewBox='0 0 900 300'
+            width='900'
+            height='300'
+            xmlns='http://www.w3.org/2000/svg'
+            xmlns:xlink='http://www.w3.org/1999/xlink'
+            version='1.1'
+            preserveAspectRatio="none"
+        >
         <style>
 
             .ping-pong {

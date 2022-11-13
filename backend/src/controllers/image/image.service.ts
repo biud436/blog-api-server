@@ -10,6 +10,8 @@ import { JwtPayload } from '../auth/validator/response.dto';
 import { CreateImageDto } from './dto/create-image.dto';
 import { Image } from './entities/image.entity';
 import * as MulterS3 from 'multer-s3';
+import { MulterS3File } from '../../interceptors/s3.upload.interceptor';
+import { S3ImageUploadDto } from './dto/s3-image-upload.dto';
 
 @Injectable()
 export class ImageService {
@@ -48,37 +50,42 @@ export class ImageService {
         return tempFileName;
     }
 
-    async upload(user: JwtPayload, files: any[]) {
-        // async upload(user: JwtPayload, files: Express.MulterS3.File[]) {
+    async upload(
+        user: JwtPayload,
+        files: MulterS3File[],
+        { postId }: S3ImageUploadDto,
+    ) {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
 
-        const file = files[0];
-
-        const key = file.key.split('.')[0];
-
-        const dto = <CreateImageDto>{
-            filename: key,
-            originalname: file.originalname,
-            destination: file.location,
-            size: file.size,
-            mimetype: file.mimetype,
-            encoding: file['encoding'],
-            fieldname: file.fieldname,
-            path: file.location,
-        };
-
         try {
-            const result = await this.create(dto, queryRunner);
-            if (result) {
-                this.logger.log(
-                    `-- ${file.originalname} 이미지 업로드 완료 --`,
-                );
+            for (const file of files) {
+                const key = file.key.split('.')[0];
+
+                const dto = <CreateImageDto>{
+                    filename: key,
+                    originalname: file.originalname,
+                    destination: file.location,
+                    size: file.size,
+                    mimetype: file.mimetype,
+                    encoding: file['encoding'],
+                    fieldname: file.fieldname,
+                    path: file.location,
+                    postId, // 특정 포스트와 연결
+                };
+
+                const result = await this.create(dto, queryRunner);
+                if (result) {
+                    this.logger.log(
+                        `-- ${file.originalname} 이미지 업로드 완료 --`,
+                    );
+                }
             }
+
             await queryRunner.commitTransaction();
 
-            return file;
+            return files[0];
         } catch (e) {
             this.logger.error(e);
             await queryRunner.rollbackTransaction();

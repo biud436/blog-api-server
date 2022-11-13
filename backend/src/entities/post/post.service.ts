@@ -70,6 +70,7 @@ export class PostService {
             .leftJoinAndSelect('post.category', 'category')
             .leftJoinAndSelect('user.profile', 'profile')
             .leftJoinAndSelect('post.viewCount', 'viewCount')
+            .leftJoinAndSelect('post.images', 'images')
             .where('post.deletedAt IS NULL');
 
         if (categoryId) {

@@ -15,6 +15,7 @@ import {
 } from 'typeorm';
 import { PostComment } from 'src/entities/comments/entities/comment.entity';
 import { decodeHtml } from 'src/common/html-escpse';
+import { Image } from 'src/controllers/image/entities/image.entity';
 
 @Entity()
 export class Post {
@@ -128,6 +129,12 @@ export class Post {
      */
     @OneToMany(() => PostComment, (comment) => comment.post)
     comments: PostComment[];
+
+    /**
+     * 이미지
+     */
+    @OneToMany(() => Image, (image) => image.post)
+    images: Image[];
 
     /**
      * Build Post entity.

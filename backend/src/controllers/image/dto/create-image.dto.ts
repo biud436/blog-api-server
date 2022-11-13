@@ -55,4 +55,9 @@ export class CreateImageDto {
     @IsNumber()
     @MaxLength(1024 * 1024 * 2)
     size: number;
+
+    @ApiProperty()
+    @IsNumber()
+    @IsOptional()
+    postId?: number;
 }

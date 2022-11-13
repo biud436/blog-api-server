@@ -17,12 +17,18 @@ import { ConfigService } from '@nestjs/config';
 import * as AWS from 'aws-sdk';
 import * as multerS3 from 'multer-s3';
 import { CryptoUtil } from 'src/utils/CryptoUtil';
-import { ImageService } from './image.service';
+import { ImageService } from '../controllers/image/image.service';
 import { AES256Provider } from 'src/modules/aes/aes-256.provider';
-import { JwtPayload } from '../auth/validator/response.dto';
+import { JwtPayload } from '../controllers/auth/validator/response.dto';
 import { S3Client } from '@aws-sdk/client-s3';
 
 type MulterInstance = any;
+
+/**
+ * ? @types/multer-s3의 Express.MulterS3.File[] 타입을 사용하면 버전 호환 문제로 컴파일이 되지 않았습니다.
+ * ? 따라서 MulterS3File[] = any[] 타입을 사용합니다.
+ */
+export type MulterS3File = any;
 
 export function S3FileInterceptor(
     fieldName: string,
