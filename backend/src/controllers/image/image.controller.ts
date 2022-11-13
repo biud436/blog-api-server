@@ -35,6 +35,7 @@ import { ResponseUtil } from 'src/utils/ResponseUtil';
 import { RESPONSE_MESSAGE } from 'src/utils/response';
 import { IResponsableData } from 'src/utils/response.interface';
 import { S3ImageUploadDto } from './dto/s3-image-upload.dto';
+import { UserId } from 'src/decorators/x-api-key.decorator';
 
 @Controller('image')
 export class ImageController {
@@ -91,12 +92,12 @@ export class ImageController {
     @ApiConsumes('multipart/form-data')
     @UseInterceptors(S3FileInterceptor('files')) // Custom Interceptor
     async uploadImageUsingS3(
-        @UserInfo() user: JwtPayload,
+        @UserId() userId: number,
         @UploadedFiles() files: MulterS3File[],
         @Body() data: S3ImageUploadDto,
     ): Promise<IResponsableData | ResponseUtil.FailureResponse> {
         try {
-            const res = await this.imageService.upload(user, files, data);
+            const res = await this.imageService.upload(userId, files, data);
 
             return ResponseUtil.success(RESPONSE_MESSAGE.SAVE_SUCCESS, res);
         } catch (e: any) {

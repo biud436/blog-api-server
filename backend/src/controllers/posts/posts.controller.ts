@@ -106,6 +106,7 @@ export class PostsController {
 
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, data);
         } catch (e) {
+            console.log(e);
             this.logger.debug(e);
 
             await queryRunner.rollbackTransaction();

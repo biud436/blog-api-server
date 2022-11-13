@@ -50,8 +50,32 @@ export class ImageService {
         return tempFileName;
     }
 
+    async findByIds(ids: number[]) {
+        const qb = this.imageRepository
+            .createQueryBuilder('image')
+            .select()
+            .where('image.id IN (:ids)', { ids });
+
+        return await qb.getMany();
+    }
+
+    async updatePostId(
+        postId: number,
+        imageIds: number[],
+        queuryRunner: QueryRunner,
+    ) {
+        const qb = this.imageRepository
+            .createQueryBuilder('image')
+            .setQueryRunner(queuryRunner)
+            .update()
+            .set({ postId })
+            .where('image.id IN (:imageIds)', { imageIds });
+
+        return await qb.execute();
+    }
+
     async upload(
-        user: JwtPayload,
+        userId: number,
         files: MulterS3File[],
         { postId }: S3ImageUploadDto,
     ) {
@@ -81,6 +105,11 @@ export class ImageService {
                         `-- ${file.originalname} 이미지 업로드 완료 --`,
                     );
                 }
+
+                await this.redisService.saveTemporarilyImageIds(
+                    userId + '',
+                    result.id + '',
+                );
             }
 
             await queryRunner.commitTransaction();

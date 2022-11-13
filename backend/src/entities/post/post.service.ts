@@ -2,7 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
 import { encodeHtml } from 'src/common/html-escpse';
+import { ImageService } from 'src/controllers/image/image.service';
 import { PostSearchProperty } from 'src/controllers/posts/types/post-search-type';
+import { RedisService } from 'src/micro-services/redis/redis.service';
 import { DateTimeUtil } from 'src/utils/DateTimeUtil';
 import { QueryRunner, Repository } from 'typeorm';
 import { PostViewCount } from '../post-view-count/entities/post-view-count.entity';
@@ -15,6 +17,8 @@ export class PostService {
     constructor(
         @InjectRepository(Post)
         private readonly postRepository: Repository<Post>,
+        private readonly imageService: ImageService,
+        private readonly redisService: RedisService,
     ) {}
 
     async create(createPostDto: CreatePostDto, queuryRunner: QueryRunner) {
@@ -41,10 +45,46 @@ export class PostService {
             new PostViewCount(),
         );
 
+        const imageIds = await this.redisService.getTemporarilyImageIds(
+            model.authorId + '',
+        );
+
+        let resultImageIds: number[] = [];
+        if (imageIds) {
+            resultImageIds = imageIds.map((e) => +e).filter((e) => !isNaN(e));
+        }
+
+        // 배열에서 NaN 제거
+        if (resultImageIds.length > 0) {
+            const images = await this.imageService.findByIds(resultImageIds);
+            model.images = images;
+        }
+
         model.viewCountId = postViewCount.id;
         model.viewCount = postViewCount;
 
-        return await queuryRunner.manager.save(model);
+        let post = await queuryRunner.manager.save(model);
+
+        if (post.images && post.images.length > 0) {
+            post.images = post.images.map((e) => {
+                return {
+                    ...e,
+                    postId: post.id,
+                };
+            });
+
+            for (let i = 0; i < post.images.length; i++) {
+                const image = post.images[i];
+                await this.redisService.deleteTemporarilyImageIds(
+                    model.authorId + '',
+                    image.id + '',
+                );
+            }
+
+            post = await queuryRunner.manager.save(post);
+        }
+
+        return post;
     }
 
     async findOne(postId: number) {

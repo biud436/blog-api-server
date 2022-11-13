@@ -59,5 +59,5 @@ export class CreateImageDto {
     @ApiProperty()
     @IsNumber()
     @IsOptional()
-    postId?: number;
+    postId?: number | null;
 }

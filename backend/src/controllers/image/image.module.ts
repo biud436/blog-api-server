@@ -19,5 +19,6 @@ import { MicroServicesModule } from 'src/micro-services/micro-services.module';
     ],
     controllers: [ImageController],
     providers: [ImageService],
+    exports: [ImageService],
 })
 export class ImageModule {}

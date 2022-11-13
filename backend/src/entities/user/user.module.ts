@@ -6,7 +6,7 @@ import { User } from './entities/user.entity';
 import { UserSubscriber } from './user.subscriber';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([User]), ImageModule],
+    imports: [TypeOrmModule.forFeature([User])],
     providers: [UserService, UserSubscriber],
     exports: [UserService],
 })

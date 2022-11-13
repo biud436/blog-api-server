@@ -84,6 +84,47 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
     }
 
     /**
+     * 임시 이미지 파일을 저장합니다.
+     */
+    async saveTemporarilyImageIds(
+        userId: string,
+        imageId: string,
+        minutes = 20, // 20분간 유효
+    ) {
+        const key = `temporarily_image_path:${userId}:${imageId}`;
+        this.set(key, imageId);
+
+        const ttl = minutes * 60;
+        return await this.client.EXPIRE(key, ttl);
+    }
+
+    /**
+     * 임시 이미지 파일을 가져옵니다.
+     *
+     * @param userId
+     * @param path
+     * @returns
+     */
+    async getTemporarilyImageIds(userId: string) {
+        const key = `temporarily_image_path:${userId}:*`;
+        const keys = await this.client.KEYS(key);
+
+        const ids = [];
+
+        for (const key of keys) {
+            const id = await this.client.GET(key);
+            ids.push(id);
+        }
+
+        return ids;
+    }
+
+    async deleteTemporarilyImageIds(userId: string, imageId: string) {
+        const key = `temporarily_image_path:${userId}:${imageId}`;
+        return await this.client.DEL(key);
+    }
+
+    /**
      * 특정 키에 대한 값을 설정합니다.
      *
      * @param key
