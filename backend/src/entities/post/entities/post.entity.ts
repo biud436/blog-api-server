@@ -48,12 +48,6 @@ export class Post {
     // })
     // secondCategoryId: number;
 
-    @Column({
-        nullable: false,
-    })
-    @Exclude()
-    viewCountId?: number;
-
     /**
      * 제목
      */
@@ -111,18 +105,6 @@ export class Post {
         referencedColumnName: 'id',
     })
     category: Category;
-
-    /**
-     * 조회수
-     */
-    @OneToOne(() => PostViewCount, {
-        onUpdate: 'RESTRICT',
-        onDelete: 'RESTRICT',
-    })
-    @JoinColumn({
-        name: 'view_count_id',
-    })
-    viewCount?: PostViewCount;
 
     /**
      * 댓글 참조

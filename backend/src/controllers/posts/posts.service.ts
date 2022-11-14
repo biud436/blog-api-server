@@ -33,19 +33,39 @@ export class PostsService {
                 const postId = parseInt(key.split(':')[1], 10);
                 const cnt = parseInt(await this.redisService.get(key), 10);
 
-                await this.postService.updateViewCount(postId, cnt);
+                // await this.postService.updateViewCount(postId, cnt);
             }
         }
     }
 
+    /**
+     * 포스트를 생성합니다.
+     *
+     * @param createPostDto
+     * @param queryRunner
+     * @returns
+     */
     async create(createPostDto: CreatePostDto, queryRunner: QueryRunner) {
         return await this.postService.create(createPostDto, queryRunner);
     }
 
+    /**
+     * 모든 글을 조회합니다.
+     *
+     * @param page
+     * @param categoryId
+     * @returns
+     */
     async findAll(page: number, categoryId?: number) {
         return await this.postService.findAll(page, categoryId);
     }
 
+    /**
+     * 특정 포스트를 조회합니다.
+     *
+     * @param postId
+     * @returns
+     */
     async findOne(postId: number) {
         let totalCount = '0';
 
@@ -66,6 +86,45 @@ export class PostsService {
         };
     }
 
+    /**
+     * 포스트 수정
+     *
+     * @param postId
+     * @param updatePostDto
+     * @param queryRunner
+     * @returns
+     */
+    async updateOne(
+        postId: number,
+        updatePostDto: UpdatePostDto,
+        queryRunner: QueryRunner,
+    ) {
+        return await this.postService.updatePost(
+            postId,
+            updatePostDto,
+            queryRunner,
+        );
+    }
+
+    /**
+     * 포스트 삭제
+     *
+     * @param postId
+     * @param queuryRunner
+     * @returns
+     */
+    async deleteOne(postId: number, queuryRunner: QueryRunner) {
+        return await this.postService.deletePostById(postId, queuryRunner);
+    }
+
+    /**
+     * 포스트 검색
+     *
+     * @param pageNumber
+     * @param searchProperty
+     * @param searchQuery
+     * @returns
+     */
     async searchPost(
         pageNumber: number,
         searchProperty: PostSearchProperty,
@@ -78,6 +137,13 @@ export class PostsService {
         );
     }
 
+    /**
+     * 댓글 작성
+     *
+     * @deprecated
+     * @param createCommentDto
+     * @returns
+     */
     async writeComment(createCommentDto: CreatePostCommentDto) {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
@@ -104,6 +170,15 @@ export class PostsService {
         }
     }
 
+    /**
+     * 댓글 조회
+     *
+     * @deprecated
+     * @param postId
+     * @param parentCommentId
+     * @param pageNumber
+     * @returns
+     */
     async readComments(
         postId: number,
         parentCommentId: number,

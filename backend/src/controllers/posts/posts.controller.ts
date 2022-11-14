@@ -31,6 +31,7 @@ import { UserId, XApiUserId } from 'src/decorators/x-api-key.decorator';
 import { CategoryService } from 'src/entities/category/category.service';
 import { CreatePostCommentDto } from 'src/entities/comments/dto/create-comment.dto';
 import { CreatePostDto } from 'src/entities/post/dto/create-post.dto';
+import { UpdatePostDto } from 'src/entities/post/dto/update-post.dto';
 import { RESPONSE_MESSAGE } from 'src/utils/response';
 import { ResponseUtil } from 'src/utils/ResponseUtil';
 import { DataSource } from 'typeorm';
@@ -155,6 +156,77 @@ export class PostsController {
     // !==========================================================
     // ! Post와 Get Mapping은 맨 아래에 배치해야 합니다.
     // !==========================================================
+
+    @Delete(':id')
+    @AdminOnly()
+    @JwtGuard()
+    @CustomApiOkResponse({
+        auth: true,
+        description: '포스트를 삭제합니다',
+        operation: {
+            summary: '포스트 삭제',
+            description: '포스트를 삭제합니다',
+        },
+    })
+    async deletePost(@Param('id', ParseIntPipe) postId: number) {
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+
+        try {
+            const res = await this.postsService.deleteOne(postId, queryRunner);
+
+            await queryRunner.commitTransaction();
+
+            return ResponseUtil.success(RESPONSE_MESSAGE.DELETE_SUCCESS, res);
+        } catch (e: any) {
+            await queryRunner.rollbackTransaction();
+            return ResponseUtil.failureWrap(e);
+        } finally {
+            await queryRunner.release();
+        }
+    }
+
+    @Patch(':id')
+    @AdminOnly()
+    @JwtGuard()
+    @CustomApiOkResponse({
+        auth: true,
+        description: '포스트를 수정합니다',
+        operation: {
+            summary: '포스트 수정',
+            description: '포스트를 수정합니다',
+        },
+    })
+    async updatePost(
+        @Param('id', ParseIntPipe) postId: number,
+        @UserId() userId: number,
+        @Body() updatePostDto: UpdatePostDto,
+    ) {
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+
+        delete updatePostDto.authorId;
+        updatePostDto.authorId = userId;
+
+        try {
+            const res = await this.postsService.updateOne(
+                postId,
+                updatePostDto,
+                queryRunner,
+            );
+
+            await queryRunner.commitTransaction();
+
+            return ResponseUtil.success(RESPONSE_MESSAGE.UPDATE_SUCCESS, res);
+        } catch (e: any) {
+            await queryRunner.rollbackTransaction();
+            return ResponseUtil.failureWrap(e);
+        } finally {
+            await queryRunner.release();
+        }
+    }
 
     @Get('/')
     @CustomApiOkResponse(DocsMapper.posts.GET.findAll)

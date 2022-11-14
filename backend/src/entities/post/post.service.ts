@@ -21,6 +21,13 @@ export class PostService {
         private readonly redisService: RedisService,
     ) {}
 
+    /**
+     * 포스트를 작성합니다.
+     *
+     * @param createPostDto
+     * @param queuryRunner
+     * @returns
+     */
     async create(createPostDto: CreatePostDto, queuryRunner: QueryRunner) {
         if (createPostDto.title) {
             createPostDto.title = encodeHtml(createPostDto.title);
@@ -41,10 +48,6 @@ export class PostService {
             throw new Error('작성자가 없습니다.');
         }
 
-        const postViewCount = await queuryRunner.manager.save(
-            new PostViewCount(),
-        );
-
         const imageIds = await this.redisService.getTemporarilyImageIds(
             model.authorId + '',
         );
@@ -60,9 +63,6 @@ export class PostService {
             model.images = images;
         }
 
-        model.viewCountId = postViewCount.id;
-        model.viewCount = postViewCount;
-
         let post = await queuryRunner.manager.save(model);
 
         if (post.images && post.images.length > 0) {
@@ -73,7 +73,6 @@ export class PostService {
                 };
             });
 
-            // TODO: 이 부분은 RDBMS로 변경하는 게 좋을 듯 하다.
             for (let i = 0; i < post.images.length; i++) {
                 const image = post.images[i];
                 await this.redisService.deleteTemporarilyImageIds(
@@ -88,6 +87,121 @@ export class PostService {
         return post;
     }
 
+    /**
+     * 기존 포스트를 수정 합니다.
+     *
+     * @param postId
+     * @param updatePostDto
+     * @param queuryRunner
+     * @returns
+     */
+    async updatePost(
+        postId: number,
+        updatePostDto: UpdatePostDto,
+        queuryRunner: QueryRunner,
+    ) {
+        if (updatePostDto.title) {
+            updatePostDto.title = encodeHtml(updatePostDto.title);
+        }
+        if (updatePostDto.content) {
+            updatePostDto.content = encodeHtml(updatePostDto.content);
+        }
+
+        const updateResult = await this.postRepository
+            .createQueryBuilder('post')
+            .update(Post)
+            .set({
+                ...updatePostDto,
+                updatedAt: () => `CURRENT_TIMESTAMP`,
+            })
+            .where('id = :postId', { postId })
+            .andWhere('deletedAt IS NULL')
+            .execute();
+
+        if (updateResult.affected === 0) {
+            throw new Error('수정할 포스트가 없습니다.');
+        }
+
+        const model = await this.findOne(postId);
+
+        // 이미지 처리 작업
+        const imageIds = await this.redisService.getTemporarilyImageIds(
+            model.authorId + '',
+        );
+
+        let resultImageIds: number[] = [];
+        if (imageIds) {
+            resultImageIds = imageIds.map((e) => +e).filter((e) => !isNaN(e));
+        }
+
+        if (resultImageIds.length > 0) {
+            const images = await this.imageService.findByIds(resultImageIds);
+            model.images = images;
+        }
+
+        let post = await queuryRunner.manager.save(model);
+
+        if (post.images && post.images.length > 0) {
+            post.images = post.images.map((e) => {
+                return {
+                    ...e,
+                    postId: post.id,
+                };
+            });
+
+            for (let i = 0; i < post.images.length; i++) {
+                const image = post.images[i];
+                await this.redisService.deleteTemporarilyImageIds(
+                    model.authorId + '',
+                    image.id + '',
+                );
+            }
+
+            post = await queuryRunner.manager.save(post);
+        }
+
+        return post;
+    }
+
+    /**
+     * 기존 포스트를 삭제합니다.
+     */
+    async deletePostById(postId: number, queuryRunner: QueryRunner) {
+        const post = await this.postRepository.findOne({
+            where: { id: postId },
+            relations: ['images'],
+        });
+
+        if (!post) {
+            throw new Error('삭제할 포스트가 존재하지 않습니다.');
+        }
+
+        // 연관된 이미지가 있는 경우, S3에 이미지 삭제 요청을 합니다.
+        if (post.images && post.images.length > 0) {
+            const ids = post.images.map((e) => e.id);
+            if (ids && ids.length > 0) {
+                await this.imageService.deleteByIds(ids, queuryRunner);
+            }
+        }
+
+        // 포스트를 삭제합니다.
+        const deleteResult = await this.postRepository
+            .createQueryBuilder('post')
+            .delete()
+            .from(Post)
+            .where('id = :id', { id: postId })
+            .setQueryRunner(queuryRunner)
+            .execute();
+
+        return deleteResult;
+    }
+
+    /**
+     * 포스트 조회
+     *
+     * @param postId
+     * @returns
+     */
     async findOne(postId: number) {
         const qb = this.postRepository
             .createQueryBuilder('post')
@@ -103,6 +217,13 @@ export class PostService {
         return plainToClass(Post, item);
     }
 
+    /**
+     * 포스트 페이징 조회
+     *
+     * @param pageNumber
+     * @param categoryId
+     * @returns
+     */
     async findAll(pageNumber: number, categoryId?: number) {
         const qb = this.postRepository
             .createQueryBuilder('post')
@@ -110,7 +231,6 @@ export class PostService {
             .leftJoinAndSelect('post.user', 'user')
             .leftJoinAndSelect('post.category', 'category')
             .leftJoinAndSelect('user.profile', 'profile')
-            .leftJoinAndSelect('post.viewCount', 'viewCount')
             .leftJoinAndSelect('post.images', 'images')
             .where('post.deletedAt IS NULL');
 
@@ -129,6 +249,14 @@ export class PostService {
         return items;
     }
 
+    /**
+     * 포스트 검색
+     *
+     * @param pageNumber 페이지 번호
+     * @param searchProperty 검색 타입
+     * @param searchQuery 검색 쿼리
+     * @returns
+     */
     async searchPost(
         pageNumber: number,
         searchProperty: PostSearchProperty,
@@ -140,7 +268,6 @@ export class PostService {
             .leftJoinAndSelect('post.user', 'user')
             .leftJoinAndSelect('post.category', 'category')
             .leftJoinAndSelect('user.profile', 'profile')
-            .leftJoinAndSelect('post.viewCount', 'viewCount')
             .where('post.deletedAt IS NULL');
 
         if (searchProperty === 'title') {
@@ -162,20 +289,5 @@ export class PostService {
         items.entities = items.entities.map((e) => plainToClass(Post, e));
 
         return items;
-    }
-
-    async updateViewCount(postId: number, count: number) {
-        const post = await this.postRepository.findOne({
-            where: { id: postId },
-            relations: ['viewCount'],
-        });
-
-        if (!post) {
-            throw new Error('존재하지 않는 게시물입니다.');
-        }
-
-        post.viewCount.count = count;
-
-        return await this.postRepository.save(post);
     }
 }

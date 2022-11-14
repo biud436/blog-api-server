@@ -49,6 +49,4 @@ export class CreatePostDto {
     @ApiProperty()
     @IsNumber()
     categoryId?: number;
-
-    viewCount?: PostViewCount;
 }

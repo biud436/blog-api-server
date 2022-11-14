@@ -1,47 +1,55 @@
-import { OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Service } from 'typedi';
-import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
-import AWS from 'aws-sdk';
-import multerS3 from 'multer-s3';
+import * as AWS from 'aws-sdk';
+import { Image } from 'src/controllers/image/entities/image.entity';
 
-@Service()
-export class AWSS3Service implements OnModuleInit {
-    private s3 = new AWS.S3();
+@Injectable()
+export class S3Service {
+    private logger = new Logger(S3Service.name);
+
+    private s3: AWS.S3 = new AWS.S3({
+        accessKeyId: this.configService.get<string>('AWS_ACCESS_KEY_ID'),
+        secretAccessKey: this.configService.get<string>(
+            'AWS_SECRET_ACCESS_KEY',
+        ),
+        region: 'ap-northeast-2',
+    });
 
     constructor(private readonly configService: ConfigService) {}
 
-    async onModuleInit() {
-        this.initWithCredentials();
-    }
-
-    initWithCredentials() {
-        AWS.config.update({
-            region: 'ap-northeast-2',
-            accessKeyId: this.configService.get<string>('AWS_ACCESS_KEY_ID'),
-            secretAccessKey: this.configService.get<string>(
-                'AWS_SECRET_ACCESS_KEY',
-            ),
-        });
-    }
-
-    getAWSS3MulterOption(): MulterOptions {
+    /**
+     * S3에 이미지 삭제를 요청합니다.
+     *
+     * @param images
+     * @returns
+     */
+    async deleteFileFromS3(images: Image[]): Promise<void> {
         const { s3 } = this;
+        const BUCKET = this.configService.get<string>('AWS_S3_BUCKET_NAME');
 
-        return {
-            storage: multerS3({
-                s3,
-                bucket: this.configService.get<string>('AWS_S3_BUCKET_NAME'),
-                key: (req, file, cb) => {
-                    cb(
-                        null,
-                        `original/${Date.now().toString()}_${
-                            file.originalname
-                        }`,
-                    );
+        return new Promise<void>((resolve, reject) => {
+            s3.deleteObjects(
+                {
+                    Bucket: BUCKET,
+                    Delete: {
+                        Objects: images.map((image) => ({
+                            Key: `${image.filename}.${image.mimetype.replace(
+                                'image/',
+                                '',
+                            )}`,
+                        })),
+                        Quiet: false,
+                    },
                 },
-                acl: 'public-read-write',
-            }),
-        };
+                (err, data) => {
+                    if (err) {
+                        this.logger.debug(err);
+                        reject(err);
+                    }
+
+                    resolve();
+                },
+            );
+        });
     }
 }

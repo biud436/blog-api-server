@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, UseInterceptors } from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { UserService } from 'src/entities/user/user.service';
 import { RedisService } from 'src/micro-services/redis/redis.service';
@@ -12,6 +12,7 @@ import { Image } from './entities/image.entity';
 import * as MulterS3 from 'multer-s3';
 import { MulterS3File } from '../../interceptors/s3.upload.interceptor';
 import { S3ImageUploadDto } from './dto/s3-image-upload.dto';
+import { S3Service } from 'src/micro-services/s3/s3.service';
 
 @Injectable()
 export class ImageService {
@@ -23,6 +24,7 @@ export class ImageService {
         @InjectDataSource() private readonly dataSource: DataSource,
         private readonly userService: UserService,
         private readonly redisService: RedisService,
+        private readonly s3Service: S3Service,
     ) {}
 
     async create(createImageDto: CreateImageDto, queryRunner?: QueryRunner) {
@@ -70,6 +72,24 @@ export class ImageService {
             .update()
             .set({ postId })
             .where('image.id IN (:imageIds)', { imageIds });
+
+        return await qb.execute();
+    }
+
+    async deleteByIds(ids: number[], queuryRunner: QueryRunner) {
+        const images = await this.findByIds(ids);
+
+        if (!images) {
+            throw new Error('해당 이미지는 존재하지 않습니다.');
+        }
+
+        await this.s3Service.deleteFileFromS3(images);
+
+        const qb = this.imageRepository
+            .createQueryBuilder('image')
+            .setQueryRunner(queuryRunner)
+            .delete()
+            .where('image.id IN (:ids)', { ids });
 
         return await qb.execute();
     }
