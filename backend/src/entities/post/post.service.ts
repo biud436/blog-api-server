@@ -209,6 +209,7 @@ export class PostService {
             .leftJoinAndSelect('post.user', 'user')
             .leftJoinAndSelect('post.category', 'category')
             .leftJoinAndSelect('user.profile', 'profile')
+            .leftJoinAndSelect('post.images', 'images')            
             .where('post.deletedAt IS NULL')
             .andWhere('post.id = :postId', { postId });
 
