@@ -72,6 +72,7 @@ export function S3FileInterceptor(
                     bucket: BUCKET,
                     acl: 'public-read',
                     contentDisposition: 'inline',
+                    contentType: multerS3.AUTO_CONTENT_TYPE, // 이 속성을 지정하지 않으면, application/octet-stream으로 설정되어 이미지가 og:image에서 불러와지지 않습니다.
                     key: (req, file, cb) => {
                         const { user } = req.user as JwtPayload;
                         const { username } = user;
