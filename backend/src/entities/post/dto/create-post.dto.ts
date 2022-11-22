@@ -29,7 +29,7 @@ export class CreatePostDto {
     @Assert.MinLength(1, {
         message: '내용을 입력해주세요.',
     })
-    @Assert.MaxLength(4000)
+    // @Assert.MaxLength(4000)
     @IsString()
     content: string;
 
