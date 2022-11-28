@@ -140,7 +140,7 @@ export class AdminController {
         try {
             const res = await this.adminService.changeCategoryName(
                 categoryId,
-                updateCategoryNameDto,
+                updateCategoryNameDto, /////////////////////////////
             );
 
             return ResponseUtil.success(RESPONSE_MESSAGE.UPDATE_SUCCESS, res);

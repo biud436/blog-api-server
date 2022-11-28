@@ -68,6 +68,25 @@ export class PostsController {
         }
     }
 
+    @Get('/categories')
+    @CustomApiOkResponse({
+        operation: {
+            summary: '카테고리 별 게시글 갯수 조회',
+        },
+        description: '카테고리 별 게시글 갯수 조회',
+    })
+    async getPostCountByCategories() {
+        try {
+            const res = await this.postsService.getPostCountByCategories();
+            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
+        } catch {
+            return ResponseUtil.failure({
+                message: '카테고리 카운트 정보를 조회할 수 없습니다.',
+                statusCode: 500,
+            });
+        }
+    }
+
     @Post('/comment')
     @ApiOperation({ summary: '댓글 작성' })
     async writeComment(@Body() createCommentDto: CreatePostCommentDto) {

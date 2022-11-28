@@ -209,7 +209,7 @@ export class PostService {
             .leftJoinAndSelect('post.user', 'user')
             .leftJoinAndSelect('post.category', 'category')
             .leftJoinAndSelect('user.profile', 'profile')
-            .leftJoinAndSelect('post.images', 'images')            
+            .leftJoinAndSelect('post.images', 'images')
             .where('post.deletedAt IS NULL')
             .andWhere('post.id = :postId', { postId });
 
@@ -290,5 +290,30 @@ export class PostService {
         items.entities = items.entities.map((e) => plainToClass(Post, e));
 
         return items;
+    }
+
+    /**
+     * 카테고리 별 포스트 갯수 조회
+     *
+     * @returns
+     */
+    async getPostCountByCategories() {
+        const qb = this.postRepository
+            .createQueryBuilder('post')
+            .select(`category.id`, 'id')
+            .addSelect(`category.name`, 'name')
+            .addSelect(`COUNT(post.categoryId)`, 'cnt')
+            .leftJoin('post.category', 'category')
+            .groupBy('post.categoryId')
+            .orderBy('post.categoryId', 'ASC');
+
+        const items = await qb.getRawMany();
+
+        return items.map((e) => ({
+            id: e.id,
+            name: e.name,
+            cnt: e.cnt,
+            nameWithCnt: `${e.name} (${e.cnt})`,
+        }));
     }
 }

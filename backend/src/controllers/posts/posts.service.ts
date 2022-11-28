@@ -192,4 +192,13 @@ export class PostsService {
 
         return comments;
     }
+
+    /**
+     * 카테고리 별 포스트 갯수 조회
+     *
+     * @returns
+     */
+    async getPostCountByCategories() {
+        return this.postService.getPostCountByCategories();
+    }
 }
