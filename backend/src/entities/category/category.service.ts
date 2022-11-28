@@ -211,6 +211,47 @@ export class CategoryService {
     }
 
     /**
+     * 자손 노드를 모두 출력합니다.
+     *
+     * @param nodes
+     * @param targetNode
+     * @returns
+     */
+    async getDescendants(nodes: Category[], targetNode: Category) {
+        const descendants: Category[] = [];
+
+        nodes.forEach((node) => {
+            if (
+                node.left >= targetNode.left &&
+                node.right <= targetNode.right
+            ) {
+                descendants.push(node);
+            }
+        });
+
+        return descendants;
+    }
+
+    async selectDescendants(categorId: number) {
+        const targetNode = await this.categoryRepository
+            .createQueryBuilder('node')
+            .select()
+            .where('node.id = :id', { id: categorId })
+            .getOneOrFail();
+
+        const nodes = await this.categoryRepository
+            .createQueryBuilder('node')
+            .select()
+            .where('node.left BETWEEN :left AND :right', {
+                left: targetNode.left,
+                right: targetNode.right,
+            })
+            .getMany();
+
+        return nodes;
+    }
+
+    /**
      * 타겟 노드의 부모, 조상 노드 출력
      * @param nodes
      * @param targetNode

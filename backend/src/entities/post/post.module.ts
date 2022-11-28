@@ -4,12 +4,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Post } from './entities/post.entity';
 import { MicroServicesModule } from 'src/micro-services/micro-services.module';
 import { ImageModule } from 'src/controllers/image/image.module';
+import { CategoryModule } from '../category/category.module';
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([Post]),
         forwardRef(() => ImageModule),
         MicroServicesModule,
+        CategoryModule,
     ],
     providers: [PostService],
     exports: [PostService],

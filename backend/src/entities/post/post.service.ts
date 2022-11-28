@@ -7,6 +7,7 @@ import { PostSearchProperty } from 'src/controllers/posts/types/post-search-type
 import { RedisService } from 'src/micro-services/redis/redis.service';
 import { DateTimeUtil } from 'src/utils/DateTimeUtil';
 import { QueryRunner, Repository } from 'typeorm';
+import { CategoryService } from '../category/category.service';
 import { PostViewCount } from '../post-view-count/entities/post-view-count.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -17,6 +18,7 @@ export class PostService {
     constructor(
         @InjectRepository(Post)
         private readonly postRepository: Repository<Post>,
+        private readonly categoryService: CategoryService,
         private readonly imageService: ImageService,
         private readonly redisService: RedisService,
     ) {}
@@ -235,8 +237,15 @@ export class PostService {
             .leftJoinAndSelect('post.images', 'images')
             .where('post.deletedAt IS NULL');
 
+        // TODO: 자손 카테고리도 포함해야 합니다.
         if (categoryId) {
-            qb.andWhere('post.categoryId = :categoryId', { categoryId });
+            const descendants = await this.categoryService.selectDescendants(
+                categoryId,
+            );
+
+            const ids = descendants.map((e) => e.id);
+
+            qb.andWhere('post.categoryId IN (:...ids)', { ids });
         }
 
         qb.orderBy('post.uploadDate', 'DESC');
