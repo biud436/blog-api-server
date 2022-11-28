@@ -15,9 +15,18 @@ import {
     Body,
 } from '@nestjs/common';
 import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
-import { ApiConsumes, ApiExcludeEndpoint } from '@nestjs/swagger';
+import {
+    ApiConsumes,
+    ApiExcludeEndpoint,
+    ApiOperation,
+    ApiTags,
+} from '@nestjs/swagger';
 import { InjectConnection, InjectDataSource } from '@nestjs/typeorm';
-import { AdminOnly, JwtGuard } from 'src/decorators/custom.decorator';
+import {
+    AdminOnly,
+    CustomApiOkResponse,
+    JwtGuard,
+} from 'src/decorators/custom.decorator';
 import { Connection, DataSource } from 'typeorm';
 import { ImageService } from './image.service';
 import { Response } from 'express';
@@ -38,6 +47,7 @@ import { S3ImageUploadDto } from './dto/s3-image-upload.dto';
 import { UserId } from 'src/decorators/x-api-key.decorator';
 
 @Controller('image')
+@ApiTags('이미지')
 export class ImageController {
     private readonly logger = new Logger(ImageController.name);
 
@@ -90,6 +100,13 @@ export class ImageController {
     @AdminOnly()
     @Post('/s3/upload')
     @ApiConsumes('multipart/form-data')
+    @CustomApiOkResponse({
+        operation: {
+            summary: 'AWS S3 이미지 업로드',
+        },
+        description: 'AWS S3에 이미지를 업로드합니다.',
+        auth: true,
+    })
     @UseInterceptors(S3FileInterceptor('files')) // Custom Interceptor
     async uploadImageUsingS3(
         @UserId() userId: number,
@@ -119,6 +136,12 @@ export class ImageController {
     @Get(['/stats', '/shake-profile'])
     @Header('Content-Type', 'image/svg+xml')
     @Header('Cache-Control', 'public, max-age=3600')
+    @CustomApiOkResponse({
+        operation: {
+            summary: '깃허브 프로필 이미지 동적 생성',
+        },
+        description: '깃허브 프로필용 이미지를 생성합니다.',
+    })
     async getStatsSvg(
         @Query('text') text: string,
         @Query('username') username: string,

@@ -1,6 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
+import { ChangeCategoryDto } from 'src/controllers/admin/dto/change-category.dto';
 import { QueryRunner, Repository, UpdateResult } from 'typeorm';
 import { CategoryDepthVO } from './dto/category-depth.vo';
 import { CreateCategoryDto } from './dto/create-category.dto';
@@ -305,5 +306,27 @@ export class CategoryService {
         }
 
         return isBeautify ? tree : this.convrtWithData(tree);
+    }
+
+    /**
+     * 카테고리 명을 변경합니다.
+     *
+     * @param categoryId
+     * @param newCategoryName
+     * @returns
+     */
+    async changeCategoryName(
+        categoryId: number,
+        { categoryName: newCategoryName }: ChangeCategoryDto,
+    ) {
+        const qb = this.categoryRepository
+            .createQueryBuilder('category')
+            .update(Category)
+            .set({ name: newCategoryName })
+            .where('category.CTGR_SQ = :id', { id: categoryId });
+
+        const updateResult = await qb.execute();
+
+        return updateResult;
     }
 }

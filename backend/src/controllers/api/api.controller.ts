@@ -1,4 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import {
     AdminOnly,
     CustomApiOkResponse,
@@ -7,6 +8,7 @@ import {
 import { ApiService } from './api.service';
 
 @Controller('api')
+@ApiTags('테스트 API')
 export class ApiController {
     constructor(private readonly apiService: ApiService) {}
 

@@ -8,8 +8,17 @@ import {
     Delete,
     Query,
     ParseBoolPipe,
+    ParseIntPipe,
+    HttpStatus,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';
+import {
+    ApiBearerAuth,
+    ApiOperation,
+    ApiParam,
+    ApiQuery,
+    ApiTags,
+} from '@nestjs/swagger';
 import { InjectDataSource } from '@nestjs/typeorm';
 import {
     AdminOnly,
@@ -20,9 +29,11 @@ import { RESPONSE_MESSAGE } from 'src/utils/response';
 import { ResponseUtil } from 'src/utils/ResponseUtil';
 import { DataSource } from 'typeorm';
 import { AdminService } from './admin.service';
+import { ChangeCategoryDto } from './dto/change-category.dto';
 import { NewCategoryDto } from './dto/new-category.dto';
 
 @Controller('admin')
+@ApiTags('관리자')
 export class AdminController {
     constructor(
         private readonly adminService: AdminService,
@@ -30,12 +41,15 @@ export class AdminController {
     ) {}
 
     @Post('/category')
-    @ApiOperation({
-        summary: '카테고리 추가',
-    })
     @AdminOnly()
     @JwtGuard()
-    @ApiBearerAuth()
+    @CustomApiOkResponse({
+        operation: {
+            summary: '새로운 카테고리 추가',
+        },
+        description: '새로운 카테고리를 추가합니다.',
+        auth: true,
+    })
     async createCategory(
         @Body()
         createCategoryDto: NewCategoryDto,
@@ -63,6 +77,16 @@ export class AdminController {
     }
 
     @Get('/category/:categoryName')
+    @CustomApiOkResponse({
+        operation: {
+            summary: '부모 카테고리 출력',
+        },
+        description: '부모 카테고리를 출력합니다.',
+    })
+    @ApiParam({
+        name: 'categoryName',
+        description: '카테고리 이름',
+    })
     async getAncestors(@Param('categoryName') categoryName: string) {
         try {
             const res = await this.adminService.getAncestors(categoryName);
@@ -73,8 +97,16 @@ export class AdminController {
     }
 
     @Get('/category')
-    @ApiOperation({
-        summary: '카테고리 출력',
+    @CustomApiOkResponse({
+        operation: {
+            summary: '카테고리 출력',
+        },
+        description: '카테고리를 출력합니다.',
+    })
+    @ApiQuery({
+        name: 'isBeautify',
+        description:
+            'true면 트리를 JSON으로 보기 좋게 출력하고, false면 flat 모드로 출력합니다.',
     })
     async getDepthList(
         @Query('isBeautify', ParseBoolPipe) isBeautify: boolean,
@@ -84,6 +116,39 @@ export class AdminController {
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
         } catch (e) {
             return ResponseUtil.failureWrap(e);
+        }
+    }
+
+    @Patch('/category/:categoryId')
+    @AdminOnly()
+    @JwtGuard()
+    @CustomApiOkResponse({
+        operation: {
+            summary: '카테고리 이름 변경',
+        },
+        description: '카테고리 이름을 변경합니다.',
+        auth: true,
+    })
+    @ApiParam({
+        name: 'categoryId',
+        description: '카테고리 ID',
+    })
+    async updateCategoryName(
+        @Param('categoryId', ParseIntPipe) categoryId: number,
+        @Body() updateCategoryNameDto: ChangeCategoryDto,
+    ) {
+        try {
+            const res = await this.adminService.changeCategoryName(
+                categoryId,
+                updateCategoryNameDto,
+            );
+
+            return ResponseUtil.success(RESPONSE_MESSAGE.UPDATE_SUCCESS, res);
+        } catch (e: any) {
+            return ResponseUtil.failureWrap({
+                message: '카테고리 이름 변경에 실패했습니다.',
+                statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+            });
         }
     }
 }
