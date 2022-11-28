@@ -37,6 +37,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { DepartmentModule } from './entities/department/department.module';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { CategoryGroupModule } from './entities/category-group/category-group.module';
 
 @Module({
     imports: [
@@ -96,6 +97,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
         CategoryModule,
         CommentsModule,
         DepartmentModule,
+        CategoryGroupModule,
     ],
     controllers: [AppController, HealthCheckController],
     providers: [

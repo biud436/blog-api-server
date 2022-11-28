@@ -237,7 +237,6 @@ export class PostService {
             .leftJoinAndSelect('post.images', 'images')
             .where('post.deletedAt IS NULL');
 
-        // TODO: 자손 카테고리도 포함해야 합니다.
         if (categoryId) {
             const descendants = await this.categoryService.selectDescendants(
                 categoryId,
