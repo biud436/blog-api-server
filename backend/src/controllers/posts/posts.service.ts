@@ -203,4 +203,12 @@ export class PostsService {
     async getPostCountByCategories() {
         return this.categoryService.getPostCountByCategories();
     }
+
+    /**
+     * 사이트맵 데이터 조회 기능 추가
+     * @returns
+     */
+    async getSitemap() {
+        return this.postService.getPostSitemap();
+    }
 }

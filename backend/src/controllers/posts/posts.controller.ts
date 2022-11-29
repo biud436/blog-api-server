@@ -88,6 +88,23 @@ export class PostsController {
         }
     }
 
+    @Get('/sitemap')
+    @CustomApiOkResponse({
+        operation: {
+            summary: '사이트맵 데이터 조회',
+        },
+        description: '사이트맵 데이터 조회',
+    })
+    async getSitemap() {
+        try {
+            const res = await this.postsService.getSitemap();
+
+            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
+        } catch (e) {
+            return ResponseUtil.failureWrap(e);
+        }
+    }
+
     @Post('/comment')
     @ApiOperation({ summary: '댓글 작성' })
     async writeComment(@Body() createCommentDto: CreatePostCommentDto) {

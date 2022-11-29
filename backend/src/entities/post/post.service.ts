@@ -258,6 +258,27 @@ export class PostService {
     }
 
     /**
+     * 사이트맵 조회 (최근 100건)
+     */
+    async getPostSitemap() {
+        const qb = this.postRepository
+            .createQueryBuilder('post')
+            .select('post.id', 'id')
+            .limit(100)
+            .where('post.deletedAt IS NULL')
+            .orderBy('post.uploadDate', 'DESC')
+            .getRawMany();
+
+        const items = await qb;
+
+        const sitemap = items.map((e) => {
+            return e.id;
+        });
+
+        return sitemap;
+    }
+
+    /**
      * 포스트 검색
      *
      * @param pageNumber 페이지 번호
