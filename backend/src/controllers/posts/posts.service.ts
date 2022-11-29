@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { plainToClass } from 'class-transformer';
 import { decodeHtml, encodeHtml } from 'src/common/html-escpse';
+import { CategoryService } from 'src/entities/category/category.service';
 import { CommentsService } from 'src/entities/comments/comments.service';
 import { CreatePostCommentDto } from 'src/entities/comments/dto/create-comment.dto';
 import { PostComment } from 'src/entities/comments/entities/comment.entity';
@@ -19,6 +20,7 @@ export class PostsService {
         private readonly commentService: CommentsService,
         private readonly dataSource: DataSource,
         private readonly redisService: RedisService,
+        private readonly categoryService: CategoryService,
     ) {}
 
     /**
@@ -199,6 +201,6 @@ export class PostsService {
      * @returns
      */
     async getPostCountByCategories() {
-        return this.postService.getPostCountByCategories();
+        return this.categoryService.getPostCountByCategories();
     }
 }

@@ -35,7 +35,7 @@ export class Post {
         nullable: false,
         name: 'category_id',
     })
-    @Exclude()
+    // @Exclude()
     categoryId: number;
 
     // @Column({

@@ -2,7 +2,13 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
 import { ChangeCategoryDto } from 'src/controllers/admin/dto/change-category.dto';
-import { QueryRunner, Repository, UpdateResult } from 'typeorm';
+import {
+    QueryRunner,
+    Repository,
+    SelectQueryBuilder,
+    UpdateResult,
+} from 'typeorm';
+import { Post } from '../post/entities/post.entity';
 import { CategoryDepthVO } from './dto/category-depth.vo';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
@@ -369,5 +375,38 @@ export class CategoryService {
         const updateResult = await qb.execute();
 
         return updateResult;
+    }
+
+    async getPostCountByCategories() {
+        const qb = this.categoryRepository.createQueryBuilder('node');
+
+        qb.select('node.id', 'id')
+            .addSelect('node.name', 'name')
+            .addSelect('floor((node.right - (node.left + 1)) / 2)', 'children')
+            .addSelect('count(node.name) - 1', 'depth')
+            .addSelect((qb) => {
+                const resultQueryBuilder = qb
+                    .subQuery()
+                    .select('COUNT(*)')
+                    .from(Post, 'post')
+                    .where(
+                        `post.categoryId IN (${qb
+                            .subQuery()
+                            .select('A.id', 'id')
+                            .from(Category, 'A')
+                            .where('A.left BETWEEN node.left AND node.right')
+                            .getQuery()})`,
+                    );
+
+                return resultQueryBuilder;
+            }, 'postCount')
+            .addFrom(Category, 'parent')
+            .where('node.left BETWEEN parent.left AND parent.right')
+            .groupBy('node.left')
+            .orderBy('node.left', 'ASC');
+
+        const result = await qb.getRawMany();
+
+        return result;
     }
 }

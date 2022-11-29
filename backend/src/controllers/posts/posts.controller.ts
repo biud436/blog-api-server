@@ -77,13 +77,14 @@ export class PostsController {
     })
     async getPostCountByCategories() {
         try {
-            const res = await this.postsService.getPostCountByCategories();
+            const res = await this.categoryService.getPostCountByCategories();
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
-        } catch {
-            return ResponseUtil.failure({
-                message: '카테고리 카운트 정보를 조회할 수 없습니다.',
-                statusCode: 500,
-            });
+        } catch (e) {
+            return ResponseUtil.failureWrap(e);
+            // return ResponseUtil.failure({
+            //     message: '카테고리 카운트 정보를 조회할 수 없습니다.',
+            //     statusCode: 500,
+            // });
         }
     }
 

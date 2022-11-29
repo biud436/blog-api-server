@@ -8,7 +8,6 @@ import { RedisService } from 'src/micro-services/redis/redis.service';
 import { DateTimeUtil } from 'src/utils/DateTimeUtil';
 import { QueryRunner, Repository } from 'typeorm';
 import { CategoryService } from '../category/category.service';
-import { PostViewCount } from '../post-view-count/entities/post-view-count.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Post } from './entities/post.entity';
@@ -298,30 +297,5 @@ export class PostService {
         items.entities = items.entities.map((e) => plainToClass(Post, e));
 
         return items;
-    }
-
-    /**
-     * 카테고리 별 포스트 갯수 조회
-     *
-     * @returns
-     */
-    async getPostCountByCategories() {
-        const qb = this.postRepository
-            .createQueryBuilder('post')
-            .select(`category.id`, 'id')
-            .addSelect(`category.name`, 'name')
-            .addSelect(`COUNT(post.categoryId)`, 'cnt')
-            .leftJoin('post.category', 'category')
-            .groupBy('post.categoryId')
-            .orderBy('post.categoryId', 'ASC');
-
-        const items = await qb.getRawMany();
-
-        return items.map((e) => ({
-            id: e.id,
-            name: e.name,
-            cnt: e.cnt,
-            nameWithCnt: `${e.name} (${e.cnt})`,
-        }));
     }
 }
