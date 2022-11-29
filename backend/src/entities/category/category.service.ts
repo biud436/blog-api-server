@@ -1,8 +1,15 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import {
+    BadRequestException,
+    Injectable,
+    InternalServerErrorException,
+} from '@nestjs/common';
+import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
 import { ChangeCategoryDto } from 'src/controllers/admin/dto/change-category.dto';
 import {
+    Between,
+    DataSource,
+    InsertResult,
     QueryRunner,
     Repository,
     SelectQueryBuilder,
@@ -11,6 +18,7 @@ import {
 import { Post } from '../post/entities/post.entity';
 import { CategoryDepthVO } from './dto/category-depth.vo';
 import { CreateCategoryDto } from './dto/create-category.dto';
+import { MoveCategoryDto } from './dto/move-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Category } from './entities/category.entity';
 
@@ -19,6 +27,7 @@ export class CategoryService {
     constructor(
         @InjectRepository(Category)
         private readonly categoryRepository: Repository<Category>,
+        @InjectDataSource() private readonly dataSource: DataSource,
     ) {}
 
     /**
@@ -408,5 +417,205 @@ export class CategoryService {
         const result = await qb.getRawMany();
 
         return result;
+    }
+
+    async deleteNode(categoryId: number, queryRunner: QueryRunner) {
+        const positionNode: Pick<Category, 'left' | 'right' | 'groupId'> & {
+            width: number;
+        } = await this.categoryRepository
+            .createQueryBuilder('node')
+            .select('node.left', 'left')
+            .addSelect('node.right', 'right')
+            .addSelect('node.right - node.left + 1', 'width')
+            .addSelect('node.groupId', 'groupId')
+            .where('node.id = :id', { id: categoryId })
+            .getRawOne();
+
+        if (!positionNode) {
+            throw new InternalServerErrorException(
+                '삭제할 노드를 찾을 수 없습니다',
+            );
+        }
+
+        await queryRunner.manager.delete(Category, {
+            left: Between(positionNode.left, positionNode.right),
+            groupId: positionNode.groupId,
+        });
+
+        // 나머지 노드를 당겨옵니다.
+        let updateResult = await this.categoryRepository
+            .createQueryBuilder('node')
+            .update()
+            .set({
+                right: () => `node.right - ${positionNode.width}`,
+            })
+            .where('node.right > :right', { right: positionNode.right })
+            .andWhere('node.groupId = :groupId', {
+                groupId: positionNode.groupId,
+            })
+            .setQueryRunner(queryRunner)
+            .execute();
+
+        if (!updateResult) {
+            throw new InternalServerErrorException('노드를 삭제할 수 없습니다');
+        }
+
+        updateResult = await this.categoryRepository
+            .createQueryBuilder('node')
+            .update()
+            .set({
+                left: () => `node.left - ${positionNode.width}`,
+            })
+            .where('node.left > :right', { right: positionNode.right })
+            .andWhere('node.groupId = :groupId', {
+                groupId: positionNode.groupId,
+            })
+            .setQueryRunner(queryRunner)
+            .execute();
+
+        if (!updateResult) {
+            throw new InternalServerErrorException('노드를 삭제할 수 없습니다');
+        }
+
+        return updateResult;
+    }
+
+    /**
+     * ! 카테고리를 다른 카테고리의 하위 카테고리로 이동시킵니다 (테스트가 되지 않았음)
+     *
+     * 1. 새로운 위치의 부모 노드의 ID 값과 기존 노드의 ID 값을 서버 API로 보낸다
+     * 2. 새로운 위치의 부모 노드의 ID 하위에 새로운 노드를 추가한다.
+     * 3. 새로운 노드의 왼쪽과 오른쪽 번호를 취한다.
+     * 4. 기존 노드의 ID 값으로 기존 노드를 가지고 와서, 스왑(Swap) 용으로 데이터를 임시(temp) 노드로 저장해두고, 새로운 노드의 왼쪽과 오른쪽 번호로 업데이트 쿼리를 날린다.
+     * 5. 새로운 노드는 temp 노드의 왼쪽과 오른쪽 번호로 업데이트 시킨다
+     * 6. 새로운 노드를 삭제한다.
+     * 7. 트리 구조를 유지한 상태로 위치 변경이 완료된다.
+     *
+     * @param prevCategoryId
+     * @param newCategoryId
+     */
+    async moveCategory({
+        newCategoryParentId,
+        prevCategoryId,
+    }: MoveCategoryDto) {
+        const queryRunner = this.dataSource.createQueryRunner();
+
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+
+        try {
+            let qb: SelectQueryBuilder<Category>;
+            let currentCategory: Category;
+
+            // 이동할 위치에 부모 카테고리가 있는지 검증합니다.
+            qb = this.categoryRepository.createQueryBuilder('node');
+            qb.select().where('node.id = :id', {
+                id: newCategoryParentId,
+            });
+
+            const parentCategory = await qb.getOne(); // << 수동으로 오류 처리를 위해 getOne()을 사용합니다.
+            if (!parentCategory) {
+                throw new BadRequestException(
+                    '새로운 위치의 부모 노드가 존재하지 않습니다.',
+                );
+            }
+
+            // 이동할 카테고리가 있는지 검증합니다.
+            currentCategory = await this.categoryRepository.findOne({
+                where: { id: prevCategoryId },
+            });
+
+            if (!currentCategory) {
+                throw new BadRequestException(
+                    '이동할 카테고리가 존재하지 않습니다.',
+                );
+            }
+
+            // 2. 새로운 위치의 부모 노드의 ID 하위에 새로운 노드를 추가한다.
+            const tempNewNodeName = `temp_${currentCategory.name}`;
+            const newNodeInsertResult = (await this.addCategory(
+                queryRunner,
+                tempNewNodeName,
+                parentCategory.name,
+            )) as InsertResult;
+
+            const newNodeId = newNodeInsertResult.identifiers.map(
+                (e) => e.id,
+            )[0];
+
+            if (!newNodeId) {
+                throw new BadRequestException(
+                    '새로운 노드를 추가하는데 실패했습니다.',
+                );
+            }
+
+            const newNode = await this.categoryRepository.findOne({
+                where: { id: newNodeId },
+            });
+
+            if (!newNode) {
+                throw new BadRequestException(
+                    '새로운 노드를 찾을 수 없습니다.',
+                );
+            }
+
+            // 3. 새로운 노드의 왼쪽과 오른쪽 번호를 취한다.
+            const { left, right } = newNode;
+
+            // 4. 기존 노드의 ID 값으로 기존 노드를 가지고 와서,
+            // 스왑(Swap) 용으로 데이터를 임시(temp) 노드로 저장해두고,
+            // 새로운 노드의 왼쪽과 오른쪽 번호로 업데이트 쿼리를 날린다.
+            const { left: prevLeft, right: prevRight } = currentCategory;
+
+            let updateResult = await this.categoryRepository
+                .createQueryBuilder('category')
+                .update()
+                .set({
+                    left: prevLeft,
+                    right: prevRight,
+                })
+                .where('category.id = :id', { id: newNode.id })
+                .execute();
+
+            if (!updateResult.affected) {
+                throw new BadRequestException(
+                    '기존 노드를 임시 노드로 업데이트하는데 실패했습니다.',
+                );
+            }
+
+            // 5. 기존 노드를 새로운 노드의 왼쪽과 오른쪽 번호로 업데이트 시킨다
+            updateResult = await this.categoryRepository
+                .createQueryBuilder('category')
+                .update()
+                .set({
+                    left: left,
+                    right: right,
+                })
+                .where('category.id = :id', { id: currentCategory.id })
+                .execute();
+
+            if (!updateResult.affected) {
+                throw new BadRequestException(
+                    '기존 노드를 이동하는 도중에 오류가 발생하였습니다.',
+                );
+            }
+
+            // 6. 새로운 노드를 삭제한다.
+            updateResult = await this.deleteNode(newNode.id, queryRunner);
+
+            if (!updateResult.affected) {
+                throw new BadRequestException(
+                    '임시 노드를 삭제하는 도중에 오류가 발생하였습니다.',
+                );
+            }
+
+            // 7. 트리 구조를 유지한 상태로 위치 변경이 완료된다.
+            await queryRunner.commitTransaction();
+        } catch (err) {
+            console.error(err);
+            await queryRunner.rollbackTransaction();
+        } finally {
+            await queryRunner.release();
+        }
     }
 }
