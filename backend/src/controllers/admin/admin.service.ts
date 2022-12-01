@@ -1,6 +1,9 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CategoryService } from 'src/entities/category/category.service';
 import { CategoryDepthVO } from 'src/entities/category/dto/category-depth.vo';
+import { MoveCategoryDto } from 'src/entities/category/dto/move-category.dto';
+import { RESPONSE_MESSAGE } from 'src/utils/response';
+import { ResponseUtil } from 'src/utils/ResponseUtil';
 import { QueryRunner } from 'typeorm';
 import { ChangeCategoryDto } from './dto/change-category.dto';
 
@@ -9,7 +12,7 @@ export class AdminService {
     constructor(private readonly categoryService: CategoryService) {}
 
     /**
-     * 새로운 카테고리 추가
+     * Adds a new category to category table.
      *
      * @param queryRunner
      * @param categoryName
@@ -29,7 +32,30 @@ export class AdminService {
     }
 
     /**
-     * 부모 카테고리 출력
+     * Moves the category to another category.
+     *
+     * @param moveCategoryDto
+     * @returns
+     */
+    async moveCategory(moveCategoryDto: MoveCategoryDto) {
+        try {
+            const res = await this.categoryService.moveCategory(
+                moveCategoryDto,
+            );
+
+            return ResponseUtil.success(RESPONSE_MESSAGE.UPDATE_SUCCESS, res);
+        } catch (e) {
+            if (e.name === 'CustomError') {
+                return e;
+            }
+
+            return ResponseUtil.failure(RESPONSE_MESSAGE.UPDATE_FAIL);
+        }
+    }
+
+    /**
+     * Prints out the parent category of the target category.
+     * it will be returned the list of parent category.
      *
      * @param categoryName
      * @returns
@@ -48,7 +74,7 @@ export class AdminService {
     }
 
     /**
-     * 카테고리를 계층적 구조로 출력합니다.
+     * Obtains the hierarchical structure.
      *
      * @param isBeautify
      * @returns
@@ -58,7 +84,7 @@ export class AdminService {
     }
 
     /**
-     * 카테고리 명을 변경합니다.
+     * Rename the category name.
      *
      * @param categoryId
      * @param newCategoryName

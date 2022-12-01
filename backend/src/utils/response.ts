@@ -6,6 +6,7 @@ export const MESSAGE_KEY = {
     SAVE_SUCCESS: '데이터 저장 성공',
     LOGOUT_SUCCESS: '로그아웃 성공',
     UPDATE_SUCCESS: '업데이트 성공',
+    UPDATE_FAIL: '데이터 수정 실패',
     DELETE_SUCCESS: '삭제 성공',
     LOGIN_SUCCESS: '로그인 성공',
     NULL_VALUE: '값이 없습니다',
@@ -52,6 +53,10 @@ export const RESPONSE_MESSAGE: Record<MessageId, IResponse> = {
     UPDATE_SUCCESS: {
         message: '데이터 수정 성공',
         statusCode: HttpStatus.NO_CONTENT,
+    },
+    UPDATE_FAIL: {
+        message: '데이터 수정 실패',
+        statusCode: HttpStatus.BAD_REQUEST,
     },
     DELETE_SUCCESS: {
         message: '데이터 삭제 성공',

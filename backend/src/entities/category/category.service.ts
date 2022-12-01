@@ -419,6 +419,13 @@ export class CategoryService {
         return result;
     }
 
+    /**
+     * 카테고리를 삭제합니다. (트랜잭션 사용 필요)
+     *
+     * @param categoryId
+     * @param queryRunner
+     * @returns
+     */
     async deleteNode(categoryId: number, queryRunner: QueryRunner) {
         const positionNode: Pick<Category, 'left' | 'right' | 'groupId'> & {
             width: number;
@@ -429,6 +436,7 @@ export class CategoryService {
             .addSelect('node.right - node.left + 1', 'width')
             .addSelect('node.groupId', 'groupId')
             .where('node.id = :id', { id: categoryId })
+            .setQueryRunner(queryRunner)
             .getRawOne();
 
         if (!positionNode) {
@@ -442,34 +450,46 @@ export class CategoryService {
             groupId: positionNode.groupId,
         });
 
+        const tableAlias = this.categoryRepository.metadata.tableName;
+
+        let affected = 0;
+
         // 나머지 노드를 당겨옵니다.
         let updateResult = await this.categoryRepository
             .createQueryBuilder('node')
-            .update()
+            .update(Category)
             .set({
-                right: () => `node.right - ${positionNode.width}`,
+                right: () => `${tableAlias}.RGT_NO - ${positionNode.width}`,
             })
-            .where('node.right > :right', { right: positionNode.right })
-            .andWhere('node.groupId = :groupId', {
+            .where(`${tableAlias}.RGT_NO > :right`, {
+                right: positionNode.right,
+            })
+            .andWhere(`${tableAlias}.CTGR_GRP_SQ = :groupId`, {
                 groupId: positionNode.groupId,
             })
+            .useTransaction(true)
             .setQueryRunner(queryRunner)
             .execute();
 
         if (!updateResult) {
             throw new InternalServerErrorException('노드를 삭제할 수 없습니다');
         }
+
+        affected += updateResult.affected;
 
         updateResult = await this.categoryRepository
             .createQueryBuilder('node')
-            .update()
+            .update(Category)
             .set({
-                left: () => `node.left - ${positionNode.width}`,
+                left: () => `${tableAlias}.LFT_NO - ${positionNode.width}`,
             })
-            .where('node.left > :right', { right: positionNode.right })
-            .andWhere('node.groupId = :groupId', {
+            .where(`${tableAlias}.LFT_NO > :right`, {
+                right: positionNode.right,
+            })
+            .andWhere(`${tableAlias}.CTGR_GRP_SQ = :groupId`, {
                 groupId: positionNode.groupId,
             })
+            .useTransaction(true)
             .setQueryRunner(queryRunner)
             .execute();
 
@@ -477,11 +497,16 @@ export class CategoryService {
             throw new InternalServerErrorException('노드를 삭제할 수 없습니다');
         }
 
-        return updateResult;
+        affected += updateResult.affected;
+
+        return {
+            ...updateResult,
+            affected,
+        };
     }
 
     /**
-     * ! 카테고리를 다른 카테고리의 하위 카테고리로 이동시킵니다 (테스트가 되지 않았음)
+     * ! 카테고리를 다른 카테고리의 하위 카테고리로 이동시킵니다.
      *
      * 1. 새로운 위치의 부모 노드의 ID 값과 기존 노드의 ID 값을 서버 API로 보낸다
      * 2. 새로운 위치의 부모 노드의 ID 하위에 새로운 노드를 추가한다.
@@ -498,6 +523,8 @@ export class CategoryService {
         newCategoryParentId,
         prevCategoryId,
     }: MoveCategoryDto) {
+        let isSuccess = false;
+
         const queryRunner = this.dataSource.createQueryRunner();
 
         await queryRunner.connect();
@@ -509,9 +536,11 @@ export class CategoryService {
 
             // 이동할 위치에 부모 카테고리가 있는지 검증합니다.
             qb = this.categoryRepository.createQueryBuilder('node');
-            qb.select().where('node.id = :id', {
-                id: newCategoryParentId,
-            });
+            qb.select()
+                .where('node.id = :id', {
+                    id: newCategoryParentId,
+                })
+                .setQueryRunner(queryRunner);
 
             const parentCategory = await qb.getOne(); // << 수동으로 오류 처리를 위해 getOne()을 사용합니다.
             if (!parentCategory) {
@@ -549,9 +578,12 @@ export class CategoryService {
                 );
             }
 
-            const newNode = await this.categoryRepository.findOne({
-                where: { id: newNodeId },
-            });
+            const newNode = await this.categoryRepository
+                .createQueryBuilder('node')
+                .select()
+                .where('node.id = :id', { id: newNodeId })
+                .setQueryRunner(queryRunner)
+                .getOne();
 
             if (!newNode) {
                 throw new BadRequestException(
@@ -567,14 +599,19 @@ export class CategoryService {
             // 새로운 노드의 왼쪽과 오른쪽 번호로 업데이트 쿼리를 날린다.
             const { left: prevLeft, right: prevRight } = currentCategory;
 
+            const tableAlias = this.categoryRepository.metadata.tableName;
+
+            // ! typeorm의 update 쿼리는 tableColumn의 alias를 지원하지 않습니다 (일부 데이터베이스만 지원하기 때문에 아예 지원하지 않음)
             let updateResult = await this.categoryRepository
                 .createQueryBuilder('category')
-                .update()
+                .update(Category)
                 .set({
                     left: prevLeft,
                     right: prevRight,
                 })
-                .where('category.id = :id', { id: newNode.id })
+                .where(`${tableAlias}.CTGR_SQ = :id`, { id: newNode.id })
+                .useTransaction(true)
+                .setQueryRunner(queryRunner)
                 .execute();
 
             if (!updateResult.affected) {
@@ -586,12 +623,16 @@ export class CategoryService {
             // 5. 기존 노드를 새로운 노드의 왼쪽과 오른쪽 번호로 업데이트 시킨다
             updateResult = await this.categoryRepository
                 .createQueryBuilder('category')
-                .update()
+                .update(Category)
                 .set({
                     left: left,
                     right: right,
                 })
-                .where('category.id = :id', { id: currentCategory.id })
+                .where(`${tableAlias}.CTGR_SQ = :id`, {
+                    id: currentCategory.id,
+                })
+                .useTransaction(true)
+                .setQueryRunner(queryRunner)
                 .execute();
 
             if (!updateResult.affected) {
@@ -611,11 +652,19 @@ export class CategoryService {
 
             // 7. 트리 구조를 유지한 상태로 위치 변경이 완료된다.
             await queryRunner.commitTransaction();
+
+            isSuccess = true;
         } catch (err) {
             console.error(err);
             await queryRunner.rollbackTransaction();
+
+            isSuccess = false;
         } finally {
             await queryRunner.release();
         }
+
+        return {
+            success: isSuccess,
+        };
     }
 }
