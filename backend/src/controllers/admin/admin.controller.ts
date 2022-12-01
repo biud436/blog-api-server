@@ -35,8 +35,6 @@ import { ChangeCategoryDto } from './dto/change-category.dto';
 import { NewCategoryDto } from './dto/new-category.dto';
 
 @Controller('admin')
-@AdminOnly()
-@JwtGuard()
 @ApiTags('관리자')
 export class AdminController {
     constructor(
@@ -45,6 +43,8 @@ export class AdminController {
     ) {}
 
     @Patch('/category/:categoryId')
+    @AdminOnly()
+    @JwtGuard()
     @CustomApiOkResponse({
         operation: {
             summary: '카테고리 이름 변경',
@@ -76,6 +76,8 @@ export class AdminController {
     }
 
     @Post('/category/:prevCategoryId/move')
+    @AdminOnly()
+    @JwtGuard()
     @CustomApiOkResponse({
         operation: {
             summary: '카테고리 이동',
