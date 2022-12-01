@@ -3,6 +3,7 @@ import { CategoryService } from 'src/entities/category/category.service';
 import { CategoryDepthVO } from 'src/entities/category/dto/category-depth.vo';
 import { MoveCategoryDto } from 'src/entities/category/dto/move-category.dto';
 import { RESPONSE_MESSAGE } from 'src/utils/response';
+import { IResponsableData } from 'src/utils/response.interface';
 import { ResponseUtil } from 'src/utils/ResponseUtil';
 import { QueryRunner } from 'typeorm';
 import { ChangeCategoryDto } from './dto/change-category.dto';
@@ -37,7 +38,9 @@ export class AdminService {
      * @param moveCategoryDto
      * @returns
      */
-    async moveCategory(moveCategoryDto: MoveCategoryDto) {
+    async moveCategory(
+        moveCategoryDto: MoveCategoryDto,
+    ): Promise<IResponsableData | ResponseUtil.FailureResponse | any> {
         try {
             const res = await this.categoryService.moveCategory(
                 moveCategoryDto,

@@ -28,6 +28,7 @@ import {
 } from 'src/decorators/custom.decorator';
 import { MoveCategoryDto } from 'src/entities/category/dto/move-category.dto';
 import { RESPONSE_MESSAGE } from 'src/utils/response';
+import { IResponsableData, IResponse } from 'src/utils/response.interface';
 import { ResponseUtil } from 'src/utils/ResponseUtil';
 import { DataSource } from 'typeorm';
 import { AdminService } from './admin.service';
