@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { InjectConnection } from '@nestjs/typeorm';
+import { InjectDataSource } from '@nestjs/typeorm';
 import { UserCopy } from 'src/entities/user-copy/entities/user-copy.entity';
 import {
-    Connection,
+    DataSource,
     EntitySubscriberInterface,
     EventSubscriber,
     InsertEvent,
@@ -11,8 +11,8 @@ import { User } from './entities/user.entity';
 
 @Injectable()
 export class UserSubscriber implements EntitySubscriberInterface<User> {
-    constructor(@InjectConnection() readonly connection: Connection) {
-        connection.subscribers.push(this);
+    constructor(@InjectDataSource() private readonly dataSource: DataSource) {
+        this.dataSource.subscribers.push(this);
     }
 
     listenTo() {

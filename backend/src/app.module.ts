@@ -38,6 +38,8 @@ import { DepartmentModule } from './entities/department/department.module';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { CategoryGroupModule } from './entities/category-group/category-group.module';
+import { BlogMetaDataModule } from './entities/blog-meta-data/blog-meta-data.module';
+import { PostTempModule } from './entities/post-temp/post-temp.module';
 
 @Module({
     imports: [
@@ -98,6 +100,8 @@ import { CategoryGroupModule } from './entities/category-group/category-group.mo
         CommentsModule,
         DepartmentModule,
         CategoryGroupModule,
+        BlogMetaDataModule,
+        PostTempModule,
     ],
     controllers: [AppController, HealthCheckController],
     providers: [
