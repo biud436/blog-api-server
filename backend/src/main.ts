@@ -7,7 +7,7 @@ import { AppModule } from './app.module';
 import { ServerLog } from './utils/ServerLog';
 import * as path from 'path';
 import * as cookieParser from 'cookie-parser';
-import * as basicAuth from 'express-basic-auth';
+
 import * as express from 'express';
 import winstonLogger from 'src/common/winston-config';
 import helmet from 'helmet';
@@ -16,6 +16,11 @@ import * as passport from 'passport';
 import * as mysqlSession from 'express-mysql-session';
 import * as connectRedis from 'connect-redis';
 import { createClient } from 'redis';
+import { LoginMiddleware } from './middlewares/login.middleware';
+import {
+    getSwaggerAuthMiddleware,
+    getSwaggerLoginCheckMiddleware,
+} from './middlewares/swagger.middleware';
 
 const MySQLStore = mysqlSession(session);
 const RedisStore = connectRedis(session);
@@ -149,14 +154,18 @@ export class NestBootstrapApplication {
 
         app.useGlobalGuards();
 
+        const configService = NestBootstrapApplication.CONFIG;
+
         app.use(
             ['/docs', '/docs-json'],
-            basicAuth({
-                challenge: true,
-                users: {
-                    admin: NestBootstrapApplication.CONFIG.get('DOCS_PASSWORD'),
-                },
-            }),
+            getSwaggerLoginCheckMiddleware(configService),
+            getSwaggerAuthMiddleware(configService),
+            // basicAuth({
+            //     challenge: true,
+            //     users: {
+            //         admin: NestBootstrapApplication.CONFIG.get('DOCS_PASSWORD'),
+            //     },
+            // }),
         );
 
         ServerLog.info('미들웨어를 초기화하였습니다');

@@ -1,0 +1,78 @@
+<html lang='ko'>
+    <head>
+        <meta charset='UTF-8' />
+        <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+        <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+        <title>로그인</title>
+        <style>
+            html {
+
+                height: 100vh;
+
+            }
+
+            * {
+                padding: 0;
+                margin: 0;
+            }
+
+            .container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+            }
+
+            .center {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                width: 400px;
+                height: 400px;
+            }
+
+            form[action="/auth/login"] {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                height: 100%;
+            }
+
+            form[action="/auth/login"] > input[type='text'], form[action="/auth/login"] > input[type='password'] {
+                padding: 1em;
+                margin: 0.02em;
+                border: 1px solid #ccc;
+                width: 100%;
+            }
+
+            form[action="/auth/login"] > button {
+                padding: 1em;
+                margin: 0.02em;
+                margin-top: 1em;
+                width: 100%;
+                border: 1px solid #ccc;
+                background-color: #ccc;
+            }
+        </style>
+    </head>
+    <body>
+        <div class='container'>
+            <div class='center'>
+                <form action='/auth/login' method='POST' id="loginForm">
+                    <input type='text' name='username' placeholder='아이디' />
+                    <input
+                        type='password'
+                        name='password'
+                        placeholder='비밀번호'
+                    />
+                    <button type='submit' id="login">로그인</button>
+                </form>
+            </div>
+        </div>
+
+        <script type="text/javascript" src="/js/index.js"></script>
+    </body>
+</html>

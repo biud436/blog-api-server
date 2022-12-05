@@ -1,4 +1,9 @@
-import { Controller, Get, InternalServerErrorException } from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    InternalServerErrorException,
+    Render,
+} from '@nestjs/common';
 import { ApiExcludeEndpoint } from '@nestjs/swagger';
 
 @Controller()
@@ -7,5 +12,18 @@ export class AppController {
     @ApiExcludeEndpoint()
     getHello(): string {
         return process.platform;
+    }
+
+    @Render('login')
+    @Get('/login')
+    @ApiExcludeEndpoint()
+    login() {
+        return { message: 'Hello world!' };
+    }
+
+    @Get('/api')
+    @ApiExcludeEndpoint()
+    async getDocs() {
+        return {};
     }
 }

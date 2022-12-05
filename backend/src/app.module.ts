@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
@@ -40,6 +40,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { CategoryGroupModule } from './entities/category-group/category-group.module';
 import { BlogMetaDataModule } from './entities/blog-meta-data/blog-meta-data.module';
 import { PostTempModule } from './entities/post-temp/post-temp.module';
+import { LoginMiddleware } from './middlewares/login.middleware';
 
 @Module({
     imports: [
@@ -115,8 +116,14 @@ import { PostTempModule } from './entities/post-temp/post-temp.module';
         },
     ],
 })
-export class AppModule {
+export class AppModule implements NestModule {
     public static isDelvelopment(): boolean {
         return process.env.NODE_ENV !== 'production';
+    }
+
+    configure(consumer: MiddlewareConsumer) {
+        consumer
+            .apply(LoginMiddleware)
+            .forRoutes('/api', '/docs', '/docs-json');
     }
 }
