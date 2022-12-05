@@ -4,7 +4,16 @@ import * as basicAuth from 'express-basic-auth';
 import { ConfigService } from '@nestjs/config';
 import * as jwt from 'jsonwebtoken';
 
+/**
+ * [HTTP-Authentication](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication)을 이용하는 Middleware입니다.
+ * @param configService
+ * @returns
+ */
 export function getSwaggerAuthMiddleware(configService: ConfigService) {
+    /**
+     * Nest.js의 Global Functional Middleware는 전역 DI가 되지 않으므로 외부에서 직접 주입해야 합니다.
+     * 따라서 HOC(고차 컴포넌트) 기법을 이용하여 외부에서 ConfigService를 주입하였습니다.
+     */
     return basicAuth({
         challenge: true,
         users: {
@@ -13,7 +22,17 @@ export function getSwaggerAuthMiddleware(configService: ConfigService) {
     });
 }
 
+/**
+ * Server의 Login API를 이용하여 **JWT Authorization**을 수행하는 Swagger Global Functional Middleware입니다.
+ *
+ * @param configService
+ * @returns
+ */
 export function getSwaggerLoginCheckMiddleware(configService: ConfigService) {
+    /**
+     * Nest.js의 Global Functional Middleware는 전역 DI가 되지 않으므로 외부에서 직접 주입해야 합니다.
+     * 따라서 HOC(고차 컴포넌트) 기법을 이용하여 외부에서 ConfigService를 주입하였습니다.
+     */
     return (req: Request, res: Response, next: NextFunction) => {
         const accessToken = req.cookies['access_token'];
 
