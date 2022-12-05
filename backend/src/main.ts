@@ -159,7 +159,7 @@ export class NestBootstrapApplication {
         app.use(
             ['/docs', '/docs-json'],
             getSwaggerLoginCheckMiddleware(configService),
-            getSwaggerAuthMiddleware(configService),
+            // getSwaggerAuthMiddleware(configService),
             // basicAuth({
             //     challenge: true,
             //     users: {
