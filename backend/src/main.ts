@@ -187,7 +187,8 @@ export class NestBootstrapApplication {
             .setTitle('블로그 서버의 API')
             .setDescription(
                 [
-                    `회원 가입과 로그인 이후 우측 상단에서 <code>Access Token</code>을 설정해주십시오`,
+                    `[블로그](https://blog.biud436.com)에서 사용되는 API 문서를 제공합니다.`,
+                    '별도의 인증 없이 API 호출이 가능합니다.',
                 ].join('<p></p>'),
             )
             .addBearerAuth({
