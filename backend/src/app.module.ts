@@ -116,14 +116,8 @@ import { LoginMiddleware } from './middlewares/login.middleware';
         },
     ],
 })
-export class AppModule implements NestModule {
+export class AppModule {
     public static isDelvelopment(): boolean {
         return process.env.NODE_ENV !== 'production';
-    }
-
-    configure(consumer: MiddlewareConsumer) {
-        consumer
-            .apply(LoginMiddleware)
-            .forRoutes('/api', '/docs', '/docs-json');
     }
 }
