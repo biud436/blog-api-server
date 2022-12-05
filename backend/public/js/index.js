@@ -1,8 +1,6 @@
 window.addEventListener('load', () => {
     loginForm.addEventListener('submit', (e) => {
-        const loginForm = document.getElementById('loginForm');
-        const username = loginForm.username.value.trim();
-        const password = loginForm.password.value.trim();
+        const { username, password } = useFormInfo();
 
         e.preventDefault();
         if (username === '' || password === '') {
@@ -13,10 +11,19 @@ window.addEventListener('load', () => {
         checkUsernameAndPassword();
     });
 
-    function checkUsernameAndPassword() {
+    function useFormInfo() {
         const loginForm = document.getElementById('loginForm');
         const username = loginForm.username.value;
         const password = loginForm.password.value;
+
+        return {
+            username,
+            password,
+        };
+    }
+
+    function checkUsernameAndPassword() {
+        const { username, password } = useFormInfo();
 
         fetch('/auth/login', {
             method: 'POST',
