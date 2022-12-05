@@ -26,7 +26,10 @@ import {
     CustomApiOkResponse,
     JwtGuard,
 } from 'src/decorators/custom.decorator';
+import { UserId } from 'src/decorators/x-api-key.decorator';
 import { MoveCategoryDto } from 'src/entities/category/dto/move-category.dto';
+import { CreatePostTempDto } from 'src/entities/post-temp/dto/create-post-temp.dto';
+import { UpdatePostTempDto } from 'src/entities/post-temp/dto/update-post-temp.dto';
 import { RESPONSE_MESSAGE } from 'src/utils/response';
 import { IResponsableData, IResponse } from 'src/utils/response.interface';
 import { ResponseUtil } from 'src/utils/ResponseUtil';
@@ -182,6 +185,110 @@ export class AdminController {
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
         } catch (e) {
             return ResponseUtil.failureWrap(e);
+        }
+    }
+
+    @Post('/temp/post')
+    @AdminOnly()
+    @JwtGuard()
+    @CustomApiOkResponse({
+        operation: {
+            summary: '임시 포스트를 저장합니다.',
+        },
+        description: '임시 포스트를 저장합니다.',
+    })
+    async saveTempPost(
+        @UserId() userId: number,
+        @Body() createPostTempDto: CreatePostTempDto,
+    ) {
+        try {
+            const res = await this.adminService.saveTempPost(
+                userId,
+                createPostTempDto,
+            );
+
+            return ResponseUtil.success(RESPONSE_MESSAGE.SAVE_SUCCESS, res);
+        } catch (e) {
+            return ResponseUtil.failureWrap(e);
+        }
+    }
+
+    @Patch('/temp/post/:postId')
+    @AdminOnly()
+    @JwtGuard()
+    @CustomApiOkResponse({
+        operation: {
+            summary: '임시 포스트를 수정합니다.',
+        },
+        description: '임시 포스트를 수정합니다.',
+    })
+    @ApiParam({
+        name: 'postId',
+        description: '포스트 ID',
+    })
+    async updateTempPost(
+        @UserId() userId: number,
+        @Param('postId', ParseIntPipe) postId: number,
+        @Body() updatePostTempDto: UpdatePostTempDto,
+    ) {
+        try {
+            const res = await this.adminService.updateTempPost(
+                userId,
+                postId,
+                updatePostTempDto,
+            );
+
+            return ResponseUtil.success(RESPONSE_MESSAGE.UPDATE_SUCCESS, res);
+        } catch (e) {
+            return ResponseUtil.failureWrap(e);
+        }
+    }
+
+    @Get('/temp/post')
+    @CustomApiOkResponse({
+        operation: {
+            summary: '모든 임시 포스트를 조회합니다.',
+        },
+        description: '특정 유저에 대한 모든 임시 포스트를 조회합니다.',
+        auth: true,
+    })
+    @AdminOnly()
+    @JwtGuard()
+    async getTempAllPost(@UserId() userId: number) {
+        try {
+            const res = await this.adminService.getTempPost(userId);
+
+            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
+        } catch (e: any) {
+            return ResponseUtil.failureWrap({
+                ...e,
+            });
+        }
+    }
+
+    @Get('/temp/post/:postId')
+    @ApiParam({
+        name: 'postId',
+        description: '게시글 ID',
+    })
+    @CustomApiOkResponse({
+        operation: {
+            summary: '임시 포스트 조회',
+        },
+        description: '임시 포스트 조회',
+        auth: true,
+    })
+    @AdminOnly()
+    @JwtGuard()
+    async getTempPostById(
+        @UserId() userId: number,
+        @Param('postId', ParseIntPipe) postId: number,
+    ) {
+        try {
+            const res = await this.adminService.getTempPostById(userId, postId);
+            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
+        } catch {
+            return ResponseUtil.failure(RESPONSE_MESSAGE.NOT_FOUND_RESULT);
         }
     }
 }
