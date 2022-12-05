@@ -53,7 +53,7 @@ export class PostTempService {
                 userId,
             });
 
-        const item = await qb.getOne();
+        const item = await qb.getOneOrFail();
 
         return item;
     }

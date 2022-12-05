@@ -20,10 +20,4 @@ export class AppController {
     login() {
         return { message: 'Hello world!' };
     }
-
-    @Get('/api')
-    @ApiExcludeEndpoint()
-    async getDocs() {
-        return {};
-    }
 }
