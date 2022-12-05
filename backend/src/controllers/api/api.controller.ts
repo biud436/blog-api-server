@@ -20,7 +20,7 @@ export class ApiController {
         operation: {},
         auth: true,
     })
-    async checkAdmin() {
+    checkAdmin() {
         return {
             isAdmin: true,
         };

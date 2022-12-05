@@ -213,6 +213,7 @@ export class NestBootstrapApplication {
             explorer: true, // 동적 로드 설정
             swaggerOptions: { persistAuthorization: true },
             customfavIcon: '/favicon.png',
+            customJs: '/js/swagger-ui-inject.js',
         });
 
         return this;
