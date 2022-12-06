@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { classToPlain, plainToClass, plainToInstance } from 'class-transformer';
+import { PaginableWithCount } from 'src/common/list-config';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { CreatePostTempDto } from './dto/create-post-temp.dto';
 import { PostTempListItem } from './dto/post-temp-list-item.dto';
@@ -21,7 +22,9 @@ export class PostTempService {
         return await this.postTempRepository.save(model);
     }
 
-    async findAll(userId: number): Promise<PostTempListItem[]> {
+    async findAll(
+        userId: number,
+    ): Promise<PaginableWithCount<PostTempListItem>> {
         const LIMIT = 20;
 
         const qb = this.postTempRepository
@@ -34,12 +37,15 @@ export class PostTempService {
             .where('postTemp.userId = :userId', { userId: userId })
             .orderBy('postTemp.id', 'DESC');
 
-        const items = await qb.getMany();
+        const [items, count] = await qb.getManyAndCount();
         const exposedItems = items.map((e) => {
             return plainToInstance(PostTempListItem, e);
         });
 
-        return exposedItems;
+        return <PaginableWithCount<PostTempListItem>>{
+            entities: exposedItems,
+            count,
+        };
     }
 
     async findOne(userId: number, postId: number): Promise<PostTemp> {

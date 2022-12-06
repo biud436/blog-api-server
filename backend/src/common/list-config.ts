@@ -81,6 +81,11 @@ export type PaginationResult = {
     maxBlock: number;
 };
 
+export type PaginableWithCount<T> = {
+    entities: T[];
+    count: number;
+};
+
 /**
  * 검색 옵션
  */
