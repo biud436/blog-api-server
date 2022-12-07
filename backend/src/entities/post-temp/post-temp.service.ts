@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { classToPlain, plainToClass, plainToInstance } from 'class-transformer';
 import { PaginableWithCount } from 'src/common/list-config';
+import { CRC32 } from 'src/utils/CrcUtil';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { CreatePostTempDto } from './dto/create-post-temp.dto';
 import { PostTempListItem } from './dto/post-temp-list-item.dto';
@@ -19,7 +20,13 @@ export class PostTempService {
         const model = await this.postTempRepository.create(createPostTempDto);
         model.userId = userId;
 
-        return await this.postTempRepository.save(model);
+        const savedModel = await this.postTempRepository.save(model);
+
+        savedModel.checksum = CRC32.getChecksum(
+            savedModel.createdAt.toString() + savedModel.title,
+        );
+
+        return await this.postTempRepository.save(savedModel);
     }
 
     async findAll(
@@ -65,7 +72,7 @@ export class PostTempService {
     }
 
     async deleteById(userId: number, postId: number): Promise<DeleteResult> {
-        const deleteResult = this.postTempRepository
+        const deleteResult = await this.postTempRepository
             .createQueryBuilder()
             .delete()
             .from(PostTemp)
@@ -79,38 +86,6 @@ export class PostTempService {
 
         return deleteResult;
     }
-
-    //#region deleteOldPostTemp
-    // async deleteOldPostTemp(userId: number) {
-    //     const LIMIT = 20;
-
-    //     const items = await this.postTempRepository
-    //         .createQueryBuilder('postTemp')
-    //         .select('postTemp.id')
-    //         .where(`postTemp.userId = :userId`, {
-    //             userId,
-    //         })
-    //         .orderBy(`postTemp.id`, 'DESC')
-    //         .offset(LIMIT)
-    //         .getRawMany();
-
-    //     const ids = items.map((e) => e.id);
-
-    //     const deleteResult = await this.postTempRepository
-    //         .createQueryBuilder()
-    //         .delete()
-    //         .from(PostTemp)
-    //         .where(`userId = :userId`, {
-    //             userId,
-    //         })
-    //         .andWhere(`id NOT IN (:...ids)`, {
-    //             ids,
-    //         })
-    //         .execute();
-
-    //     return deleteResult;
-    // }
-    //#endregion
 
     async updateById(
         updatePostTempDto: UpdatePostTempDto,

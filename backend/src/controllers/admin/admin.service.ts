@@ -8,7 +8,7 @@ import { PostTempService } from 'src/entities/post-temp/post-temp.service';
 import { RESPONSE_MESSAGE } from 'src/utils/response';
 import { IResponsableData } from 'src/utils/response.interface';
 import { ResponseUtil } from 'src/utils/ResponseUtil';
-import { QueryRunner } from 'typeorm';
+import { DeleteQueryBuilder, QueryRunner } from 'typeorm';
 import { ChangeCategoryDto } from './dto/change-category.dto';
 
 @Injectable()
@@ -149,5 +149,15 @@ export class AdminService {
         data: UpdatePostTempDto,
     ) {
         return this.postTempService.updateById(data, userId, postId);
+    }
+
+    /**
+     * Delete the temporary post by ID.
+     * @param userId
+     * @param postId
+     * @returns
+     */
+    async deleteTempPostById(userId: number, postId: number) {
+        return this.postTempService.deleteById(userId, postId);
     }
 }

@@ -3,6 +3,7 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    Index,
     JoinColumn,
     ManyToOne,
     PrimaryGeneratedColumn,
@@ -31,6 +32,13 @@ export class PostTemp {
         type: 'text',
     })
     content: string;
+
+    @Column({
+        length: 255,
+        nullable: true,
+    })
+    @Index()
+    checksum: string;
 
     @Column({ nullable: false })
     userId: number;

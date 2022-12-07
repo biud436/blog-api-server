@@ -266,10 +266,40 @@ export class AdminController {
         }
     }
 
+    @Delete('/temp/post/:postId')
+    @ApiParam({
+        name: 'postId',
+        description: '포스트 ID',
+    })
+    @CustomApiOkResponse({
+        operation: {
+            summary: '임시 포스트 삭제',
+        },
+        description: '임시 포스트 삭제',
+        auth: true,
+    })
+    @AdminOnly()
+    @JwtGuard()
+    async deleteTempPostById(
+        @UserId() userId: number,
+        @Param('postId', ParseIntPipe) postId: number,
+    ) {
+        try {
+            const res = await this.adminService.deleteTempPostById(
+                userId,
+                postId,
+            );
+
+            return ResponseUtil.success(RESPONSE_MESSAGE.DELETE_SUCCESS, res);
+        } catch {
+            return ResponseUtil.failure(RESPONSE_MESSAGE.NOT_FOUND_RESULT);
+        }
+    }
+
     @Get('/temp/post/:postId')
     @ApiParam({
         name: 'postId',
-        description: '게시글 ID',
+        description: '포스트 ID',
     })
     @CustomApiOkResponse({
         operation: {
