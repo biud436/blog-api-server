@@ -16,7 +16,8 @@ import {
 import { PostComment } from 'src/entities/comments/entities/comment.entity';
 import { decodeHtml } from 'src/common/html-escpse';
 import { Image } from 'src/controllers/image/entities/image.entity';
-
+import removeMarkdown from 'markdown-to-text';
+import { VirtualColumn } from 'src/decorators/virtual-column.decorator';
 @Entity()
 export class Post {
     @PrimaryGeneratedColumn()
@@ -66,6 +67,12 @@ export class Post {
     })
     @Transform((value: TransformFnParams) => decodeHtml(value.value))
     content: string;
+
+    // @VirtualColumn('previewContent')
+    // @Transform((value: TransformFnParams) => {
+    //     removeMarkdown(value.value)?.slice(0, 100);
+    // })
+    previewContent?: string;
 
     @Column({
         default: () => 'CURRENT_TIMESTAMP',

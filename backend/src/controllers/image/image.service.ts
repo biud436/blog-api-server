@@ -13,6 +13,7 @@ import * as MulterS3 from 'multer-s3';
 import { MulterS3File } from '../../interceptors/s3.upload.interceptor';
 import { S3ImageUploadDto } from './dto/s3-image-upload.dto';
 import { S3Service } from 'src/micro-services/s3/s3.service';
+import Handlerbars from 'handlebars';
 
 @Injectable()
 export class ImageService {
