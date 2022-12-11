@@ -152,11 +152,22 @@ export class ImageController {
         @Query('y', ParseIntPipe) y = 50,
         // @Res({ passthrough: true }) res: Response,
     ) {
-        const { data } = (await this.httpService.axiosRef.get(
-            `https://api.github.com/users/${username}`,
-        )) as Record<string, any>;
+        let login, name, followers;
 
-        const { login, name, public_repos, followers } = data;
+        try {
+            const { data } = (await this.httpService.axiosRef.get(
+                `https://api.github.com/users/${username}`,
+            )) as Record<string, any>;
+
+            // const { login, name, public_repos, followers } = data;
+            login = data.login;
+            name = data.name;
+            followers = data.followers;
+        } catch {
+            name = 'TEST';
+            followers = 0;
+            login = 'TEST';
+        }
 
         const parameters = {
             name: name ?? login,
@@ -167,14 +178,27 @@ export class ImageController {
         return {
             ...parameters,
             texts: (() => {
-                return text.split('').map((char, index) => ({
-                    x: 10 + index * 20,
-                    y,
-                    color,
-                    textSize,
-                    className: index % 3 === 0 ? 'ping-pong' : 'ping-pong-2',
-                    content: char,
-                }));
+                return text.split('').map((char, index) => {
+                    const x = 10 + index * 20;
+                    const endX = -50 + x;
+
+                    return {
+                        x,
+                        y,
+
+                        color,
+                        smoothTrailPath: `M${x - 20},20 C${x},-20 ${
+                            x + 40
+                        },80 ${x},20 C${40 - 20 + x} ${
+                            y + 20
+                        },80 ${endX}-15,20 z`,
+
+                        textSize,
+                        className:
+                            index % 3 === 0 ? 'ping-pong' : 'ping-pong-2',
+                        content: char,
+                    };
+                });
             })(),
         };
     }

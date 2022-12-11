@@ -157,7 +157,18 @@
             fill="{{color}}"
             font-size="{{textSize}}"
             class="{{className}}"
-        >{{content}}</text>
+        >
+            <animateMotion path="{{smoothTrailPath}}" begin="0s" dur="10s" repeatCount="indefinite"/>
+            <animateTransform
+                attributeName="transform"
+                type="rotate"
+                from="0 {{x}} {{y}}"
+                to="10 {{x}} {{y}}"
+                dur="3s"
+                repeatCount="indefinite"
+            />
+        {{content}}
+        </text>
     {{/each}}
 
     <text
@@ -168,7 +179,18 @@
         font-weight="bold"
         fill="#000"
         class="smooth-text-reverse"
-    >{{followers}} Followers</text>
+    >
+        <animateMotion path="M40,20 C40,-20 40,80 40,20 C40-20 20,80 20,20 z" begin="0s" dur="3s" repeatCount="indefinite"/>
+
+        <animate
+            attributeName="font-size"
+            values="3.5em;2.5em;3.5em"
+            dur="1s"
+            repeatCount="indefinite"
+            />
+        
+        {{followers}} Followers
+    </text>
 
         <text
             x="50%"
