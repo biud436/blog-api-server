@@ -34,3 +34,29 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           tags: ghcr.io/${{ github.repository_owner }}/blog-api-server:latest
+
+      - name: Configure AWS credential
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: AWS Deploy push
+        run: |
+          aws deploy push \
+            --application-name blog-api-server \
+            -- description "blog-api-server-${{ github.sha }}" \
+            --ignore-hidden-files
+            --s3-location s3://${{ secrets.AWS_S3_BUCKET }}/blog-api-server/blog-api-server.zip \
+            --source .
+
+      - name: AWS Deploy create
+        run: |
+          aws deploy create-deployment \
+            --application-name blog-api-server \
+            --deployment-config-name CodeDeployDefault.OneAtATime \
+            --deployment-group-name blog-api-server \
+            --description "blog-api-server-${{ github.sha }}" \
+            --s3-location bucket=${{ secrets.AWS_S3_BUCKET }},key=blog-api-server/blog-api-server.zip,bundleType=zip \
+            --file-exists-behavior OVERWRITE
