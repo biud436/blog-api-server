@@ -10,9 +10,9 @@ services:
     container_name: api-server
     image: ghcr.io/biud436/blog-api-server:latest
     restart: always
-    build:
-      dockerfile: Dockerfile
-      context: ../backend
+    # build:
+    #   dockerfile: Dockerfile
+    #   context: ../backend
     env_file:
       - ../backend/.env
     links:
@@ -29,9 +29,9 @@ services:
     container_name: api-server-green
     image: ghcr.io/biud436/blog-api-server:latest
     restart: always
-    build:
-      dockerfile: Dockerfile
-      context: ../backend
+    # build:
+    #   dockerfile: Dockerfile
+    #   context: ../backend
     env_file:
       - ../backend/.env
     links:
