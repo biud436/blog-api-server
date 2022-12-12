@@ -47,7 +47,7 @@ jobs:
           aws deploy push \
             --application-name blog-api-server \
             -- description "blog-api-server-${{ github.sha }}" \
-            --ignore-hidden-files
+            --ignore-hidden-files \
             --s3-location s3://${{ secrets.AWS_S3_BUCKET }}/blog-api-server-${{ github.sha }}.zip \
             --source .
 
