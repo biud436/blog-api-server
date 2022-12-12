@@ -1,54 +1,58 @@
 version: "3"
 x-logging: &default-logging
-    options:
-        max-size: "1m"
-        max-file: "3"
-    driver: "json-file"
+  options:
+    max-size: "1m"
+    max-file: "3"
+  driver: "json-file"
 
 services:
-    api-server:
-        container_name: api-server
-        image: api-server:latest
-        restart: always
-        build:
-            dockerfile: Dockerfile
-            context: ../backend
-        links:
-            - redis
-        expose:
-            - 3000
-        extra_hosts:
-            - "host.docker.internal:host-gateway"
-        volumes:
-            - ../upload:/usr/src/app/upload
-            - ../logs:/usr/src/app/logs
-        logging: *default-logging
-    api-server-green:
-        container_name: api-server-green
-        image: api-server-green:latest
-        restart: always
-        build:
-            dockerfile: Dockerfile
-            context: ../backend
-        links:
-            - redis
-        expose:
-            - 3000
-        extra_hosts:
-            - "host.docker.internal:host-gateway"
-        volumes:
-            - ../upload:/usr/src/app/upload
-            - ../logs:/usr/src/app/logs
-        logging: *default-logging
-    redis:
-        container_name: redis
-        image: redis
-        restart: always
-        ports:
-            - "6379:6379"
-        volumes:
-            - ./data:/data
+  api-server:
+    container_name: api-server
+    image: ghcr.io/biud436/blog-api-server:latest
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ../backend
+    env_file:
+      - ../backend/.env
+    links:
+      - redis
+    expose:
+      - 3000
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ../upload:/usr/src/app/upload
+      - ../logs:/usr/src/app/logs
+    logging: *default-logging
+  api-server-green:
+    container_name: api-server-green
+    image: ghcr.io/biud436/blog-api-server:latest
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ../backend
+    env_file:
+      - ../backend/.env
+    links:
+      - redis
+    expose:
+      - 3000
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ../upload:/usr/src/app/upload
+      - ../logs:/usr/src/app/logs
+    logging: *default-logging
+  redis:
+    container_name: redis
+    image: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data:/data
 networks:
-    default:
-        external:
-            name: my-devops-network
+  default:
+    external:
+      name: my-devops-network
