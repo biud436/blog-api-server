@@ -48,7 +48,7 @@ jobs:
             --application-name blog-api-server \
             -- description "blog-api-server-${{ github.sha }}" \
             --ignore-hidden-files
-            --s3-location s3://${{ secrets.AWS_S3_BUCKET }}/blog-api-server/blog-api-server.zip \
+            --s3-location s3://${{ secrets.AWS_S3_BUCKET }}/blog-api-server-${{ github.sha }}.zip \
             --source .
 
       - name: AWS Deploy create
@@ -58,5 +58,5 @@ jobs:
             --deployment-config-name CodeDeployDefault.OneAtATime \
             --deployment-group-name blog-api-server \
             --description "blog-api-server-${{ github.sha }}" \
-            --s3-location bucket=${{ secrets.AWS_S3_BUCKET }},key=blog-api-server/blog-api-server.zip,bundleType=zip \
+            --s3-location bucket=${{ secrets.AWS_S3_BUCKET }},key=blog-api-server-${{ github.sha }}.zip,bundleType=zip \
             --file-exists-behavior OVERWRITE
