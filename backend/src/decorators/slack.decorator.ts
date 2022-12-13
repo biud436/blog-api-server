@@ -1,5 +1,8 @@
 import * as toss from '@toss/nestjs-aop';
-import { SlackLogger, SLACK_LOGGER_DECORATOR } from './slack.logger';
+import {
+    SlackLogger,
+    SLACK_LOGGER_DECORATOR,
+} from '../modules/slack/slack.logger';
 
 @toss.Aspect(SLACK_LOGGER_DECORATOR)
 export class SlackDecorator implements toss.LazyDecorator<any, any> {
