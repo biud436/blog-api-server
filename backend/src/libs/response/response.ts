@@ -1,5 +1,5 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { IResponse } from './response.interface';
+import { IResponse } from './interface/response.interface';
 
 export const MESSAGE_KEY = {
     READ_SUCCESS: '데이터 조회 성공',

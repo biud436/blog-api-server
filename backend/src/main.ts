@@ -4,7 +4,7 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import { ServerLog } from './utils/ServerLog';
+import { ServerLog } from './libs/logger/ServerLog';
 import * as path from 'path';
 import * as cookieParser from 'cookie-parser';
 
@@ -33,7 +33,7 @@ export class NestBootstrapApplication {
 
     private _application: NestExpressApplication = null;
 
-    get app() {
+    get app(): NestExpressApplication {
         return this._application;
     }
 
@@ -120,17 +120,7 @@ export class NestBootstrapApplication {
                 secret: NestBootstrapApplication.CONFIG.get('APP_SECRET'),
                 resave: false,
                 saveUninitialized: false,
-                // store: new session.MemoryStore(),
                 store: new RedisStore({ client: redisStoreMiddleware }),
-                // store: new MySQLStore({
-                //     host: NestBootstrapApplication.CONFIG.get('DB_HOST'),
-                //     port: NestBootstrapApplication.CONFIG.get('DB_PORT'),
-                //     user: NestBootstrapApplication.CONFIG.get('DB_USER'),
-                //     password:
-                //         NestBootstrapApplication.CONFIG.get('DB_PASSWORD'),
-                //     database:
-                //         NestBootstrapApplication.CONFIG.get('DB_SESSION_NAME'),
-                // }),
                 cookie: {
                     httpOnly: true,
                     signed: true,
@@ -159,13 +149,6 @@ export class NestBootstrapApplication {
         app.use(
             ['/docs', '/docs-json'],
             getSwaggerLoginCheckMiddleware(configService),
-            // getSwaggerAuthMiddleware(configService),
-            // basicAuth({
-            //     challenge: true,
-            //     users: {
-            //         admin: NestBootstrapApplication.CONFIG.get('DOCS_PASSWORD'),
-            //     },
-            // }),
         );
 
         ServerLog.info('미들웨어를 초기화하였습니다');
@@ -232,11 +215,14 @@ export class NestBootstrapApplication {
     }
 }
 
-process.on('uncaughtException', (err) => {
-    ServerLog.error(err.stack);
-});
-process.on('unhandledRejection', (err) => {
-    ServerLog.error((err as any).stack);
-});
+function prepareServerProcess() {
+    process.on('uncaughtException', (err) => {
+        ServerLog.error(err.stack);
+    });
+    process.on('unhandledRejection', (err) => {
+        ServerLog.error((err as any).stack);
+    });
+}
 
+prepareServerProcess();
 NestBootstrapApplication.getInstance().start();

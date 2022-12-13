@@ -6,6 +6,7 @@ import { CategoryModule } from 'src/entities/category/category.module';
 import { CommentsModule } from 'src/entities/comments/comments.module';
 import { MicroServicesModule } from 'src/micro-services/micro-services.module';
 import { UserModule } from 'src/entities/user/user.module';
+import { SlackModule } from 'src/modules/slack/slack.module';
 
 @Module({
     imports: [

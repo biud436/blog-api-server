@@ -5,7 +5,7 @@ import { encodeHtml } from 'src/common/html-escpse';
 import { ImageService } from 'src/controllers/image/image.service';
 import { PostSearchProperty } from 'src/controllers/posts/types/post-search-type';
 import { RedisService } from 'src/micro-services/redis/redis.service';
-import { DateTimeUtil } from 'src/utils/DateTimeUtil';
+import { DateTimeUtil } from 'src/libs/date/DateTimeUtil';
 import { QueryRunner, Repository } from 'typeorm';
 import { CategoryService } from '../category/category.service';
 import { CreatePostDto } from './dto/create-post.dto';

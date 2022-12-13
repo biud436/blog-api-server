@@ -30,9 +30,12 @@ import { UserId } from 'src/decorators/x-api-key.decorator';
 import { MoveCategoryDto } from 'src/entities/category/dto/move-category.dto';
 import { CreatePostTempDto } from 'src/entities/post-temp/dto/create-post-temp.dto';
 import { UpdatePostTempDto } from 'src/entities/post-temp/dto/update-post-temp.dto';
-import { RESPONSE_MESSAGE } from 'src/utils/response';
-import { IResponsableData, IResponse } from 'src/utils/response.interface';
-import { ResponseUtil } from 'src/utils/ResponseUtil';
+import { RESPONSE_MESSAGE } from 'src/libs/response/response';
+import {
+    IResponsableData,
+    IResponse,
+} from 'src/libs/response/interface/response.interface';
+import { ResponseUtil } from 'src/libs/response/ResponseUtil';
 import { DataSource } from 'typeorm';
 import { AdminService } from './admin.service';
 import { ChangeCategoryDto } from './dto/change-category.dto';

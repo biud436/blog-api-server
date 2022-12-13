@@ -25,11 +25,4 @@ export class ApiController {
             isAdmin: true,
         };
     }
-
-    @Get('test')
-    async test() {
-        return {
-            test: 'test2...',
-        };
-    }
 }

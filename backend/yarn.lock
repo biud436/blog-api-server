@@ -1856,6 +1856,11 @@
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-1.1.2.tgz#ccb91445360179a04e7fe6aff78c00ffc1eeaf82"
   integrity sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==
 
+"@toss/nestjs-aop@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@toss/nestjs-aop/-/nestjs-aop-1.0.3.tgz#9aaa261dd8f45f950c02e23d6a1f96e20bb4d00e"
+  integrity sha512-L9zCD0oxwzKBON/tbSVaIzUl9rDmFfO2ciklfqZa/NJhmG0DYSfZ5kAzyBCmG1b3ZsOIbWVeRkDiN1FAjqG9Tw==
+
 "@tsconfig/node10@^1.0.7":
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/@tsconfig/node10/-/node10-1.0.8.tgz#c1e4e80d6f964fbecb3359c43bd48b40f7cadad9"

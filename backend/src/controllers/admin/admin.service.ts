@@ -5,9 +5,9 @@ import { MoveCategoryDto } from 'src/entities/category/dto/move-category.dto';
 import { CreatePostTempDto } from 'src/entities/post-temp/dto/create-post-temp.dto';
 import { UpdatePostTempDto } from 'src/entities/post-temp/dto/update-post-temp.dto';
 import { PostTempService } from 'src/entities/post-temp/post-temp.service';
-import { RESPONSE_MESSAGE } from 'src/utils/response';
-import { IResponsableData } from 'src/utils/response.interface';
-import { ResponseUtil } from 'src/utils/ResponseUtil';
+import { RESPONSE_MESSAGE } from 'src/libs/response/response';
+import { IResponsableData } from 'src/libs/response/interface/response.interface';
+import { ResponseUtil } from 'src/libs/response/ResponseUtil';
 import { DeleteQueryBuilder, QueryRunner } from 'typeorm';
 import { ChangeCategoryDto } from './dto/change-category.dto';
 

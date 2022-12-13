@@ -6,6 +6,7 @@ import {
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
 import { ChangeCategoryDto } from 'src/controllers/admin/dto/change-category.dto';
+import { SlackHook } from 'src/modules/slack/slack.logger';
 import {
     Between,
     DataSource,
@@ -189,6 +190,7 @@ export class CategoryService {
     /**
      * 특정 카테고리까지의 경로를 조회합니다.
      */
+    @SlackHook({})
     async getBreadcrumbs(categoryName: string) {
         const categories = await this.categoryRepository
             .createQueryBuilder('node')

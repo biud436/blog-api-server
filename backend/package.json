@@ -35,6 +35,7 @@
         "@nestjs/swagger": "^6.1.2",
         "@nestjs/terminus": "^9.1.2",
         "@nestjs/typeorm": "^9.0.1",
+        "@toss/nestjs-aop": "^1.0.3",
         "@types/bcrypt": "^5.0.0",
         "@types/cron": "^2.0.0",
         "@types/express-session": "^1.17.5",

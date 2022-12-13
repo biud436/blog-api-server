@@ -6,7 +6,7 @@ import {
     HttpException,
     HttpStatus,
 } from '@nestjs/common';
-import { ServerLog } from 'src/utils/ServerLog';
+import { ServerLog } from 'src/libs/logger/ServerLog';
 import { Request, Response } from 'express';
 import { RedirectException } from './redirect.exception';
 import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';

@@ -16,7 +16,7 @@ import { MULTER_MODULE_OPTIONS } from '@nestjs/platform-express/multer/files.con
 import { ConfigService } from '@nestjs/config';
 import * as AWS from 'aws-sdk';
 import * as multerS3 from 'multer-s3';
-import { CryptoUtil } from 'src/utils/CryptoUtil';
+import { CryptoUtil } from 'src/libs/crypto/CryptoUtil';
 import { ImageService } from '../controllers/image/image.service';
 import { AES256Provider } from 'src/modules/aes/aes-256.provider';
 import { JwtPayload } from '../controllers/auth/validator/response.dto';

@@ -24,10 +24,10 @@ import { getMyMulterOption } from './common/multer.config';
 import { AesModule } from './modules/aes/aes.module';
 import { PostViewCountModule } from './entities/post-view-count/post-view-count.module';
 import { UserCopyModule } from './entities/user-copy/user-copy.module';
-import './polyfill/';
+import './libs/polyfill';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import dbconnect from './config';
-import { ServerLog } from './utils/ServerLog';
+import { ServerLog } from './libs/logger/ServerLog';
 import { ApiModule } from './controllers/api/api.module';
 import { AdminModule as AdminControllerModule } from './controllers/admin/admin.module';
 import { ApiKeyModule } from './entities/api-key/api-key.module';
@@ -41,6 +41,8 @@ import { CategoryGroupModule } from './entities/category-group/category-group.mo
 import { BlogMetaDataModule } from './entities/blog-meta-data/blog-meta-data.module';
 import { PostTempModule } from './entities/post-temp/post-temp.module';
 import { LoginMiddleware } from './middlewares/login.middleware';
+import { AopModule } from '@toss/nestjs-aop';
+import { SlackModule } from './modules/slack/slack.module';
 
 @Module({
     imports: [
@@ -103,6 +105,8 @@ import { LoginMiddleware } from './middlewares/login.middleware';
         CategoryGroupModule,
         BlogMetaDataModule,
         PostTempModule,
+        AopModule,
+        SlackModule,
     ],
     controllers: [AppController, HealthCheckController],
     providers: [

@@ -18,6 +18,7 @@ import { SessionSerializer } from './session.serializer';
 import { ApiKeyModule } from 'src/entities/api-key/api-key.module';
 import { HttpModule } from '@nestjs/axios';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { SlackModule } from 'src/modules/slack/slack.module';
 
 @Module({
     imports: [

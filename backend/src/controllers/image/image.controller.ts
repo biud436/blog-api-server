@@ -40,9 +40,9 @@ import {
 } from '../../interceptors/s3.upload.interceptor';
 import { UserInfo } from 'src/decorators/user.decorator';
 import { JwtPayload } from '../auth/validator/response.dto';
-import { ResponseUtil } from 'src/utils/ResponseUtil';
-import { RESPONSE_MESSAGE } from 'src/utils/response';
-import { IResponsableData } from 'src/utils/response.interface';
+import { ResponseUtil } from 'src/libs/response/ResponseUtil';
+import { RESPONSE_MESSAGE } from 'src/libs/response/response';
+import { IResponsableData } from 'src/libs/response/interface/response.interface';
 import { S3ImageUploadDto } from './dto/s3-image-upload.dto';
 import { UserId } from 'src/decorators/x-api-key.decorator';
 import Handlebars from 'handlebars';
