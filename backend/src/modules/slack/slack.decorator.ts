@@ -1,6 +1,10 @@
 import * as toss from '@toss/nestjs-aop';
 import { SlackLogger, SLACK_LOGGER_DECORATOR } from './slack.logger';
 
+/**
+ * IOC 컨테이너에 의해 DI를 받아야 하기 때문에 SlackModule에 Provider로 등록해야 합니다.
+ * decorators 폴더로 옮기지 마십시오.
+ */
 @toss.Aspect(SLACK_LOGGER_DECORATOR)
 export class SlackDecorator implements toss.LazyDecorator<any, any> {
     /**
