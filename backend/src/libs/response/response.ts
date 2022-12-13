@@ -1,6 +1,9 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { IResponse } from './interface/response.interface';
 
+/**
+ * TODO: refactoring 필요
+ */
 export const MESSAGE_KEY = {
     READ_SUCCESS: '데이터 조회 성공',
     SAVE_SUCCESS: '데이터 저장 성공',
@@ -118,7 +121,6 @@ export const RESPONSE_MESSAGE: Record<MessageId, IResponse> = {
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         error: 'Internal Server Error!',
     },
-
     NOT_FOUND_RESULT: {
         message: '기록이 존재하지 않습니다.',
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,

@@ -18,6 +18,9 @@ interface UTCTimeCollection {
 
 /**
  * @interface DateTimeUtilImpl
+ * @deprecated
+ * @description
+ * 다양한 날짜 라이브러리를 테스트 했지만 현재, 기본 Date를 사용하고 있습니다.
  */
 interface DateTimeUtilImpl {
     /**

@@ -1,6 +1,9 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { IResponsableData, IResponse } from './interface/response.interface';
 
+/**
+ * TODO: refactoring 필요
+ */
 export namespace ResponseUtil {
     export type FailureResponse = IResponse &
         Pick<IResponsableData, 'name' | 'result'>;
