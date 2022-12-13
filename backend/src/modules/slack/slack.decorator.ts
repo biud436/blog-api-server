@@ -5,7 +5,7 @@ import { SlackLogger, SLACK_LOGGER_DECORATOR } from './slack.logger';
  * @toss.Aspect는 Injectable 데코레이터와 조합되어있기 때문에 Provider와 같습니다.
  * Injectable 데코레이터를 포함하므로 IOC 컨테이너에 의해 DI를 받을 수 있습니다.
  *
- * 이름과 달리 Injetable하며 기능을 정의하기 때문에, 순수한 데코레이터와는 구분됩니다.
+ * 이름과 달리 Injectable하며 기능을 정의하기 때문에, 순수한 데코레이터와는 구분됩니다.
  * 따라서 decorators 폴더로 옮기지 마시기 바랍니다.
  *
  * 클래스명은 튜토리얼에 근거하여 이름을 명명했으나 순수 데코레이터와 혼동을 줄 가능성이 있기 때문에,
