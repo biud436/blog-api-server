@@ -29,7 +29,7 @@ export class ApiController {
     @Get('test')
     async test() {
         return {
-            test: 'test',
+            test: 'test2...',
         };
     }
 }
