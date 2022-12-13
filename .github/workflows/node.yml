@@ -55,7 +55,7 @@ jobs:
           aws deploy create-deployment \
             --application-name blog-api-server \
             --deployment-config-name CodeDeployDefault.AllAtOnce \
-            --deployment-group-name blog-api-server \
+            --deployment-group-name blog-api-server-code-deploy \
             --description "blog-api-server-${{ github.sha }}" \
             --s3-location bucket=${{ secrets.AWS_S3_BUCKET }},key=blog-api-server-${{ github.sha }}.zip,bundleType=zip \
             --file-exists-behavior OVERWRITE
