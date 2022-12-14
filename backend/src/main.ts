@@ -1,6 +1,10 @@
-import { Logger, ValidationPipe } from '@nestjs/common';
+import {
+    ClassSerializerInterceptor,
+    Logger,
+    ValidationPipe,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
@@ -88,6 +92,11 @@ export class NestBootstrapApplication {
                 },
             }),
         );
+        /**
+         * @link https://wanago.io/2020/06/08/api-nestjs-serializing-response-interceptors/
+         */
+        this.useClassSerializerInterceptor(app);
+
         app.use(
             '/images',
             express.static(
@@ -154,6 +163,20 @@ export class NestBootstrapApplication {
         ServerLog.info('미들웨어를 초기화하였습니다');
 
         return this;
+    }
+
+    /**
+     * class-transform을 전역적으로 수행합니다.
+     * @Exclude() 데코레이터가 마킹된 속성이 자동으로 제외됩니다.
+     *
+     * @link https://wanago.io/2020/06/08/api-nestjs-serializing-response-interceptors/
+     * @param app
+     * @returns
+     */
+    private useClassSerializerInterceptor(app: NestExpressApplication) {
+        app.useGlobalInterceptors(
+            new ClassSerializerInterceptor(app.get(Reflector)),
+        );
     }
 
     private useNginxProxy(): NestBootstrapApplication {
