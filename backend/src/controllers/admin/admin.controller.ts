@@ -26,7 +26,7 @@ import {
     CustomApiOkResponse,
     JwtGuard,
 } from 'src/decorators/custom.decorator';
-import { UserId } from 'src/decorators/x-api-key.decorator';
+import { UserId } from 'src/decorators/user-id.decorator';
 import { MoveCategoryDto } from 'src/entities/category/dto/move-category.dto';
 import { CreatePostTempDto } from 'src/entities/post-temp/dto/create-post-temp.dto';
 import { UpdatePostTempDto } from 'src/entities/post-temp/dto/update-post-temp.dto';

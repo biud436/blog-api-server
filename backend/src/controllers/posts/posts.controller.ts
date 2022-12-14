@@ -27,7 +27,8 @@ import {
 } from 'src/decorators/custom.decorator';
 import { PageNumber } from 'src/decorators/page-number.decorator';
 import { UserInfo } from 'src/decorators/user.decorator';
-import { UserId, XApiUserId } from 'src/decorators/x-api-key.decorator';
+import { XApiUserId } from 'src/decorators/x-api-user-id.decorator';
+import { UserId } from 'src/decorators/user-id.decorator';
 import { CategoryService } from 'src/entities/category/category.service';
 import { CreatePostCommentDto } from 'src/entities/comments/dto/create-comment.dto';
 import { CreatePostDto } from 'src/entities/post/dto/create-post.dto';
