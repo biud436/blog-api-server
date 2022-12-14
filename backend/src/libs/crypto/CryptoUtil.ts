@@ -3,8 +3,6 @@ import * as zlib from 'zlib';
 import { v4 as uuidv4 } from 'uuid';
 
 export namespace CryptoUtil {
-    // const iv = crypto.randomBytes(16);
-
     /**
      * 램덤한 문자열을 만듭니다.
      *
