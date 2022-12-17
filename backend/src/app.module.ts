@@ -43,6 +43,8 @@ import { PostTempModule } from './entities/post-temp/post-temp.module';
 import { LoginMiddleware } from './middlewares/login.middleware';
 import { AopModule } from '@toss/nestjs-aop';
 import { SlackModule } from './modules/slack/slack.module';
+import { RssModule } from './controllers/rss/rss.module';
+import { TypeOrmExModule } from './modules/typeorm-ex/typeorm-ex.module';
 
 @Module({
     imports: [
@@ -107,6 +109,8 @@ import { SlackModule } from './modules/slack/slack.module';
         PostTempModule,
         AopModule,
         SlackModule,
+        RssModule,
+        TypeOrmExModule,
     ],
     controllers: [AppController, HealthCheckController],
     providers: [
