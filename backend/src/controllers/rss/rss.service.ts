@@ -3,6 +3,7 @@ import { PostsService } from '../posts/posts.service';
 import * as RSS from 'rss';
 import * as nestCore from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
+import { DateTimeUtil } from 'src/libs/date/DateTimeUtil';
 
 @Injectable()
 export class RssService {
@@ -29,7 +30,8 @@ export class RssService {
                 title: post.title,
                 description: post.previewContent,
                 url: `${BLOG_URL}/posts/${post.id}`,
-                date: post.updatedAt,
+                date: post.uploadDate.toUTCString().replace('GMT', '+0000'),
+                author: '어진석(테스트)',
             });
         }
 
