@@ -1,4 +1,11 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import {
+    CacheInterceptor,
+    CacheModule,
+    CacheModuleAsyncOptions,
+    MiddlewareConsumer,
+    Module,
+    NestModule,
+} from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
@@ -8,7 +15,7 @@ import { UserModule } from './entities/user/user.module';
 import { ProfileModule } from './entities/profile/profile.module';
 import { AuthModule } from './controllers/auth/auth.module';
 import { AdminModule } from './entities/admin/admin.module';
-import { APP_FILTER, APP_GUARD } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { RolesGuard } from './controllers/auth/guards/roles.guard';
 import { AllExceptionFilter } from './exceptions/AllExceptionFilter.filter';
 import { EnvFileMap } from '@app/env/libs/types';
@@ -45,6 +52,7 @@ import { AopModule } from '@toss/nestjs-aop';
 import { SlackModule } from './modules/slack/slack.module';
 import { RssModule } from './controllers/rss/rss.module';
 import { TypeOrmExModule } from './modules/typeorm-ex/typeorm-ex.module';
+import { redisCacheConfig } from './micro-services/redis/redis.config';
 
 @Module({
     imports: [
@@ -73,6 +81,7 @@ import { TypeOrmExModule } from './modules/typeorm-ex/typeorm-ex.module';
                 };
             },
         }),
+        CacheModule.registerAsync(redisCacheConfig),
         ConfigModule.forRoot({
             envFilePath: <EnvFileMap>(
                 (AppModule.isDelvelopment() ? '.development.env' : '.env')
@@ -117,6 +126,10 @@ import { TypeOrmExModule } from './modules/typeorm-ex/typeorm-ex.module';
         {
             provide: APP_GUARD,
             useClass: RolesGuard,
+        },
+        {
+            provide: APP_INTERCEPTOR,
+            useClass: CacheInterceptor,
         },
         {
             provide: APP_FILTER,

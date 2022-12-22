@@ -140,8 +140,6 @@ export class PostsController {
                 queryRunner,
             );
 
-            this.logger.log(data);
-
             await queryRunner.commitTransaction();
 
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, data);

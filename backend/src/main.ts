@@ -56,6 +56,7 @@ export class NestBootstrapApplication {
             AppModule,
             {
                 ...winstonLogger,
+                logger: new Logger(), // chalk 버그 방지
             },
         );
         console.log('어플리케이션 초기화 완료');

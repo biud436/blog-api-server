@@ -18,5 +18,6 @@ import { SlackModule } from 'src/modules/slack/slack.module';
     ],
     controllers: [PostsController],
     providers: [PostsService],
+    exports: [PostsService],
 })
 export class PostsModule {}

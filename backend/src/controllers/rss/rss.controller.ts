@@ -6,10 +6,30 @@ import {
     Patch,
     Param,
     Delete,
+    Header,
+    CacheKey,
+    CacheTTL,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { CustomApiOkResponse } from 'src/decorators/custom.decorator';
 import { RssService } from './rss.service';
 
 @Controller('rss')
+@ApiTags('rss')
 export class RssController {
     constructor(private readonly rssService: RssService) {}
+
+    @Get()
+    @Header('Content-Type', 'application/xml')
+    @CacheKey('rss')
+    @CacheTTL(60 * 5)
+    @CustomApiOkResponse({
+        description: 'RSS 피드를 반환합니다.',
+        operation: {
+            summary: 'RSS 피드를 반환합니다.',
+        },
+    })
+    async getFeeds() {
+        return this.rssService.getFeeds();
+    }
 }

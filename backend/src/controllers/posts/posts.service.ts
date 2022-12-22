@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Cron } from '@nestjs/schedule';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { plainToClass } from 'class-transformer';
 import { decodeHtml, encodeHtml } from 'src/common/html-escpse';
 import { CategoryService } from 'src/entities/category/category.service';
@@ -26,7 +26,7 @@ export class PostsService {
     /**
      * 레디스에 적재된 조회수를 새벽에 RDBMS에 배치합니다.
      */
-    @Cron('0 0 0 * * *')
+    @Cron(CronExpression.EVERY_DAY_AT_1AM)
     async redisBatchStart() {
         const keys = await this.redisService.getKeys('post_view_count:*');
         if (keys.length > 0) {
