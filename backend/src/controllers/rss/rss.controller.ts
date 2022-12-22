@@ -9,12 +9,15 @@ import {
     Header,
     CacheKey,
     CacheTTL,
+    UseInterceptors,
+    CacheInterceptor,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CustomApiOkResponse } from 'src/decorators/custom.decorator';
 import { RssService } from './rss.service';
 
 @Controller('rss')
+@UseInterceptors(CacheInterceptor)
 @ApiTags('rss')
 export class RssController {
     constructor(private readonly rssService: RssService) {}

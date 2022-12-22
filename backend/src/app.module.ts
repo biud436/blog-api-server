@@ -128,10 +128,6 @@ import { redisCacheConfig } from './micro-services/redis/redis.config';
             useClass: RolesGuard,
         },
         {
-            provide: APP_INTERCEPTOR,
-            useClass: CacheInterceptor,
-        },
-        {
             provide: APP_FILTER,
             useClass: AllExceptionFilter,
         },
