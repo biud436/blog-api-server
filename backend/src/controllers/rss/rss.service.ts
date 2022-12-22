@@ -31,7 +31,7 @@ export class RssService {
                 description: post.previewContent,
                 url: `${BLOG_URL}/posts/${post.id}`,
                 date: post.uploadDate.toUTCString().replace('GMT', '+0000'),
-                author: '어진석(테스트)',
+                author: '어진석', // 하드 코딩 주의
             });
         }
 
