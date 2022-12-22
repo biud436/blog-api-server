@@ -20,9 +20,9 @@ export class RssController {
     constructor(private readonly rssService: RssService) {}
 
     @Get()
-    @Header('Content-Type', 'application/xml')
+    @Header('Content-Type', 'text/xml;charset=UTF-8')
     @CacheKey('rss')
-    @CacheTTL(60 * 5)
+    @CacheTTL(10)
     @CustomApiOkResponse({
         description: 'RSS 피드를 반환합니다.',
         operation: {
