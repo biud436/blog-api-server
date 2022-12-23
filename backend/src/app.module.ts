@@ -53,6 +53,7 @@ import { SlackModule } from './modules/slack/slack.module';
 import { RssModule } from './controllers/rss/rss.module';
 import { TypeOrmExModule } from './modules/typeorm-ex/typeorm-ex.module';
 import { redisCacheConfig } from './micro-services/redis/redis.config';
+import { MyBlogConfigModule } from './modules/config/my-config.module';
 
 @Module({
     imports: [
@@ -120,6 +121,7 @@ import { redisCacheConfig } from './micro-services/redis/redis.config';
         SlackModule,
         RssModule,
         TypeOrmExModule,
+        MyBlogConfigModule,
     ],
     controllers: [AppController, HealthCheckController],
     providers: [
