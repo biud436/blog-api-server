@@ -103,6 +103,24 @@ export class AuthController {
         );
     }
 
+    @Post('/regenerate/access-token')
+    @CustomApiOkResponse({
+        description: '토큰 재발급',
+        operation: {
+            description: '토큰 재발급',
+        },
+        auth: false,
+    })
+    async regenerateAccessToken(
+        @Req() req: Request,
+        @Res({
+            passthrough: true,
+        })
+        res: Response,
+    ) {
+        return this.authService.regenerateAccessToken(req, res);
+    }
+
     @Post('send-auth-code')
     @CustomApiOkResponse(DocsMapper.auth.POST.sendAuthCodeByEmail)
     async sendAuthCodeByEmail(@Body() data: SendAuthCodeRequestDto) {
@@ -150,7 +168,7 @@ export class AuthController {
         }
     }
 
-    @Post('verify-auth-code')
+    @Post('/verify-auth-code')
     @CustomApiOkResponse(DocsMapper.auth.POST.verifyAuthCode)
     async verifyAuthCode(@Body() data: VerifyAuthCodeRequestDto) {
         try {

@@ -11,6 +11,7 @@ import { CategoryService } from '../category/category.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Post } from './entities/post.entity';
+import { ConfigData } from 'src/modules/config/types/my-config.decorator';
 
 @Injectable()
 export class PostService {

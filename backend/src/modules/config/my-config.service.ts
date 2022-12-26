@@ -1,6 +1,7 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DiscoveryService, MetadataScanner, Reflector } from '@nestjs/core';
+import { MY_CONFIG_METADATA_KEY } from './types/my-config.decorator';
 
 @Injectable()
 export class MyBlogConfigService implements OnModuleInit {
@@ -40,6 +41,12 @@ export class MyBlogConfigService implements OnModuleInit {
         providers
             .filter((provider) => provider.isDependencyTreeStatic())
             .filter((e) => e.instance && Object.getPrototypeOf(e.instance))
+            .filter(({ instance, metatype }) => {
+                if (!instance || !metatype) {
+                    return false;
+                }
+                return true;
+            })
             .forEach((instanceWrapper) => {
                 const { instance } = instanceWrapper;
                 const className = instance.constructor.name;
@@ -52,6 +59,18 @@ export class MyBlogConfigService implements OnModuleInit {
                     prototype,
                     (key) => {
                         this.logger.log(`${className}.${instance[key].name}`);
+
+                        // 메타 데이터를 취득합니다.
+                        const targets = this.reflector.get(
+                            MY_CONFIG_METADATA_KEY,
+                            instance[key],
+                        );
+
+                        if (!targets) {
+                            return;
+                        }
+
+                        this.logger.log(`targets: ${targets}`);
                     },
                 );
             });

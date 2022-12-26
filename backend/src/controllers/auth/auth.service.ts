@@ -345,7 +345,9 @@ export class AuthService {
         req: Request,
         res: Response,
         options?: JwtSignOptions,
-    ): Promise<string> {
+    ): Promise<{
+        isRenew: boolean;
+    }> {
         const refreshToken = req.cookies.refresh_token;
 
         // 토큰이 없다면 오류
@@ -396,7 +398,9 @@ export class AuthService {
             ...getCookieSettingWithAccessToken(jwtSecretExpirationTime),
         });
 
-        return accessToken;
+        return {
+            isRenew: true,
+        };
     }
 
     /**

@@ -21,9 +21,5 @@ export class PostSubscriber implements EntitySubscriberInterface<Post> {
 
     async afterLoad(post: Post): Promise<void> {
         post.previewContent = removeMarkdown(post.content)?.slice(0, 100);
-        // post.previewContent = post.previewContent?.replace(
-        //     /(\r\n|\n|\r)/gm,
-        //     '',
-        // );
     }
 }
