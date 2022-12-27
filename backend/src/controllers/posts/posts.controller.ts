@@ -26,8 +26,6 @@ import {
     JwtGuard,
 } from 'src/decorators/custom.decorator';
 import { PageNumber } from 'src/decorators/page-number.decorator';
-import { UserInfo } from 'src/decorators/user.decorator';
-import { XApiUserId } from 'src/decorators/x-api-user-id.decorator';
 import { UserId } from 'src/decorators/user-id.decorator';
 import { CategoryService } from 'src/entities/category/category.service';
 import { CreatePostCommentDto } from 'src/entities/comments/dto/create-comment.dto';
@@ -35,9 +33,7 @@ import { CreatePostDto } from 'src/entities/post/dto/create-post.dto';
 import { UpdatePostDto } from 'src/entities/post/dto/update-post.dto';
 import { RESPONSE_MESSAGE } from 'src/libs/response/response';
 import { ResponseUtil } from 'src/libs/response/ResponseUtil';
-import { SlackHook } from 'src/modules/slack/slack.logger';
 import { DataSource } from 'typeorm';
-import { JwtPayload } from '../auth/validator/response.dto';
 import { PostsService } from './posts.service';
 import { PostSearchProperty } from './types/post-search-type';
 
@@ -49,6 +45,7 @@ export class PostsController {
     constructor(
         private readonly postsService: PostsService,
         private readonly categoryService: CategoryService,
+        // TODO: typeorm에 너무 강하게 커플링되는 부분
         @InjectDataSource() private readonly dataSource: DataSource,
     ) {}
 
@@ -82,28 +79,10 @@ export class PostsController {
             const res = await this.categoryService.getPostCountByCategories();
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
         } catch (e) {
-            return ResponseUtil.failureWrap(e);
-            // return ResponseUtil.failure({
-            //     message: '카테고리 카운트 정보를 조회할 수 없습니다.',
-            //     statusCode: 500,
-            // });
-        }
-    }
-
-    @Get('/sitemap')
-    @CustomApiOkResponse({
-        operation: {
-            summary: '사이트맵 데이터 조회',
-        },
-        description: '사이트맵 데이터 조회',
-    })
-    async getSitemap() {
-        try {
-            const res = await this.postsService.getSitemap();
-
-            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
-        } catch (e) {
-            return ResponseUtil.failureWrap(e);
+            return ResponseUtil.failure({
+                message: '카테고리 카운트 정보를 조회할 수 없습니다.',
+                statusCode: 500,
+            });
         }
     }
 
