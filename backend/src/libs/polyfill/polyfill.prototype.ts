@@ -14,27 +14,41 @@ declare module 'typeorm' {
         /**
          * 페이지네이션 설정입니다.
          * 조인이 설정된 경우, setPaginationWithJoin를 대신 사용하세요.
+         *
          * @param this
-         * @param pageNumber
+         * @param pageNumber 페이지 번호
+         * @param numberPerPage 페이지당 표시할 레코드 개수
          */
         setPagination(
             this: SelectQueryBuilder<Entity>,
             pageNumber?: number,
+            numberPerPage?: number,
         ): SelectQueryBuilder<Entity>;
 
         /**
          * 페이지네이션 설정입니다.
+         *
          * @param this
          * @param pageNumber
+         * @param numberPerPage
          */
         setPaginationWithJoin(
             this: SelectQueryBuilder<Entity>,
             pageNumber?: number,
+            numberPerPage?: number,
         ): SelectQueryBuilder<Entity>;
 
+        /**
+         * 페이지네이션이 설정된 쿼리를 실행합니다 (쿼리 파서 -> 결과 -> 엔티티에 바인딩 -> JSON)
+         *
+         * @param this
+         * @param pageNumber 페이지 번호
+         * @param numberPerPage 페이지당 표시할 레코드 개수
+         */
         getManyWithPagination(
             this: SelectQueryBuilder<Entity>,
             pageNumber: number,
+            numberPerPage?: number,
         ): Promise<
             | {
                   pagination: PaginationResult;
@@ -43,9 +57,17 @@ declare module 'typeorm' {
             | undefined
         >;
 
+        /**
+         * 페이지네이션이 설정된 쿼리를 실행합니다 (쿼리 파서 -> 결과 -> JSON)
+         *
+         * @param this
+         * @param pageNumber 페이지 번호
+         * @param numberPerPage 페이지당 표시할 레코드 개수
+         */
         getRawManyWithPagination(
             this: SelectQueryBuilder<Entity>,
             pageNumber: number,
+            numberPerPage?: number,
         ): Promise<
             | {
                   pagination: PaginationResult;
@@ -59,10 +81,11 @@ declare module 'typeorm' {
 SelectQueryBuilder.prototype.setPagination = function (
     this: SelectQueryBuilder<any>,
     pageNumber?: number,
+    numberPerPage?: number,
 ) {
-    this.offset(PaginationConfig.limit.numberPerPage * (pageNumber - 1)).limit(
-        PaginationConfig.limit.numberPerPage,
-    );
+    numberPerPage ??= PaginationConfig.limit.numberPerPage;
+
+    this.offset(numberPerPage * (pageNumber - 1)).limit(numberPerPage);
 
     return this;
 };
@@ -70,22 +93,24 @@ SelectQueryBuilder.prototype.setPagination = function (
 SelectQueryBuilder.prototype.setPaginationWithJoin = function (
     this: SelectQueryBuilder<any>,
     pageNumber?: number,
+    numberPerPage?: number,
 ) {
-    this.skip(PaginationConfig.limit.numberPerPage * (pageNumber - 1)).take(
-        PaginationConfig.limit.numberPerPage,
-    );
+    numberPerPage ??= PaginationConfig.limit.numberPerPage;
+
+    this.skip(numberPerPage * (pageNumber - 1)).take(numberPerPage);
 
     return this;
 };
 
 SelectQueryBuilder.prototype.getManyWithPagination = async function (
     pageNumber: number,
+    numberPerPage?: number,
 ) {
+    numberPerPage ??= PaginationConfig.limit.numberPerPage;
+
     const cloneQueryBuilder = this.clone();
     const totalCount = await cloneQueryBuilder.getCount();
-    const maxPage = Math.ceil(
-        totalCount / PaginationConfig.limit.numberPerPage,
-    );
+    const maxPage = Math.ceil(totalCount / numberPerPage);
 
     const maxBlock = Math.ceil(maxPage / PaginationConfig.limit.pagePerBlock);
     const currentBlock = Math.ceil(
@@ -113,14 +138,15 @@ SelectQueryBuilder.prototype.getManyWithPagination = async function (
 
 SelectQueryBuilder.prototype.getRawManyWithPagination = async function (
     pageNumber: number,
+    numberPerPage?: number,
 ) {
+    numberPerPage ??= PaginationConfig.limit.numberPerPage;
+
     const cloneQueryBuilder = this.clone();
 
     const totalCount = await this.getCount();
     const entities = await cloneQueryBuilder.getRawMany();
-    const maxPage = Math.ceil(
-        totalCount / PaginationConfig.limit.numberPerPage,
-    );
+    const maxPage = Math.ceil(totalCount / numberPerPage);
 
     const maxBlock = Math.ceil(maxPage / PaginationConfig.limit.pagePerBlock);
     const currentBlock = Math.ceil(
