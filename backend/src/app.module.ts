@@ -54,6 +54,7 @@ import { RssModule } from './controllers/rss/rss.module';
 import { TypeOrmExModule } from './modules/typeorm-ex/typeorm-ex.module';
 import { redisCacheConfig } from './micro-services/redis/redis.config';
 import { MyBlogConfigModule } from './modules/config/my-config.module';
+import { XMulterModule } from './modules/x-multer/x-multer.module';
 
 @Module({
     imports: [
@@ -72,15 +73,6 @@ import { MyBlogConfigModule } from './modules/config/my-config.module';
                 }
             },
             inject: [ConfigService],
-        }),
-        MulterModule.registerAsync({
-            useFactory: () => {
-                const isProduction = process.env.NODE_ENV === 'production';
-
-                return {
-                    ...getMyMulterOption(isProduction),
-                };
-            },
         }),
         CacheModule.registerAsync(redisCacheConfig),
         ConfigModule.forRoot({
@@ -122,6 +114,7 @@ import { MyBlogConfigModule } from './modules/config/my-config.module';
         RssModule,
         TypeOrmExModule,
         MyBlogConfigModule,
+        XMulterModule,
     ],
     controllers: [AppController, HealthCheckController],
     providers: [
