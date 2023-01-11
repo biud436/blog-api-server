@@ -13,6 +13,7 @@ import {
     UploadedFile,
     Param,
     Body,
+    DefaultValuePipe,
 } from '@nestjs/common';
 import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import {
@@ -148,9 +149,9 @@ export class ImageController {
         @Query('text') text: string,
         @Query('username') username: string,
         @Query('color') color: string,
-        @Query('textSize', ParseIntPipe) textSize = 60,
-        @Query('y', ParseIntPipe) y = 50,
-        // @Res({ passthrough: true }) res: Response,
+        @Query('textSize', new DefaultValuePipe(60), ParseIntPipe)
+        textSize = 60,
+        @Query('y', new DefaultValuePipe(50), ParseIntPipe) y = 50,
     ) {
         let login, name, followers;
 

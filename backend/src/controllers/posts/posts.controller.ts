@@ -9,6 +9,7 @@ import {
     Query,
     ParseIntPipe,
     Logger,
+    DefaultValuePipe,
 } from '@nestjs/common';
 import {
     ApiBody,
@@ -152,8 +153,10 @@ export class PostsController {
         enum: ['title', 'content'],
     })
     async searchPost(
-        @Query('pageNumber', ParseIntPipe) pageNumber: number,
-        @Query('searchProperty') searchProperty: PostSearchProperty,
+        @Query('pageNumber', new DefaultValuePipe(1), ParseIntPipe)
+        pageNumber: number,
+        @Query('searchProperty', new DefaultValuePipe('title'))
+        searchProperty: PostSearchProperty,
         @Query('searchQuery') searchQuery: string,
     ) {
         try {
