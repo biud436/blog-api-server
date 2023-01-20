@@ -54,9 +54,9 @@ export function CustomApiOkResponse(
         operation.summary = option.description;
     }
 
-    const operationOption: ApiOperationData = {
+    const operationOption = {
         ...operation,
-    };
+    } as ApiOperationData;
     const { type, schema, ...partial } = option;
 
     if (option.requestBody) {

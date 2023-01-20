@@ -58,7 +58,7 @@ export class MyBlogConfigService implements OnModuleInit {
                     instance,
                     prototype,
                     (key) => {
-                        this.logger.log(`${className}.${instance[key].name}`);
+                        // this.logger.log(`${className}.${instance[key].name}`);
 
                         // 메타 데이터를 취득합니다.
                         const targets = this.reflector.get(
@@ -70,7 +70,7 @@ export class MyBlogConfigService implements OnModuleInit {
                             return;
                         }
 
-                        this.logger.log(`targets: ${targets}`);
+                        // this.logger.log(`targets: ${targets}`);
                     },
                 );
             });
