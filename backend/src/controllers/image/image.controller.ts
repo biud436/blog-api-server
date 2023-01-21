@@ -47,6 +47,7 @@ import { IResponsableData } from 'src/libs/response/interface/response.interface
 import { S3ImageUploadDto } from './dto/s3-image-upload.dto';
 import { UserId } from 'src/decorators/user-id.decorator';
 import Handlebars from 'handlebars';
+import { ImageCreateSvgCommand } from './commands/image-create-svg.command';
 
 @Controller('image')
 @ApiTags('이미지')
@@ -55,7 +56,7 @@ export class ImageController {
 
     constructor(
         private readonly imageService: ImageService,
-        private readonly httpService: HttpService,
+        private readonly createSvgCommand: ImageCreateSvgCommand,
         @InjectDataSource() private readonly dataSource: DataSource,
     ) {}
 
@@ -153,54 +154,12 @@ export class ImageController {
         textSize = 60,
         @Query('y', new DefaultValuePipe(50), ParseIntPipe) y = 50,
     ) {
-        let login, name, followers;
-
-        try {
-            const { data } = (await this.httpService.axiosRef.get(
-                `https://api.github.com/users/${username}`,
-            )) as Record<string, any>;
-
-            // const { login, name, public_repos, followers } = data;
-            login = data.login;
-            name = data.name;
-            followers = data.followers;
-        } catch {
-            name = 'TEST';
-            followers = 0;
-            login = 'TEST';
-        }
-
-        const parameters = {
-            name: name ?? login,
-            followers: followers ?? 0,
-            date: new Date().toLocaleTimeString(),
-        };
-
-        return {
-            ...parameters,
-            texts: (() => {
-                return text.split('').map((char, index) => {
-                    const x = 10 + index * 20;
-                    const endX = -50 + x;
-
-                    return {
-                        x,
-                        y,
-
-                        color,
-                        smoothTrailPath: `M${x - 20},20 C${x},-20 ${
-                            x + 40
-                        },80 ${x},20 C${40 - 20 + x} ${
-                            y + 20
-                        },80 ${endX}-15,20 z`,
-
-                        textSize,
-                        className:
-                            index % 3 === 0 ? 'ping-pong' : 'ping-pong-2',
-                        content: char,
-                    };
-                });
-            })(),
-        };
+        return await this.createSvgCommand.execute(
+            text,
+            username,
+            color,
+            textSize,
+            y,
+        );
     }
 }

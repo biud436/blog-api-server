@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { UserService } from 'src/entities/user/user.service';
 import { CryptoUtil } from 'src/libs/crypto/CryptoUtil';
 
@@ -18,7 +18,7 @@ export class ImageTempFileGetterCommandImpl extends ImageTempFileGetterCommand {
         );
 
         if (!filename2) {
-            throw new Error('해당 유저는 존재하지 않습니다.');
+            throw new BadRequestException('해당 유저는 존재하지 않습니다.');
         }
 
         const hashFile = CryptoUtil.uuid().replace(/-/gi, '');

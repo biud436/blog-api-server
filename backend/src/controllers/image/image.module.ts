@@ -32,6 +32,10 @@ import {
     ImageDeleteCommand,
     ImageDeleteCommandImpl,
 } from './commands/image-delete.command';
+import {
+    ImageCreateSvgCommand,
+    ImageCreateSvgCommandImpl,
+} from './commands/image-create-svg.command';
 
 @Module({
     imports: [
@@ -67,6 +71,10 @@ import {
         {
             provide: ImageDeleteCommand,
             useClass: ImageDeleteCommandImpl,
+        },
+        {
+            provide: ImageCreateSvgCommand,
+            useClass: ImageCreateSvgCommandImpl,
         },
     ],
     exports: [ImageService],

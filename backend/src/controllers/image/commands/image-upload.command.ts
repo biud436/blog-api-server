@@ -95,7 +95,7 @@ export class ImageUploadCommandImpl extends ImageUploadCommand {
                 );
                 if (result) {
                     this.logger.log(
-                        `-- ${file.originalname} 이미지 업로드 완료 --`,
+                        `-- ${file.originalname} has completed uploading.`,
                     );
                 }
 
