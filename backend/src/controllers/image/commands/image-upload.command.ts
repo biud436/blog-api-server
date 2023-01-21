@@ -27,6 +27,54 @@ export class ImageUploadCommandImpl extends ImageUploadCommand {
         super();
     }
 
+    /**
+     * 키 값에서 파일명을 추출합니다.
+     *
+     * @param key
+     * @returns
+     */
+    extractFilenameFromKey(key: string) {
+        if (!key.includes('.')) {
+            return key;
+        }
+        return key.split('.')[0];
+    }
+
+    /**
+     * CreateImageDto를 생성합니다.
+     *
+     * @param postId
+     * @param key
+     * @param file
+     * @returns
+     */
+    getValidDto(postId: number, key: string, file: MulterS3File) {
+        return <CreateImageDto>{
+            filename: key,
+            originalname: file.originalname,
+            destination: file.location,
+            size: file.size,
+            mimetype: file.mimetype,
+            encoding: file['encoding'],
+            fieldname: file.fieldname,
+            path: file.location,
+            postId, // 특정 포스트와 연결
+        };
+    }
+
+    /**
+     * 20분간 유효한 이미지 아이디 (키)를 레디스에 저장합니다.
+     *
+     * @param userId
+     * @param imageId
+     */
+    async saveTemporarilyImageIds(userId: number, imageId: number) {
+        await this.redisService.saveTemporarilyImageIds(
+            userId.toString(),
+            imageId.toString(),
+        );
+    }
+
     async execute(
         userId: number,
         files: MulterS3File[],
@@ -38,19 +86,8 @@ export class ImageUploadCommandImpl extends ImageUploadCommand {
 
         try {
             for (const file of files) {
-                const key = file.key.split('.')[0];
-
-                const dto = <CreateImageDto>{
-                    filename: key,
-                    originalname: file.originalname,
-                    destination: file.location,
-                    size: file.size,
-                    mimetype: file.mimetype,
-                    encoding: file['encoding'],
-                    fieldname: file.fieldname,
-                    path: file.location,
-                    postId, // 특정 포스트와 연결
-                };
+                const key = this.extractFilenameFromKey(file.key);
+                const dto = this.getValidDto(postId, key, file);
 
                 const result = await this.createCommand.execute(
                     dto,
@@ -62,10 +99,7 @@ export class ImageUploadCommandImpl extends ImageUploadCommand {
                     );
                 }
 
-                await this.redisService.saveTemporarilyImageIds(
-                    userId + '',
-                    result.id + '',
-                );
+                await this.saveTemporarilyImageIds(userId, result.id);
             }
 
             await queryRunner.commitTransaction();
