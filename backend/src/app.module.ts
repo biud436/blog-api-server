@@ -113,7 +113,9 @@ import { XMulterModule } from './modules/x-multer/x-multer.module';
         SlackModule,
         RssModule,
         TypeOrmExModule,
-        MyBlogConfigModule,
+        MyBlogConfigModule.register({
+            isGlobal: true,
+        }),
         XMulterModule,
     ],
     controllers: [AppController, HealthCheckController],

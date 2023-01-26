@@ -1,5 +1,5 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { ConfigModuleOptions, ConfigService } from '@nestjs/config';
 import { DiscoveryService, MetadataScanner, Reflector } from '@nestjs/core';
 import { MY_CONFIG_METADATA_KEY } from './types/my-config.decorator';
 
@@ -12,6 +12,7 @@ export class MyBlogConfigService implements OnModuleInit {
         private readonly discoveryService: DiscoveryService,
         private readonly metadataScanner: MetadataScanner,
         private readonly reflector: Reflector,
+        @Inject('CONFIG_OPTIONS') private readonly options: ConfigModuleOptions,
     ) {}
 
     async onModuleInit() {
@@ -58,8 +59,6 @@ export class MyBlogConfigService implements OnModuleInit {
                     instance,
                     prototype,
                     (key) => {
-                        // this.logger.log(`${className}.${instance[key].name}`);
-
                         // 메타 데이터를 취득합니다.
                         const targets = this.reflector.get(
                             MY_CONFIG_METADATA_KEY,
@@ -69,10 +68,10 @@ export class MyBlogConfigService implements OnModuleInit {
                         if (!targets) {
                             return;
                         }
-
-                        // this.logger.log(`targets: ${targets}`);
                     },
                 );
             });
+
+        console.log(this.options);
     }
 }
