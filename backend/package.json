@@ -61,6 +61,7 @@
         "hbs": "^4.2.0",
         "helmet": "^5.1.0",
         "inquirer": "^8.2.0",
+        "joi": "^17.7.0",
         "markdown-to-text": "^0.1.1",
         "multer-s3": "^3.0.1",
         "mysql2": "^2.3.3",

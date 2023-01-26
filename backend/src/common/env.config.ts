@@ -1,0 +1,43 @@
+import * as Joi from 'joi';
+
+const schema = {
+    validationSchema: Joi.object({
+        DB_HOST: Joi.string().required(),
+        DB_PASSWORD: Joi.string().required(),
+        DB_USER: Joi.string().required(),
+        DB_NAME: Joi.string().required(),
+        DB_SESSION_NAME: Joi.string().required(),
+        DB_PORT: Joi.number().required(),
+        DOCS_USERNAME: Joi.string().required(),
+        DOCS_PASSWORD: Joi.string().required(),
+        JWT_SECRET: Joi.string().required(),
+        JWT_SECRET_EXPIRATION_TIME: Joi.string().required(),
+        JWT_REFRESH_TOKEN_SECRET: Joi.string().required(),
+        JWT_REFRESH_TOKEN_EXPIRATION_TIME: Joi.string().required(),
+        PUBLIC_SERVER_IP: Joi.string().required(),
+        PASSWORD_JWT_SECRET: Joi.string().required(),
+        MAIL_XOR_KEY: Joi.string().required(),
+        GMAIL_USERNAME: Joi.string().required(),
+        GMAIL_PASSWORD: Joi.string().required(),
+        DAUM_USERNAME: Joi.string().required(),
+        DAUM_PASSWORD: Joi.string().required(),
+        NAVER_USERNAME: Joi.string().required(),
+        NAVER_PASSWORD: Joi.string().required(),
+        AES_256_KEY: Joi.string().required(),
+        AES_256_IV: Joi.string().required(),
+        GITHUB_CLIENT_ID: Joi.string().required(),
+        GITHUB_CLIENT_SECRET: Joi.string().required(),
+        GITHUB_CALLBACK_URL: Joi.string().required(),
+        APP_SECRET: Joi.string().required(),
+        GITHUB_REDIRECT_URI: Joi.string().required(),
+        AWS_ACCESS_KEY_ID: Joi.string().required(),
+        AWS_SECRET_ACCESS_KEY: Joi.string().required(),
+        AWS_S3_BUCKET_NAME: Joi.string().required(),
+        SLACK_WEBHOOK_URL: Joi.string().required(),
+        BLOG_URL: Joi.string().required(),
+        REDIS_HOST: Joi.string().required(),
+        REDIS_PORT: Joi.number().required(),
+    }),
+} as const;
+
+export default schema;
