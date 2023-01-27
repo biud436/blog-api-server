@@ -55,6 +55,8 @@ import { TypeOrmExModule } from './modules/typeorm-ex/typeorm-ex.module';
 import { redisCacheConfig } from './micro-services/redis/redis.config';
 import { MyBlogConfigModule } from './modules/config/my-config.module';
 import { XMulterModule } from './modules/x-multer/x-multer.module';
+import { HealthCheckModule } from './controllers/health-check/health-check.module';
+import { HealthCheckConstant } from './controllers/health-check/health-check.constant';
 
 @Module({
     imports: [
@@ -85,7 +87,6 @@ import { XMulterModule } from './modules/x-multer/x-multer.module';
             rootPath: join(__dirname, '..', 'public'),
         }),
         ScheduleModule.forRoot(),
-        TerminusModule,
         HttpModule,
         OrmModule,
         UserModule,
@@ -116,9 +117,17 @@ import { XMulterModule } from './modules/x-multer/x-multer.module';
         MyBlogConfigModule.register({
             isGlobal: true,
         }),
+        HealthCheckModule.register({
+            pingCheck: {
+                url: 'https://google.co.kr',
+            },
+            checkHeap: {
+                heapUsedThreshold: HealthCheckConstant.DEFAULT_HEAP_SIZE,
+            },
+        }),
         XMulterModule,
     ],
-    controllers: [AppController, HealthCheckController],
+    controllers: [AppController],
     providers: [
         {
             provide: APP_GUARD,
