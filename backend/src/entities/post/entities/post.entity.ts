@@ -6,6 +6,7 @@ import {
     Column,
     DeleteDateColumn,
     Entity,
+    Index,
     JoinColumn,
     ManyToOne,
     OneToMany,
@@ -36,18 +37,17 @@ export class Post {
         nullable: false,
         name: 'category_id',
     })
-    // @Exclude()
     categoryId: number;
 
-    // @Column({
-    //     nullable: false,
-    // })
-    // firstCategoryId: number;
-
-    // @Column({
-    //     nullable: false,
-    // })
-    // secondCategoryId: number;
+    /**
+     * 비공개 여부
+     */
+    @Column({
+        nullable: false,
+        default: 0,
+    })
+    @Index()
+    isPrivate: boolean;
 
     /**
      * 제목

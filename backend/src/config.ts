@@ -58,6 +58,7 @@ export default (configService: ConfigService): DBConnectionType => {
         dev: {
             ...defaultOption,
             synchronize: true,
+            // logging: true,
         },
         production: {
             type: 'mysql',

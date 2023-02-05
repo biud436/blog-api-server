@@ -23,7 +23,6 @@ import { PostTemp } from 'src/entities/post-temp/entities/post-temp.entity';
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
-    @Exclude()
     id: number;
 
     @Column({

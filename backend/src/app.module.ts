@@ -57,6 +57,7 @@ import { MyBlogConfigModule } from './modules/config/my-config.module';
 import { XMulterModule } from './modules/x-multer/x-multer.module';
 import { HealthCheckModule } from './controllers/health-check/health-check.module';
 import { HealthCheckConstant } from './controllers/health-check/health-check.constant';
+import { PrivatePostGuard } from './controllers/auth/guards/private-post.guard';
 
 @Module({
     imports: [
@@ -132,6 +133,10 @@ import { HealthCheckConstant } from './controllers/health-check/health-check.con
         {
             provide: APP_GUARD,
             useClass: RolesGuard,
+        },
+        {
+            provide: APP_GUARD,
+            useClass: PrivatePostGuard,
         },
         {
             provide: APP_FILTER,

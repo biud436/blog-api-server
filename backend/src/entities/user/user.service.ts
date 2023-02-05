@@ -14,7 +14,7 @@ export type UserLoginValidationInfo = {
     isCorrectPassword: boolean;
     userInfo: Omit<
         User,
-        'password' | 'hashPassword' | 'savePassword' | 'id' | 'profileId'
+        'password' | 'hashPassword' | 'savePassword' | 'profileId'
     >;
 };
 
@@ -94,7 +94,7 @@ export class UserService {
         return await qb;
     }
 
-    async getUserID(username: string) {
+    async getUserId(username: string) {
         const qb = this.userRepository
             .createQueryBuilder('user')
             .select('user.id')
@@ -102,6 +102,18 @@ export class UserService {
                 username,
             })
             .getOneOrFail();
+
+        return await qb;
+    }
+
+    async getUserIdWithoutFail(username: string) {
+        const qb = this.userRepository
+            .createQueryBuilder('user')
+            .select('user.id')
+            .where('user.username = :username', {
+                username,
+            })
+            .getOne();
 
         return await qb;
     }

@@ -68,10 +68,14 @@ export class PostsService {
      * @param postId
      * @returns
      */
-    async findOne(postId: number) {
+    async findOne(postId: number, isPrivate?: boolean, anonymousId?: number) {
         let totalCount = '0';
 
-        const item = await this.postService.findOne(postId);
+        const item = await this.postService.findOne(
+            postId,
+            isPrivate,
+            anonymousId,
+        );
 
         if (item) {
             await this.redisService.increasePostViewCount(postId);

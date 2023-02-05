@@ -22,7 +22,7 @@ export class MyBlogConfigService implements OnModuleInit {
         for (const controller of controllers) {
             const { instance, name } = controller;
 
-            this.logger.debug(`Controller: ${name} ${Object.keys(instance)}`);
+            // this.logger.debug(`Controller: ${name} ${Object.keys(instance)}`);
         }
 
         for (const provider of providers) {
@@ -30,9 +30,9 @@ export class MyBlogConfigService implements OnModuleInit {
 
             // 싱글턴 프로바이더만 출력
             if (provider.isDependencyTreeStatic()) {
-                this.logger.debug(`isDependencyTreeStatic - Provider: ${name}`);
+                // this.logger.debug(`isDependencyTreeStatic - Provider: ${name}`);
             } else {
-                this.logger.debug(`Provider: ${name}`);
+                // this.logger.debug(`Provider: ${name}`);
             }
         }
 
@@ -72,6 +72,6 @@ export class MyBlogConfigService implements OnModuleInit {
                 );
             });
 
-        console.log(this.options);
+        // console.log(this.options);
     }
 }

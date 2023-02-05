@@ -6,7 +6,7 @@ export class ParseUserIdPipe implements PipeTransform {
     constructor(private readonly userService: UserService) {}
 
     async transform(value: any, metadata: ArgumentMetadata): Promise<number> {
-        const user = await this.userService.getUserID(value.user.username);
+        const user = await this.userService.getUserId(value.user.username);
 
         return user.id;
     }

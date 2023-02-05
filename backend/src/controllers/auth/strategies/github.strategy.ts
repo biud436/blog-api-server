@@ -41,9 +41,6 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
     ) {
         // accessToken & refreshToken 저장 필요
 
-        console.log(accessToken);
-        console.log(profile);
-
         // 비동기 처리가 제대로 되지 않음.
         const user = await this.userCopyService.create({
             username: profile.id,

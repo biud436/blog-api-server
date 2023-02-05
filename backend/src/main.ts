@@ -144,6 +144,7 @@ export class NestBootstrapApplication {
         app.use(passport.session());
 
         app.use(cookieParser());
+
         app.enableCors({
             origin:
                 process.env.NODE_ENV === 'production'

@@ -10,6 +10,7 @@ import {
     ParseBoolPipe,
     ParseIntPipe,
     HttpStatus,
+    Req,
 } from '@nestjs/common';
 import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';
 import {
@@ -40,6 +41,7 @@ import { DataSource } from 'typeorm';
 import { AdminService } from './admin.service';
 import { ChangeCategoryDto } from './dto/change-category.dto';
 import { NewCategoryDto } from './dto/new-category.dto';
+import { Request } from 'express';
 
 @Controller('admin')
 @ApiTags('관리자')
@@ -181,6 +183,7 @@ export class AdminController {
             'true면 트리를 JSON으로 보기 좋게 출력하고, false면 flat 모드로 출력합니다.',
     })
     async getDepthList(
+        @Req() req: Request,
         @Query('isBeautify', ParseBoolPipe) isBeautify: boolean,
     ) {
         try {
