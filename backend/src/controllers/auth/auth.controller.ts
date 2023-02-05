@@ -40,6 +40,13 @@ import { HttpService } from '@nestjs/axios';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { AxiosResponse } from '@nestjs/terminus/dist/health-indicator/http/axios.interfaces';
 import { GithubTokenResponse, GithubUserData } from './validator/github.dto';
+import { PrivatePostGuard } from './guards/private-post.guard';
+import {
+    Anonymous,
+    IsReadablePrivatePost,
+} from 'src/decorators/anonymous.decorator';
+import { PostId } from 'src/decorators/post-id.decorator';
+import { PostsService } from '../posts/posts.service';
 
 @Controller('auth')
 @ApiTags('인증 API')
@@ -50,6 +57,7 @@ export class AuthController {
         private readonly authService: AuthService,
         private readonly configService: ConfigService,
         private readonly httpService: HttpService,
+        private readonly postsService: PostsService,
     ) {}
 
     @Post('/login')

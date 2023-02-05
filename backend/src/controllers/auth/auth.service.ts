@@ -35,7 +35,6 @@ import { ApiKeyService } from 'src/entities/api-key/api-key.service';
 import { User } from 'src/entities/user/entities/user.entity';
 import { Role } from 'src/decorators/role.enum';
 import { HttpService } from '@nestjs/axios';
-import qs from 'qs';
 import { GithubUserData } from './validator/github.dto';
 import { LocalDate, LocalDateTime } from '@js-joda/core';
 

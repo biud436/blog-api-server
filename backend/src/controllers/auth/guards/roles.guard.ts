@@ -48,10 +48,6 @@ export class RolesGuard implements CanActivate {
         if (!decoded) {
             return false;
         }
-        console.log(
-            '토큰 유효성 확인중 ' +
-                requiredRoles.some((role) => decoded.role?.includes(role)),
-        );
 
         return requiredRoles.some((role) => decoded.role?.includes(role));
     }

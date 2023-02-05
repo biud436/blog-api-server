@@ -10,6 +10,8 @@ import {
     ParseIntPipe,
     Logger,
     DefaultValuePipe,
+    UseGuards,
+    Req,
 } from '@nestjs/common';
 import {
     ApiBody,
@@ -27,7 +29,14 @@ import {
     JwtGuard,
 } from 'src/decorators/custom.decorator';
 import { PageNumber } from 'src/decorators/page-number.decorator';
+import { PostId } from 'src/decorators/post-id.decorator';
 import { UserId } from 'src/decorators/user-id.decorator';
+import {
+    Anonymous,
+    AnonymousId,
+    IsReadablePrivatePost,
+} from 'src/decorators/anonymous.decorator';
+import { UserInfo } from 'src/decorators/user.decorator';
 import { CategoryService } from 'src/entities/category/category.service';
 import { CreatePostCommentDto } from 'src/entities/comments/dto/create-comment.dto';
 import { CreatePostDto } from 'src/entities/post/dto/create-post.dto';
@@ -35,8 +44,10 @@ import { UpdatePostDto } from 'src/entities/post/dto/update-post.dto';
 import { RESPONSE_MESSAGE } from 'src/libs/response/response';
 import { ResponseUtil } from 'src/libs/response/ResponseUtil';
 import { DataSource } from 'typeorm';
+import { PrivatePostGuard } from '../auth/guards/private-post.guard';
 import { PostsService } from './posts.service';
 import { PostSearchProperty } from './types/post-search-type';
+import { Request } from 'express';
 
 @Controller('posts')
 @ApiTags('블로그 API')
@@ -187,7 +198,7 @@ export class PostsController {
             description: '포스트를 삭제합니다',
         },
     })
-    async deletePost(@Param('id', ParseIntPipe) postId: number) {
+    async deletePost(@PostId() postId: number) {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
@@ -218,7 +229,7 @@ export class PostsController {
         },
     })
     async updatePost(
-        @Param('id', ParseIntPipe) postId: number,
+        @PostId() postId: number,
         @UserId() userId: number,
         @Body() updatePostDto: UpdatePostDto,
     ) {
@@ -256,9 +267,6 @@ export class PostsController {
     })
     async findAll(
         @PageNumber('page') page: number,
-        /**
-         * optional이므로, ParseIntPipe를 제외하였음.
-         */
         @Query('categoryId') categoryId?: number,
     ) {
         try {
@@ -283,7 +291,7 @@ export class PostsController {
         description: '부모 댓글 아이디',
     })
     async readComments(
-        @Param('id', ParseIntPipe) postId: number,
+        @PostId() postId: number,
         @PageNumber('page') pageNumber: number,
         @Query('parentCommentId', ParseIntPipe) parentCommentId?: number,
     ) {
@@ -300,10 +308,25 @@ export class PostsController {
     }
 
     @Get(':id')
+    @Anonymous()
+    @UseGuards(PrivatePostGuard)
     @CustomApiOkResponse(DocsMapper.posts.GET.findOne)
-    async findOne(@Param('id', ParseIntPipe) postId: number) {
+    async findOne(
+        @PostId() postId: number,
+        @IsReadablePrivatePost() IsReadablePrivatePost?: boolean,
+        @AnonymousId() anonymousId?: number,
+    ) {
         try {
-            const model = await this.postsService.findOne(postId);
+            console.log(
+                `비공개 글을 읽을 수 있는가? => ${IsReadablePrivatePost} ${anonymousId}`,
+            );
+            const model = await this.postsService.findOne(
+                postId,
+                IsReadablePrivatePost,
+                anonymousId,
+            );
+
+            console.log(model);
 
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, model);
         } catch (e) {

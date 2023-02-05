@@ -204,7 +204,7 @@ export class PostService {
      * @param postId
      * @returns
      */
-    async findOne(postId: number) {
+    async findOne(postId: number, isPrivate?: boolean, anonymousId?: number) {
         const qb = this.postRepository
             .createQueryBuilder('post')
             .select()
@@ -214,6 +214,13 @@ export class PostService {
             .leftJoinAndSelect('post.images', 'images')
             .where('post.deletedAt IS NULL')
             .andWhere('post.id = :postId', { postId });
+
+        if (isPrivate) {
+            qb.andWhere('post.isPrivate >= 0');
+            qb.andWhere('user.id = :anonymousId', { anonymousId });
+        } else {
+            qb.andWhere('post.isPrivate = 0');
+        }
 
         const item = await qb.getOneOrFail();
 
@@ -247,6 +254,7 @@ export class PostService {
             qb.andWhere('post.categoryId IN (:...ids)', { ids });
         }
 
+        qb.andWhere('post.isPrivate = 0');
         qb.orderBy('post.uploadDate', 'DESC');
 
         const items = await qb
@@ -309,6 +317,8 @@ export class PostService {
                 searchQuery: `%${searchQuery}%`,
             });
         }
+
+        qb.andWhere('post.isPrivate = 0');
 
         qb.orderBy('post.uploadDate', 'DESC');
 
