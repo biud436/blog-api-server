@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Profile } from '../../profile/entities/profile.entity';
 import * as bcrypt from 'bcrypt';
-import { Exclude } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 import {
     BeforeInsert,
     Column,
@@ -19,6 +19,7 @@ import { ApiKey } from 'src/entities/api-key/entities/api-key.entity';
 import { Department } from 'src/entities/department/entities/department.entity';
 import { BlogMetaData } from 'src/entities/blog-meta-data/entities/blog-meta-data.entity';
 import { PostTemp } from 'src/entities/post-temp/entities/post-temp.entity';
+import { Role } from 'src/decorators/role.enum';
 
 @Entity()
 export class User {
@@ -76,6 +77,19 @@ export class User {
     })
     @Exclude()
     password: string;
+
+    @Expose({
+        name: 'role',
+    })
+    get role() {
+        const adminRoles = this.admins ?? [];
+
+        if (adminRoles.length > 0) {
+            return Role.Admin;
+        }
+
+        return Role.User;
+    }
 
     async hashPassword(password: string) {
         this.password = await bcrypt.hash(password, 10);

@@ -5,22 +5,21 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import { AuthService } from '../auth.service';
 import { Request } from 'express';
+import { AES256Provider } from 'src/modules/aes/aes-256.provider';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-    constructor(
-        private readonly authService: AuthService,
-        configService: ConfigService,
-    ) {
+    constructor(readonly configService: ConfigService) {
         super({
-            // jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             jwtFromRequest: ExtractJwt.fromExtractors([
                 (req: Request) => {
-                    return req?.cookies?.access_token;
+                    const encodedToken = req?.cookies?.access_token;
+
+                    return encodedToken;
                 },
             ]),
             ignoreExpiration: false,
-            secretOrKey: configService.get('JWT_SECRET'),
+            secretOrKey: configService.getOrThrow('JWT_SECRET'),
         });
     }
 

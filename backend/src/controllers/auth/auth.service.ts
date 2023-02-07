@@ -37,6 +37,9 @@ import { Role } from 'src/decorators/role.enum';
 import { HttpService } from '@nestjs/axios';
 import { GithubUserData } from './validator/github.dto';
 import { LocalDate, LocalDateTime } from '@js-joda/core';
+import { AES256Provider } from 'src/modules/aes/aes-256.provider';
+import { Paginatable } from 'src/common/list-config';
+import { ConnectInfoService } from 'src/entities/connect-info/connect-info.service';
 
 export type AvailableEmailList =
     | `${string}@gmail.com`
@@ -94,6 +97,8 @@ export class AuthService {
         private readonly apiKeyService: ApiKeyService,
         private readonly dataSource: DataSource,
         private readonly httpService: HttpService,
+        private readonly aes256Provider: AES256Provider,
+        private readonly connectInfoService: ConnectInfoService,
     ) {}
 
     /**
@@ -121,8 +126,10 @@ export class AuthService {
             const refreshToken = await this.jwtService.signAsync(payload, <
                 JwtSignOptions
             >{
-                secret: this.configService.get('JWT_REFRESH_TOKEN_SECRET'),
-                expiresIn: this.configService.get(
+                secret: this.configService.getOrThrow(
+                    'JWT_REFRESH_TOKEN_SECRET',
+                ),
+                expiresIn: this.configService.getOrThrow(
                     'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
                 ),
                 algorithm: 'HS384',
@@ -140,6 +147,13 @@ export class AuthService {
 
             throw new InternalServerErrorException(e.message);
         }
+    }
+
+    async createConnectInfo(ip: string) {
+        await this.connectInfoService.create({
+            ip: ip,
+            userAgent: 'unknown',
+        });
     }
 
     /**
@@ -171,9 +185,12 @@ export class AuthService {
                 this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME'),
             );
 
-        res.cookie('access_token', token.accessToken, <CookieOptions>{
+        const encodedAccess = token.accessToken;
+        const encodedRefresh = token.refreshToken;
+
+        res.cookie('access_token', encodedAccess, <CookieOptions>{
             ...getCookieSettingWithAccessToken(jwtSecretExpirationTime),
-        }).cookie('refresh_token', token.refreshToken, <CookieOptions>{
+        }).cookie('refresh_token', encodedRefresh, <CookieOptions>{
             ...getCookieSettingWithRefreshToken(jwtRefreshTokenExpirationTime),
         });
 
@@ -347,7 +364,9 @@ export class AuthService {
     ): Promise<{
         isRenew: boolean;
     }> {
-        const refreshToken = req.cookies.refresh_token;
+        const refreshToken = this.aes256Provider.decrypt(
+            req.cookies.refresh_token,
+        );
 
         // 토큰이 없다면 오류
         if (!refreshToken) {
@@ -393,7 +412,8 @@ export class AuthService {
             this.configService.get('JWT_SECRET_EXPIRATION_TIME'),
         );
 
-        res.cookie('access_token', accessToken, <CookieOptions>{
+        const encodedAccessToken = this.aes256Provider.encrypt(accessToken);
+        res.cookie('access_token', encodedAccessToken, <CookieOptions>{
             ...getCookieSettingWithAccessToken(jwtSecretExpirationTime),
         });
 
@@ -532,13 +552,9 @@ export class AuthService {
                 throw new UnauthorizedException('유저 데이터가 없습니다 [1]');
             }
 
-            console.time('getProfile');
-
             const profileUser = await this.userService.findProfileByUsername(
                 user.username,
             );
-
-            console.timeEnd('getProfile');
 
             if (!profileUser) {
                 throw new UnauthorizedException('유저 데이터가 없습니다 [2]');
@@ -565,10 +581,28 @@ export class AuthService {
         }
     }
 
+    async getUserList(pageNumber: number) {
+        try {
+            const users = await this.userService.getUserList(pageNumber);
+
+            return ResponseUtil.successWrap(
+                {
+                    message: '유저 목록',
+                    statusCode: 200,
+                },
+                users,
+            );
+        } catch (e) {
+            throw new InternalServerErrorException(e.message);
+        }
+    }
+
     /**
      * ? 1. Request a user's GitHub identity
      * https://docs.github.com/en/developers/apps/building-oauth-apps/authorizing-oauth-apps#1-request-a-users-github-identity
      * /auth/github/callback
+     *
+     * @deprecated
      * @returns {Promise<any>}
      */
     async requestGithubUserIdentity() {
@@ -610,6 +644,8 @@ export class AuthService {
      * ? 2. Users are redirected back to your site by GitHub
      * https://docs.github.com/en/developers/apps/building-oauth-apps/authorizing-oauth-apps#2-users-are-redirected-back-to-your-site-by-github
      * /github/login
+     *
+     * @deprecated
      */
     async loginGithubUser(code: string, state: string) {
         const serverState = await this.redisService.get('github_state');
@@ -676,7 +712,7 @@ export class AuthService {
     /**
      * 깃허브 유저 데이터를 가져옵니다.
      *
-     * @param param0
+     * @deprecated
      * @returns
      */
     async getGithubUserData({

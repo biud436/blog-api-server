@@ -22,6 +22,8 @@ import { SlackModule } from 'src/modules/slack/slack.module';
 import { PrivatePostGuard } from './guards/private-post.guard';
 import { PostsModule } from '../posts/posts.module';
 import { APP_GUARD } from '@nestjs/core';
+import { AesModule } from 'src/modules/aes/aes.module';
+import { ConnectInfoModule } from 'src/entities/connect-info/connect-info.module';
 
 @Module({
     imports: [
@@ -35,6 +37,8 @@ import { APP_GUARD } from '@nestjs/core';
         HttpModule,
         ApiKeyModule,
         PostsModule,
+        AesModule,
+        ConnectInfoModule,
         PassportModule.register({ defaultStrategy: 'jwt', session: true }),
         JwtModule.registerAsync({
             imports: [ConfigModule],

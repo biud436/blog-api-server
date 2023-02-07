@@ -87,6 +87,14 @@ export type PaginableWithCount<T> = {
 };
 
 /**
+ * 페이지네이션 가능한 타입
+ */
+export type Paginatable<T> = {
+    pagination: PaginationResult;
+    entities: T[];
+};
+
+/**
  * 검색 옵션
  */
 export const SearchOption: { handleQuery: (query: string) => never | string } =
@@ -100,6 +108,11 @@ export const SearchOption: { handleQuery: (query: string) => never | string } =
         handleQuery: (query: string) => {
             if (!validator.isString(query) || query.length === 0) {
                 throw new BadRequestException('검색어를 입력하세요.');
+            }
+            if (query.split('').find((e) => ['%', '_'].includes(e))) {
+                throw new BadRequestException(
+                    '검색어에 특수문자를 사용할 수 없습니다.',
+                );
             }
             return decodeURIComponent(query);
         },

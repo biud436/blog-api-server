@@ -4,8 +4,9 @@ import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import { User } from './entities/user.entity';
 import { Profile } from '../profile/entities/profile.entity';
-import { QueryRunner, Repository } from 'typeorm';
+import { Brackets, QueryRunner, Repository } from 'typeorm';
 import { plainToClass } from 'class-transformer';
+import { Paginatable } from 'src/common/list-config';
 
 type SafedUser = Omit<User, 'password' | 'hashPassword' | 'savePassword'>;
 
@@ -81,40 +82,96 @@ export class UserService {
         return result;
     }
 
-    async findProfileByUsername(username: string) {
+    async findProfileByUsername(username: string): Promise<User> {
         const qb = this.userRepository
             .createQueryBuilder('user')
             .select()
             .innerJoinAndSelect('user.profile', 'profile')
+            .innerJoinAndSelect('user.admins', 'admins')
             .where('user.username = :username', {
                 username,
             })
+            .andWhere('user.isValid = :isValid', { isValid: true })
+            .andWhere('admins.id IS NOT NULL')
             .getOne();
 
         return await qb;
     }
 
-    async getUserId(username: string) {
+    async getUserId(username: string): Promise<User> {
         const qb = this.userRepository
             .createQueryBuilder('user')
             .select('user.id')
+            .innerJoinAndSelect('user.profile', 'profile')
+            .innerJoinAndSelect('user.admins', 'admins')
             .where('user.username = :username', {
                 username,
             })
+            .andWhere('user.isValid = :isValid', { isValid: true })
+            .andWhere('admins.id IS NOT NULL')
             .getOneOrFail();
 
         return await qb;
     }
 
-    async getUserIdWithoutFail(username: string) {
+    async getUserIdWithoutFail(username: string): Promise<User> {
         const qb = this.userRepository
             .createQueryBuilder('user')
             .select('user.id')
+            .innerJoinAndSelect('user.profile', 'profile')
+            .innerJoinAndSelect('user.admins', 'admins')
             .where('user.username = :username', {
                 username,
             })
+            .andWhere('admins.id IS NOT NULL')
             .getOne();
 
         return await qb;
+    }
+
+    async getUserList(pageNumber: number): Promise<Paginatable<User>> {
+        const qb = this.userRepository
+            .createQueryBuilder('user')
+            .select()
+            .innerJoinAndSelect('user.profile', 'profile')
+            .innerJoinAndSelect('user.admins', 'admins')
+            .where('admins.id IS NOT NULL')
+            .andWhere('user.isValid = :isValid', { isValid: true })
+            .setPaginationWithJoin(pageNumber);
+
+        return await qb.getManyWithPagination(pageNumber);
+    }
+
+    async searchUserList(
+        pageNumber: number,
+        searchProperty:
+            | keyof Pick<Profile, 'nickname'>
+            | keyof Pick<User, 'id'>,
+        searchQuery: string,
+    ): Promise<Paginatable<User>> {
+        const qb = this.userRepository
+            .createQueryBuilder('user')
+            .select()
+            .innerJoinAndSelect('user.profile', 'profile')
+            .innerJoinAndSelect('user.admins', 'admins')
+            .where('admins.id IS NOT NULL')
+            .setPaginationWithJoin(pageNumber);
+
+        switch (searchProperty) {
+            case 'id':
+                qb.andWhere('user.id = :id', {
+                    id: searchQuery,
+                });
+                break;
+            case 'nickname':
+                qb.andWhere('profile.nickname LIKE :nickname', {
+                    nickname: `%${searchQuery}%`,
+                });
+                break;
+        }
+
+        qb.andWhere('user.isValid = :isValid', { isValid: true });
+
+        return await qb.getManyWithPagination(pageNumber);
     }
 }

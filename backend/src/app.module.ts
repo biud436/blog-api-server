@@ -58,6 +58,7 @@ import { XMulterModule } from './modules/x-multer/x-multer.module';
 import { HealthCheckModule } from './controllers/health-check/health-check.module';
 import { HealthCheckConstant } from './controllers/health-check/health-check.constant';
 import { PrivatePostGuard } from './controllers/auth/guards/private-post.guard';
+import { ConnectInfoModule } from './entities/connect-info/connect-info.module';
 
 @Module({
     imports: [
@@ -127,6 +128,7 @@ import { PrivatePostGuard } from './controllers/auth/guards/private-post.guard';
             },
         }),
         XMulterModule,
+        ConnectInfoModule,
     ],
     controllers: [AppController],
     providers: [

@@ -22,7 +22,7 @@ import {
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { Request, Response } from 'express';
-import { ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { ApiConsumes, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { SendAuthCodeRequestDto } from './dto/send-auth-code.dto';
 import { ResponseUtil } from 'src/libs/response/ResponseUtil';
 import { RESPONSE_MESSAGE } from 'src/libs/response/response';
@@ -47,6 +47,7 @@ import {
 } from 'src/decorators/anonymous.decorator';
 import { PostId } from 'src/decorators/post-id.decorator';
 import { PostsService } from '../posts/posts.service';
+import { PageNumber } from 'src/decorators/page-number.decorator';
 
 @Controller('auth')
 @ApiTags('인증 API')
@@ -65,6 +66,7 @@ export class AuthController {
     @CustomApiOkResponse(DocsMapper.auth.POST.login)
     @ApiConsumes('application/json')
     async login(
+        @Ip() ip: string,
         @UserInfo() user: User,
         @Req() req: Request,
         @Res({
@@ -72,6 +74,7 @@ export class AuthController {
         })
         res: Response,
     ) {
+        await this.authService.createConnectInfo(ip);
         const token = await this.authService.login(user);
 
         return this.authService.loginUseCookieMiddleware(token, req, res);
@@ -215,6 +218,20 @@ export class AuthController {
                 statusCode: HttpStatus.BAD_REQUEST,
             });
         }
+    }
+
+    @Get('/users')
+    @CustomApiOkResponse({
+        description: '유저 목록 조회',
+        operation: {},
+        auth: true,
+    })
+    @ApiQuery({
+        name: 'pageNumber',
+        description: '페이지 번호',
+    })
+    async getUserList(@PageNumber('pageNumber') pageNumber: number) {
+        return await this.authService.getUserList(pageNumber);
     }
 
     /**
