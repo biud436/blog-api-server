@@ -4,13 +4,14 @@ import * as RSS from 'rss';
 import * as nestCore from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { DateTimeUtil } from 'src/common/libs/date/DateTimeUtil';
-import { RssOptions, RSS_OPTIONS } from './rss.constant';
+import { RSS_MODULE_OPTIONS } from './rss.constant';
+import { RssModuleOptions } from './interfaces/rss-option.interface';
 
 @Injectable()
 export class RssService {
     constructor(
         private readonly postsService: PostsService,
-        @Inject(RSS_OPTIONS) private readonly options: RssOptions,
+        @Inject(RSS_MODULE_OPTIONS) private readonly options: RssModuleOptions,
     ) {}
 
     async getFeeds() {

@@ -3,12 +3,13 @@ import { RssService } from './rss.service';
 import { RssController } from './rss.controller';
 import { PostsModule } from '../posts/posts.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { RssOptions, RSS_OPTIONS } from './rss.constant';
+import { RSS_MODULE_OPTIONS } from './rss.constant';
+import { RssModuleOptions } from './interfaces/rss-option.interface';
 
 @Module({})
 export class RssModule {
     static register(
-        options: Pick<RssOptions, 'title' | 'description' | 'author'>,
+        options: Pick<RssModuleOptions, 'title' | 'description' | 'author'>,
     ): DynamicModule {
         return {
             module: RssModule,
@@ -17,8 +18,10 @@ export class RssModule {
             providers: [
                 RssService,
                 {
-                    provide: RSS_OPTIONS,
-                    useFactory: (configService: ConfigService): RssOptions => {
+                    provide: RSS_MODULE_OPTIONS,
+                    useFactory: (
+                        configService: ConfigService,
+                    ): RssModuleOptions => {
                         return {
                             feed_url: `${configService.getOrThrow(
                                 'BLOG_URL',
