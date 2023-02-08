@@ -4,22 +4,20 @@ import * as RSS from 'rss';
 import * as nestCore from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { DateTimeUtil } from 'src/common/libs/date/DateTimeUtil';
+import { RssOptions, RSS_OPTIONS } from './rss.constant';
 
 @Injectable()
 export class RssService {
     constructor(
         private readonly postsService: PostsService,
-        private readonly configService: ConfigService,
+        @Inject(RSS_OPTIONS) private readonly options: RssOptions,
     ) {}
 
     async getFeeds() {
-        const BLOG_URL = this.configService.getOrThrow('BLOG_URL');
+        const { postUrl, author } = this.options;
 
         const feed = new RSS({
-            title: '어진석의 블로그', // TODO: 설정 파일로 분리 필요. 블로그 이름을 가져와야 합니다.
-            description: '어진석의 블로그',
-            feed_url: `${BLOG_URL}/rss`,
-            site_url: `${BLOG_URL}`,
+            ...this.options,
         });
 
         // 5개의 포스트만 가져옵니다.
@@ -29,9 +27,9 @@ export class RssService {
             feed.item({
                 title: post.title,
                 description: post.previewContent,
-                url: `${BLOG_URL}/posts/${post.id}`,
+                url: `${postUrl}/${post.id}`,
                 date: post.uploadDate.toUTCString().replace('GMT', '+0000'),
-                author: '어진석', // 하드 코딩 주의
+                author,
             });
         }
 

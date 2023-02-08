@@ -121,7 +121,11 @@ import { ThrottlerBehindProxyGuard } from './common/guards/throttler-behind-prox
         PostTempModule,
         AopModule,
         SlackModule,
-        RssModule,
+        RssModule.register({
+            title: '어진석의 블로그',
+            description: '어진석의 블로그입니다.',
+            author: '어진석',
+        }),
         TypeOrmExModule,
         MyBlogConfigModule.register({
             isGlobal: true,
