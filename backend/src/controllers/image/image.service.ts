@@ -1,14 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { UserService } from 'src/entities/user/user.service';
-import { RedisService } from 'src/micro-services/redis/redis.service';
-import { CryptoUtil } from 'src/libs/crypto/CryptoUtil';
+import { RedisService } from 'src/common/micro-services/redis/redis.service';
+import { CryptoUtil } from 'src/common/libs/crypto/CryptoUtil';
 import { DataSource, QueryRunner, Repository } from 'typeorm';
 import { CreateImageDto } from './dto/create-image.dto';
 import { Image } from './entities/image.entity';
-import { MulterS3File } from '../../interceptors/s3.upload.interceptor';
+import { MulterS3File } from '../../common/interceptors/s3.upload.interceptor';
 import { S3ImageUploadDto } from './dto/s3-image-upload.dto';
-import { S3Service } from 'src/micro-services/s3/s3.service';
+import { S3Service } from 'src/common/micro-services/s3/s3.service';
 import { ImageCreateCommand } from './commands/image-create.command';
 import { ImageTempFileGetterCommand } from './commands/image-temp.command';
 import { ImageFindByIdCommand } from './commands/image-find-by-id.command';

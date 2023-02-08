@@ -1,7 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as crypto from 'crypto';
-import { CryptoUtil } from 'src/libs/crypto/CryptoUtil';
+import { CryptoUtil } from 'src/common/libs/crypto/CryptoUtil';
 
 @Injectable()
 export class AES256Provider implements OnModuleInit {

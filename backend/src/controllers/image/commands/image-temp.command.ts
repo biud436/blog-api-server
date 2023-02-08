@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UserService } from 'src/entities/user/user.service';
-import { CryptoUtil } from 'src/libs/crypto/CryptoUtil';
+import { CryptoUtil } from 'src/common/libs/crypto/CryptoUtil';
 
 export abstract class ImageTempFileGetterCommand {
     abstract execute(filename: string, username: string): Promise<string>;

@@ -1,5 +1,5 @@
-import { ServerLog } from 'src/libs/logger/ServerLog';
-import { CryptoUtil } from 'src/libs/crypto/CryptoUtil';
+import { ServerLog } from 'src/common/libs/logger/ServerLog';
+import { CryptoUtil } from 'src/common/libs/crypto/CryptoUtil';
 import * as fs from 'fs';
 import * as inquirer from 'inquirer';
 import * as dotenv from 'dotenv';

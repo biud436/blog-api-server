@@ -1,4 +1,4 @@
-import { CryptoUtil } from 'src/libs/crypto/CryptoUtil';
+import { CryptoUtil } from 'src/common/libs/crypto/CryptoUtil';
 
 namespace EnvModuleEntryPoint {
     /**

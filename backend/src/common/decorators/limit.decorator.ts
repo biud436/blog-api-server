@@ -5,10 +5,10 @@ import {
     Query,
     Type,
 } from '@nestjs/common';
-import { PaginationOffsetPipe } from 'src/pipes/pagination-offset.pipe';
+import { PaginationLimitPipe } from 'src/common/pipes/pagination-limit.pipe';
 
-export function Offset(
+export function Limit(
     property: string | (Type<PipeTransform> | PipeTransform),
 ): ParameterDecorator {
-    return Query(<string>property, PaginationOffsetPipe);
+    return Query(<string>property, PaginationLimitPipe);
 }

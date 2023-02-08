@@ -7,7 +7,7 @@ import {
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
 import { ChangeCategoryDto } from 'src/controllers/admin/dto/change-category.dto';
-import { SlackHook } from 'src/modules/slack/slack.logger';
+import { SlackHook } from 'src/common/modules/slack/slack.logger';
 import {
     Between,
     DataSource,

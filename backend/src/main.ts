@@ -8,7 +8,7 @@ import { NestFactory, Reflector } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import { ServerLog } from './libs/logger/ServerLog';
+import { ServerLog } from './common/libs/logger/ServerLog';
 import * as path from 'path';
 import * as cookieParser from 'cookie-parser';
 
@@ -20,11 +20,11 @@ import * as passport from 'passport';
 import * as mysqlSession from 'express-mysql-session';
 import * as connectRedis from 'connect-redis';
 import { createClient } from 'redis';
-import { LoginMiddleware } from './middlewares/login.middleware';
+import { LoginMiddleware } from './common/middlewares/login.middleware';
 import {
     getSwaggerAuthMiddleware,
     getSwaggerLoginCheckMiddleware,
-} from './middlewares/swagger.middleware';
+} from './common/middlewares/swagger.middleware';
 
 const MySQLStore = mysqlSession(session);
 const RedisStore = connectRedis(session);

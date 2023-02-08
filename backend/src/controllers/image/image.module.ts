@@ -6,8 +6,8 @@ import { Image } from './entities/image.entity';
 import { HttpModule } from '@nestjs/axios';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from 'src/entities/user/user.module';
-import { AesModule } from 'src/modules/aes/aes.module';
-import { MicroServicesModule } from 'src/micro-services/micro-services.module';
+import { AesModule } from 'src/common/modules/aes/aes.module';
+import { MicroServicesModule } from 'src/common/micro-services/micro-services.module';
 import {
     ImageCreateCommand,
     ImageCreateCommandImpl,

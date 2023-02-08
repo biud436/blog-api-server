@@ -9,7 +9,7 @@ import { PostComment } from 'src/entities/comments/entities/comment.entity';
 import { CreatePostDto } from 'src/entities/post/dto/create-post.dto';
 import { UpdatePostDto } from 'src/entities/post/dto/update-post.dto';
 import { PostService } from 'src/entities/post/post.service';
-import { RedisService } from 'src/micro-services/redis/redis.service';
+import { RedisService } from 'src/common/micro-services/redis/redis.service';
 import { DataSource, QueryRunner } from 'typeorm';
 import { PostSearchProperty } from './types/post-search-type';
 

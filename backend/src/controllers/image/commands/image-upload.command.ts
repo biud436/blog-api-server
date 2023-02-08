@@ -1,9 +1,9 @@
-import { MulterS3File } from 'src/interceptors/s3.upload.interceptor';
+import { MulterS3File } from 'src/common/interceptors/s3.upload.interceptor';
 import { S3ImageUploadDto } from '../dto/s3-image-upload.dto';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { RedisService } from 'src/micro-services/redis/redis.service';
+import { RedisService } from 'src/common/micro-services/redis/redis.service';
 import { CreateImageDto } from '../dto/create-image.dto';
 import { ImageCreateCommand } from './image-create.command';
 

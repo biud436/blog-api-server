@@ -3,7 +3,7 @@ import { PostsService } from '../posts/posts.service';
 import * as RSS from 'rss';
 import * as nestCore from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
-import { DateTimeUtil } from 'src/libs/date/DateTimeUtil';
+import { DateTimeUtil } from 'src/common/libs/date/DateTimeUtil';
 
 @Injectable()
 export class RssService {

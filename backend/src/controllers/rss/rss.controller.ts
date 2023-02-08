@@ -13,7 +13,7 @@ import {
     CacheInterceptor,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CustomApiOkResponse } from 'src/decorators/custom.decorator';
+import { CustomApiOkResponse } from 'src/common/decorators/custom.decorator';
 import { RssService } from './rss.service';
 
 @Controller('rss')

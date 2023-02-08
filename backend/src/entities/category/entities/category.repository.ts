@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Post } from 'src/entities/post/entities/post.entity';
-import { CustomRepository } from 'src/modules/typeorm-ex/typeorm-ex.decorator';
+import { CustomRepository } from 'src/common/modules/typeorm-ex/typeorm-ex.decorator';
 import { Between, QueryRunner, Repository } from 'typeorm';
 import { CategoryDepthVO } from '../dto/category-depth.vo';
 import { Category } from './category.entity';

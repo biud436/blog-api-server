@@ -26,17 +26,17 @@ import {
     AdminOnly,
     CustomApiOkResponse,
     JwtGuard,
-} from 'src/decorators/custom.decorator';
-import { UserId } from 'src/decorators/user-id.decorator';
+} from 'src/common/decorators/custom.decorator';
+import { UserId } from 'src/common/decorators/user-id.decorator';
 import { MoveCategoryDto } from 'src/entities/category/dto/move-category.dto';
 import { CreatePostTempDto } from 'src/entities/post-temp/dto/create-post-temp.dto';
 import { UpdatePostTempDto } from 'src/entities/post-temp/dto/update-post-temp.dto';
-import { RESPONSE_MESSAGE } from 'src/libs/response/response';
+import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
 import {
     IResponsableData,
     IResponse,
-} from 'src/libs/response/interface/response.interface';
-import { ResponseUtil } from 'src/libs/response/ResponseUtil';
+} from 'src/common/libs/response/interface/response.interface';
+import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
 import { DataSource } from 'typeorm';
 import { AdminService } from './admin.service';
 import { ChangeCategoryDto } from './dto/change-category.dto';

@@ -1,4 +1,4 @@
-import { DateTimeUtil } from '../libs/date/DateTimeUtil';
+import { DateTimeUtil } from '../common/libs/date/DateTimeUtil';
 
 describe('시간 테스트', () => {
     it('JWT 시간 더하기 테스트', () => {

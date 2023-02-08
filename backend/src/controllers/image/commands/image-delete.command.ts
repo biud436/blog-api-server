@@ -4,7 +4,7 @@ import { Image } from '../entities/image.entity';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ImageFindByIdCommand } from './image-find-by-id.command';
-import { S3Service } from 'src/micro-services/s3/s3.service';
+import { S3Service } from 'src/common/micro-services/s3/s3.service';
 
 export abstract class ImageDeleteCommand {
     abstract execute(

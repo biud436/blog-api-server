@@ -1,6 +1,6 @@
 import { SetMetadata } from '@nestjs/common';
-import { ParseAnonymousIdPipe } from 'src/pipes/parse-anonymous-id.pipe';
-import { ParseReadablePrivatePostPipe } from 'src/pipes/parse-readable-private-post.pipe';
+import { ParseAnonymousIdPipe } from 'src/common/pipes/parse-anonymous-id.pipe';
+import { ParseReadablePrivatePostPipe } from 'src/common/pipes/parse-readable-private-post.pipe';
 import { UserInfo } from './user.decorator';
 
 export const ANONYMOUS_ID = 'AnonymousId';

@@ -4,14 +4,14 @@ import { plainToClass } from 'class-transformer';
 import { encodeHtml } from 'src/common/html-escpse';
 import { ImageService } from 'src/controllers/image/image.service';
 import { PostSearchProperty } from 'src/controllers/posts/types/post-search-type';
-import { RedisService } from 'src/micro-services/redis/redis.service';
-import { DateTimeUtil } from 'src/libs/date/DateTimeUtil';
+import { RedisService } from 'src/common/micro-services/redis/redis.service';
+import { DateTimeUtil } from 'src/common/libs/date/DateTimeUtil';
 import { QueryRunner, Repository } from 'typeorm';
 import { CategoryService } from '../category/category.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Post } from './entities/post.entity';
-import { ConfigData } from 'src/modules/config/types/my-config.decorator';
+import { ConfigData } from 'src/common/modules/config/types/my-config.decorator';
 
 @Injectable()
 export class PostService {

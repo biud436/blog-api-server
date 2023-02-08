@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
-import { RedisService } from 'src/micro-services/redis/redis.service';
+import { RedisService } from 'src/common/micro-services/redis/redis.service';
 import { QueryRunner, Repository, UpdateResult } from 'typeorm';
 import { CreatePostViewCountDto } from './dto/create-post-view-count.dto';
 import { UpdatePostViewCountDto } from './dto/update-post-view-count.dto';

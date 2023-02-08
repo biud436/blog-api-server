@@ -18,21 +18,21 @@ import {
     AdminOnly,
     CustomApiOkResponse,
     JwtGuard,
-} from 'src/decorators/custom.decorator';
+} from 'src/common/decorators/custom.decorator';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { Request, Response } from 'express';
-import { ApiConsumes, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiConsumes, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { SendAuthCodeRequestDto } from './dto/send-auth-code.dto';
-import { ResponseUtil } from 'src/libs/response/ResponseUtil';
-import { RESPONSE_MESSAGE } from 'src/libs/response/response';
+import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
+import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
 import { VerifyAuthCodeRequestDto } from './dto/verify-auth-code.dto';
 import { AuthRequest } from './validator/request.dto';
 import { DocsMapper } from 'src/common/swagger-config';
-import { UserInfo } from 'src/decorators/user.decorator';
+import { UserInfo } from 'src/common/decorators/user.decorator';
 import { User } from 'src/entities/user/entities/user.entity';
-import { DateTimeUtil } from 'src/libs/date/DateTimeUtil';
-import { ServerLog } from 'src/libs/logger/ServerLog';
+import { DateTimeUtil } from 'src/common/libs/date/DateTimeUtil';
+import { ServerLog } from 'src/common/libs/logger/ServerLog';
 import { ConfigService } from '@nestjs/config';
 import { SessionAuthGuard } from './guards/session-auth.guard';
 import { promisify } from 'util';
@@ -44,10 +44,12 @@ import { PrivatePostGuard } from './guards/private-post.guard';
 import {
     Anonymous,
     IsReadablePrivatePost,
-} from 'src/decorators/anonymous.decorator';
-import { PostId } from 'src/decorators/post-id.decorator';
+} from 'src/common/decorators/anonymous.decorator';
+import { PostId } from 'src/common/decorators/post-id.decorator';
 import { PostsService } from '../posts/posts.service';
-import { PageNumber } from 'src/decorators/page-number.decorator';
+import { PageNumber } from 'src/common/decorators/page-number.decorator';
+import { Throttle } from '@nestjs/throttler';
+import { LOGIN_INTERVAL } from 'src/common/throttle-config';
 
 @Controller('auth')
 @ApiTags('인증 API')
@@ -61,9 +63,23 @@ export class AuthController {
         private readonly postsService: PostsService,
     ) {}
 
+    /**
+     * 로그인
+     *
+     * @param ip
+     * @param user
+     * @param req
+     * @param res
+     * @returns
+     */
     @Post('/login')
+    @Throttle(...LOGIN_INTERVAL)
     @UseGuards(new LocalAuthGuard())
     @CustomApiOkResponse(DocsMapper.auth.POST.login)
+    @ApiResponse({
+        status: HttpStatus.TOO_MANY_REQUESTS,
+        description: '요청이 너무 많습니다. 잠시후에 시도해주세요.',
+    })
     @ApiConsumes('application/json')
     async login(
         @Ip() ip: string,
@@ -95,13 +111,6 @@ export class AuthController {
         })
         res: Response,
     ) {
-        // https://discord.com/channels/520622812742811698/606125913343787008/982825765051695115
-        // @types/passport@1.0.8
-        // req.logout((err) => {
-        //     console.warn(err);
-        // });
-        // await promisify(req.session.destroy.bind(req.session))();
-
         res.clearCookie('access_token');
         res.clearCookie('refresh_token');
 

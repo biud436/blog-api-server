@@ -4,7 +4,7 @@ import { BasicStrategy as Strategy } from 'passport-http';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 import { AuthService } from '../auth.service';
-import { RedirectException } from 'src/exceptions/redirect.exception';
+import { RedirectException } from 'src/common/exceptions/redirect.exception';
 
 @Injectable()
 export class BasicStrategy extends PassportStrategy(Strategy, 'basic-auth') {

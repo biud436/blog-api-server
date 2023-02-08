@@ -8,8 +8,8 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { AdminModule } from 'src/entities/admin/admin.module';
 import { ProfileModule } from 'src/entities/profile/profile.module';
-import { MicroServicesModule } from 'src/micro-services/micro-services.module';
-import { MailModule } from 'src/modules/mail/mail.module';
+import { MicroServicesModule } from 'src/common/micro-services/micro-services.module';
+import { MailModule } from 'src/common/modules/mail/mail.module';
 import { GithubStrategy } from './strategies/github.strategy';
 import { UserCopy } from 'src/entities/user-copy/entities/user-copy.entity';
 import { UserCopyModule } from 'src/entities/user-copy/user-copy.module';
@@ -18,11 +18,11 @@ import { SessionSerializer } from './session.serializer';
 import { ApiKeyModule } from 'src/entities/api-key/api-key.module';
 import { HttpModule } from '@nestjs/axios';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { SlackModule } from 'src/modules/slack/slack.module';
+import { SlackModule } from 'src/common/modules/slack/slack.module';
 import { PrivatePostGuard } from './guards/private-post.guard';
 import { PostsModule } from '../posts/posts.module';
 import { APP_GUARD } from '@nestjs/core';
-import { AesModule } from 'src/modules/aes/aes.module';
+import { AesModule } from 'src/common/modules/aes/aes.module';
 import { ConnectInfoModule } from 'src/entities/connect-info/connect-info.module';
 
 @Module({

@@ -10,8 +10,8 @@ import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard, AuthModuleOptions } from '@nestjs/passport';
 import { Request } from 'express';
-import { JwtGuard } from 'src/decorators/custom.decorator';
-import { ANONYMOUS_ID } from 'src/decorators/anonymous.decorator';
+import { JwtGuard } from 'src/common/decorators/custom.decorator';
+import { ANONYMOUS_ID } from 'src/common/decorators/anonymous.decorator';
 
 /**
  * 토큰을 검증하고 디코딩하지만 오류를 발생시키진 않습니다.

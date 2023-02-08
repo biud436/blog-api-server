@@ -19,7 +19,7 @@ import { ApiKey } from 'src/entities/api-key/entities/api-key.entity';
 import { Department } from 'src/entities/department/entities/department.entity';
 import { BlogMetaData } from 'src/entities/blog-meta-data/entities/blog-meta-data.entity';
 import { PostTemp } from 'src/entities/post-temp/entities/post-temp.entity';
-import { Role } from 'src/decorators/role.enum';
+import { Role } from 'src/common/decorators/role.enum';
 
 @Entity()
 export class User {

@@ -27,22 +27,22 @@ import {
     AdminOnly,
     CustomApiOkResponse,
     JwtGuard,
-} from 'src/decorators/custom.decorator';
-import { PageNumber } from 'src/decorators/page-number.decorator';
-import { PostId } from 'src/decorators/post-id.decorator';
-import { UserId } from 'src/decorators/user-id.decorator';
+} from 'src/common/decorators/custom.decorator';
+import { PageNumber } from 'src/common/decorators/page-number.decorator';
+import { PostId } from 'src/common/decorators/post-id.decorator';
+import { UserId } from 'src/common/decorators/user-id.decorator';
 import {
     Anonymous,
     AnonymousId,
     IsReadablePrivatePost,
-} from 'src/decorators/anonymous.decorator';
-import { UserInfo } from 'src/decorators/user.decorator';
+} from 'src/common/decorators/anonymous.decorator';
+import { UserInfo } from 'src/common/decorators/user.decorator';
 import { CategoryService } from 'src/entities/category/category.service';
 import { CreatePostCommentDto } from 'src/entities/comments/dto/create-comment.dto';
 import { CreatePostDto } from 'src/entities/post/dto/create-post.dto';
 import { UpdatePostDto } from 'src/entities/post/dto/update-post.dto';
-import { RESPONSE_MESSAGE } from 'src/libs/response/response';
-import { ResponseUtil } from 'src/libs/response/ResponseUtil';
+import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
+import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
 import { DataSource } from 'typeorm';
 import { PrivatePostGuard } from '../auth/guards/private-post.guard';
 import { PostsService } from './posts.service';

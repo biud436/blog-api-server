@@ -4,7 +4,7 @@ import {
     AdminOnly,
     CustomApiOkResponse,
     JwtGuard,
-} from 'src/decorators/custom.decorator';
+} from 'src/common/decorators/custom.decorator';
 import { ApiService } from './api.service';
 
 @Controller('api')

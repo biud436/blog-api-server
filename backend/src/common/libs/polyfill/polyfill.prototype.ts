@@ -4,7 +4,7 @@ import {
     PaginationFlushObject as PaginationFlags,
     PaginationResult,
 } from 'src/common/list-config';
-import { VIRTUAL_COLUMN_KEY } from 'src/decorators/virtual-column.decorator';
+import { VIRTUAL_COLUMN_KEY } from 'src/common/decorators/virtual-column.decorator';
 import { SelectQueryBuilder } from 'typeorm';
 import { QueryExpressionMap } from 'typeorm/query-builder/QueryExpressionMap';
 // import { QueryExpressionMap } from 'typeorm/query-builder/QueryExpressionMap';

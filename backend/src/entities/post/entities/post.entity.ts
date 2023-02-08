@@ -18,7 +18,7 @@ import { PostComment } from 'src/entities/comments/entities/comment.entity';
 import { decodeHtml } from 'src/common/html-escpse';
 import { Image } from 'src/controllers/image/entities/image.entity';
 import removeMarkdown from 'markdown-to-text';
-import { VirtualColumn } from 'src/decorators/virtual-column.decorator';
+import { VirtualColumn } from 'src/common/decorators/virtual-column.decorator';
 @Entity()
 export class Post {
     @PrimaryGeneratedColumn()

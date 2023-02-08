@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { classToPlain, plainToClass, plainToInstance } from 'class-transformer';
 import { PaginableWithCount } from 'src/common/list-config';
-import { CRC32 } from 'src/libs/crypto/CrcUtil';
+import { CRC32 } from 'src/common/libs/crypto/CrcUtil';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { CreatePostTempDto } from './dto/create-post-temp.dto';
 import { PostTempListItem } from './dto/post-temp-list-item.dto';
