@@ -5,6 +5,7 @@ import {
     CustomApiOkResponse,
     JwtGuard,
 } from 'src/common/decorators/custom.decorator';
+import { UploadFolder } from 'src/common/decorators/upload-folder';
 import { ApiService } from './api.service';
 
 @Controller('api')

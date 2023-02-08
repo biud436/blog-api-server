@@ -138,7 +138,11 @@ import { ThrottlerBehindProxyGuard } from './common/guards/throttler-behind-prox
                 heapUsedThreshold: HealthCheckConstant.DEFAULT_HEAP_SIZE,
             },
         }),
-        XMulterModule,
+        XMulterModule.forRoot({
+            dest: !AppModule.isDelvelopment()
+                ? '/usr/src/app/upload/'
+                : './upload',
+        }),
         ConnectInfoModule,
     ],
     controllers: [AppController],
