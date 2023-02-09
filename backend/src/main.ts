@@ -1,3 +1,3 @@
-import { NestBootstrapApplication } from './bootstrap/nest-bootstrap.application';
+import { NestBootstrapApplication } from './nest-bootstrap.application';
 
 NestBootstrapApplication.getInstance().prepare().start();

@@ -33,7 +33,7 @@ import { PostViewCountModule } from './entities/post-view-count/post-view-count.
 import { UserCopyModule } from './entities/user-copy/user-copy.module';
 import './common/libs/polyfill';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import dbconnect from './config';
+import dbconnect from './common/config';
 import { ServerLog } from './common/libs/logger/ServerLog';
 import { ApiModule } from './controllers/api/api.module';
 import { AdminModule as AdminControllerModule } from './controllers/admin/admin.module';
