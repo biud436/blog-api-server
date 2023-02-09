@@ -30,11 +30,14 @@ export class NestBootstrapApplication {
 
     private _application: NestExpressApplication = null;
 
+    private readonly SWAGGER_GLOB = ['/docs', '/docs-json'];
+    private readonly DEFAULT_VIEW_ENGINE = 'hbs';
+
     get app(): NestExpressApplication {
         return this._application;
     }
 
-    prepare(): NestBootstrapApplication {
+    public prepare(): NestBootstrapApplication {
         process.on('uncaughtException', (err) => {
             ServerLog.error(err.stack);
         });
@@ -45,17 +48,26 @@ export class NestBootstrapApplication {
         return this;
     }
 
+    private getWorkingDirectory(target?: string): string {
+        const CWD = process.cwd();
+
+        return target ? path.join(CWD, target) : CWD;
+    }
+
+    private getDefaultViewEngine(): string {
+        return this.DEFAULT_VIEW_ENGINE;
+    }
+
     /**
      * 서버 시작
      */
-    async start(): Promise<void> {
+    public async start(): Promise<void> {
         if (this.isDelvelopment()) {
             NestBootstrapApplication.LOGGER.log(
                 '서버가 개발 모드에서 시작되었습니다',
             );
         }
 
-        console.log('어플리케이션 초기화 중');
         this._application = await NestFactory.create<NestExpressApplication>(
             AppModule,
             {
@@ -63,14 +75,11 @@ export class NestBootstrapApplication {
                 logger: new Logger(), // chalk 버그 방지
             },
         );
-        console.log('어플리케이션 초기화 완료');
 
         // Nest.js v8 버전에서는 "ConfigService"라고 하면 오류가 나니 다음과 같이 해야 한다.
         NestBootstrapApplication.CONFIG = <ConfigService>(
             await this._application.resolve<ConfigService>(ConfigService)
         );
-
-        console.log(NestBootstrapApplication.CONFIG.get('DB_HOST'));
 
         this.initWithMiddleware(this._application)
             .initWithApiDocs() // API 문서 설정
@@ -97,9 +106,7 @@ export class NestBootstrapApplication {
                 },
             }),
         );
-        /**
-         * @link https://wanago.io/2020/06/08/api-nestjs-serializing-response-interceptors/
-         */
+
         this.useClassSerializerInterceptor(app);
 
         app.use(
@@ -111,13 +118,11 @@ export class NestBootstrapApplication {
             ),
         );
         app.use(helmet());
-        app.useStaticAssets(path.join(__dirname, '..', 'public'));
-        app.setBaseViewsDir(path.join(__dirname, '..', 'views'));
-        app.setViewEngine('hbs');
 
-        // app.use(
-        //     cookieParser(NestBootstrapApplication.CONFIG.get('APP_SECRET')),
-        // );
+        app.useStaticAssets(this.getWorkingDirectory('public'));
+        app.setBaseViewsDir(this.getWorkingDirectory('views'));
+        app.setViewEngine(this.getDefaultViewEngine());
+
         const redisStoreMiddleware = createClient({
             socket: {
                 host: process.platform === 'linux' ? 'redis' : 'localhost',
@@ -130,7 +135,9 @@ export class NestBootstrapApplication {
 
         app.use(
             session({
-                secret: NestBootstrapApplication.CONFIG.get('APP_SECRET'),
+                secret: NestBootstrapApplication.CONFIG.getOrThrow(
+                    'APP_SECRET',
+                ),
                 resave: false,
                 saveUninitialized: false,
                 store: new RedisStore({ client: redisStoreMiddleware }),
@@ -161,7 +168,7 @@ export class NestBootstrapApplication {
         const configService = NestBootstrapApplication.CONFIG;
 
         app.use(
-            ['/docs', '/docs-json'],
+            this.SWAGGER_GLOB,
             getSwaggerLoginCheckMiddleware(configService),
         );
 
