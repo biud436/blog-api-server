@@ -33,25 +33,6 @@ export default (configService: ConfigService): DBConnectionType => {
         dateStrings: true,
         bigNumberStrings: false,
         timezone: 'Asia/Seoul',
-        // replication: {
-        //     master: {
-        //         host: configService.get('DB_HOST'),
-        //         port: +configService.get('DB_PORT'),
-        //         username: configService.get('DB_USER'),
-        //         password: configService.get('DB_PASSWORD'),
-        //         database: configService.get('DB_NAME'),
-        //     },
-        //     slaves: [
-        //         {
-        //             host: configService.get('DB_HOST'),
-        //             port: +configService.get('DB_PORT'),
-        //             username: 'admin_repl',
-        //             password: configService.get('DB_PASSWORD'),
-        //             database: 'test_slave',
-        //         },
-        //     ],
-        //     canRetry: true,
-        // },
     };
 
     return {

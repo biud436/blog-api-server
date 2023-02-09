@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { NestBootstrapApplication } from 'src/main';
+import { NestBootstrapApplication } from 'src/bootstrap/nest-bootstrap-application';
 import * as basicAuth from 'express-basic-auth';
 import { ConfigService } from '@nestjs/config';
 import * as jwt from 'jsonwebtoken';
