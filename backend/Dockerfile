@@ -15,6 +15,7 @@ RUN yarn build
 
 FROM node:16-alpine
 
+# 멀티스테이지 빌드를 사용하여 필요한 파일만 복사한다.
 COPY --from=builder /usr/src/app/nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /usr/src/app/dist ./dist
 COPY --from=builder /usr/src/app/node_modules ./node_modules 
