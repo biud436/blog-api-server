@@ -1,21 +1,24 @@
-FROM node:16-alpine
+FROM node:16.13.1-alpine as builder
+
 RUN apk --no-cache add --virtual .builds-deps build-base python3
+RUN apk add --no-cache tzdata && \
+    echo 'Etc/UTC' > /etc/timezone
+
 WORKDIR /usr/src/app
 
-# 의존성 패키지 설치
 COPY package*.json ./
 RUN yarn install
+
 COPY . .
 
-# ENV NODE_OPTIONS --openssl-legacy-provider
-
-# 타임존을 UTC로 설정
-RUN apk add --no-cache tzdata
-RUN echo 'Etc/UTC' > /etc/timezone
-
-# 빌드 및 시작
 RUN yarn build
-COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
+
+FROM node:16.13.1-alpine
+
+COPY --from=builder /usr/src/app/nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /usr/src/app/dist ./dist
+COPY --from=builder /usr/src/app/node_modules ./node_modules 
+
 EXPOSE 3000
 ENV NODE_ENV production
-CMD [ "yarn", "start:prod" ]
+CMD [ "node", "./dist/main" ]
