@@ -1,4 +1,4 @@
-FROM node:16.13.1-alpine as builder
+FROM node:16-alpine as builder
 
 RUN apk --no-cache add --virtual .builds-deps build-base python3
 RUN apk add --no-cache tzdata && \
@@ -13,7 +13,7 @@ COPY . .
 
 RUN yarn build
 
-FROM node:16.13.1-alpine
+FROM node:16-alpine
 
 COPY --from=builder /usr/src/app/nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /usr/src/app/dist ./dist
