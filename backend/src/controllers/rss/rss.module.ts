@@ -5,6 +5,7 @@ import { PostsModule } from '../posts/posts.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RSS_MODULE_OPTIONS } from './rss.constant';
 import { RssModuleOptions } from './interfaces/rss-option.interface';
+import { PostModule } from 'src/entities/post/post.module';
 
 @Module({})
 export class RssModule {
@@ -13,7 +14,7 @@ export class RssModule {
     ): DynamicModule {
         return {
             module: RssModule,
-            imports: [PostsModule, ConfigModule],
+            imports: [PostModule, ConfigModule],
             controllers: [RssController],
             providers: [
                 RssService,
