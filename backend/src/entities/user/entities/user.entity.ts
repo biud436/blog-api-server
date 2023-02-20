@@ -16,7 +16,6 @@ import {
 import { Post } from 'src/entities/post/entities/post.entity';
 import { Admin } from 'src/entities/admin/entities/admin.entity';
 import { ApiKey } from 'src/entities/api-key/entities/api-key.entity';
-import { Department } from 'src/entities/department/entities/department.entity';
 import { BlogMetaData } from 'src/entities/blog-meta-data/entities/blog-meta-data.entity';
 import { PostTemp } from 'src/entities/post-temp/entities/post-temp.entity';
 import { Role } from 'src/common/decorators/role.enum';
@@ -62,9 +61,6 @@ export class User {
 
     @OneToMany(() => ApiKey, (apiKey) => apiKey.user)
     apiKeys: ApiKey[];
-
-    @OneToMany(() => Department, (department) => department.departmentManager)
-    departments: Department[];
 
     @OneToMany(() => BlogMetaData, (blogMetaData) => blogMetaData.user)
     blogMetaData: BlogMetaData[];

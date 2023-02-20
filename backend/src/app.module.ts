@@ -41,7 +41,6 @@ import { ApiKeyModule } from './entities/api-key/api-key.module';
 import { CategoryModule } from './entities/category/category.module';
 import { CommentsModule } from './entities/comments/comments.module';
 import { ScheduleModule } from '@nestjs/schedule';
-import { DepartmentModule } from './entities/department/department.module';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { CategoryGroupModule } from './entities/category-group/category-group.module';
@@ -115,7 +114,6 @@ import { ThrottlerBehindProxyGuard } from './common/guards/throttler-behind-prox
         ApiKeyModule,
         CategoryModule,
         CommentsModule,
-        DepartmentModule,
         CategoryGroupModule,
         BlogMetaDataModule,
         PostTempModule,
