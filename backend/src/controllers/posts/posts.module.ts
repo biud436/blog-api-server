@@ -3,7 +3,6 @@ import { PostsService } from './posts.service';
 import { PostsController } from './posts.controller';
 import { PostModule } from 'src/entities/post/post.module';
 import { CategoryModule } from 'src/entities/category/category.module';
-import { CommentsModule } from 'src/entities/comments/comments.module';
 import { MicroServicesModule } from 'src/common/micro-services/micro-services.module';
 import { UserModule } from 'src/entities/user/user.module';
 import { SlackModule } from 'src/common/modules/slack/slack.module';
@@ -20,7 +19,6 @@ import { UserCopyModule } from 'src/entities/user-copy/user-copy.module';
     imports: [
         PostModule,
         CategoryModule,
-        CommentsModule,
         MicroServicesModule,
         UserModule,
         forwardRef(() => AuthModule),

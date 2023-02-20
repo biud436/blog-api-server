@@ -14,7 +14,6 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
-import { PostComment } from 'src/entities/comments/entities/comment.entity';
 import { decodeHtml } from 'src/common/html-escpse';
 import { Image } from 'src/controllers/image/entities/image.entity';
 import removeMarkdown from 'markdown-to-text';
@@ -112,12 +111,6 @@ export class Post {
         referencedColumnName: 'id',
     })
     category: Category;
-
-    /**
-     * 댓글 참조
-     */
-    @OneToMany(() => PostComment, (comment) => comment.post)
-    comments: PostComment[];
 
     /**
      * 이미지

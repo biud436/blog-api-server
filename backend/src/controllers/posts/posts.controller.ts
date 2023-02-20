@@ -4,7 +4,6 @@ import {
     Post,
     Body,
     Patch,
-    Param,
     Delete,
     Query,
     ParseIntPipe,
@@ -13,13 +12,7 @@ import {
     UseGuards,
     Req,
 } from '@nestjs/common';
-import {
-    ApiBody,
-    ApiOperation,
-    ApiParam,
-    ApiQuery,
-    ApiTags,
-} from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { SearchOption } from 'src/common/list-config';
 import { DocsMapper } from 'src/common/swagger-config';
@@ -36,9 +29,7 @@ import {
     AnonymousId,
     IsReadablePrivatePost,
 } from 'src/common/decorators/anonymous.decorator';
-import { UserInfo } from 'src/common/decorators/user.decorator';
 import { CategoryService } from 'src/entities/category/category.service';
-import { CreatePostCommentDto } from 'src/entities/comments/dto/create-comment.dto';
 import { CreatePostDto } from 'src/entities/post/dto/create-post.dto';
 import { UpdatePostDto } from 'src/entities/post/dto/update-post.dto';
 import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
@@ -47,7 +38,6 @@ import { DataSource } from 'typeorm';
 import { PrivatePostGuard } from '../auth/guards/private-post.guard';
 import { PostsService } from './posts.service';
 import { PostSearchProperty } from './types/post-search-type';
-import { Request } from 'express';
 
 @Controller('posts')
 @ApiTags('블로그 API')
@@ -57,7 +47,6 @@ export class PostsController {
     constructor(
         private readonly postsService: PostsService,
         private readonly categoryService: CategoryService,
-        // TODO: typeorm에 너무 강하게 커플링되는 부분
         @InjectDataSource() private readonly dataSource: DataSource,
     ) {}
 
@@ -81,9 +70,7 @@ export class PostsController {
 
     @Get('/categories')
     @CustomApiOkResponse({
-        operation: {
-            summary: '카테고리 별 게시글 갯수 조회',
-        },
+        operation: {},
         description: '카테고리 별 게시글 갯수 조회',
     })
     async getPostCountByCategories() {
@@ -95,17 +82,6 @@ export class PostsController {
                 message: '카테고리 카운트 정보를 조회할 수 없습니다.',
                 statusCode: 500,
             });
-        }
-    }
-
-    @Post('/comment')
-    @ApiOperation({ summary: '댓글 작성' })
-    async writeComment(@Body() createCommentDto: CreatePostCommentDto) {
-        try {
-            const data = await this.postsService.writeComment(createCommentDto);
-            return ResponseUtil.success(RESPONSE_MESSAGE.SAVE_SUCCESS, data);
-        } catch (e) {
-            return ResponseUtil.failureWrap(e);
         }
     }
 
@@ -135,11 +111,13 @@ export class PostsController {
 
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, data);
         } catch (e) {
-            console.log(e);
             this.logger.debug(e);
 
             await queryRunner.rollbackTransaction();
-            return ResponseUtil.failureWrap(e);
+            return ResponseUtil.failureWrap({
+                statusCode: 500,
+                message: '포스트를 작성할 수 없습니다.',
+            });
         } finally {
             await queryRunner.release();
         }
@@ -225,7 +203,6 @@ export class PostsController {
         description: '포스트를 수정합니다',
         operation: {
             summary: '포스트 수정',
-            description: '포스트를 수정합니다',
         },
     })
     async updatePost(
@@ -269,42 +246,7 @@ export class PostsController {
         @PageNumber('page') page: number,
         @Query('categoryId') categoryId?: number,
     ) {
-        try {
-            const res = await this.postsService.findAll(page, categoryId);
-            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
-        } catch {
-            return ResponseUtil.failure({
-                message: '작성된 포스트가 없습니다',
-                statusCode: 500,
-            });
-        }
-    }
-
-    @Get('/:id/comment')
-    @ApiOperation({ summary: '댓글 조회' })
-    @ApiParam({
-        name: 'id',
-        description: '포스트 아이디',
-    })
-    @ApiQuery({
-        name: 'parentCommentId',
-        description: '부모 댓글 아이디',
-    })
-    async readComments(
-        @PostId() postId: number,
-        @PageNumber('page') pageNumber: number,
-        @Query('parentCommentId', ParseIntPipe) parentCommentId?: number,
-    ) {
-        try {
-            const res = await this.postsService.readComments(
-                postId,
-                parentCommentId,
-                pageNumber,
-            );
-            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
-        } catch (e) {
-            return ResponseUtil.failure(e);
-        }
+        return await this.postsService.findAll(page, categoryId);
     }
 
     @Get(':id')
@@ -317,16 +259,11 @@ export class PostsController {
         @AnonymousId() anonymousId?: number,
     ) {
         try {
-            console.log(
-                `비공개 글을 읽을 수 있는가? => ${IsReadablePrivatePost} ${anonymousId}`,
-            );
             const model = await this.postsService.findOne(
                 postId,
                 IsReadablePrivatePost,
                 anonymousId,
             );
-
-            console.log(model);
 
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, model);
         } catch (e) {

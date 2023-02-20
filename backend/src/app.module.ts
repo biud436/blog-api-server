@@ -15,38 +15,31 @@ import { UserModule } from './entities/user/user.module';
 import { ProfileModule } from './entities/profile/profile.module';
 import { AuthModule } from './controllers/auth/auth.module';
 import { AdminModule } from './entities/admin/admin.module';
-import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './controllers/auth/guards/roles.guard';
 import { AllExceptionFilter } from './common/exceptions/AllExceptionFilter.filter';
 import { EnvFileMap } from '@app/env/libs/types';
 import { PostsModule } from './controllers/posts/posts.module';
 import { MailModule } from './common/modules/mail/mail.module';
-import { TerminusModule } from '@nestjs/terminus';
-import { HealthCheckController } from './controllers/health-check/health-check.controller';
 import { MicroServicesModule } from './common/micro-services/micro-services.module';
 import { OrmModule } from './common/modules/orm/orm.module';
 import { ImageModule } from './controllers/image/image.module';
-import { MulterModule } from '@nestjs/platform-express';
-import { getMyMulterOption } from './common/multer.config';
 import { AesModule } from './common/modules/aes/aes.module';
 import { PostViewCountModule } from './entities/post-view-count/post-view-count.module';
 import { UserCopyModule } from './entities/user-copy/user-copy.module';
 import './common/libs/polyfill';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import dbconnect from './common/config';
-import { ServerLog } from './common/libs/logger/ServerLog';
 import { ApiModule } from './controllers/api/api.module';
 import { AdminModule as AdminControllerModule } from './controllers/admin/admin.module';
 import { ApiKeyModule } from './entities/api-key/api-key.module';
 import { CategoryModule } from './entities/category/category.module';
-import { CommentsModule } from './entities/comments/comments.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { CategoryGroupModule } from './entities/category-group/category-group.module';
 import { BlogMetaDataModule } from './entities/blog-meta-data/blog-meta-data.module';
 import { PostTempModule } from './entities/post-temp/post-temp.module';
-import { LoginMiddleware } from './common/middlewares/login.middleware';
 import { AopModule } from '@toss/nestjs-aop';
 import { SlackModule } from './common/modules/slack/slack.module';
 import { RssModule } from './controllers/rss/rss.module';
@@ -70,12 +63,10 @@ import { ThrottlerBehindProxyGuard } from './common/guards/throttler-behind-prox
             ): Promise<TypeOrmModuleOptions> => {
                 const config = dbconnect(configService);
                 if (ConfiguredDatabaseModule.isDelvelopment()) {
-                    ServerLog.info('개발 DB입니다.');
                     return config.dev;
-                } else {
-                    ServerLog.info('프로덕션 DB입니다.');
-                    return config.production;
                 }
+
+                return config.production;
             },
             inject: [ConfigService],
         }),
@@ -113,7 +104,7 @@ import { ThrottlerBehindProxyGuard } from './common/guards/throttler-behind-prox
         AdminControllerModule,
         ApiKeyModule,
         CategoryModule,
-        CommentsModule,
+
         CategoryGroupModule,
         BlogMetaDataModule,
         PostTempModule,
