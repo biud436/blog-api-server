@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
 import { encodeHtml } from 'src/common/html-escpse';
@@ -12,6 +12,7 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Post } from './entities/post.entity';
 import { ConfigData } from 'src/common/modules/config/types/my-config.decorator';
+import { Paginatable } from 'src/common/list-config';
 
 @Injectable()
 export class PostService {
@@ -43,11 +44,11 @@ export class PostService {
         model.uploadDate = now;
 
         if (!model.categoryId) {
-            throw new Error('카테고리를 선택해주세요.');
+            throw new BadRequestException('카테고리를 선택해주세요.');
         }
 
         if (!model.authorId) {
-            throw new Error('작성자가 없습니다.');
+            throw new BadRequestException('작성자가 없습니다.');
         }
 
         const imageIds = await this.redisService.getTemporarilyImageIds(
@@ -121,7 +122,7 @@ export class PostService {
             .execute();
 
         if (updateResult.affected === 0) {
-            throw new Error('수정할 포스트가 없습니다.');
+            throw new BadRequestException('수정할 포스트가 없습니다.');
         }
 
         const model = await this.findOne(postId);
@@ -175,7 +176,7 @@ export class PostService {
         });
 
         if (!post) {
-            throw new Error('삭제할 포스트가 존재하지 않습니다.');
+            throw new BadRequestException('삭제할 포스트가 존재하지 않습니다.');
         }
 
         // 연관된 이미지가 있는 경우, S3에 이미지 삭제 요청을 합니다.
@@ -264,6 +265,24 @@ export class PostService {
         items.entities = items.entities.map((e) => plainToClass(Post, e));
 
         return items;
+    }
+
+    async findAllByUserId(
+        pageNumber: number,
+        userId: number,
+    ): Promise<Paginatable<Post>> {
+        const qb = this.postRepository
+            .createQueryBuilder('post')
+            .select('post.id', 'id')
+            .addSelect('post.title', 'title')
+            .addSelect('post.uploadDate', 'uploadDate')
+            .addSelect('post.isPrivate', 'isPrivate')
+            .leftJoinAndSelect('post.category', 'category')
+            .where('post.deletedAt IS NULL')
+            .andWhere('post.userId = :userId', { userId })
+            .setPaginationWithJoin(pageNumber);
+
+        return await qb.getManyWithPagination(pageNumber);
     }
 
     /**

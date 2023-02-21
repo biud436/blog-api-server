@@ -30,8 +30,20 @@ export class NestBootstrapApplication {
 
     private _application: NestExpressApplication = null;
 
-    private readonly SWAGGER_GLOB = ['/docs', '/docs-json'];
-    private readonly DEFAULT_VIEW_ENGINE = 'hbs';
+    private static readonly SWAGGER_GLOB = ['/docs', '/docs-json'];
+    private static readonly DEFAULT_VIEW_ENGINE = 'hbs';
+
+    private static readonly CORS_WHITELIST = [
+        'http://localhost:8080',
+        'http://127.0.0.1:8080',
+        'http://localhost:3000',
+    ];
+    private static readonly LOCAL_HOST = 'http://localhost:3000';
+    private static readonly PRODUCTION_HOST = 'https://blog.biud436.com';
+
+    private static readonly REDIS_HOST =
+        process.platform === 'linux' ? 'redis' : 'localhost';
+    private static readonly REDIS_PORT = 6379;
 
     get app(): NestExpressApplication {
         return this._application;
@@ -55,7 +67,7 @@ export class NestBootstrapApplication {
     }
 
     private getDefaultViewEngine(): string {
-        return this.DEFAULT_VIEW_ENGINE;
+        return NestBootstrapApplication.DEFAULT_VIEW_ENGINE;
     }
 
     /**
@@ -123,10 +135,46 @@ export class NestBootstrapApplication {
         app.setBaseViewsDir(this.getWorkingDirectory('views'));
         app.setViewEngine(this.getDefaultViewEngine());
 
+        this.useStickySession(app);
+
+        app.use(cookieParser());
+
+        const whitelist = this.isDelvelopment()
+            ? NestBootstrapApplication.CORS_WHITELIST
+            : [NestBootstrapApplication.PRODUCTION_HOST];
+
+        app.enableCors({
+            origin: (origin, callback) => {
+                if (!origin || whitelist.indexOf(origin) !== -1) {
+                    callback(null, true);
+                } else {
+                    callback(new Error('Not allowed by CORS'));
+                }
+            },
+            credentials: true,
+        });
+
+        app.useGlobalGuards();
+
+        const configService = NestBootstrapApplication.CONFIG;
+
+        app.use(
+            NestBootstrapApplication.SWAGGER_GLOB,
+            getSwaggerLoginCheckMiddleware(configService),
+        );
+
+        ServerLog.info('미들웨어를 초기화하였습니다');
+
+        return this;
+    }
+
+    private useStickySession(
+        app: NestExpressApplication,
+    ): NestBootstrapApplication {
         const redisStoreMiddleware = createClient({
             socket: {
-                host: process.platform === 'linux' ? 'redis' : 'localhost',
-                port: 6379,
+                host: NestBootstrapApplication.REDIS_HOST,
+                port: NestBootstrapApplication.REDIS_PORT,
             },
             legacyMode: true,
         });
@@ -152,27 +200,6 @@ export class NestBootstrapApplication {
 
         app.use(passport.initialize());
         app.use(passport.session());
-
-        app.use(cookieParser());
-
-        app.enableCors({
-            origin:
-                process.env.NODE_ENV === 'production'
-                    ? 'https://blog.biud436.com'
-                    : 'http://localhost:8080',
-            credentials: true,
-        });
-
-        app.useGlobalGuards();
-
-        const configService = NestBootstrapApplication.CONFIG;
-
-        app.use(
-            this.SWAGGER_GLOB,
-            getSwaggerLoginCheckMiddleware(configService),
-        );
-
-        ServerLog.info('미들웨어를 초기화하였습니다');
 
         return this;
     }
@@ -200,8 +227,8 @@ export class NestBootstrapApplication {
         return this;
     }
 
-    private initWithApiDocs(): NestBootstrapApplication {
-        const config = new DocumentBuilder()
+    private getSwaggerConfigBuilder() {
+        return new DocumentBuilder()
             .setTitle('블로그 서버의 API')
             .setDescription(
                 [
@@ -215,22 +242,24 @@ export class NestBootstrapApplication {
                 bearerFormat: 'JWT',
             })
             .setContact('the developer', null, 'biud436@gmail.com')
-            .addServer(
-                this.isDelvelopment()
-                    ? 'http://localhost:3000'
-                    : 'https://blog-api.biud436.com',
-                this.isDelvelopment() ? '로컬 서버' : '운영 서버',
-            )
+            .addServer(NestBootstrapApplication.LOCAL_HOST, '로컬 서버')
+            .addServer(NestBootstrapApplication.PRODUCTION_HOST, '배포 서버')
             .setVersion('1.0')
             .build();
+    }
 
+    private initWithApiDocs(): NestBootstrapApplication {
+        const config = this.getSwaggerConfigBuilder();
         const document = SwaggerModule.createDocument(
             this._application,
             config,
         );
         SwaggerModule.setup('docs', this._application, document, {
             explorer: true,
-            swaggerOptions: { persistAuthorization: true },
+            swaggerOptions: {
+                defaultModelsExpandDepth: -1, // API 문서에서 하단 객체 제거
+                persistAuthorization: true, // 새로고침 해도 로그인 고정
+            },
             customfavIcon: '/favicon.png',
             customJs: '/js/swagger-ui-inject.js',
         });

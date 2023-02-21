@@ -32,10 +32,6 @@ import { MoveCategoryDto } from 'src/entities/category/dto/move-category.dto';
 import { CreatePostTempDto } from 'src/entities/post-temp/dto/create-post-temp.dto';
 import { UpdatePostTempDto } from 'src/entities/post-temp/dto/update-post-temp.dto';
 import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
-import {
-    IResponsableData,
-    IResponse,
-} from 'src/common/libs/response/interface/response.interface';
 import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
 import { DataSource } from 'typeorm';
 import { AdminService } from './admin.service';
@@ -55,10 +51,8 @@ export class AdminController {
     @AdminOnly()
     @JwtGuard()
     @CustomApiOkResponse({
-        operation: {
-            summary: '카테고리 이름 변경',
-        },
-        description: '카테고리 이름을 변경합니다.',
+        operation: {},
+        description: 'Changes category name',
         auth: true,
     })
     @ApiParam({
