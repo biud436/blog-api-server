@@ -44,7 +44,9 @@ export function getSwaggerLoginCheckMiddleware(configService: ConfigService) {
                     res.render('login', (err, html) => {
                         if (err) {
                             console.error(err);
-                            res.status(500).send('Internal Server Error');
+                            res.status(500).send(
+                                '로그인 페이지에 접근할 수 없습니다.',
+                            );
                         } else {
                             res.send(html);
                         }

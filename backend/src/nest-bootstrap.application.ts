@@ -40,7 +40,10 @@ export class NestBootstrapApplication extends EventEmitter {
         'http://localhost:3000',
     ];
     private static readonly LOCAL_HOST = 'http://localhost:3000';
-    private static readonly PRODUCTION_HOST = 'https://blog.biud436.com';
+    private static readonly PRODUCTION_HOST: [string, string] = [
+        'https://blog.biud436.com',
+        'https://blog-api.biud436.com',
+    ];
 
     private static readonly REDIS_HOST =
         process.platform === 'linux' ? 'redis' : 'localhost';
@@ -150,7 +153,7 @@ export class NestBootstrapApplication extends EventEmitter {
 
         const whitelist = this.isDelvelopment()
             ? NestBootstrapApplication.CORS_WHITELIST
-            : [NestBootstrapApplication.PRODUCTION_HOST];
+            : [...NestBootstrapApplication.PRODUCTION_HOST];
 
         app.enableCors({
             origin: (origin, callback) => {
@@ -252,7 +255,7 @@ export class NestBootstrapApplication extends EventEmitter {
             })
             .setContact('the developer', null, 'biud436@gmail.com')
             .addServer(NestBootstrapApplication.LOCAL_HOST, '로컬 서버')
-            .addServer(NestBootstrapApplication.PRODUCTION_HOST, '배포 서버')
+            .addServer(NestBootstrapApplication.PRODUCTION_HOST[0], '배포 서버')
             .setVersion('1.0')
             .build();
     }
