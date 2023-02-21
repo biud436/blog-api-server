@@ -19,10 +19,11 @@ import * as passport from 'passport';
 import { createClient } from 'redis';
 import { getSwaggerLoginCheckMiddleware } from './common/middlewares/swagger.middleware';
 import * as connectRedis from 'connect-redis';
+import { EventEmitter } from 'events';
 
 export const RedisStore = connectRedis(session);
 
-export class NestBootstrapApplication {
+export class NestBootstrapApplication extends EventEmitter {
     private static INSTANCE: NestBootstrapApplication;
     private static PORT = 3000;
     private static CONFIG: ConfigService;
@@ -44,6 +45,16 @@ export class NestBootstrapApplication {
     private static readonly REDIS_HOST =
         process.platform === 'linux' ? 'redis' : 'localhost';
     private static readonly REDIS_PORT = 6379;
+
+    private constructor() {
+        super();
+        this.on('ready', () => {
+            this.prepare().start();
+        });
+        this.on('[debug]', (message: string) => {
+            NestBootstrapApplication.LOGGER.verbose(message);
+        });
+    }
 
     get app(): NestExpressApplication {
         return this._application;
@@ -75,9 +86,7 @@ export class NestBootstrapApplication {
      */
     public async start(): Promise<void> {
         if (this.isDelvelopment()) {
-            NestBootstrapApplication.LOGGER.log(
-                '서버가 개발 모드에서 시작되었습니다',
-            );
+            this.emit('[debug]', '서버가 개발 모드에서 시작되었습니다');
         }
 
         this._application = await NestFactory.create<NestExpressApplication>(
@@ -163,7 +172,7 @@ export class NestBootstrapApplication {
             getSwaggerLoginCheckMiddleware(configService),
         );
 
-        ServerLog.info('미들웨어를 초기화하였습니다');
+        this.emit('[debug]', '미들웨어를 초기화하였습니다');
 
         return this;
     }
