@@ -139,6 +139,7 @@ export class ImageController {
     @Get(['/stats', '/shake-profile'])
     @Header('Content-Type', 'image/svg+xml')
     @Header('Cache-Control', 'public, max-age=3600')
+    @Header('Access-Control-Allow-Origin', '*')
     @CustomApiOkResponse({
         operation: {
             summary: '깃허브 프로필 이미지 동적 생성',
