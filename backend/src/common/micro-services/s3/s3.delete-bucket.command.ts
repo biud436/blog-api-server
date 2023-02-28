@@ -1,6 +1,7 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as AWS from 'aws-sdk';
+import { TEnvironmentFile } from 'src/common/my-config-service.type';
 import { Image } from 'src/controllers/image/entities/image.entity';
 
 export abstract class S3DeleteBucketCommand {
@@ -17,14 +18,16 @@ export class S3DeleteBucketCommandImpl
     private logger = new Logger(S3DeleteBucketCommand.name);
 
     protected s3: AWS.S3 = new AWS.S3({
-        accessKeyId: this.configService.get<string>('AWS_ACCESS_KEY_ID'),
-        secretAccessKey: this.configService.get<string>(
+        accessKeyId: this.configService.getOrThrow<string>('AWS_ACCESS_KEY_ID'),
+        secretAccessKey: this.configService.getOrThrow<string>(
             'AWS_SECRET_ACCESS_KEY',
         ),
         region: 'ap-northeast-2',
     });
 
-    constructor(private readonly configService: ConfigService) {
+    constructor(
+        private readonly configService: ConfigService<TEnvironmentFile>,
+    ) {
         super();
     }
 
@@ -34,7 +37,8 @@ export class S3DeleteBucketCommandImpl
 
     execute(images: Image[]): Promise<void> {
         const { s3 } = this;
-        const BUCKET = this.configService.get<string>('AWS_S3_BUCKET_NAME');
+        const BUCKET =
+            this.configService.getOrThrow<string>('AWS_S3_BUCKET_NAME');
 
         return new Promise<void>((resolve, reject) => {
             s3.deleteObjects(

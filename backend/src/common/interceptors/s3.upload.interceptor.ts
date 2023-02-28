@@ -21,6 +21,7 @@ import { ImageService } from '../../controllers/image/image.service';
 import { AES256Provider } from 'src/common/modules/aes/aes-256.provider';
 import { JwtPayload } from '../../controllers/auth/validator/response.dto';
 import { S3Client } from '@aws-sdk/client-s3';
+import { TEnvironmentFile } from '../my-config-service.type';
 
 type MulterInstance = any;
 
@@ -40,8 +41,8 @@ export function S3FileInterceptor(
         private s3: S3Client = new S3Client({
             credentials: {
                 accessKeyId:
-                    this.configService.get<string>('AWS_ACCESS_KEY_ID'),
-                secretAccessKey: this.configService.get<string>(
+                    this.configService.getOrThrow<string>('AWS_ACCESS_KEY_ID'),
+                secretAccessKey: this.configService.getOrThrow<string>(
                     'AWS_SECRET_ACCESS_KEY',
                 ),
             },
@@ -52,7 +53,7 @@ export function S3FileInterceptor(
             @Optional()
             @Inject(MULTER_MODULE_OPTIONS)
             options: MulterModuleOptions = {},
-            private readonly configService: ConfigService,
+            private readonly configService: ConfigService<TEnvironmentFile>,
             private readonly imageService: ImageService,
         ) {
             this.initWithDefaultSettings();
@@ -64,7 +65,8 @@ export function S3FileInterceptor(
         }
 
         initWithDefaultSettings() {
-            const BUCKET = this.configService.get<string>('AWS_S3_BUCKET_NAME');
+            const BUCKET =
+                this.configService.getOrThrow<string>('AWS_S3_BUCKET_NAME');
 
             this.defaultSettings = {
                 storage: multerS3({

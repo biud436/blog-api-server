@@ -16,7 +16,7 @@ export function getSwaggerAuthMiddleware(configService: ConfigService) {
     return basicAuth({
         challenge: true,
         users: {
-            admin: configService.get('DOCS_PASSWORD'),
+            admin: configService.getOrThrow('DOCS_PASSWORD'),
         },
     });
 }

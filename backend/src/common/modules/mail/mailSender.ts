@@ -3,6 +3,7 @@ import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import Mail from 'nodemailer/lib/mailer';
 import { Injectable } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TEnvironmentFile } from 'src/common/my-config-service.type';
 
 export type MailForm = Record<string, SMTPTransport.Options>;
 export type MailAdminFrom<T extends MailForm, VP extends keyof T> = {
@@ -65,7 +66,9 @@ export class MailSender {
     private options: SMTPTransport.Options;
     private transporter?: Mail;
 
-    constructor(private readonly configService: ConfigService) {
+    constructor(
+        private readonly configService: ConfigService<TEnvironmentFile>,
+    ) {
         this.initWithMailInfo();
         this.transporter = nodemailer.createTransport(
             this.transporterOptions.gmail,
@@ -82,7 +85,7 @@ export class MailSender {
      * @returns
      */
     decrypt(str: string): string {
-        const XOR_KEY = +this.configService.get<number>('MAIL_XOR_KEY');
+        const XOR_KEY = +this.configService.getOrThrow<number>('MAIL_XOR_KEY');
 
         console.log(XOR_KEY);
 
@@ -98,7 +101,7 @@ export class MailSender {
      */
     initWithMailInfo(): void {
         const get = (key: string) => {
-            return this.configService.get(key);
+            return this.configService.getOrThrow(key as any);
         };
 
         this.transporterOptions = {

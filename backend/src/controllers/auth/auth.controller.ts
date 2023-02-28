@@ -50,6 +50,7 @@ import { PostsService } from '../posts/posts.service';
 import { PageNumber } from 'src/common/decorators/page-number.decorator';
 import { Throttle } from '@nestjs/throttler';
 import { LOGIN_INTERVAL } from 'src/common/throttle-config';
+import { TEnvironmentFile } from 'src/common/my-config-service.type';
 
 @Controller('auth')
 @ApiTags('인증 API')
@@ -58,7 +59,7 @@ export class AuthController {
 
     constructor(
         private readonly authService: AuthService,
-        private readonly configService: ConfigService,
+        private readonly configService: ConfigService<TEnvironmentFile>,
         private readonly httpService: HttpService,
         private readonly postsService: PostsService,
     ) {}

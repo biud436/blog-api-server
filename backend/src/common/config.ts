@@ -1,6 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { TEnvironmentFile } from './my-config-service.type';
 
 /**
  * @interface DBConnectionType
@@ -19,15 +20,17 @@ interface DBConnectionType {
 
 type ParitialDBType = Partial<TypeOrmModuleOptions>;
 
-export default (configService: ConfigService): DBConnectionType => {
+export default (
+    configService: ConfigService<TEnvironmentFile>,
+): DBConnectionType => {
     // 기본 옵션
     const defaultOption = <ParitialDBType>{
         type: 'mariadb',
-        host: configService.get('DB_HOST'),
-        port: +configService.get('DB_PORT'),
-        username: configService.get('DB_USER'),
-        password: configService.get('DB_PASSWORD'),
-        database: configService.get('DB_NAME'),
+        host: configService.getOrThrow('DB_HOST'),
+        port: +configService.getOrThrow('DB_PORT'),
+        username: configService.getOrThrow('DB_USER'),
+        password: configService.getOrThrow('DB_PASSWORD'),
+        database: configService.getOrThrow('DB_NAME'),
         autoLoadEntities: true,
         namingStrategy: new SnakeNamingStrategy(),
         dateStrings: true,
@@ -43,11 +46,11 @@ export default (configService: ConfigService): DBConnectionType => {
         },
         production: {
             type: 'mysql',
-            host: configService.get('DB_HOST'),
-            port: +configService.get('DB_PORT'),
-            username: configService.get('DB_USER'),
-            password: configService.get('DB_PASSWORD'),
-            database: configService.get('DB_NAME'),
+            host: configService.getOrThrow('DB_HOST'),
+            port: +configService.getOrThrow('DB_PORT'),
+            username: configService.getOrThrow('DB_USER'),
+            password: configService.getOrThrow('DB_PASSWORD'),
+            database: configService.getOrThrow('DB_NAME'),
             autoLoadEntities: true,
 
             namingStrategy: new SnakeNamingStrategy(),

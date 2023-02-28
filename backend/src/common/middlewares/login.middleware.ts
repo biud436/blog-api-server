@@ -2,7 +2,6 @@ import { NestMiddleware } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-
 export class LoginMiddleware implements NestMiddleware {
     constructor(private readonly configService: ConfigService) {}
 
@@ -18,7 +17,7 @@ export class LoginMiddleware implements NestMiddleware {
             return;
         }
 
-        const secret = this.configService.get('JWT_SECRET');
+        const secret = this.configService.getOrThrow('JWT_SECRET');
 
         jwt.verify(accessToken, secret, (err, decoded) => {
             if (err) {

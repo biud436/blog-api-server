@@ -2,6 +2,7 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as crypto from 'crypto';
 import { CryptoUtil } from 'src/common/libs/crypto/CryptoUtil';
+import { TEnvironmentFile } from 'src/common/my-config-service.type';
 
 @Injectable()
 export class AES256Provider implements OnModuleInit {
@@ -14,7 +15,9 @@ export class AES256Provider implements OnModuleInit {
 
     public static ALGORITHM = <crypto.CipherCCMTypes>'aes-256-gcm';
 
-    constructor(private readonly configService: ConfigService) {}
+    constructor(
+        private readonly configService: ConfigService<TEnvironmentFile>,
+    ) {}
 
     /**
      * 멤버 초기화
@@ -26,9 +29,11 @@ export class AES256Provider implements OnModuleInit {
         };
 
         const KEY =
-            this.configService.get<string>('AES_256_KEY') || tempStorage.KEY;
+            this.configService.getOrThrow<string>('AES_256_KEY') ||
+            tempStorage.KEY;
         const IV =
-            this.configService.get<string>('AES_256_IV') || tempStorage.IV;
+            this.configService.getOrThrow<string>('AES_256_IV') ||
+            tempStorage.IV;
 
         this.KEY = Buffer.from(KEY, 'utf-8');
         this.IV = Buffer.from(IV, 'hex');
