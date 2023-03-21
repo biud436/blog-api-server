@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { CategoryService } from 'src/entities/category/category.service';
 import { CreatePostDto } from 'src/entities/post/dto/create-post.dto';
 import { UpdatePostDto } from 'src/entities/post/dto/update-post.dto';
@@ -15,6 +15,7 @@ export class PostsService {
         private readonly postService: PostService,
         private readonly redisService: RedisService,
         private readonly categoryService: CategoryService,
+        @Inject(CACHE_MANAGER) private cacheManager: Cache,
     ) {}
 
     /**
@@ -54,7 +55,12 @@ export class PostsService {
      * @param postId
      * @returns
      */
-    async findOne(postId: number, isPrivate?: boolean, anonymousId?: number) {
+    async findOne(
+        postId: number,
+        ip: string,
+        isPrivate?: boolean,
+        anonymousId?: number,
+    ) {
         let totalCount = '0';
 
         const item = await this.postService.findOne(
@@ -63,8 +69,16 @@ export class PostsService {
             anonymousId,
         );
 
+        // ip가 이미 조회한 ip인지 확인
+        const isViewed = await this.redisService.isViewedPost(postId, ip);
+
         if (item) {
-            await this.redisService.increasePostViewCount(postId);
+            if (!isViewed) {
+                // 24시간 이내에 조회한 적이 없다면 조회수 증가
+                await this.redisService.setViewedPost(postId, ip);
+                await this.redisService.increasePostViewCount(postId);
+            }
+
             totalCount = await this.redisService.get(
                 'post_view_count:' + postId,
             );

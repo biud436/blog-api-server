@@ -153,7 +153,7 @@ import { ThrottlerBehindProxyGuard } from './common/guards/throttler-behind-prox
             useClass: AllExceptionFilter,
         },
     ],
-    exports: [ThrottlerModule],
+    exports: [ThrottlerModule, CacheModule],
 })
 export class AppModule {
     public static isDelvelopment(): boolean {

@@ -17,6 +17,8 @@ export namespace Redis {
 
 @Injectable()
 export class RedisService implements OnModuleInit, OnModuleDestroy {
+    private static EVERY_24_HOURS = 60 * 60 * 24;
+
     public client = createClient({
         socket: {
             host: process.platform === 'linux' ? 'redis' : 'localhost',
@@ -186,6 +188,33 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
         const key = `post_view_count:${postId}`;
 
         return await this.client.INCR(key);
+    }
+
+    /**
+     * 조회 여부를 확인합니다.
+     * @param postId
+     * @param ip
+     * @returns
+     */
+    async isViewedPost(postId: number, ip: string) {
+        const key = `post_viewed:${postId}:${ip}`;
+        const result = await this.client.GET(key);
+
+        return result === '1';
+    }
+
+    /**
+     * 조회 여부가 확인되었음을 표시합니다.
+     *
+     * @param postId
+     * @param ip
+     * @returns
+     */
+    async setViewedPost(postId: number, ip: string) {
+        const key = `post_viewed:${postId}:${ip}`;
+        const ttl = RedisService.EVERY_24_HOURS;
+        await this.set(key, '1');
+        return await this.client.EXPIRE(key, ttl);
     }
 
     /**

@@ -11,6 +11,7 @@ import {
     DefaultValuePipe,
     UseGuards,
     Req,
+    Ip,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { InjectDataSource } from '@nestjs/typeorm';
@@ -255,12 +256,14 @@ export class PostsController {
     @CustomApiOkResponse(DocsMapper.posts.GET.findOne)
     async findOne(
         @PostId() postId: number,
+        @Ip() ip: string,
         @IsReadablePrivatePost() IsReadablePrivatePost?: boolean,
         @AnonymousId() anonymousId?: number,
     ) {
         try {
             const model = await this.postsService.findOne(
                 postId,
+                ip,
                 IsReadablePrivatePost,
                 anonymousId,
             );
