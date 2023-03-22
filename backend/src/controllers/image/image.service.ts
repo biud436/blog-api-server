@@ -1,14 +1,8 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
-import { UserService } from 'src/entities/user/user.service';
-import { RedisService } from 'src/common/micro-services/redis/redis.service';
-import { CryptoUtil } from 'src/common/libs/crypto/CryptoUtil';
-import { DataSource, QueryRunner, Repository } from 'typeorm';
+import { Injectable } from '@nestjs/common';
+import { QueryRunner } from 'typeorm';
 import { CreateImageDto } from './dto/create-image.dto';
-import { Image } from './entities/image.entity';
 import { MulterS3File } from '../../common/interceptors/s3.upload.interceptor';
 import { S3ImageUploadDto } from './dto/s3-image-upload.dto';
-import { S3Service } from 'src/common/micro-services/s3/s3.service';
 import { ImageCreateCommand } from './commands/image-create.command';
 import { ImageTempFileGetterCommand } from './commands/image-temp.command';
 import { ImageFindByIdCommand } from './commands/image-find-by-id.command';
@@ -18,8 +12,6 @@ import { ImageDeleteCommand } from './commands/image-delete.command';
 
 @Injectable()
 export class ImageService {
-    private readonly logger = new Logger(ImageService.name);
-
     constructor(
         private readonly createCommand: ImageCreateCommand,
         private readonly tempFileGetterCommand: ImageTempFileGetterCommand,

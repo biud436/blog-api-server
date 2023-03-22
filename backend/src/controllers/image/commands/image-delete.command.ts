@@ -1,5 +1,4 @@
 import { DeleteResult, QueryRunner, Repository } from 'typeorm';
-import { CreateImageDto } from '../dto/create-image.dto';
 import { Image } from '../entities/image.entity';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';

@@ -1,6 +1,5 @@
 import { Exclude } from 'class-transformer';
 import { Post } from 'src/entities/post/entities/post.entity';
-import { User } from 'src/entities/user/entities/user.entity';
 import {
     Column,
     Entity,
