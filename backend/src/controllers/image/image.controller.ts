@@ -6,48 +6,33 @@ import {
     Post,
     Query,
     Render,
-    Res,
     UploadedFiles,
     UseInterceptors,
     Header,
-    UploadedFile,
-    Param,
     Body,
     DefaultValuePipe,
 } from '@nestjs/common';
-import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
-import {
-    ApiConsumes,
-    ApiExcludeEndpoint,
-    ApiOperation,
-    ApiTags,
-} from '@nestjs/swagger';
-import { InjectConnection, InjectDataSource } from '@nestjs/typeorm';
+import { AnyFilesInterceptor } from '@nestjs/platform-express';
+import { ApiConsumes, ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger';
+import { InjectDataSource } from '@nestjs/typeorm';
 import {
     AdminOnly,
     CustomApiOkResponse,
     JwtGuard,
 } from 'src/common/decorators/custom.decorator';
-import { Connection, DataSource } from 'typeorm';
+import { DataSource } from 'typeorm';
 import { ImageService } from './image.service';
-import { Response } from 'express';
-import { HttpService } from '@nestjs/axios';
-import { ConfigService } from '@nestjs/config';
-import * as AWS from 'aws-sdk';
-import * as multerS3 from 'multer-s3';
 import {
     MulterS3File,
     S3FileInterceptor,
 } from '../../common/interceptors/s3.upload.interceptor';
-import { UserInfo } from 'src/common/decorators/user.decorator';
-import { JwtPayload } from '../auth/validator/response.dto';
 import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
 import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
 import { IResponsableData } from 'src/common/libs/response/interface/response.interface';
 import { S3ImageUploadDto } from './dto/s3-image-upload.dto';
 import { UserId } from 'src/common/decorators/user-id.decorator';
-import Handlebars from 'handlebars';
 import { ImageCreateSvgCommand } from './commands/image-create-svg.command';
+import { Image } from './entities/image.entity';
 
 @Controller('image')
 @ApiTags('이미지')
@@ -71,17 +56,15 @@ export class ImageController {
         await queryRunner.startTransaction();
 
         try {
+            const pendingList: Promise<Image>[] = [];
+
             for (const file of files) {
-                const result = await this.imageService.create(
-                    file,
-                    queryRunner,
-                );
-                if (result) {
-                    this.logger.log(
-                        `-- ${file.originalname} 이미지 업로드 완료 --`,
-                    );
-                }
+                const result = this.imageService.create(file, queryRunner);
+                pendingList.push(result);
             }
+
+            await Promise.allSettled(pendingList);
+
             await queryRunner.commitTransaction();
         } catch (e) {
             this.logger.error(e);
