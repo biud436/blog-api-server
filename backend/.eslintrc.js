@@ -27,6 +27,12 @@ module.exports = {
             'error',
             {
               'endOfLine': 'auto',
+              'singleQuote': true,
+              'semi': true,   
+              'tabWidth': 4,
+              'useTabs': false,
+              'trailingComma': 'all',
+              'private': 'off',
             }
           ]        
     },

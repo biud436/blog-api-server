@@ -1,5 +1,8 @@
 {
   "discord.enabled": true,
   "css.customData": [".vscode/css_custom_data.json"],
-  "[handlebars]": { "editor.formatOnSave": false }
+  "[handlebars]": { "editor.formatOnSave": false },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
 }
