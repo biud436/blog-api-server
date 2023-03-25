@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import * as basicAuth from 'express-basic-auth';
 import { ConfigService } from '@nestjs/config';
 import * as jwt from 'jsonwebtoken';
+import { NestBootstrapApplication } from 'src/nest-bootstrap.application';
 
 /**
  * [HTTP-Authentication](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication)을 이용하는 Middleware입니다.

@@ -20,6 +20,10 @@ import { createClient } from 'redis';
 import { getSwaggerLoginCheckMiddleware } from './common/middlewares/swagger.middleware';
 import * as connectRedis from 'connect-redis';
 import { EventEmitter } from 'events';
+import { useGlobalPipes } from './common/middlewares/global-pipes.middleware';
+import { useStaticImageFiles } from './common/middlewares/images.middleware';
+import { useHelmet } from './common/middlewares/helmet.middleware';
+import { useCookieParser } from './common/middlewares/cookie-parser.middleware';
 
 export const RedisStore = connectRedis(session);
 
@@ -111,6 +115,11 @@ export class NestBootstrapApplication extends EventEmitter {
         await this._application.listen(NestBootstrapApplication.PORT);
     }
 
+    private useGlobalPipes = useGlobalPipes;
+    private useStaticImageFiles = useStaticImageFiles;
+    private useHelmet = useHelmet;
+    private useCookieParser = useCookieParser;
+
     /**
      * 미들웨어를 초기화합니다.
      *
@@ -120,36 +129,38 @@ export class NestBootstrapApplication extends EventEmitter {
     private initWithMiddleware(
         app: NestExpressApplication,
     ): NestBootstrapApplication {
-        app.useGlobalPipes(
-            new ValidationPipe({
-                disableErrorMessages: false,
-                transform: true,
-                transformOptions: {
-                    enableImplicitConversion: true,
-                },
-            }),
-        );
-
+        this.useGlobalPipes(app);
         this.useClassSerializerInterceptor(app);
-
-        app.use(
-            '/images',
-            express.static(
-                process.env.NODE_ENV === 'production'
-                    ? '/usr/src/app/upload/'
-                    : './images',
-            ),
-        );
-        app.use(helmet());
+        this.useStaticImageFiles(app);
+        this.useHelmet(app);
 
         app.useStaticAssets(this.getWorkingDirectory('public'));
         app.setBaseViewsDir(this.getWorkingDirectory('views'));
         app.setViewEngine(this.getDefaultViewEngine());
 
         this.useStickySession(app);
+        this.useCookieParser(app);
+        this.useCors(app);
 
-        app.use(cookieParser());
+        app.useGlobalGuards();
 
+        this.useSwagger(app);
+
+        this.emit('[debug]', '미들웨어를 초기화하였습니다');
+
+        return this;
+    }
+
+    private useSwagger(app: NestExpressApplication) {
+        const configService = NestBootstrapApplication.CONFIG;
+
+        app.use(
+            NestBootstrapApplication.SWAGGER_GLOB,
+            getSwaggerLoginCheckMiddleware(configService),
+        );
+    }
+
+    private useCors(app: NestExpressApplication) {
         const whitelist = this.isDelvelopment()
             ? NestBootstrapApplication.CORS_WHITELIST
             : [...NestBootstrapApplication.PRODUCTION_HOST];
@@ -164,19 +175,6 @@ export class NestBootstrapApplication extends EventEmitter {
             },
             credentials: true,
         });
-
-        app.useGlobalGuards();
-
-        const configService = NestBootstrapApplication.CONFIG;
-
-        app.use(
-            NestBootstrapApplication.SWAGGER_GLOB,
-            getSwaggerLoginCheckMiddleware(configService),
-        );
-
-        this.emit('[debug]', '미들웨어를 초기화하였습니다');
-
-        return this;
     }
 
     private useStickySession(
@@ -217,7 +215,7 @@ export class NestBootstrapApplication extends EventEmitter {
 
     /**
      * class-transform을 전역적으로 수행합니다.
-     * @Exclude() 데코레이터가 마킹된 속성이 자동으로 제외됩니다.
+     * `@Exclude()` 데코레이터가 마킹된 속성이 자동으로 제외됩니다.
      *
      * @link https://wanago.io/2020/06/08/api-nestjs-serializing-response-interceptors/
      * @param app
