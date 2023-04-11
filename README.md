@@ -1,17 +1,17 @@
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/badge/nest-9.3.2-red?logo=nestjs" alt="NPM Version" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/badge/nest-9.4.0-red?logo=nestjs" alt="NPM Version" /></a>
 
 # Introduction
 
-This project is the blog server that is made with the server framework called nestjs@v9.1.4, it is also included devops file that allows you to set and start the blog server using docker. This will introduce you to the basic elements of blog implementation. Learning something new is always a little daunting at first. but I think that things will start to become familiar in no time.
+This project is the blog server that is made with the server framework called nestjs@v9.4.0, it is also included devops file that allows you to set and start the blog server using docker. This will introduce you to the basic elements of blog implementation. Learning something new is always a little daunting at first. but I think that things will start to become familiar in no time.
 
 # Setting up the server
 
 In this directory named `backend` will finish off the features of our server by adding a lot of controllers, services, pipes of `Nest.js` for blog service.
 
--   Nest.js
--   TypeORM
--   MariaDB
--   Redis
+- Nest.js
+- TypeORM
+- MariaDB
+- Redis
 
 Before start the server application, you have to create some file such as `.development.env` and `.env` and then you should set the following environment variables.
 
@@ -61,8 +61,8 @@ yarn start env
 
 In directories called `devops` and `rdb-devops`, there is the yaml file ends with `docker-compose.yml` that can use in the the Docker. These files will create and execute a docker image in your linux or macos due to a Dockerfile of corresponding folder.
 
--   Nginx
--   Docker
+- Nginx
+- Docker
 
 You can run the web server, database, and others in certain environments such as `linux (Ubuntu Server 20.04)` or `MacOS (Apple M1 Silicon)` only. (Do not run it on Windows)
 
@@ -112,56 +112,56 @@ To pass the parameter key and value named `isBeautify=true`, you can get the hie
 
 ```json
 {
-    "message": "데이터 조회 성공",
-    "statusCode": 200,
-    "result": "success",
-    "data": [
+  "message": "데이터 조회 성공",
+  "statusCode": 200,
+  "result": "success",
+  "data": [
+    {
+      "children": [
         {
-            "children": [
-                {
-                    "children": [
-                        {
-                            "children": [],
-                            "name": "강좌",
-                            "left": 3,
-                            "right": 4,
-                            "depth": 2
-                        }
-                    ],
-                    "name": "C++",
-                    "left": 2,
-                    "right": 5,
-                    "depth": 1
-                },
-                {
-                    "children": [
-                        {
-                            "children": [],
-                            "name": "자바 강좌",
-                            "left": 7,
-                            "right": 8,
-                            "depth": 2
-                        }
-                    ],
-                    "name": "Java",
-                    "left": 6,
-                    "right": 9,
-                    "depth": 1
-                },
-                {
-                    "children": [],
-                    "name": "Ruby",
-                    "left": 10,
-                    "right": 11,
-                    "depth": 1
-                }
-            ],
-            "name": "IT",
-            "left": 1,
-            "right": 12,
-            "depth": 0
+          "children": [
+            {
+              "children": [],
+              "name": "강좌",
+              "left": 3,
+              "right": 4,
+              "depth": 2
+            }
+          ],
+          "name": "C++",
+          "left": 2,
+          "right": 5,
+          "depth": 1
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "name": "자바 강좌",
+              "left": 7,
+              "right": 8,
+              "depth": 2
+            }
+          ],
+          "name": "Java",
+          "left": 6,
+          "right": 9,
+          "depth": 1
+        },
+        {
+          "children": [],
+          "name": "Ruby",
+          "left": 10,
+          "right": 11,
+          "depth": 1
         }
-    ]
+      ],
+      "name": "IT",
+      "left": 1,
+      "right": 12,
+      "depth": 0
+    }
+  ]
 }
 ```
 
@@ -173,17 +173,17 @@ if pass the parameter is the same as `isBeautify=false`, you can get the flat ca
 
 ```json
 {
-    "message": "데이터 조회 성공",
-    "statusCode": 200,
-    "result": "success",
-    "data": [
-        ["IT", "", 0],
-        ["C++", "IT", 1],
-        ["강좌", "C++", 2],
-        ["Java", "IT", 1],
-        ["자바 강좌", "Java", 2],
-        ["Ruby", "IT", 1]
-    ]
+  "message": "데이터 조회 성공",
+  "statusCode": 200,
+  "result": "success",
+  "data": [
+    ["IT", "", 0],
+    ["C++", "IT", 1],
+    ["강좌", "C++", 2],
+    ["Java", "IT", 1],
+    ["자바 강좌", "Java", 2],
+    ["Ruby", "IT", 1]
+  ]
 }
 ```
 
@@ -199,10 +199,10 @@ The posts are the main feature of this blog service. The posts can be created, u
 
 ```json
 {
-    "message": "데이터 조회 성공",
-    "statusCode": 200,
-    "result": "success",
-    "data": "IT > Java > 자바 강좌"
+  "message": "데이터 조회 성공",
+  "statusCode": 200,
+  "result": "success",
+  "data": "IT > Java > 자바 강좌"
 }
 ```
 

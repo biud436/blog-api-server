@@ -1,6 +1,4 @@
 import {
-    CacheInterceptor,
-    CacheModule,
     CacheModuleAsyncOptions,
     MiddlewareConsumer,
     Module,
@@ -53,6 +51,7 @@ import { PrivatePostGuard } from './controllers/auth/guards/private-post.guard';
 import { ConnectInfoModule } from './entities/connect-info/connect-info.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { ThrottlerBehindProxyGuard } from './common/guards/throttler-behind-proxy.guard';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
     imports: [
