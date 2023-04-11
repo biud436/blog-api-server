@@ -208,15 +208,17 @@ The posts are the main feature of this blog service. The posts can be created, u
 
 # Upgrade modules
 
-업그레이드된 `@nestjs` 버전으로 갱신하려면 다음과 같이 해야 합니다.
+To upgrade the `@nestjs/*` version, you have to do the following.
 
 ```bash
 yarn upgrade --pattern @nestjs --latest
 ```
 
-버전 업그레이드에 따라 특정 기능이 `deprecated` 될 수도 있습니다.
+Note that some features may be `deprecated` due to dependencies update.
 
-frontend 서브 모듈을 업그레이드하려면 다음과 같이 해야 합니다.
+## Upgrade frontend submodule
+
+To upgrade the sub module, you have to do the following.
 
 ```bash
 git submodule update --remote
