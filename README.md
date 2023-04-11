@@ -215,3 +215,9 @@ yarn upgrade --pattern @nestjs --latest
 ```
 
 버전 업그레이드에 따라 특정 기능이 `deprecated` 될 수도 있습니다.
+
+frontend 서브 모듈을 업그레이드하려면 다음과 같이 해야 합니다.
+
+```bash
+git submodule update --remote
+```
