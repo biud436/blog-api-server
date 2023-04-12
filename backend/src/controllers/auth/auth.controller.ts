@@ -51,6 +51,7 @@ import { PageNumber } from 'src/common/decorators/page-number.decorator';
 import { Throttle } from '@nestjs/throttler';
 import { LOGIN_INTERVAL } from 'src/common/throttle-config';
 import { TEnvironmentFile } from 'src/common/my-config-service.type';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 @ApiTags('인증 API')
@@ -273,14 +274,11 @@ export class AuthController {
      * /github/login
      */
     @Get('/github/callback')
-    async loginGithubUser(
-        @Query('code') code: string,
-        @Query('state') state: string,
-    ): Promise<GithubUserData> {
-        try {
-            return await this.authService.loginGithubUser(code, state);
-        } catch (e: any) {
-            throw ResponseUtil.failureWrap(e);
-        }
+    @UseGuards(AuthGuard('github'))
+    async loginGithubUser(@Req() req) {
+        const user = req.user;
+        const payload = { user: user, role: 'user' };
+
+        return { accessToken: this.authService.sign(payload) };
     }
 }

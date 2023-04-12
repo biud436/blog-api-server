@@ -152,6 +152,10 @@ export class AuthService {
         }
     }
 
+    async sign(payload: any) {
+        return this.jwtService.sign(payload);
+    }
+
     async createConnectInfo(ip: string) {
         await this.connectInfoService.create({
             ip: ip,

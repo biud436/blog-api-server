@@ -34,22 +34,20 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
     }
 
     async validate(
-        request: Request, // passReqToCallback
         accessToken: string,
         refreshToken: string,
-        profile: IGithubProfile,
+        profile: any,
+        done: (error: any, user?: any, info?: any) => void,
     ) {
-        // accessToken & refreshToken 저장 필요
-
-        // 비동기 처리가 제대로 되지 않음.
-        const user = await this.userCopyService.create({
-            username: profile.id,
-        });
-
-        return {
-            user,
-            email: profile.emails[0].value,
-            name: profile.displayName ?? profile.username,
+        const { username, photos, displayName } = profile;
+        const user = {
+            email: '',
+            name: displayName,
+            photo: photos[0].value,
+            username,
+            accessToken,
+            refreshToken,
         };
+        done(null, user);
     }
 }
