@@ -247,22 +247,12 @@ export class AuthController {
         return await this.authService.getUserList(pageNumber);
     }
 
-    /**
-     * ? 1. Request a user's GitHub identity
-     * https://docs.github.com/en/developers/apps/building-oauth-apps/authorizing-oauth-apps#1-request-a-users-github-identity
-     * @returns
-     */
     @Get('/github/login')
     @UseGuards(AuthGuard('github'))
     async loginByGithub() {
         return true;
     }
 
-    /**
-     * ? 2. Users are redirected back to your site by GitHub
-     * https://docs.github.com/en/developers/apps/building-oauth-apps/authorizing-oauth-apps#2-users-are-redirected-back-to-your-site-by-github
-     * /github/login
-     */
     @Get('/github/callback')
     @UseGuards(AuthGuard('github'))
     async loginGithubUser(
