@@ -43,6 +43,7 @@ import { LocalDate, LocalDateTime } from '@js-joda/core';
 import { AES256Provider } from 'src/common/modules/aes/aes-256.provider';
 import { Paginatable } from 'src/common/list-config';
 import { ConnectInfoService } from 'src/entities/connect-info/connect-info.service';
+import { GithubUser } from './strategies/github.strategy';
 
 export type AvailableEmailList =
     | `${string}@gmail.com`
@@ -150,6 +151,86 @@ export class AuthService {
 
             throw new InternalServerErrorException(e.message);
         }
+    }
+
+    async loginGithubUser(githubPayload: GithubUser, res: Response) {
+        try {
+            if (!githubPayload) {
+                throw new UnauthorizedException('Github User Not Found');
+            }
+
+            const user = githubPayload;
+
+            const payload = <JwtPayload>{ user: user, role: 'user' };
+
+            // 깃허브 아이디를 확인하고, 해당 유저가 있는지 확인한다,
+            const username = user.username;
+
+            const authorizedUser = await this.userService.findProfileByUsername(
+                username,
+            );
+
+            // 유저가 없으면 보통 회원 가입이 순례이지만, 회원 가입 기능이 없는 사이트이므로 401 에러를 던진다.
+            if (!authorizedUser) {
+                throw new UnauthorizedException('User Not Found');
+            }
+
+            // 본 블로그에서는 관리자 권한을 가진 유저를 별도의 테이블에 따로 관리한다.
+            // 따라서 관리자인지 확인하는 코드는 아래와 같다.
+            let isAdmin = false;
+
+            if ('username' in authorizedUser) {
+                isAdmin = await this.adminService.isAdmin(username);
+            }
+
+            if (isAdmin) {
+                payload.role = 'admin';
+            }
+
+            // 관리자가 아니라면 오류를 던진다.
+            if (!['admin'].includes(payload.role)) {
+                throw new LoginAuthorizationException();
+            }
+
+            // 깃허브를 통해 인증이 완료되었으므로 자체 로그인에 호환되는 JWT 토큰을 발급한다.
+            const accessToken = await this.jwtService.signAsync(payload);
+            const refreshToken = await this.jwtService.signAsync(payload, <
+                JwtSignOptions
+            >{
+                secret: this.configService.getOrThrow(
+                    'JWT_REFRESH_TOKEN_SECRET',
+                ),
+                expiresIn: this.configService.getOrThrow(
+                    'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
+                ),
+                algorithm: 'HS384',
+            });
+
+            // 쿠키 방식의 토큰 로그인이므로 쿠키를 생성한다.
+            await this.loginUseCookieMiddleware(
+                {
+                    accessToken,
+                    refreshToken,
+                },
+                null,
+                res,
+            );
+
+            // 로그인에 성공하였으므로 블로그로 다시 리다이렉트 처리를 한다.
+            const blogUrl = this.configService.getOrThrow('BLOG_URL');
+            res.redirect(blogUrl);
+        } catch (e: any) {
+            const status = e.status || 500;
+            if ([400, 401, 403, 404, 500].includes(status)) {
+                throw new UnauthorizedException(e.message);
+            }
+
+            throw new InternalServerErrorException(e.message);
+        }
+    }
+
+    async sign(payload: any) {
+        return this.jwtService.sign(payload);
     }
 
     async createConnectInfo(ip: string) {
@@ -641,75 +722,6 @@ export class AuthService {
             .join('');
 
         return URL + queryString;
-    }
-
-    /**
-     * ? 2. Users are redirected back to your site by GitHub
-     * https://docs.github.com/en/developers/apps/building-oauth-apps/authorizing-oauth-apps#2-users-are-redirected-back-to-your-site-by-github
-     * /github/login
-     *
-     * @deprecated
-     */
-    async loginGithubUser(code: string, state: string) {
-        const serverState = await this.redisService.get('github_state');
-
-        console.log('serverState : %s', serverState);
-        console.log('state : %s', state);
-        console.log('code : %s', code);
-        console.log('same? : %s', serverState === state);
-
-        if (serverState !== state) {
-            throw new UnauthorizedException(
-                '잘못된 요청입니다 [상태 코드 만료]',
-            );
-        }
-
-        const URL = 'https://github.com/login/oauth/access_token';
-        const client_id = this.configService.get<string>('GITHUB_CLIENT_ID');
-        const client_secret = this.configService.get<string>(
-            'GITHUB_CLIENT_SECRET',
-        );
-        const redirect_uri = this.configService.get<string>(
-            'GITHUB_REDIRECT_URI',
-        );
-
-        const responseProm = await this.httpService.axiosRef.post(URL, null, {
-            headers: {
-                Accept: 'application/json',
-            },
-            params: {
-                client_id,
-                client_secret,
-                code,
-            },
-        });
-
-        if (responseProm.status !== 200) {
-            throw new UnauthorizedException(
-                '깃허브 서버에서 토큰을 받아오지 못했습니다',
-            );
-        }
-
-        // 유저 데이터를 취득합니다.
-        /**
-         * @link https://docs.github.com/en/rest/users/users 참고 링크
-         */
-        const githubUserData = await this.getGithubUserData(responseProm.data);
-
-        console.log('githubUserData : %o', githubUserData);
-
-        if (!githubUserData) {
-            throw new UnauthorizedException(
-                '유저 데이터를 받아오지 못했습니다',
-            );
-        }
-
-        const { id } = githubUserData;
-
-        // DB에 깃허브 유저 데이터 저장 필요 (NoSQL이 적당한데, RDBMS에 매핑해서 저장해야 한다)
-        console.log(`유저 식별 코드 : ${id}`);
-
-        return githubUserData;
     }
 
     /**

@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
-import { Strategy } from 'passport-github2';
+import { Strategy, Profile } from 'passport-github2';
+import { Role } from 'src/common/decorators/role.enum';
 import { UserCopyService } from 'src/entities/user-copy/user-copy.service';
 import { UserService } from 'src/entities/user/user.service';
 
@@ -11,6 +12,15 @@ interface IGithubProfile {
     username: string;
     profileUrl: string;
     emails: Array<{ value: string }>;
+}
+
+export interface GithubUser {
+    email: string;
+    name: string;
+    photo: string;
+    username: string;
+    accessToken: string;
+    refreshToken: string;
 }
 
 @Injectable()
@@ -29,27 +39,26 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
             callbackURL: configService.get('GITHUB_CALLBACK_URL', {
                 infer: true,
             }),
-            passReqToCallback: true,
+            scope: ['user', 'public_profile'],
         });
     }
 
     async validate(
-        request: Request, // passReqToCallback
         accessToken: string,
         refreshToken: string,
-        profile: IGithubProfile,
+        profile: Profile,
+        done: (error: any, user?: any, info?: any) => void,
     ) {
-        // accessToken & refreshToken 저장 필요
-
-        // 비동기 처리가 제대로 되지 않음.
-        const user = await this.userCopyService.create({
-            username: profile.id,
-        });
-
-        return {
-            user,
+        const { username, photos, displayName } = profile;
+        const user = {
             email: profile.emails[0].value,
-            name: profile.displayName ?? profile.username,
+            name: displayName,
+            photo: photos[0].value,
+            username,
+            accessToken,
+            refreshToken,
         };
+
+        done(null, user);
     }
 }
