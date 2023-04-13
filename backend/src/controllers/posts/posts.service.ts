@@ -15,7 +15,6 @@ export class PostsService {
         private readonly postService: PostService,
         private readonly redisService: RedisService,
         private readonly categoryService: CategoryService,
-        @Inject(CACHE_MANAGER) private cacheManager: Cache,
     ) {}
 
     /**

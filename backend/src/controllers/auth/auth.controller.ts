@@ -52,6 +52,7 @@ import { Throttle } from '@nestjs/throttler';
 import { LOGIN_INTERVAL } from 'src/common/throttle-config';
 import { TEnvironmentFile } from 'src/common/my-config-service.type';
 import { AuthGuard } from '@nestjs/passport';
+import { JwtPayload } from './validator/response.dto';
 
 @Controller('auth')
 @ApiTags('인증 API')
@@ -251,21 +252,10 @@ export class AuthController {
      * https://docs.github.com/en/developers/apps/building-oauth-apps/authorizing-oauth-apps#1-request-a-users-github-identity
      * @returns
      */
-    @Get('/github/identity')
-    async requestGithubUserIdentity(
-        @Res({
-            passthrough: true,
-        })
-        res: Response,
-    ) {
-        try {
-            const requestUrl =
-                await this.authService.requestGithubUserIdentity();
-
-            return requestUrl;
-        } catch (e) {
-            console.warn(e);
-        }
+    @Get('/github/login')
+    @UseGuards(AuthGuard('github'))
+    async loginByGithub() {
+        return true;
     }
 
     /**
@@ -275,10 +265,14 @@ export class AuthController {
      */
     @Get('/github/callback')
     @UseGuards(AuthGuard('github'))
-    async loginGithubUser(@Req() req) {
+    async loginGithubUser(
+        @Req() req,
+        @Res({
+            passthrough: true,
+        })
+        res: Response,
+    ) {
         const user = req.user;
-        const payload = { user: user, role: 'user' };
-
-        return { accessToken: this.authService.sign(payload) };
+        return await this.authService.loginGithubUser(user, res);
     }
 }
