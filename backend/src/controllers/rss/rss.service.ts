@@ -16,7 +16,7 @@ export class RssService {
     async getFeeds(): Promise<string> {
         const feed = this.createFeed(this.options);
 
-        const { entities: posts } = await this.postService.findAll(1);
+        const { entities: posts } = await this.postService.getFeed(1);
 
         for (const post of posts) {
             feed.item(this.createFeedItem(post));

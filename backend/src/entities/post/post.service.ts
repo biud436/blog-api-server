@@ -272,6 +272,49 @@ export class PostService {
         return items;
     }
 
+    /**
+     * 포스트 페이징 조회
+     *
+     * @param pageNumber
+     * @param categoryId
+     * @returns
+     */
+    async getFeed(pageNumber: number, categoryId?: number) {
+        const qb = this.postRepository
+            .createQueryBuilder('post')
+            .select()
+            .leftJoinAndSelect('post.user', 'user')
+            .leftJoinAndSelect('post.category', 'category')
+            .leftJoinAndSelect('user.profile', 'profile')
+            .leftJoinAndSelect('post.images', 'images')
+            .where('post.deletedAt IS NULL');
+
+        if (categoryId) {
+            const descendants = await this.categoryService.selectDescendants(
+                categoryId,
+            );
+
+            const ids = descendants.map((e) => e.id);
+
+            qb.andWhere('post.categoryId IN (:...ids)', { ids });
+        }
+
+        // 비공개 포스트는 조회하지 않습니다.
+        qb.andWhere('post.isPrivate = 0');
+
+        qb.orderBy('post.uploadDate', 'DESC');
+
+        const items = await qb
+            .setPagination(pageNumber)
+            .getManyWithPagination(pageNumber);
+
+        items.entities = items.entities.map((e) => {
+            return plainToClass(Post, e);
+        });
+
+        return items;
+    }
+
     async findAllByUserId(
         pageNumber: number,
         userId: number,
