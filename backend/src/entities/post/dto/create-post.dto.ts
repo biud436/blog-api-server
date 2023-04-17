@@ -1,5 +1,6 @@
 import { Exclude, Transform, Type } from 'class-transformer';
 import {
+    IsBoolean,
     IsEmpty,
     IsInt,
     IsNumber,
@@ -21,7 +22,6 @@ export class CreatePostDto {
     @Assert.IsNotEmpty('제목을 입력해주세요.')
     @IsString()
     title: string;
-
     /**
      * 글 내용
      */
@@ -49,4 +49,12 @@ export class CreatePostDto {
     @ApiProperty()
     @IsNumber()
     categoryId?: number;
+
+    /**
+     * 비공개 글 작성 여부
+     */
+    @ApiProperty()
+    @IsOptional()
+    @IsBoolean()
+    isPrivate?: boolean;
 }
