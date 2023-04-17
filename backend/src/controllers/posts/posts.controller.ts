@@ -247,7 +247,9 @@ export class PostsController {
         @PageNumber('page') page: number,
         @Query('categoryId') categoryId?: number,
     ) {
-        return await this.postsService.findAll(page, categoryId);
+        const res = await this.postsService.findAll(page, categoryId);
+
+        return res;
     }
 
     @Get(':id')

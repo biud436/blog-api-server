@@ -2,9 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, Profile } from 'passport-github2';
-import { Role } from 'src/common/decorators/role.enum';
-import { UserCopyService } from 'src/entities/user-copy/user-copy.service';
-import { UserService } from 'src/entities/user/user.service';
 
 interface IGithubProfile {
     id: string;
@@ -25,10 +22,7 @@ export interface GithubUser {
 
 @Injectable()
 export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
-    constructor(
-        configService: ConfigService,
-        private readonly userCopyService: UserCopyService,
-    ) {
+    constructor(configService: ConfigService) {
         super({
             clientID: configService.get('GITHUB_CLIENT_ID', {
                 infer: true,

@@ -255,14 +255,19 @@ export class PostService {
             qb.andWhere('post.categoryId IN (:...ids)', { ids });
         }
 
+        // 비공개 포스트는 조회하지 않습니다.
         qb.andWhere('post.isPrivate = 0');
+
         qb.orderBy('post.uploadDate', 'DESC');
 
         const items = await qb
             .setPagination(pageNumber)
             .getManyWithPagination(pageNumber);
 
-        items.entities = items.entities.map((e) => plainToClass(Post, e));
+        items.entities = items.entities.map((e) => {
+            delete e.content;
+            return plainToClass(Post, e);
+        });
 
         return items;
     }

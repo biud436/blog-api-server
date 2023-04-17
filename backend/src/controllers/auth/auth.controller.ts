@@ -22,7 +22,13 @@ import {
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { Request, Response } from 'express';
-import { ApiConsumes, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+    ApiConsumes,
+    ApiOperation,
+    ApiQuery,
+    ApiResponse,
+    ApiTags,
+} from '@nestjs/swagger';
 import { SendAuthCodeRequestDto } from './dto/send-auth-code.dto';
 import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
 import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
@@ -247,12 +253,24 @@ export class AuthController {
         return await this.authService.getUserList(pageNumber);
     }
 
+    @ApiOperation({
+        summary: '깃허브 로그인',
+        description: '깃허브로 OAuth 2.0 로그인을 수행합니다.',
+    })
+    @ApiResponse({
+        status: HttpStatus.MOVED_PERMANENTLY,
+    })
     @Get('/github/login')
     @UseGuards(AuthGuard('github'))
     async loginByGithub() {
         return true;
     }
 
+    @ApiOperation({
+        summary: '깃허브 콜백',
+        description:
+            'CLIENT_ID와 CLIENT_SECRET을 이용하여 로그인이 수행되면 절차를 밟아 콜백을 받습니다.',
+    })
     @Get('/github/callback')
     @UseGuards(AuthGuard('github'))
     async loginGithubUser(

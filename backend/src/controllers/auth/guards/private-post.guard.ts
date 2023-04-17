@@ -39,17 +39,12 @@ export class PrivatePostGuard implements CanActivate {
 
         try {
             const token = this.getToken(request);
-
-            console.log(token);
-
             user = this.jwtService.verify(token) ?? null;
         } catch (e: any) {
-            console.warn(e);
+            // empty
         }
 
         request.user = user;
-
-        console.log(request.user);
 
         return true;
     }
@@ -65,7 +60,8 @@ export class PrivatePostGuard implements CanActivate {
         const token = request.cookies['access_token'] ?? '';
 
         if (token === '') {
-            console.warn('Token is empty. This user is anonymous.');
+            // empty
+            // console.warn('Token is empty. This user is anonymous.');
         }
 
         return token;
