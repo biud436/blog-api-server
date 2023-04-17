@@ -256,7 +256,7 @@ export class PostService {
         }
 
         // 비공개 포스트는 조회하지 않습니다.
-        qb.andWhere('post.isPrivate = 0');
+        // qb.andWhere('post.isPrivate = 0');
 
         qb.orderBy('post.uploadDate', 'DESC');
 
