@@ -272,8 +272,8 @@ export class PostsController {
 
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, model);
         } catch (e) {
-            return ResponseUtil.failureWrap({
-                message: '포스트를 찾을 수 없습니다',
+            throw ResponseUtil.failureWrap({
+                message: '포스트를 찾을 수 없거나 비공개 포스트입니다.',
                 statusCode: 403,
             });
         }
