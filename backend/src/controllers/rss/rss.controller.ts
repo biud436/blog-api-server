@@ -18,8 +18,8 @@ export class RssController {
 
     @Get()
     @Header('Content-Type', 'text/xml;charset=UTF-8')
-    @CacheKey('rss')
-    @CacheTTL(10)
+    // @CacheKey('rss')
+    // @CacheTTL(10)
     @CustomApiOkResponse({
         description: 'RSS 피드를 반환합니다.',
         operation: {
