@@ -1,20 +1,14 @@
 import {
     Controller,
     Get,
-    Post,
-    Body,
-    Patch,
-    Param,
-    Delete,
     Header,
-    CacheKey,
     CacheTTL,
     UseInterceptors,
-    CacheInterceptor,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CustomApiOkResponse } from 'src/common/decorators/custom.decorator';
 import { RssService } from './rss.service';
+import { CacheInterceptor, CacheKey } from '@nestjs/cache-manager';
 
 @Controller('rss')
 @UseInterceptors(CacheInterceptor)
