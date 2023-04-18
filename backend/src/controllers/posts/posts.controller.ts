@@ -40,7 +40,7 @@ import { PrivatePostGuard } from '../auth/guards/private-post.guard';
 import { PostsService } from './posts.service';
 import { PostSearchProperty } from './types/post-search-type';
 
-@Controller('posts')
+@Controller(['post', 'posts'])
 @ApiTags('블로그 API')
 export class PostsController {
     private logger: Logger = new Logger(PostsController.name);

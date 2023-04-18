@@ -1,10 +1,4 @@
-import {
-    Controller,
-    Get,
-    Header,
-    CacheTTL,
-    UseInterceptors,
-} from '@nestjs/common';
+import { Controller, Get, Header, CacheTTL } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CustomApiOkResponse } from 'src/common/decorators/custom.decorator';
 import { RssService } from './rss.service';
