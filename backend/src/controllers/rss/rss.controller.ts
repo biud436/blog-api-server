@@ -11,15 +11,13 @@ import { RssService } from './rss.service';
 import { CacheInterceptor, CacheKey } from '@nestjs/cache-manager';
 
 @Controller('rss')
-@UseInterceptors(CacheInterceptor)
 @ApiTags('rss')
 export class RssController {
     constructor(private readonly rssService: RssService) {}
 
     @Get()
     @Header('Content-Type', 'text/xml;charset=UTF-8')
-    // @CacheKey('rss')
-    // @CacheTTL(10)
+    @CacheTTL(10)
     @CustomApiOkResponse({
         description: 'RSS 피드를 반환합니다.',
         operation: {
