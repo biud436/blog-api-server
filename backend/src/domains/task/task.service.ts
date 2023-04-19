@@ -26,6 +26,8 @@ export class TaskService implements OnModuleInit {
         await queryRunner.connect();
         await queryRunner.startTransaction();
 
+        this.logger.log('Start handlePostViewCount...');
+
         try {
             const posts = await this.redisService.collectAllPostViewCount();
 
@@ -37,9 +39,7 @@ export class TaskService implements OnModuleInit {
                     count,
                 });
 
-                this.logger.log(
-                    `[TaskService] PostViewCount: ${id} - ${count}`,
-                );
+                this.logger.log(`PostViewCount: ${id} - ${count}`);
             }
 
             await queryRunner.commitTransaction();
@@ -49,5 +49,7 @@ export class TaskService implements OnModuleInit {
         } finally {
             await queryRunner.release();
         }
+
+        this.logger.log('End handlePostViewCount...');
     }
 }
