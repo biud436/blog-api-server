@@ -44,9 +44,8 @@ export class NestBootstrapApplication extends EventEmitter {
         'http://localhost:3000',
     ];
     private static readonly LOCAL_HOST = 'http://localhost:3000';
-    private static readonly PRODUCTION_HOST: [string, string] = [
+    private static readonly PRODUCTION_HOST: [string] = [
         'https://blog.biud436.com',
-        'https://blog-api.biud436.com',
     ];
 
     private static readonly REDIS_HOST =
@@ -135,8 +134,8 @@ export class NestBootstrapApplication extends EventEmitter {
         this.useStaticImageFiles(app);
         this.useHelmet(app);
 
-        app.useStaticAssets(this.getWorkingDirectory('public'));
-        app.setBaseViewsDir(this.getWorkingDirectory('views'));
+        app.useStaticAssets(path.join(__dirname, '..', 'public'));
+        app.setBaseViewsDir(path.join(__dirname, '..', 'views'));
         app.setViewEngine(this.getDefaultViewEngine());
 
         this.useStickySession(app);
