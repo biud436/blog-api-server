@@ -52,6 +52,7 @@ import { ConnectInfoModule } from './entities/connect-info/connect-info.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { ThrottlerBehindProxyGuard } from './common/guards/throttler-behind-proxy.guard';
 import { CacheModule } from '@nestjs/cache-manager';
+import { TaskModule } from './domains/task/task.module';
 
 @Module({
     imports: [
@@ -132,6 +133,7 @@ import { CacheModule } from '@nestjs/cache-manager';
                 : './upload',
         }),
         ConnectInfoModule,
+        TaskModule,
     ],
     controllers: [AppController],
     providers: [

@@ -85,9 +85,7 @@ export class PostsService {
                     await this.redisService.increasePostViewCount(postId);
                 }
 
-                totalCount = await this.redisService.get(
-                    'post_view_count:' + postId,
-                );
+                totalCount = await this.redisService.getPostViewCount(postId);
             }
 
             const model = {

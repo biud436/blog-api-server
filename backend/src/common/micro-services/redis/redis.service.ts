@@ -190,6 +190,29 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
         return await this.client.INCR(key);
     }
 
+    async getPostViewCount(postId: number) {
+        const key = `post_view_count:${postId}`;
+        const result = await this.client.GET(key);
+
+        return result;
+    }
+
+    async collectAllPostViewCount(): Promise<{ id: number; count: number }[]> {
+        const keys = await this.client.KEYS('post_view_count:*');
+        const result = [];
+
+        for (const key of keys) {
+            const postId = key.replace('post_view_count:', '');
+            const count = await this.client.GET(key);
+            result.push({
+                id: parseInt(postId),
+                count: parseInt(count),
+            });
+        }
+
+        return result;
+    }
+
     /**
      * 조회 여부를 확인합니다.
      * @param postId

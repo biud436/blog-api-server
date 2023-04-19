@@ -22,13 +22,15 @@ export class PostViewCountService {
      */
     async create(
         createPostViewCountDto: CreatePostViewCountDto,
-        queryRunner: QueryRunner,
+        queryRunner?: QueryRunner,
     ): Promise<PostViewCount> {
         const model = await this.postViewCountRepository.create(
             createPostViewCountDto,
         );
 
-        return await queryRunner.manager.save(model);
+        return queryRunner
+            ? queryRunner.manager.save(model)
+            : this.postViewCountRepository.save(model);
     }
 
     /**

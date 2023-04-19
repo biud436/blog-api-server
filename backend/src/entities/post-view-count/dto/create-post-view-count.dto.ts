@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsNumber } from 'class-validator';
+import { IsDate, IsNumber, IsOptional } from 'class-validator';
 
 export class CreatePostViewCountDto {
     @ApiProperty()
@@ -7,12 +7,14 @@ export class CreatePostViewCountDto {
     id: number;
 
     @ApiProperty()
+    @IsOptional()
     @IsDate()
-    createdAt: Date;
+    createdAt?: Date;
 
     @ApiProperty()
+    @IsOptional()
     @IsDate()
-    updatedAt: Date;
+    updatedAt?: Date;
 
     @ApiProperty()
     @IsNumber()
