@@ -66,35 +66,44 @@ export class PostsService {
         isPrivate?: boolean,
         anonymousId?: number,
     ) {
-        let totalCount = '0';
+        try {
+            let totalCount = '0';
 
-        const item = await this.postService.findOne(
-            postId,
-            isPrivate,
-            anonymousId,
-        );
+            const item = await this.postService.findOne(
+                postId,
+                isPrivate,
+                anonymousId,
+            );
 
-        // ip가 이미 조회한 ip인지 확인
-        const isViewed = await this.redisService.isViewedPost(postId, ip);
+            // ip가 이미 조회한 ip인지 확인
+            const isViewed = await this.redisService.isViewedPost(postId, ip);
 
-        if (item) {
-            if (!isViewed) {
-                // 24시간 이내에 조회한 적이 없다면 조회수 증가
-                await this.redisService.setViewedPost(postId, ip);
-                await this.redisService.increasePostViewCount(postId);
+            if (item) {
+                if (!isViewed) {
+                    // 24시간 이내에 조회한 적이 없다면 조회수 증가
+                    await this.redisService.setViewedPost(postId, ip);
+                    await this.redisService.increasePostViewCount(postId);
+                }
+
+                totalCount = await this.redisService.get(
+                    'post_view_count:' + postId,
+                );
             }
 
-            totalCount = await this.redisService.get(
-                'post_view_count:' + postId,
-            );
-        }
+            const model = {
+                ...item,
+                viewCount: {
+                    count: parseInt(totalCount, 10),
+                },
+            };
 
-        return {
-            ...item,
-            viewCount: {
-                count: parseInt(totalCount, 10),
-            },
-        };
+            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, model);
+        } catch (e: any) {
+            throw ResponseUtil.failureWrap({
+                message: '포스트를 찾을 수 없거나 비공개 포스트입니다.',
+                statusCode: 403,
+            });
+        }
     }
 
     /**

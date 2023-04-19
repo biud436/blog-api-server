@@ -44,8 +44,9 @@ export class NestBootstrapApplication extends EventEmitter {
         'http://localhost:3000',
     ];
     private static readonly LOCAL_HOST = 'http://localhost:3000';
-    private static readonly PRODUCTION_HOST: [string] = [
+    private static readonly PRODUCTION_HOST: [string, string] = [
         'https://blog.biud436.com',
+        'https://blog-api.biud436.com',
     ];
 
     private static readonly REDIS_HOST =

@@ -13,7 +13,16 @@ import {
     Req,
     Ip,
 } from '@nestjs/common';
-import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import {
+    ApiBearerAuth,
+    ApiCreatedResponse,
+    ApiForbiddenResponse,
+    ApiInternalServerErrorResponse,
+    ApiOkResponse,
+    ApiOperation,
+    ApiQuery,
+    ApiTags,
+} from '@nestjs/swagger';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { SearchOption } from 'src/common/list-config';
 import { DocsMapper } from 'src/common/swagger-config';
@@ -70,10 +79,11 @@ export class PostsController {
     }
 
     @Get('/categories')
-    @CustomApiOkResponse({
-        operation: {},
+    @ApiOperation({
         description: '카테고리 별 게시글 갯수 조회',
     })
+    @ApiOkResponse()
+    @ApiInternalServerErrorResponse()
     async getPostCountByCategories() {
         try {
             const res = await this.categoryService.getPostCountByCategories();
@@ -199,13 +209,13 @@ export class PostsController {
     @Patch(':id')
     @AdminOnly()
     @JwtGuard()
-    @CustomApiOkResponse({
-        auth: true,
+    @ApiOperation({
+        summary: '포스트 수정',
         description: '포스트를 수정합니다',
-        operation: {
-            summary: '포스트 수정',
-        },
     })
+    @ApiBearerAuth()
+    @ApiForbiddenResponse()
+    @ApiCreatedResponse()
     async updatePost(
         @PostId() postId: number,
         @UserId() userId: number,
@@ -247,9 +257,7 @@ export class PostsController {
         @PageNumber('page') page: number,
         @Query('categoryId') categoryId?: number,
     ) {
-        const res = await this.postsService.findAll(page, categoryId);
-
-        return res;
+        return await this.postsService.findAll(page, categoryId);
     }
 
     @Get(':id')
@@ -262,20 +270,11 @@ export class PostsController {
         @IsReadablePrivatePost() IsReadablePrivatePost?: boolean,
         @AnonymousId() anonymousId?: number,
     ) {
-        try {
-            const model = await this.postsService.findOne(
-                postId,
-                ip,
-                IsReadablePrivatePost,
-                anonymousId,
-            );
-
-            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, model);
-        } catch (e) {
-            throw ResponseUtil.failureWrap({
-                message: '포스트를 찾을 수 없거나 비공개 포스트입니다.',
-                statusCode: 403,
-            });
-        }
+        return await this.postsService.findOne(
+            postId,
+            ip,
+            IsReadablePrivatePost,
+            anonymousId,
+        );
     }
 }
