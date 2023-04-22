@@ -76,6 +76,7 @@ import { TaskModule } from './domains/task/task.module';
                 (AppModule.isDelvelopment() ? '.development.env' : '.env')
             ),
             isGlobal: true,
+            cache: true,
         }),
         ServeStaticModule.forRoot({
             rootPath: join(__dirname, '..', 'public'),
