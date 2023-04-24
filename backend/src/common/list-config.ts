@@ -40,7 +40,7 @@ export const PaginationConfig = <Pagination.Config>{
         /**
          * 페이지 당 게시물 수
          */
-        numberPerPage: 6,
+        numberPerPage: 8,
 
         /**
          * 블럭 당 페이지 수

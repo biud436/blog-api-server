@@ -66,10 +66,6 @@ export class Post {
     @Transform((value: TransformFnParams) => decodeHtml(value.value))
     content: string;
 
-    // @VirtualColumn('previewContent')
-    // @Transform((value: TransformFnParams) => {
-    //     removeMarkdown(value.value)?.slice(0, 100);
-    // })
     previewContent?: string;
 
     @Column({

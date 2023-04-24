@@ -265,7 +265,7 @@ export class PostService {
             .getManyWithPagination(pageNumber);
 
         items.entities = items.entities.map((e) => {
-            delete e.content;
+            e.content = e.content.slice(0, 30);
             return plainToClass(Post, e);
         });
 
