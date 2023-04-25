@@ -265,7 +265,9 @@ export class PostService {
             .getManyWithPagination(pageNumber);
 
         items.entities = items.entities.map((e) => {
-            e.content = e.content.slice(0, 30);
+            e.content = e.isPrivate
+                ? '비공개 글입니다'
+                : e.content.slice(0, 30);
             return plainToClass(Post, e);
         });
 
