@@ -8,7 +8,6 @@ import { HttpModule } from '@nestjs/axios';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { PostModule } from './entities/post/post.module';
-import { ConfiguredDatabaseModule } from './common/modules/configured-database/configured-database.module';
 import { UserModule } from './entities/user/user.module';
 import { ProfileModule } from './entities/profile/profile.module';
 import { AuthModule } from './controllers/auth/auth.module';
@@ -62,7 +61,7 @@ import { TaskModule } from './domains/task/task.module';
                 configService: ConfigService,
             ): Promise<TypeOrmModuleOptions> => {
                 const config = dbconnect(configService);
-                if (ConfiguredDatabaseModule.isDelvelopment()) {
+                if (AppModule.isDelvelopment()) {
                     return config.dev;
                 }
 
