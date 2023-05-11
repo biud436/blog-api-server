@@ -5,7 +5,7 @@ import { CryptoUtil } from 'src/common/libs/crypto/CryptoUtil';
 import { TEnvironmentFile } from 'src/common/my-config-service.type';
 
 @Injectable()
-export class AES256Provider implements OnModuleInit {
+export class AES256Provider {
     // 암호화 키
     private KEY = Buffer.from(CryptoUtil.getRandomHexString(32), 'utf-8');
 
@@ -17,12 +17,7 @@ export class AES256Provider implements OnModuleInit {
 
     constructor(
         private readonly configService: ConfigService<TEnvironmentFile>,
-    ) {}
-
-    /**
-     * 멤버 초기화
-     */
-    onModuleInit() {
+    ) {
         const tempStorage: Record<'KEY' | 'IV', string> = {
             KEY: this.KEY.toString('utf-8'),
             IV: this.IV.toString('utf-8'),
