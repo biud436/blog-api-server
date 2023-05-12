@@ -5,7 +5,6 @@ import { PostModule } from 'src/entities/post/post.module';
 import { CategoryModule } from 'src/entities/category/category.module';
 import { MicroServicesModule } from 'src/common/micro-services/micro-services.module';
 import { UserModule } from 'src/entities/user/user.module';
-import { SlackModule } from 'src/common/modules/slack/slack.module';
 import { JwtModule } from '@nestjs/jwt';
 import { PrivatePostGuard } from '../auth/guards/private-post.guard';
 import { ConfigModule, ConfigService } from '@nestjs/config';
