@@ -18,7 +18,6 @@ import { SessionSerializer } from './session.serializer';
 import { ApiKeyModule } from 'src/entities/api-key/api-key.module';
 import { HttpModule } from '@nestjs/axios';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { SlackModule } from 'src/common/modules/slack/slack.module';
 import { PrivatePostGuard } from './guards/private-post.guard';
 import { PostsModule } from '../posts/posts.module';
 import { APP_GUARD } from '@nestjs/core';
