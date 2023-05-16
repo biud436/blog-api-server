@@ -85,6 +85,10 @@ SelectQueryBuilder.prototype.setPagination = function (
 ) {
     numberPerPage ??= PaginationConfig.limit.numberPerPage;
 
+    if (pageNumber < 1) {
+        pageNumber = 1;
+    }
+
     this.offset(numberPerPage * (pageNumber - 1)).limit(numberPerPage);
 
     return this;
@@ -96,6 +100,10 @@ SelectQueryBuilder.prototype.setPaginationWithJoin = function (
     numberPerPage?: number,
 ) {
     numberPerPage ??= PaginationConfig.limit.numberPerPage;
+
+    if (pageNumber < 1) {
+        pageNumber = 1;
+    }
 
     this.skip(numberPerPage * (pageNumber - 1)).take(numberPerPage);
 
@@ -112,13 +120,23 @@ SelectQueryBuilder.prototype.getManyWithPagination = async function (
     const totalCount = await cloneQueryBuilder.getCount();
     const maxPage = Math.ceil(totalCount / numberPerPage);
 
+    if (pageNumber < 1) {
+        pageNumber = 1;
+    }
+
     const maxBlock = Math.ceil(maxPage / PaginationConfig.limit.pagePerBlock);
     const currentBlock = Math.ceil(
         pageNumber / PaginationConfig.limit.pagePerBlock,
     );
 
     if (pageNumber > maxPage) {
-        throw new BadRequestException('조회할 페이지가 존재하지 않습니다.');
+        pageNumber = maxPage;
+
+        if (cloneQueryBuilder.expressionMap.offset !== undefined) {
+            cloneQueryBuilder.setPagination(pageNumber, numberPerPage);
+        } else if (cloneQueryBuilder.expressionMap.skip !== undefined) {
+            cloneQueryBuilder.setPaginationWithJoin(pageNumber, numberPerPage);
+        }
     }
 
     const result = <PaginationResult>{
@@ -145,17 +163,27 @@ SelectQueryBuilder.prototype.getRawManyWithPagination = async function (
     const cloneQueryBuilder = this.clone();
 
     const totalCount = await this.getCount();
-    const entities = await cloneQueryBuilder.getRawMany();
     const maxPage = Math.ceil(totalCount / numberPerPage);
+    if (pageNumber < 1) {
+        pageNumber = 1;
+    }
+
+    if (pageNumber > maxPage) {
+        pageNumber = maxPage;
+
+        if (cloneQueryBuilder.expressionMap.offset !== undefined) {
+            cloneQueryBuilder.setPagination(pageNumber, numberPerPage);
+        } else if (cloneQueryBuilder.expressionMap.skip !== undefined) {
+            cloneQueryBuilder.setPaginationWithJoin(pageNumber, numberPerPage);
+        }
+    }
 
     const maxBlock = Math.ceil(maxPage / PaginationConfig.limit.pagePerBlock);
     const currentBlock = Math.ceil(
         pageNumber / PaginationConfig.limit.pagePerBlock,
     );
 
-    if (pageNumber > maxPage) {
-        throw new BadRequestException('조회할 페이지가 존재하지 않습니다.');
-    }
+    const entities = await cloneQueryBuilder.getRawMany();
 
     const result = <PaginationResult>{
         currentPage: pageNumber,
