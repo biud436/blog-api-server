@@ -10,29 +10,20 @@ import { CookieOptions, Request, Response } from 'express';
 import { AdminService } from 'src/entities/admin/admin.service';
 import { CreateUserDto } from 'src/entities/user/dto/create-user.dto';
 import { UserService } from 'src/entities/user/user.service';
-import { Connection, DataSource } from 'typeorm';
+import { DataSource } from 'typeorm';
 import { AuthRequest } from './validator/request.dto';
 import { JwtPayload } from './validator/response.dto';
 import * as validator from 'class-validator';
 import { DownStreamInternalServerErrorException } from './validator/upstream.error';
 import { ProfileService } from 'src/entities/profile/profile.service';
-import {
-    Redis,
-    RedisService,
-} from 'src/common/micro-services/redis/redis.service';
+import { RedisService } from 'src/common/micro-services/redis/redis.service';
 import * as CONFIG from 'src/common/modules/i18n/auth.json';
 import { CryptoUtil } from 'src/common/libs/crypto/CryptoUtil';
 import { MailService } from 'src/common/modules/mail/mail.service';
 import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
 import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
-import { IResponsableData } from 'src/common/libs/response/interface/response.interface';
-import { ApiProperty } from '@nestjs/swagger';
-import { InjectConnection } from '@nestjs/typeorm';
 import { DateTimeUtil } from 'src/common/libs/date/DateTimeUtil';
-import { CreateProfileDto } from 'src/entities/profile/dto/create-profile.dto';
 import { plainToClass } from 'class-transformer';
-import Handlebars from 'handlebars';
-import { FindUserNameDto } from './dto/find-username.dto';
 import { LoginAuthorizationException } from './validator/error.dto';
 import { ApiKeyService } from 'src/entities/api-key/api-key.service';
 import { User } from 'src/entities/user/entities/user.entity';
@@ -41,7 +32,6 @@ import { HttpService } from '@nestjs/axios';
 import { GithubUserData } from './validator/github.dto';
 import { LocalDate, LocalDateTime } from '@js-joda/core';
 import { AES256Provider } from 'src/common/modules/aes/aes-256.provider';
-import { Paginatable } from 'src/common/list-config';
 import { ConnectInfoService } from 'src/entities/connect-info/connect-info.service';
 import { GithubUser } from './strategies/github.strategy';
 

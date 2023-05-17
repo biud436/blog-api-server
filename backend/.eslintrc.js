@@ -26,14 +26,14 @@ module.exports = {
         'prettier/prettier': [
             'error',
             {
-              'endOfLine': 'auto',
-              'singleQuote': true,
-              'semi': true,   
-              'tabWidth': 4,
-              'useTabs': false,
-              'trailingComma': 'all',
-              'private': 'off',
-            }
-          ]        
+                endOfLine: 'auto',
+                singleQuote: true,
+                semi: true,
+                tabWidth: 4,
+                useTabs: false,
+                trailingComma: 'all',
+                private: 'off',
+            },
+        ],
     },
 };

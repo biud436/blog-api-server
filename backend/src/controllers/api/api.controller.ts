@@ -13,14 +13,12 @@ import { ApiService } from './api.service';
 export class ApiController {
     constructor(private readonly apiService: ApiService) {}
 
+    /**
+     * 관리자 권한 확인
+     */
     @Get('/check/admin')
     @JwtGuard()
     @AdminOnly()
-    @CustomApiOkResponse({
-        description: '관리자 권한 확인',
-        operation: {},
-        auth: true,
-    })
     checkAdmin() {
         return {
             isAdmin: true,

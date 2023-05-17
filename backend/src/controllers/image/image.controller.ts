@@ -45,11 +45,15 @@ export class ImageController {
         @InjectDataSource() private readonly dataSource: DataSource,
     ) {}
 
-    @ApiExcludeEndpoint()
+    /**
+     * 이미지 업로드
+     *
+     * @deprecated
+     * @param files
+     */
     @AdminOnly()
     @Post('/upload')
     @UseInterceptors(AnyFilesInterceptor())
-    @ApiConsumes('multipart/form-data')
     async upload(@UploadedFiles() files: any[]) {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
@@ -85,14 +89,6 @@ export class ImageController {
     @JwtGuard()
     @AdminOnly()
     @Post('/s3/upload')
-    @ApiConsumes('multipart/form-data')
-    @CustomApiOkResponse({
-        operation: {
-            summary: 'AWS S3 이미지 업로드',
-        },
-        description: 'AWS S3에 이미지를 업로드합니다.',
-        auth: true,
-    })
     @UseInterceptors(S3FileInterceptor('files')) // Custom Interceptor
     async uploadImageUsingS3(
         @UserId() userId: number,
@@ -123,12 +119,6 @@ export class ImageController {
     @Header('Content-Type', 'image/svg+xml')
     @Header('Cache-Control', 'public, max-age=3600')
     @Header('Access-Control-Allow-Origin', '*')
-    @CustomApiOkResponse({
-        operation: {
-            summary: '깃허브 프로필 이미지 동적 생성',
-        },
-        description: '깃허브 프로필용 이미지를 생성합니다.',
-    })
     @Render('svg-profile')
     async getStatsSvg(
         @Query('text') text: string,

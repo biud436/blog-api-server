@@ -6,6 +6,8 @@ import { PostService } from 'src/entities/post/post.service';
 import { Post } from 'src/entities/post/entities/post.entity';
 import { FeedItem } from './rss-feed-item';
 
+export type RSSFeed = any;
+
 @Injectable()
 export class RssService {
     constructor(
@@ -25,7 +27,7 @@ export class RssService {
         return feed.xml();
     }
 
-    createFeed(options: RssModuleOptions): any {
+    createFeed(options: RssModuleOptions): RSSFeed {
         return new RSS({
             ...options,
         });
