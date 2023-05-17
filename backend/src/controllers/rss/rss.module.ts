@@ -1,7 +1,6 @@
 import { DynamicModule, Module } from '@nestjs/common';
 import { RssService } from './rss.service';
 import { RssController } from './rss.controller';
-import { PostsModule } from '../posts/posts.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RSS_MODULE_OPTIONS } from './rss.constant';
 import { RssModuleOptions } from './interfaces/rss-option.interface';

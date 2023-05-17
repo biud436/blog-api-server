@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { IResponsableData, IResponse } from './interface/response.interface';
 
 /**
@@ -37,6 +37,19 @@ export namespace ResponseUtil {
             data,
         };
     }
+
+    export const LOGIN_OK = successWrap(
+        {
+            message: '로그아웃 되었습니다.',
+            statusCode: HttpStatus.OK,
+        },
+        {},
+    );
+
+    export const FAILED_SEARCH = failureWrap({
+        message: '검색에 실패하였습니다.',
+        statusCode: HttpStatus.BAD_REQUEST,
+    });
 
     /**
      * 응답을 받지 못했을 때, 실패 메시지를 반환합니다.

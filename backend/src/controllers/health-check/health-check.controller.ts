@@ -34,6 +34,11 @@ export class HealthCheckController {
         @Inject(HEALTH_CHECK_OPTIONS) private options: HealthCheckOptions,
     ) {}
 
+    /**
+     * 헬스 체크
+     *
+     * @returns
+     */
     @Get()
     @HealthCheck()
     check() {

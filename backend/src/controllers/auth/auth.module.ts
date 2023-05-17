@@ -1,4 +1,4 @@
-import { forwardRef, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
@@ -11,16 +11,13 @@ import { ProfileModule } from 'src/entities/profile/profile.module';
 import { MicroServicesModule } from 'src/common/micro-services/micro-services.module';
 import { MailModule } from 'src/common/modules/mail/mail.module';
 import { GithubStrategy } from './strategies/github.strategy';
-import { UserCopy } from 'src/entities/user-copy/entities/user-copy.entity';
 import { UserCopyModule } from 'src/entities/user-copy/user-copy.module';
 import { PassportModule } from '@nestjs/passport';
 import { SessionSerializer } from './session.serializer';
 import { ApiKeyModule } from 'src/entities/api-key/api-key.module';
 import { HttpModule } from '@nestjs/axios';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { PrivatePostGuard } from './guards/private-post.guard';
 import { PostsModule } from '../posts/posts.module';
-import { APP_GUARD } from '@nestjs/core';
 import { AesModule } from 'src/common/modules/aes/aes.module';
 import { ConnectInfoModule } from 'src/entities/connect-info/connect-info.module';
 

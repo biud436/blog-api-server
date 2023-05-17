@@ -110,11 +110,6 @@ export class NestBootstrapApplication extends EventEmitter {
 
         this.initWithMiddleware(this._application).useNginxProxy(); // 쿠키 (NGINX 프록시 설정)
 
-        // API 문서 설정
-        if (this.isDelvelopment()) {
-            this.initWithApiDocs();
-        }
-
         await this._application.listen(NestBootstrapApplication.PORT);
     }
 

@@ -50,7 +50,6 @@ import { PostsService } from './posts.service';
 import { PostSearchProperty } from './types/post-search-type';
 
 @Controller(['post', 'posts'])
-@ApiTags('블로그 API')
 export class PostsController {
     private logger: Logger = new Logger(PostsController.name);
 
@@ -60,46 +59,52 @@ export class PostsController {
         @InjectDataSource() private readonly dataSource: DataSource,
     ) {}
 
+    /**
+     * breadcrumbs 정보를 조회합니다.
+     * @param categoryName 카테고리 이름
+     * @returns
+     */
     @Get('/breadcrumbs')
-    @ApiOperation({ summary: 'Breadcrumbs 정보 조회' })
-    @ApiQuery({
-        name: 'categoryName',
-        description: '카테고리 이름',
-    })
     async getBreadcrumbs(@Query('categoryName') categoryName: string) {
         try {
             const res = await this.categoryService.getBreadcrumbs(categoryName);
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
         } catch {
-            return ResponseUtil.failure({
+            throw ResponseUtil.failure({
                 message: 'Breadcrumbs 정보를 조회할 수 없습니다.',
                 statusCode: 500,
             });
         }
     }
 
+    /**
+     * 카테고리 정보와 포스트 갯수를 조회합니다.
+     *
+     * @returns
+     */
     @Get('/categories')
-    @ApiOperation({
-        description: '카테고리 별 게시글 갯수 조회',
-    })
-    @ApiOkResponse()
-    @ApiInternalServerErrorResponse()
     async getPostCountByCategories() {
         try {
             const res = await this.categoryService.getPostCountByCategories();
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
         } catch (e) {
-            return ResponseUtil.failure({
+            throw ResponseUtil.failure({
                 message: '카테고리 카운트 정보를 조회할 수 없습니다.',
                 statusCode: 500,
             });
         }
     }
 
+    /**
+     * 새로운 포스트를 생성합니다.
+     *
+     * @param userId JWT에서 추출한 유저 아이디
+     * @param createPostDto  생성할 포스트 정보
+     * @returns
+     */
     @Post()
     @AdminOnly()
     @JwtGuard()
-    @CustomApiOkResponse(DocsMapper.posts.POST.create)
     async create(
         @UserId() userId: number,
         @Body()
@@ -125,7 +130,7 @@ export class PostsController {
             this.logger.debug(e);
 
             await queryRunner.rollbackTransaction();
-            return ResponseUtil.failureWrap({
+            throw ResponseUtil.failureWrap({
                 statusCode: 500,
                 message: '포스트를 작성할 수 없습니다.',
             });
@@ -137,21 +142,11 @@ export class PostsController {
     /**
      * 포스트 검색
      *
-     * @param pageNumber 1
-     * @param searchProperty title, content
-     * @param searchQuery
+     * @param pageNumber 페이지 번호 (1부터 시작)
+     * @param searchProperty 검색할 속성 title, content
+     * @param searchQuery 검색할 값
      */
     @Get('/search')
-    @CustomApiOkResponse({
-        description: '포스트의 제목 또는 내용을 검색합니다',
-        auth: false,
-        operation: {},
-    })
-    @ApiQuery({
-        name: 'searchProperty',
-        description: '검색할 속성',
-        enum: ['title', 'content'],
-    })
     async searchPost(
         @Query('pageNumber', new DefaultValuePipe(1), ParseIntPipe)
         pageNumber: number,
@@ -168,7 +163,7 @@ export class PostsController {
 
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
         } catch (e) {
-            return ResponseUtil.failureWrap(e);
+            throw ResponseUtil.FAILED_SEARCH;
         }
     }
 
@@ -176,17 +171,15 @@ export class PostsController {
     // ! Post와 Get Mapping은 맨 아래에 배치해야 합니다.
     // !==========================================================
 
+    /**
+     * 포스트를 삭제합니다.
+     *
+     * @param postId
+     * @returns
+     */
     @Delete(':id')
     @AdminOnly()
     @JwtGuard()
-    @CustomApiOkResponse({
-        auth: true,
-        description: '포스트를 삭제합니다',
-        operation: {
-            summary: '포스트 삭제',
-            description: '포스트를 삭제합니다',
-        },
-    })
     async deletePost(@PostId() postId: number) {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
@@ -206,16 +199,17 @@ export class PostsController {
         }
     }
 
+    /**
+     * 포스트를 수정합니다.
+     *
+     * @param postId 포스트 ID
+     * @param userId 유저 ID
+     * @param updatePostDto 수정할 포스트 정보
+     * @returns
+     */
     @Patch(':id')
     @AdminOnly()
     @JwtGuard()
-    @ApiOperation({
-        summary: '포스트 수정',
-        description: '포스트를 수정합니다',
-    })
-    @ApiBearerAuth()
-    @ApiForbiddenResponse()
-    @ApiCreatedResponse()
     async updatePost(
         @PostId() postId: number,
         @UserId() userId: number,
@@ -246,13 +240,14 @@ export class PostsController {
         }
     }
 
+    /**
+     * 포스트를 페이지 단위로 조회합니다.
+     *
+     * @param page 페이지 번호 (1부터 시작)
+     * @param categoryId 카테고리 ID, 생략하면 전체 포스트를 조회합니다.
+     * @returns
+     */
     @Get('/')
-    @CustomApiOkResponse(DocsMapper.posts.GET.findAll)
-    @ApiQuery({
-        name: 'categoryId',
-        description: '카테고리 ID',
-        required: false,
-    })
     async findAll(
         @PageNumber('page') page: number,
         @Query('categoryId') categoryId?: number,
@@ -260,10 +255,18 @@ export class PostsController {
         return await this.postsService.findAll(page, categoryId);
     }
 
+    /**
+     * 포스트를 조회합니다.
+     *
+     * @param postId 조회할 포스트 번호
+     * @param ip 클라이언트 IP (중복 조회 방지 용도)
+     * @param IsReadablePrivatePost 비공개 포스트 여부
+     * @param anonymousId 익명 아이디
+     * @returns
+     */
     @Get(':id')
     @Anonymous()
     @UseGuards(PrivatePostGuard)
-    @CustomApiOkResponse(DocsMapper.posts.GET.findOne)
     async findOne(
         @PostId() postId: number,
         @Ip() ip: string,
