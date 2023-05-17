@@ -11,6 +11,7 @@ import {
     ParseIntPipe,
     HttpStatus,
     Req,
+    BadRequestException,
 } from '@nestjs/common';
 import { ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { InjectDataSource } from '@nestjs/typeorm';
@@ -40,18 +41,16 @@ export class AdminController {
         @InjectDataSource() private readonly dataSource: DataSource,
     ) {}
 
+    /**
+     * 카테고리 명을 변경합니다.
+     *
+     * @param categoryId 카테고리 ID
+     * @param updateCategoryNameDto 카테고리 정보
+     * @returns
+     */
     @Patch('/category/:categoryId')
     @AdminOnly()
     @JwtGuard()
-    @CustomApiOkResponse({
-        operation: {},
-        description: 'Changes category name',
-        auth: true,
-    })
-    @ApiParam({
-        name: 'categoryId',
-        description: '카테고리 ID',
-    })
     async updateCategoryName(
         @Param('categoryId', ParseIntPipe) categoryId: number,
         @Body() updateCategoryNameDto: ChangeCategoryDto,
@@ -64,27 +63,23 @@ export class AdminController {
 
             return ResponseUtil.success(RESPONSE_MESSAGE.UPDATE_SUCCESS, res);
         } catch (e: any) {
-            return ResponseUtil.failureWrap({
+            throw ResponseUtil.failureWrap({
                 message: '카테고리 이름 변경에 실패했습니다.',
                 statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
             });
         }
     }
 
+    /**
+     * 카테고리를 이동합니다.
+     *
+     * @param prevCategoryId  이전 카테고리 ID
+     * @param moveCategoryDto  이동할 카테고리 정보
+     * @returns
+     */
     @Post('/category/:prevCategoryId/move')
     @AdminOnly()
     @JwtGuard()
-    @CustomApiOkResponse({
-        operation: {
-            summary: '카테고리 이동',
-        },
-        description: '카테고리를 이동합니다.',
-        auth: true,
-    })
-    @ApiParam({
-        name: 'prevCategoryId',
-        description: '카테고리 ID',
-    })
     async moveCategory(
         @Param('prevCategoryId', ParseIntPipe) prevCategoryId: number,
         @Body() moveCategoryDto: MoveCategoryDto,
@@ -99,37 +94,31 @@ export class AdminController {
         return this.adminService.moveCategory(moveCategoryDto);
     }
 
+    /**
+     * 부모 카테고리를 출력합니다.
+     *
+     * @param categoryName 카테고리 명
+     * @returns
+     */
     @Get('/category/:categoryName')
-    @CustomApiOkResponse({
-        operation: {
-            summary: '부모 카테고리 출력',
-        },
-        description: '부모 카테고리를 출력합니다.',
-        auth: true,
-    })
-    @ApiParam({
-        name: 'categoryName',
-        description: '카테고리 이름',
-    })
     async getAncestors(@Param('categoryName') categoryName: string) {
         try {
             const res = await this.adminService.getAncestors(categoryName);
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
         } catch (e) {
-            return ResponseUtil.failureWrap(e);
+            throw ResponseUtil.failureWrap(e);
         }
     }
 
+    /**
+     * 새로운 카테고리를 추가합니다.
+     *
+     * @param createCategoryDto 카테고리 DTO
+     * @returns
+     */
     @Post('/category')
     @AdminOnly()
     @JwtGuard()
-    @CustomApiOkResponse({
-        operation: {
-            summary: '새로운 카테고리 추가',
-        },
-        description: '새로운 카테고리를 추가합니다.',
-        auth: true,
-    })
     async createCategory(
         @Body()
         createCategoryDto: NewCategoryDto,
@@ -156,19 +145,14 @@ export class AdminController {
         }
     }
 
+    /**
+     * 카테고리를 출력합니다.
+     *
+     * @param req
+     * @param isBeautify true면 트리를 JSON으로 보기 좋게 출력하고, false면 flat 모드로 출력합니다.
+     * @returns
+     */
     @Get('/category')
-    @CustomApiOkResponse({
-        operation: {
-            summary: '카테고리 출력',
-        },
-        description: '카테고리를 출력합니다.',
-        auth: true,
-    })
-    @ApiQuery({
-        name: 'isBeautify',
-        description:
-            'true면 트리를 JSON으로 보기 좋게 출력하고, false면 flat 모드로 출력합니다.',
-    })
     async getDepthList(
         @Req() req: Request,
         @Query('isBeautify', ParseBoolPipe) isBeautify: boolean,
@@ -177,19 +161,19 @@ export class AdminController {
             const res = await this.adminService.getTreeChildren(isBeautify);
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
         } catch (e) {
-            return ResponseUtil.failureWrap(e);
+            throw ResponseUtil.failureWrap(e);
         }
     }
 
+    /**
+     * 임시 포스트를 저장합니다.
+     * @param userId 유저 ID
+     * @param createPostTempDto 임시 포스트 정보
+     * @returns
+     */
     @Post('/temp/post')
     @AdminOnly()
     @JwtGuard()
-    @CustomApiOkResponse({
-        operation: {
-            summary: '임시 포스트를 저장합니다.',
-        },
-        description: '임시 포스트를 저장합니다.',
-    })
     async saveTempPost(
         @UserId() userId: number,
         @Body() createPostTempDto: CreatePostTempDto,
@@ -206,19 +190,17 @@ export class AdminController {
         }
     }
 
+    /**
+     * 임시 포스트를 수정합니다.
+     *
+     * @param userId 유저 ID
+     * @param postId 포스트 번호
+     * @param updatePostTempDto 임시 포스트 정보
+     * @returns
+     */
     @Patch('/temp/post/:postId')
     @AdminOnly()
     @JwtGuard()
-    @CustomApiOkResponse({
-        operation: {
-            summary: '임시 포스트를 수정합니다.',
-        },
-        description: '임시 포스트를 수정합니다.',
-    })
-    @ApiParam({
-        name: 'postId',
-        description: '포스트 ID',
-    })
     async updateTempPost(
         @UserId() userId: number,
         @Param('postId', ParseIntPipe) postId: number,
@@ -237,14 +219,13 @@ export class AdminController {
         }
     }
 
+    /**
+     * 특정 유저에 대한 모든 임시 포스트를 조회합니다.
+     *
+     * @param userId 유저 ID
+     * @returns
+     */
     @Get('/temp/post')
-    @CustomApiOkResponse({
-        operation: {
-            summary: '모든 임시 포스트를 조회합니다.',
-        },
-        description: '특정 유저에 대한 모든 임시 포스트를 조회합니다.',
-        auth: true,
-    })
     @AdminOnly()
     @JwtGuard()
     async getTempAllPost(@UserId() userId: number) {
@@ -253,24 +234,18 @@ export class AdminController {
 
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
         } catch (e: any) {
-            return ResponseUtil.failureWrap({
-                ...e,
-            });
+            throw ResponseUtil.FAILED_TEMP_POST;
         }
     }
 
+    /**
+     * 임시 포스트 삭제
+     *
+     * @param userId 유저 ID
+     * @param postId 포스트 번호
+     * @returns
+     */
     @Delete('/temp/post/:postId')
-    @ApiParam({
-        name: 'postId',
-        description: '포스트 ID',
-    })
-    @CustomApiOkResponse({
-        operation: {
-            summary: '임시 포스트 삭제',
-        },
-        description: '임시 포스트 삭제',
-        auth: true,
-    })
     @AdminOnly()
     @JwtGuard()
     async deleteTempPostById(
@@ -285,22 +260,18 @@ export class AdminController {
 
             return ResponseUtil.success(RESPONSE_MESSAGE.DELETE_SUCCESS, res);
         } catch {
-            return ResponseUtil.failure(RESPONSE_MESSAGE.NOT_FOUND_RESULT);
+            throw ResponseUtil.failure(RESPONSE_MESSAGE.NOT_FOUND_RESULT);
         }
     }
 
+    /**
+     * 임시 포스트 조회
+     *
+     * @param userId 유저 ID
+     * @param postId 포스트 번호
+     * @returns
+     */
     @Get('/temp/post/:postId')
-    @ApiParam({
-        name: 'postId',
-        description: '포스트 ID',
-    })
-    @CustomApiOkResponse({
-        operation: {
-            summary: '임시 포스트 조회',
-        },
-        description: '임시 포스트 조회',
-        auth: true,
-    })
     @AdminOnly()
     @JwtGuard()
     async getTempPostById(
@@ -311,7 +282,7 @@ export class AdminController {
             const res = await this.adminService.getTempPostById(userId, postId);
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
         } catch {
-            return ResponseUtil.failure(RESPONSE_MESSAGE.NOT_FOUND_RESULT);
+            throw ResponseUtil.failure(RESPONSE_MESSAGE.NOT_FOUND_RESULT);
         }
     }
 }

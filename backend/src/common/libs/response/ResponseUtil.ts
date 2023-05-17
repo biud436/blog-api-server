@@ -1,4 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+    BadRequestException,
+    HttpException,
+    HttpStatus,
+    Injectable,
+} from '@nestjs/common';
 import { IResponsableData, IResponse } from './interface/response.interface';
 
 /**
@@ -44,6 +49,10 @@ export namespace ResponseUtil {
             statusCode: HttpStatus.OK,
         },
         {},
+    );
+
+    export const FAILED_TEMP_POST = new BadRequestException(
+        '임시 포스트를 불러오는데 실패했습니다.',
     );
 
     export const FAILED_SEARCH = failureWrap({
