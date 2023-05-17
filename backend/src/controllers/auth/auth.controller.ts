@@ -157,8 +157,8 @@ export class AuthController {
             const res = await this.authService.sendAuthCodeByEmail(data.email);
             return ResponseUtil.success(RESPONSE_MESSAGE.SAVE_SUCCESS, res);
         } catch (e) {
-            return ResponseUtil.failureWrap({
-                message: e ? e.message : '인증 코드가 일치하지 않습니다.',
+            throw ResponseUtil.failureWrap({
+                message: '인증 코드가 일치하지 않습니다.',
                 statusCode: HttpStatus.BAD_REQUEST,
             });
         }
@@ -191,7 +191,6 @@ export class AuthController {
                 },
             };
         } catch (e) {
-            console.warn(e);
             return {
                 user: {},
             };
@@ -208,7 +207,7 @@ export class AuthController {
             );
             return ResponseUtil.success(RESPONSE_MESSAGE.SAVE_SUCCESS, res);
         } catch (e) {
-            return ResponseUtil.failureWrap({
+            throw ResponseUtil.failureWrap({
                 message: e ? e.message : '인증 코드가 일치하지 않습니다.',
                 statusCode: HttpStatus.BAD_REQUEST,
             });
@@ -232,25 +231,11 @@ export class AuthController {
                 ...res.user,
             });
         } catch (e) {
-            return ResponseUtil.failureWrap({
-                message: e ? e.message : '회원가입에 실패하였습니다',
+            throw ResponseUtil.failureWrap({
+                message: '회원가입에 실패하였습니다',
                 statusCode: HttpStatus.BAD_REQUEST,
             });
         }
-    }
-
-    @Get('/users')
-    @CustomApiOkResponse({
-        description: '유저 목록 조회',
-        operation: {},
-        auth: true,
-    })
-    @ApiQuery({
-        name: 'pageNumber',
-        description: '페이지 번호',
-    })
-    async getUserList(@PageNumber('pageNumber') pageNumber: number) {
-        return await this.authService.getUserList(pageNumber);
     }
 
     @ApiOperation({
