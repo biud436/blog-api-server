@@ -11,7 +11,6 @@ import { Response } from 'express';
 @Controller()
 export class AppController {
     @Get()
-    @ApiExcludeEndpoint()
     getHello(
         @Res({
             passthrough: true,
@@ -23,7 +22,6 @@ export class AppController {
 
     @Render('login')
     @Get('/login')
-    @ApiExcludeEndpoint()
     login() {
         return { message: 'Hello world!' };
     }
