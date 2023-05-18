@@ -3,22 +3,22 @@ import { QueryRunner } from 'typeorm';
 import { CreateImageDto } from './dto/create-image.dto';
 import { MulterS3File } from '../../common/interceptors/s3.upload.interceptor';
 import { S3ImageUploadDto } from './dto/s3-image-upload.dto';
-import { ImageCreateCommand } from './commands/image-create.command';
-import { ImageTempFileGetterCommand } from './commands/image-temp.command';
-import { ImageFindByIdCommand } from './commands/image-find-by-id.command';
-import { ImageUpdatePostIdCommand } from './commands/image-update-post-id.command';
-import { ImageUploadCommand } from './commands/image-upload.command';
-import { ImageDeleteCommand } from './commands/image-delete.command';
+import { ImageCreateCommandImpl } from './commands/image-create.command';
+import { ImageTempFileGetterCommandImpl } from './commands/image-temp.command';
+import { ImageFindByIdCommandImpl } from './commands/image-find-by-id.command';
+import { ImageUpdatePostIdCommandImpl } from './commands/image-update-post-id.command';
+import { ImageUploadCommandImpl } from './commands/image-upload.command';
+import { ImageDeleteCommandImpl } from './commands/image-delete.command';
 
 @Injectable()
 export class ImageService {
     constructor(
-        private readonly createCommand: ImageCreateCommand,
-        private readonly tempFileGetterCommand: ImageTempFileGetterCommand,
-        private readonly findByIdsCommand: ImageFindByIdCommand,
-        private readonly updatePostIdCommand: ImageUpdatePostIdCommand,
-        private readonly uploadCommand: ImageUploadCommand,
-        private readonly deleteCommand: ImageDeleteCommand,
+        private readonly createCommand: ImageCreateCommandImpl,
+        private readonly tempFileGetterCommand: ImageTempFileGetterCommandImpl,
+        private readonly findByIdsCommand: ImageFindByIdCommandImpl,
+        private readonly updatePostIdCommand: ImageUpdatePostIdCommandImpl,
+        private readonly uploadCommand: ImageUploadCommandImpl,
+        private readonly deleteCommand: ImageDeleteCommandImpl,
     ) {}
 
     async create(createImageDto: CreateImageDto, queryRunner?: QueryRunner) {

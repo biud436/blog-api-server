@@ -105,7 +105,7 @@ export class AdminController {
         try {
             const res = await this.adminService.getAncestors(categoryName);
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
-        } catch (e) {
+        } catch (e: any) {
             throw ResponseUtil.failureWrap(e);
         }
     }
@@ -160,7 +160,7 @@ export class AdminController {
         try {
             const res = await this.adminService.getTreeChildren(isBeautify);
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
-        } catch (e) {
+        } catch (e: any) {
             throw ResponseUtil.failureWrap(e);
         }
     }
@@ -185,7 +185,7 @@ export class AdminController {
             );
 
             return ResponseUtil.success(RESPONSE_MESSAGE.SAVE_SUCCESS, res);
-        } catch (e) {
+        } catch (e: any) {
             return ResponseUtil.failureWrap(e);
         }
     }
@@ -214,7 +214,7 @@ export class AdminController {
             );
 
             return ResponseUtil.success(RESPONSE_MESSAGE.UPDATE_SUCCESS, res);
-        } catch (e) {
+        } catch (e: any) {
             return ResponseUtil.failureWrap(e);
         }
     }

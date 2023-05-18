@@ -53,7 +53,7 @@ export class AdminService {
             );
 
             return ResponseUtil.success(RESPONSE_MESSAGE.UPDATE_SUCCESS, res);
-        } catch (e) {
+        } catch (e: any) {
             if (e.name === 'CustomError') {
                 return e;
             }

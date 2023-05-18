@@ -48,7 +48,7 @@ export class Command implements CommandImpl {
         this.flag.isPassword = isPassword;
 
         // 타입을 결정합니다.
-        let promptType: inquirer.QuestionTypeName = isPort
+        const promptType: inquirer.QuestionTypeName = isPort
             ? 'number'
             : isPassword
             ? 'password'
@@ -97,7 +97,7 @@ export class Command implements CommandImpl {
         console.log('키 ' + realKey + '의 값을 변경합니다.');
 
         // 깊은 복사
-        let tempEnv: Record<string, any> = {
+        const tempEnv: Record<string, any> = {
             ...env,
         };
 

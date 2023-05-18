@@ -5,7 +5,10 @@ import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { RedisService } from 'src/common/micro-services/redis/redis.service';
 import { CreateImageDto } from '../dto/create-image.dto';
-import { ImageCreateCommand } from './image-create.command';
+import {
+    ImageCreateCommand,
+    ImageCreateCommandImpl,
+} from './image-create.command';
 
 export abstract class ImageUploadCommand {
     abstract execute(
@@ -22,7 +25,7 @@ export class ImageUploadCommandImpl extends ImageUploadCommand {
     constructor(
         @InjectDataSource() private readonly dataSource: DataSource,
         private readonly redisService: RedisService,
-        private readonly createCommand: ImageCreateCommand,
+        private readonly createCommand: ImageCreateCommandImpl,
     ) {
         super();
     }

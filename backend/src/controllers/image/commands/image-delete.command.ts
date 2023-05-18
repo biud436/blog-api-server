@@ -2,7 +2,10 @@ import { DeleteResult, QueryRunner, Repository } from 'typeorm';
 import { Image } from '../entities/image.entity';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ImageFindByIdCommand } from './image-find-by-id.command';
+import {
+    ImageFindByIdCommand,
+    ImageFindByIdCommandImpl,
+} from './image-find-by-id.command';
 import { S3Service } from 'src/common/micro-services/s3/s3.service';
 
 export abstract class ImageDeleteCommand {
@@ -17,7 +20,7 @@ export class ImageDeleteCommandImpl extends ImageDeleteCommand {
     constructor(
         @InjectRepository(Image)
         private readonly imageRepository: Repository<Image>,
-        private readonly findByIdsCommand: ImageFindByIdCommand,
+        private readonly findByIdsCommand: ImageFindByIdCommandImpl,
         private readonly s3Service: S3Service,
     ) {
         super();

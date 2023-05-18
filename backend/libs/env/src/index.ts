@@ -16,9 +16,11 @@ export namespace EnvModuleEntryPoint {
         private env?: IEnvFile;
         private tempXORKey?: number;
 
-        private _commands: Command[];
+        private _commands!: Command[];
 
-        constructor() {}
+        constructor() {
+            // empty
+        }
 
         /**
          * 기초 커맨드를 생성합니다.
@@ -36,7 +38,7 @@ export namespace EnvModuleEntryPoint {
          */
         public async start() {
             const commands = await this.initWithCommands();
-            const mutex = new Mutex<Number>();
+            const mutex = new Mutex<number>();
 
             commands.forEach(async (command) => {
                 const unlock = await mutex.lock();

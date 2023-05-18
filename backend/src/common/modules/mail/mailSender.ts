@@ -61,9 +61,9 @@ namespace MailSenderCollection {
  */
 @Injectable()
 export class MailSender {
-    private transporterOptions: MailForm;
+    private transporterOptions!: MailForm;
 
-    private options: SMTPTransport.Options;
+    private options!: SMTPTransport.Options;
     private transporter?: Mail;
 
     constructor(
@@ -153,7 +153,7 @@ export class MailSender {
 
         MailSenderCollection.validate(form);
 
-        transporter.sendMail(form, (error, info) => {
+        transporter?.sendMail(form, (error: any, info: any) => {
             if (error) {
                 console.log(error);
             } else {
@@ -173,7 +173,7 @@ export class MailSender {
 
             MailSenderCollection.validate(form);
 
-            transporter.sendMail(form, (error, info) => {
+            transporter?.sendMail(form, (error: any, info: any) => {
                 if (error) {
                     reject(error);
                     return;

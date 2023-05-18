@@ -31,8 +31,12 @@ import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
 import { IResponsableData } from 'src/common/libs/response/interface/response.interface';
 import { S3ImageUploadDto } from './dto/s3-image-upload.dto';
 import { UserId } from 'src/common/decorators/user-id.decorator';
-import { ImageCreateSvgCommand } from './commands/image-create-svg.command';
+import {
+    ImageCreateSvgCommand,
+    ImageCreateSvgCommandImpl,
+} from './commands/image-create-svg.command';
 import { Image } from './entities/image.entity';
+import { TypedRoute } from '@nestia/core';
 
 @Controller('image')
 @ApiTags('이미지')
@@ -41,7 +45,7 @@ export class ImageController {
 
     constructor(
         private readonly imageService: ImageService,
-        private readonly createSvgCommand: ImageCreateSvgCommand,
+        private readonly createSvgCommand: ImageCreateSvgCommandImpl,
         @InjectDataSource() private readonly dataSource: DataSource,
     ) {}
 
@@ -80,11 +84,6 @@ export class ImageController {
 
     /**
      * 커스텀으로 만든 AWS S3 파일 인터셉터를 이용하여 이미지 파일을 업로드합니다.
-     *
-     * @param user
-     * @param files
-     * @param postId
-     * @returns
      */
     @JwtGuard()
     @AdminOnly()
@@ -94,13 +93,13 @@ export class ImageController {
         @UserId() userId: number,
         @UploadedFiles() files: MulterS3File[],
         @Body() data: S3ImageUploadDto,
-    ): Promise<IResponsableData | ResponseUtil.FailureResponse> {
+    ) {
         try {
             const res = await this.imageService.upload(userId, files, data);
 
             return ResponseUtil.success(RESPONSE_MESSAGE.SAVE_SUCCESS, res);
         } catch (e: any) {
-            return ResponseUtil.failure(e.message);
+            throw ResponseUtil.failure(e.message);
         }
     }
 
