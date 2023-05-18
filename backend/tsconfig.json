@@ -16,6 +16,8 @@
         "paths": {
             "@app/env": ["libs/env/src"],
             "@app/env/*": ["libs/env/src/*"]
-        }
+        },
+        "strict": true,
+        "strictNullChecks": true
     }
 }

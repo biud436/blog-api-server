@@ -4,9 +4,9 @@ import { IsString } from 'class-validator';
 export class FeedDto {
     @ApiProperty()
     @IsString()
-    title: string;
+    title!: string;
 
     @ApiProperty()
     @IsString()
-    description: string;
+    description!: string;
 }

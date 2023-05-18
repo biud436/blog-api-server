@@ -5,5 +5,5 @@ export class S3ImageUploadDto {
     @ApiProperty()
     @IsOptional()
     @IsNumber()
-    postId: number;
+    postId?: number;
 }

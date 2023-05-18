@@ -2,8 +2,8 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateBlogMetaDatumDto {
     @ApiProperty()
-    siteName: string;
+    siteName?: string;
 
     @ApiProperty()
-    githubUrl: string;
+    githubUrl?: string;
 }

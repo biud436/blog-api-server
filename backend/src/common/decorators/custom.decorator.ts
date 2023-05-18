@@ -94,7 +94,7 @@ export function CustomApiOkResponse(
         decorators.push(ApiBasicAuth());
     }
     // Body에 타입을 표시할 지 여부
-    const bodyData = {};
+    const bodyData = {} as any;
 
     if (option.type) {
         bodyData[type] = option.type;

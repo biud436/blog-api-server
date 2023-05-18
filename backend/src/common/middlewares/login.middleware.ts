@@ -19,7 +19,7 @@ export class LoginMiddleware implements NestMiddleware {
 
         const secret = this.configService.getOrThrow('JWT_SECRET');
 
-        jwt.verify(accessToken, secret, (err, decoded) => {
+        jwt.verify(accessToken, secret, (err: any, decoded: any) => {
             if (err) {
                 res.status(401).send('Unauthorized');
                 return;

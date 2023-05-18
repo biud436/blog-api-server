@@ -34,7 +34,8 @@ export class AES256Provider {
         this.IV = Buffer.from(IV, 'hex');
     }
 
-    public convert = (from, to) => (str) => Buffer.from(str, from).toString(to);
+    public convert = (from: any, to: any) => (str: string) =>
+        Buffer.from(str, from).toString(to);
     public utf8ToHex = this.convert('utf8', 'hex');
     public hexToUtf8 = this.convert('hex', 'utf8');
 

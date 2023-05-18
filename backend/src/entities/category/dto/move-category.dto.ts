@@ -12,5 +12,5 @@ export class MoveCategoryDto {
      */
     @ApiProperty()
     @IsNumber()
-    newCategoryParentId: number;
+    newCategoryParentId!: number;
 }

@@ -27,19 +27,19 @@ interface DateTimeUtilImpl {
      * 주어진 날짜의 시간을 유닉스 타임스탬프로 변환합니다.
      * @param date
      */
-    getUnixTime(date: LocalDateTime);
+    getUnixTime(date: LocalDateTime): number;
 
     /**
      * 주어진 날짜의 현지 시간 기준 요일을 숫자값으로 반환합니다.
      * @param date
      */
-    getDay(date: LocalDateTime);
+    getDay(date: LocalDateTime): number;
 
     /**
      * 주어진 날짜의 현지 시간 기준 요일을 문자열로 반환합니다.
      * @param date
      */
-    getDayOfWeek(date: LocalDateTime);
+    getDayOfWeek(date: LocalDateTime): string;
 
     /**
      * LocalDateTime 객체의 월 값을 현지 시간에 맞춰 반환합니다.
@@ -47,12 +47,12 @@ interface DateTimeUtilImpl {
      *
      * @param date
      */
-    getMonth(date: LocalDateTime);
+    getMonth(date: LocalDateTime): number;
 
     /**
      * 주어진 날짜의 현지 시간 기준 일을 반환합니다.
      */
-    getDate(date: LocalDateTime);
+    getDate(date: LocalDateTime): number;
 
     /**
      * LocalDateTime을 `ZonedDateTime` 타입으로 변환합니다.

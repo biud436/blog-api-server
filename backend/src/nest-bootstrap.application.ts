@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
     ClassSerializerInterceptor,
     Logger,
@@ -18,14 +19,12 @@ import * as session from 'express-session';
 import * as passport from 'passport';
 import { createClient } from 'redis';
 import { getSwaggerLoginCheckMiddleware } from './common/middlewares/swagger.middleware';
-import * as connectRedis from 'connect-redis';
+import RedisStore from 'connect-redis';
 import { EventEmitter } from 'events';
 import { useGlobalPipes } from './common/middlewares/global-pipes.middleware';
 import { useStaticImageFiles } from './common/middlewares/images.middleware';
 import { useHelmet } from './common/middlewares/helmet.middleware';
 import { useCookieParser } from './common/middlewares/cookie-parser.middleware';
-
-export const RedisStore = connectRedis(session);
 
 export class NestBootstrapApplication extends EventEmitter {
     private static INSTANCE: NestBootstrapApplication;
@@ -33,7 +32,7 @@ export class NestBootstrapApplication extends EventEmitter {
     private static CONFIG: ConfigService;
     private static LOGGER: Logger = new Logger(NestBootstrapApplication.name);
 
-    private _application: NestExpressApplication = null;
+    private _application: NestExpressApplication | null = null;
 
     private static readonly SWAGGER_GLOB = ['/docs', '/docs-json'];
     private static readonly DEFAULT_VIEW_ENGINE = 'hbs';
@@ -62,7 +61,7 @@ export class NestBootstrapApplication extends EventEmitter {
         });
     }
 
-    get app(): NestExpressApplication {
+    get app(): NestExpressApplication | null {
         return this._application;
     }
 
@@ -229,7 +228,7 @@ export class NestBootstrapApplication extends EventEmitter {
         // NGINX 내부에서 EXPRESS가 실행 중이기 때문에 이 옵션을 전달해야 합니다.
         // 그렇지 않으면 쿠키가 설정되지 않습니다.
         // https://expressjs.com/ko/guide/behind-proxies.html
-        this._application.set('trust proxy', 1);
+        this._application?.set('trust proxy', 1);
 
         return this;
     }
@@ -248,7 +247,7 @@ export class NestBootstrapApplication extends EventEmitter {
                 scheme: 'bearer',
                 bearerFormat: 'JWT',
             })
-            .setContact('the developer', null, 'biud436@gmail.com')
+            .setContact('the developer', '', 'biud436@gmail.com')
             .addServer(NestBootstrapApplication.LOCAL_HOST, '로컬 서버')
             .addServer(NestBootstrapApplication.PRODUCTION_HOST[0], '배포 서버')
             .setVersion('1.0')
@@ -258,10 +257,10 @@ export class NestBootstrapApplication extends EventEmitter {
     private initWithApiDocs(): NestBootstrapApplication {
         const config = this.getSwaggerConfigBuilder();
         const document = SwaggerModule.createDocument(
-            this._application,
+            this._application!,
             config,
         );
-        SwaggerModule.setup('docs', this._application, document, {
+        SwaggerModule.setup('docs', this._application!, document, {
             explorer: true,
             swaggerOptions: {
                 defaultModelsExpandDepth: -1, // API 문서에서 하단 객체 제거

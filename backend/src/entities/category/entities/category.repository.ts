@@ -130,11 +130,17 @@ export class CategoryRepository extends Repository<Category> {
      * @returns
      */
     async selectParentNode(categoryName: string) {
-        const category: Pick<CategoryDepthVO, 'left'> =
+        const category: Pick<CategoryDepthVO, 'left'> | undefined =
             await this.createQueryBuilder('category')
                 .select('category.left', 'left')
                 .where('category.name = :name', { name: categoryName })
                 .getRawOne();
+
+        if (!category) {
+            throw new InternalServerErrorException(
+                '카테고리를 찾을 수 없습니다.',
+            );
+        }
 
         const { left } = category;
 
@@ -233,9 +239,11 @@ export class CategoryRepository extends Repository<Category> {
     }
 
     async deleteNode(categoryId: number, queryRunner: QueryRunner) {
-        const positionNode: Pick<Category, 'left' | 'right' | 'groupId'> & {
-            width: number;
-        } = await this.createQueryBuilder('node')
+        const positionNode:
+            | (Pick<Category, 'left' | 'right' | 'groupId'> & {
+                  width: number;
+              })
+            | undefined = await this.createQueryBuilder('node')
             .select('node.left', 'left')
             .addSelect('node.right', 'right')
             .addSelect('node.right - node.left + 1', 'width')
@@ -279,7 +287,7 @@ export class CategoryRepository extends Repository<Category> {
             throw new InternalServerErrorException('노드를 삭제할 수 없습니다');
         }
 
-        affected += updateResult.affected;
+        affected += updateResult.affected || 0;
 
         updateResult = await this.createQueryBuilder('node')
             .update(Category)
@@ -300,7 +308,7 @@ export class CategoryRepository extends Repository<Category> {
             throw new InternalServerErrorException('노드를 삭제할 수 없습니다');
         }
 
-        affected += updateResult.affected;
+        affected += updateResult.affected || 0;
 
         return {
             ...updateResult,

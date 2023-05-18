@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Paginatable, Pagination } from 'src/common/list-config';
+import { Paginatable } from 'src/common/list-config';
 import { DeleteResult, Repository } from 'typeorm';
 import { CreateConnectInfoDto } from './dto/create-connect-info.dto';
-import { UpdateConnectInfoDto } from './dto/update-connect-info.dto';
 import { ConnectInfo } from './entities/connect-info.entity';
 
 @Injectable()
@@ -35,7 +34,9 @@ export class ConnectInfoService {
      * @param pageNumber
      * @returns
      */
-    async findAll(pageNumber: number): Promise<Paginatable<ConnectInfo>> {
+    async findAll(
+        pageNumber: number,
+    ): Promise<Paginatable<ConnectInfo> | undefined> {
         const qb = this.connectInfoRepository
             .createQueryBuilder('connectInfo')
             .select()

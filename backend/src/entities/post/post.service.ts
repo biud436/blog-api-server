@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
@@ -41,6 +42,11 @@ export class PostService {
 
         const model = this.postRepository.create(createPostDto);
         const now = DateTimeUtil.toDate(DateTimeUtil.now());
+
+        if (!now) {
+            throw new BadRequestException('날짜가 잘못되었습니다.');
+        }
+
         model.uploadDate = now;
 
         if (!model.categoryId) {
@@ -57,7 +63,7 @@ export class PostService {
 
         let resultImageIds: number[] = [];
         if (imageIds) {
-            resultImageIds = imageIds.map((e) => +e).filter((e) => !isNaN(e));
+            resultImageIds = imageIds.map((e) => +e!).filter((e) => !isNaN(e));
         }
 
         // 배열에서 NaN 제거
@@ -134,7 +140,7 @@ export class PostService {
 
         let resultImageIds: number[] = [];
         if (imageIds) {
-            resultImageIds = imageIds.map((e) => +e).filter((e) => !isNaN(e));
+            resultImageIds = imageIds.map((e) => +e!).filter((e) => !isNaN(e));
         }
 
         if (resultImageIds.length > 0) {
@@ -264,6 +270,10 @@ export class PostService {
             .setPagination(pageNumber)
             .getManyWithPagination(pageNumber);
 
+        if (!items) {
+            throw new BadRequestException('포스트가 존재하지 않습니다.');
+        }
+
         items.entities = items.entities.map((e) => {
             e.content = e.isPrivate
                 ? '비공개 글입니다'
@@ -310,6 +320,10 @@ export class PostService {
             .setPagination(pageNumber)
             .getManyWithPagination(pageNumber);
 
+        if (!items) {
+            throw new BadRequestException('포스트가 존재하지 않습니다.');
+        }
+
         items.entities = items.entities.map((e) => {
             return plainToClass(Post, e);
         });
@@ -320,7 +334,7 @@ export class PostService {
     async findAllByUserId(
         pageNumber: number,
         userId: number,
-    ): Promise<Paginatable<Post>> {
+    ): Promise<Paginatable<Post> | undefined> {
         const qb = this.postRepository
             .createQueryBuilder('post')
             .select('post.id', 'id')
@@ -394,6 +408,10 @@ export class PostService {
         const items = await qb
             .setPagination(pageNumber)
             .getManyWithPagination(pageNumber);
+
+        if (!items) {
+            throw new BadRequestException('포스트가 존재하지 않습니다.');
+        }
 
         items.entities = items.entities.map((e) => plainToClass(Post, e));
 

@@ -4,18 +4,18 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 @Entity()
 export class CategoryGroup {
     @PrimaryGeneratedColumn()
-    id: number;
+    id!: number;
 
     @Column({
         name: 'CTGR_GRP_NM',
     })
-    name: string;
+    name!: string;
 
     @Column({
         name: 'CTGR_GRP_DESC',
     })
-    description: string;
+    description!: string;
 
     @OneToMany(() => Category, (category) => category.categoryGroup)
-    categories: Category[];
+    categories!: Category[];
 }

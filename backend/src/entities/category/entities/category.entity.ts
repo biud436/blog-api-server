@@ -17,38 +17,38 @@ export class Category {
         name: 'CTGR_SQ',
     })
     @Exclude()
-    id: number;
+    id!: number;
 
     @Column({
         name: 'CTGR_NM',
     })
     @Index()
-    name: string;
+    name!: string;
 
     @Column({
         name: 'LFT_NO',
     })
     @Exclude()
-    left: number;
+    left!: number;
 
     @Column({
         name: 'RGT_NO',
     })
     @Exclude()
-    right: number;
+    right!: number;
 
     @Column({
         name: 'CTGR_GRP_SQ',
         default: 1,
     })
-    groupId: number;
+    groupId!: number;
 
     @OneToMany(() => Post, (post) => post.category)
-    posts: Post[];
+    posts!: Post[];
 
     @ManyToOne(() => CategoryGroup, (categoryGroup) => categoryGroup.categories)
     @JoinColumn({
         name: 'CTGR_GRP_SQ',
     })
-    categoryGroup: CategoryGroup;
+    categoryGroup!: CategoryGroup;
 }

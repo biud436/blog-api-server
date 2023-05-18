@@ -1,6 +1,6 @@
 import { MulterS3File } from 'src/common/interceptors/s3.upload.interceptor';
 import { S3ImageUploadDto } from '../dto/s3-image-upload.dto';
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { RedisService } from 'src/common/micro-services/redis/redis.service';
@@ -80,6 +80,10 @@ export class ImageUploadCommandImpl extends ImageUploadCommand {
         files: MulterS3File[],
         { postId }: S3ImageUploadDto,
     ) {
+        if (!postId) {
+            throw new BadRequestException('포스트 아이디가 존재하지 않습니다.');
+        }
+
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();

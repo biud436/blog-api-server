@@ -13,37 +13,37 @@ import { ApiProperty } from '@nestjs/swagger';
 @Entity()
 export class ApiKey {
     @PrimaryGeneratedColumn()
-    id: number;
+    id!: number;
 
     @ApiProperty()
     @Column({
         unique: true,
     })
-    accessKey: string;
+    accessKey!: string;
 
     @ApiProperty()
     @Column()
-    isExpired: boolean;
+    isExpired!: boolean;
 
     @ApiProperty()
     @Column({
         type: 'datetime',
     })
     @Transform((param: TransformFnParams) => moment(param.value))
-    expiresAt: moment.Moment;
+    expiresAt!: moment.Moment;
 
     @ApiProperty()
     @Column({
         name: 'user_id',
     })
-    userId: number;
+    userId!: number;
 
     @ManyToOne(() => User, (user) => user.apiKeys, {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
     })
     @JoinColumn({ name: 'user_id' })
-    user: User;
+    user!: User;
 
     static of(
         data: Omit<Partial<ApiKey>, 'expiresAt'> & {

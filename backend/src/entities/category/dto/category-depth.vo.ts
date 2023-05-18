@@ -1,8 +1,8 @@
 export class CategoryDepthVO {
-    left: number;
-    right: number;
-    name: string;
-    depth: number;
+    left!: number;
+    right!: number;
+    name!: string;
+    depth!: number;
 
     children: CategoryDepthVO[] = [];
 

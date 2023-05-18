@@ -7,18 +7,18 @@ export class PostTempListItem {
      * 임시 포스트 ID
      */
     @ApiProperty()
-    id: number;
+    id!: number;
 
     /**
      * 임시 포스트 제목
      */
     @ApiProperty()
-    title: string;
+    title!: string;
 
     /**
      * 임시 포스트 생성 날짜
      */
     @ApiProperty()
     @IsDateString()
-    createdAt: Date;
+    createdAt!: Date;
 }

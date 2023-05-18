@@ -23,26 +23,26 @@ import { Role } from 'src/common/decorators/role.enum';
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
-    id: number;
+    id!: number;
 
     @Column({
         nullable: false,
         unique: true,
     })
-    username: string;
+    username!: string;
 
     @Column({
         nullable: false,
     })
     @Exclude()
-    profileId: number;
+    profileId!: number;
 
     @Column({
         default: true,
         nullable: false,
     })
     @Exclude()
-    isValid: boolean;
+    isValid!: boolean;
 
     @OneToOne(() => Profile, {
         onUpdate: 'RESTRICT',
@@ -51,28 +51,28 @@ export class User {
     @JoinColumn({
         name: 'profile_id',
     })
-    profile: Profile;
+    profile!: Profile;
 
     @OneToMany(() => Post, (post) => post.user)
-    posts: Post[];
+    posts!: Post[];
 
     @OneToMany(() => Admin, (admin) => admin.user)
-    admins: Admin[];
+    admins!: Admin[];
 
     @OneToMany(() => ApiKey, (apiKey) => apiKey.user)
-    apiKeys: ApiKey[];
+    apiKeys!: ApiKey[];
 
     @OneToMany(() => BlogMetaData, (blogMetaData) => blogMetaData.user)
-    blogMetaData: BlogMetaData[];
+    blogMetaData!: BlogMetaData[];
 
     @OneToMany(() => PostTemp, (postTemp) => postTemp.user)
-    postTemps: PostTemp[];
+    postTemps!: PostTemp[];
 
     @Column({
         nullable: false,
     })
     @Exclude()
-    password: string;
+    password!: string;
 
     @Expose({
         name: 'role',
@@ -100,11 +100,11 @@ export class User {
         default: () => 'CURRENT_TIMESTAMP',
     })
     @Exclude()
-    createdAt: Date;
+    createdAt!: Date;
 
     @CreateDateColumn({
         default: () => 'CURRENT_TIMESTAMP',
     })
     @Exclude()
-    updatedAt: Date;
+    updatedAt!: Date;
 }

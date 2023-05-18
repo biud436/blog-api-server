@@ -12,7 +12,7 @@ export namespace AuthRequest {
             type: String,
             description: '유저 아이디',
         })
-        username: string;
+        username!: string;
         @Matches(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/, {
             message:
                 'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character',
@@ -21,21 +21,21 @@ export namespace AuthRequest {
             type: String,
             description: '비밀 번호',
         })
-        password: string;
+        password!: string;
 
         @IsEmail({}, { message: '이메일 형식이 아닙니다' })
         @ApiProperty({
             type: String,
             description: '이메일',
         })
-        email: string;
+        email!: string;
 
         @IsString({ message: '별명을 문자열이어야 합니다' })
         @ApiProperty({
             type: String,
             description: '별명',
         })
-        nickname: string;
+        nickname!: string;
 
         // @ApiProperty()
         // profile: CreateProfileDto;

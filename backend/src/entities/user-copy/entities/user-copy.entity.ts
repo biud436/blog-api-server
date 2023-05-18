@@ -8,13 +8,13 @@ import {
 @Entity()
 export class UserCopy {
     @PrimaryGeneratedColumn()
-    id: number;
+    id!: number;
 
     @Column({
         nullable: false,
     })
-    username: string;
+    username!: string;
 
     @CreateDateColumn()
-    createdAt: Date;
+    createdAt!: Date;
 }

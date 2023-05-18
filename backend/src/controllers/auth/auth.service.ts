@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
     Injectable,
     InternalServerErrorException,
@@ -112,7 +113,7 @@ export class AuthService {
                 payload.role = 'admin';
             }
 
-            if (!['admin'].includes(payload.role)) {
+            if (!['admin'].includes(payload.role!)) {
                 throw new LoginAuthorizationException();
             }
 
@@ -178,7 +179,7 @@ export class AuthService {
             }
 
             // 관리자가 아니라면 오류를 던진다.
-            if (!['admin'].includes(payload.role)) {
+            if (!['admin'].includes(payload.role!)) {
                 throw new LoginAuthorizationException();
             }
 
@@ -202,7 +203,6 @@ export class AuthService {
                     accessToken,
                     refreshToken,
                 },
-                null,
                 res,
             );
 
@@ -243,7 +243,6 @@ export class AuthService {
             accessToken: string;
             refreshToken: string;
         },
-        req: Request,
         res: Response,
     ) {
         let url = this.configService.get('PUBLIC_SERVER_IP');
@@ -252,11 +251,13 @@ export class AuthService {
         url = url.split(':')[0];
 
         const jwtSecretExpirationTime = DateTimeUtil.extractJwtExpirationTime(
-            this.configService.get('JWT_SECRET_EXPIRATION_TIME'),
+            this.configService.getOrThrow('JWT_SECRET_EXPIRATION_TIME'),
         );
         const jwtRefreshTokenExpirationTime =
             DateTimeUtil.extractJwtExpirationTime(
-                this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME'),
+                this.configService.getOrThrow(
+                    'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
+                ),
             );
 
         const encodedAccess = token.accessToken;
@@ -476,14 +477,14 @@ export class AuthService {
             payload.role = 'admin';
         }
 
-        if (!['admin'].includes(payload.role)) {
+        if (!['admin'].includes(payload.role!)) {
             throw new LoginAuthorizationException();
         }
 
         // 액세스 토큰 재생성
         const accessToken = await this.jwtService.signAsync(payload);
         const jwtSecretExpirationTime = DateTimeUtil.extractJwtExpirationTime(
-            this.configService.get('JWT_SECRET_EXPIRATION_TIME'),
+            this.configService.getOrThrow('JWT_SECRET_EXPIRATION_TIME'),
         );
 
         const encodedAccessToken = this.aes256Provider.encrypt(accessToken);
@@ -594,7 +595,7 @@ export class AuthService {
                 user: safelyUserModel,
                 profile: profileModel,
             };
-        } catch (e) {
+        } catch (e: any) {
             await queryRunner.rollbackTransaction();
 
             // 레디스에 저장된 키를 제거합니다.
@@ -650,7 +651,7 @@ export class AuthService {
                 ...plainToClass(User, profileUser),
                 scope: [scope],
             };
-        } catch (e) {
+        } catch (e: any) {
             throw new UnauthorizedException(e.message);
         }
     }
@@ -666,7 +667,7 @@ export class AuthService {
                 },
                 users,
             );
-        } catch (e) {
+        } catch (e: any) {
             throw new InternalServerErrorException(e.message);
         }
     }
@@ -699,10 +700,10 @@ export class AuthService {
             redirect_uri,
             state,
             scope,
-        };
+        } as Record<string, any>;
 
         const queryString = Object.keys(query)
-            .map((key, index) => {
+            .map((key: string, index: number) => {
                 if (index === 0) {
                     return `${key}=${query[key]}`;
                 }

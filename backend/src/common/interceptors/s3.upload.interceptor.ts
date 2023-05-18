@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
     CallHandler,
     ExecutionContext,
@@ -37,7 +38,7 @@ export function S3FileInterceptor(
 ): Type<NestInterceptor> {
     class MixinInterceptor implements NestInterceptor {
         protected multer: MulterInstance;
-        private defaultSettings: MulterOptions;
+        private defaultSettings!: MulterOptions;
         private s3: S3Client = new S3Client({
             credentials: {
                 accessKeyId:
@@ -70,7 +71,7 @@ export function S3FileInterceptor(
 
             this.defaultSettings = {
                 storage: multerS3({
-                    s3: this.s3,
+                    s3: this.s3 as any,
                     bucket: BUCKET,
                     acl: 'public-read',
                     contentType: multerS3.AUTO_CONTENT_TYPE, // 이 속성을 지정하지 않으면, application/octet-stream으로 설정되어 이미지가 og:image에서 불러와지지 않습니다.
@@ -79,7 +80,7 @@ export function S3FileInterceptor(
                         const { username } = user;
 
                         this.imageService
-                            .getTempImageFileName(file.originalname, username)
+                            .getTempImageFileName(file.originalname, username!)
                             .then((filename) => {
                                 const extension = file.mimetype.split('/')[1];
 

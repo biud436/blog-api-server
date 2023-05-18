@@ -5,7 +5,7 @@ import { TEnvironmentFile } from 'src/common/my-config-service.type';
 import { Image } from 'src/controllers/image/entities/image.entity';
 
 export abstract class S3DeleteBucketCommand {
-    protected s3: AWS.S3;
+    protected s3!: AWS.S3;
 
     abstract execute(images: Image[]): Promise<void>;
 }

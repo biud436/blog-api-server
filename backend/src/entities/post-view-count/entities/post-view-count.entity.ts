@@ -11,25 +11,25 @@ import {
 export class PostViewCount {
     @PrimaryGeneratedColumn()
     @Exclude()
-    id: number;
+    id!: number;
 
     @CreateDateColumn({
         nullable: false,
         default: () => 'CURRENT_TIMESTAMP',
     })
     @Exclude()
-    createdAt: Date;
+    createdAt!: Date;
 
     @UpdateDateColumn({
         nullable: false,
         default: () => 'CURRENT_TIMESTAMP',
     })
     @Exclude()
-    updatedAt: Date;
+    updatedAt!: Date;
 
     @Column({
         nullable: false,
         default: 0,
     })
-    count: number;
+    count!: number;
 }

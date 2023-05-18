@@ -26,6 +26,7 @@ import { SessionAuthGuard } from './guards/session-auth.guard';
 import { Throttle } from '@nestjs/throttler';
 import { LOGIN_INTERVAL } from 'src/common/throttle-config';
 import { AuthGuard } from '@nestjs/passport';
+import { GithubUser } from './strategies/github.strategy';
 
 @Controller('auth')
 @ApiTags('인증 API')
@@ -58,7 +59,7 @@ export class AuthController {
         await this.authService.createConnectInfo(ip);
         const token = await this.authService.login(user);
 
-        return this.authService.loginUseCookieMiddleware(token, req, res);
+        return this.authService.loginUseCookieMiddleware(token, res);
     }
 
     /**
@@ -163,7 +164,7 @@ export class AuthController {
                 data.authCode,
             );
             return ResponseUtil.success(RESPONSE_MESSAGE.SAVE_SUCCESS, res);
-        } catch (e) {
+        } catch (e: any) {
             throw ResponseUtil.failureWrap({
                 message: e ? e.message : '인증 코드가 일치하지 않습니다.',
                 statusCode: HttpStatus.BAD_REQUEST,
@@ -214,13 +215,13 @@ export class AuthController {
     @Get('/github/callback')
     @UseGuards(AuthGuard('github'))
     async loginGithubUser(
-        @Req() req,
+        @Req() req: Request,
         @Res({
             passthrough: true,
         })
         res: Response,
     ) {
         const user = req.user;
-        return await this.authService.loginGithubUser(user, res);
+        return await this.authService.loginGithubUser(user as GithubUser, res);
     }
 }

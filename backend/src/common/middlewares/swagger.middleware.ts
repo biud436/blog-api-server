@@ -39,10 +39,10 @@ export function getSwaggerLoginCheckMiddleware(configService: ConfigService) {
         jwt.verify(
             accessToken,
             configService.getOrThrow('JWT_SECRET'),
-            (err) => {
+            (err: any) => {
                 if (err) {
                     res.clearCookie('access_token');
-                    res.render('login', (err, html) => {
+                    res.render('login', (err: any, html: any) => {
                         if (err) {
                             console.error(err);
                             res.status(500).send(

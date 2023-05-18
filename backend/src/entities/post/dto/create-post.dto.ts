@@ -21,7 +21,7 @@ export class CreatePostDto {
     @ApiProperty()
     @Assert.IsNotEmpty('제목을 입력해주세요.')
     @IsString()
-    title: string;
+    title!: string;
     /**
      * 글 내용
      */
@@ -31,7 +31,7 @@ export class CreatePostDto {
     })
     // @Assert.MaxLength(4000)
     @IsString()
-    content: string;
+    content!: string;
 
     /**
      * 업로드 일

@@ -21,44 +21,44 @@ export class PostTemp {
      * DB에서 포스트를 조회할 때, PK 값을 이용하는 것이 상당히 효율적이지만 이 값을 노출시키는 것은 보안상의 문제가 있습니다.
      */
     @PrimaryGeneratedColumn()
-    id: number;
+    id!: number;
 
     @Column({
         length: 255,
     })
-    title: string;
+    title!: string;
 
     @Column({
         type: 'text',
     })
-    content: string;
+    content!: string;
 
     @Column({
         length: 255,
         nullable: true,
     })
     @Index()
-    checksum: string;
+    checksum!: string;
 
     @Column({ nullable: false })
-    userId: number;
+    userId!: number;
 
     @ManyToOne(() => User, (user) => user.postTemps, {
         onDelete: 'RESTRICT',
         onUpdate: 'RESTRICT',
     })
     @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
-    user: User;
+    user!: User;
 
     @CreateDateColumn({
         default: () => 'CURRENT_TIMESTAMP',
         nullable: false,
     })
-    createdAt: Date;
+    createdAt!: Date;
 
     @UpdateDateColumn({
         default: () => 'CURRENT_TIMESTAMP',
         nullable: false,
     })
-    updatedAt: Date;
+    updatedAt!: Date;
 }

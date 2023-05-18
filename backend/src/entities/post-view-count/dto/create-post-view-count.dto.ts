@@ -4,7 +4,7 @@ import { IsDate, IsNumber, IsOptional } from 'class-validator';
 export class CreatePostViewCountDto {
     @ApiProperty()
     @IsNumber()
-    id: number;
+    id!: number;
 
     @ApiProperty()
     @IsOptional()
@@ -18,5 +18,5 @@ export class CreatePostViewCountDto {
 
     @ApiProperty()
     @IsNumber()
-    count: number;
+    count!: number;
 }

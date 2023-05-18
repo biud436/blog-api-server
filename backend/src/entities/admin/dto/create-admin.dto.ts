@@ -8,5 +8,5 @@ export class CreateAdminDto {
     @ApiProperty()
     @Assert.IsNotEmpty()
     @Assert.IsNumber()
-    userId: number;
+    userId?: number;
 }

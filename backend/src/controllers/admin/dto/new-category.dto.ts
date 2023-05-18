@@ -3,7 +3,7 @@ import { IsOptional } from 'class-validator';
 
 export class NewCategoryDto {
     @ApiProperty()
-    categoryName: string;
+    categoryName!: string;
 
     @ApiProperty()
     @IsOptional()

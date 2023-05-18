@@ -7,8 +7,8 @@ export class VerifyAuthCodeRequestDto {
         type: 'string',
     })
     @IsEmail()
-    email: EmailAddress;
+    email!: EmailAddress;
 
     @ApiProperty()
-    authCode: string;
+    authCode!: string;
 }

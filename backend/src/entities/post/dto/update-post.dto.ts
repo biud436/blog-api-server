@@ -11,7 +11,7 @@ export class UpdatePostDto {
     @ApiProperty()
     @Assert.IsNotEmpty('제목을 입력해주세요.')
     @IsString()
-    title: string;
+    title!: string;
 
     /**
      * 글 내용
@@ -22,7 +22,7 @@ export class UpdatePostDto {
     })
     @Assert.MaxLength(4000)
     @IsString()
-    content: string;
+    content!: string;
 
     authorId?: number;
 

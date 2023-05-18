@@ -1,11 +1,4 @@
-import {
-    Controller,
-    Get,
-    InternalServerErrorException,
-    Render,
-    Res,
-} from '@nestjs/common';
-import { ApiExcludeEndpoint } from '@nestjs/swagger';
+import { Controller, Get, Render, Res } from '@nestjs/common';
 import { Response } from 'express';
 
 @Controller()

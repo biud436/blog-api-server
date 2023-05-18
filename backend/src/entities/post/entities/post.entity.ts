@@ -20,7 +20,7 @@ import removeMarkdown from 'markdown-to-text';
 @Entity()
 export class Post {
     @PrimaryGeneratedColumn()
-    id: number;
+    id!: number;
 
     /**
      * 작성자
@@ -29,13 +29,13 @@ export class Post {
         nullable: false,
     })
     @Exclude()
-    authorId: number;
+    authorId!: number;
 
     @Column({
         nullable: false,
         name: 'category_id',
     })
-    categoryId: number;
+    categoryId!: number;
 
     /**
      * 비공개 여부
@@ -45,7 +45,7 @@ export class Post {
         default: 0,
     })
     @Index()
-    isPrivate: boolean;
+    isPrivate!: boolean;
 
     /**
      * 제목
@@ -54,7 +54,7 @@ export class Post {
         nullable: false,
     })
     @Transform((value: TransformFnParams) => decodeHtml(value.value))
-    title: string;
+    title!: string;
 
     /**
      * 상세 내용
@@ -64,7 +64,7 @@ export class Post {
         type: 'text',
     })
     @Transform((value: TransformFnParams) => decodeHtml(value.value))
-    content: string;
+    content!: string;
 
     previewContent?: string;
 
@@ -72,14 +72,14 @@ export class Post {
         default: () => 'CURRENT_TIMESTAMP',
         nullable: false,
     })
-    uploadDate: Date;
+    uploadDate!: Date;
 
     @UpdateDateColumn({
         default: () => 'CURRENT_TIMESTAMP',
         nullable: false,
     })
     @Exclude()
-    updatedAt: Date;
+    updatedAt!: Date;
 
     @DeleteDateColumn({
         nullable: true,
@@ -95,7 +95,7 @@ export class Post {
         name: 'author_id',
         referencedColumnName: 'id',
     })
-    user: User;
+    user!: User;
 
     @ManyToOne(() => Category, (firstCategory) => firstCategory.posts, {
         onUpdate: 'RESTRICT',
@@ -105,13 +105,13 @@ export class Post {
         name: 'category_id',
         referencedColumnName: 'id',
     })
-    category: Category;
+    category!: Category;
 
     /**
      * 이미지
      */
     @OneToMany(() => Image, (image) => image.post)
-    images: Image[];
+    images!: Image[];
 
     /**
      * Build Post entity.

@@ -54,23 +54,23 @@ export class PaginationFlushObject {
     /**
      * 현재 페이지
      */
-    currentPage: number;
+    currentPage!: number;
     /**
      * 전체 페이지 수
      */
-    maxPage: number;
+    maxPage!: number;
     /**
      * 전체 게시물 수
      */
-    totalRecord: number;
+    totalRecord!: number;
     /**
      * 현재 페이지 블럭
      */
-    currentBlock: number;
+    currentBlock!: number;
     /**
      * 전체 블럭 수
      */
-    totalBlock: number;
+    totalBlock!: number;
 }
 
 export type PaginationResult = {

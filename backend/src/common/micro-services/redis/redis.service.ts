@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { createClient } from 'redis';
 import { promisify, format } from 'util';
@@ -41,7 +42,7 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
         await this.client.connect();
     }
 
-    async hget(key: string, field: string): Promise<string> {
+    async hget(key: string, field: string): Promise<string | undefined> {
         return await this.client.hGet(key, field);
     }
 
@@ -71,7 +72,7 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
 
         // 10분간 유효
         const ttl = validationMinutes * 60;
-        return await this.client.EXPIRE(key, ttl);
+        return await this.client.EXPIRE(key!, ttl!);
     }
 
     /**
@@ -206,7 +207,7 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
             const count = await this.client.GET(key);
             result.push({
                 id: parseInt(postId),
-                count: parseInt(count),
+                count: parseInt(count!, 10),
             });
         }
 
@@ -263,7 +264,7 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
         return await this.client.GET(key);
     }
 
-    async getApiUsageAsKey(key: string): Promise<string> {
+    async getApiUsageAsKey(key: string): Promise<string | null> {
         return await this.client.GET(key);
     }
 
@@ -278,7 +279,7 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
      * @param userId {string}
      * @returns
      */
-    async getAuthorizationCode(userId: string): Promise<string> {
+    async getAuthorizationCode(userId: string): Promise<string | null> {
         const key = Redis.keyStore.getAuthorizationCodeKey(userId);
         return await this.client.GET(key);
     }
@@ -307,7 +308,7 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
      * @param userId
      * @returns
      */
-    async getRefreshToken(userId: string): Promise<string> {
+    async getRefreshToken(userId: string): Promise<string | undefined> {
         return await this.client.HGET('JWT_REFRESH_TOKEN', userId);
     }
 

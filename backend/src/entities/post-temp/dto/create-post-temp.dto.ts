@@ -7,11 +7,11 @@ export class CreatePostTempDto {
     @IsNotEmpty({
         message: '제목을 입력해주세요.',
     })
-    title: string;
+    title!: string;
 
     @ApiProperty()
     @IsString({
         message: '내용을 입력해주세요.',
     })
-    content: string;
+    content!: string;
 }

@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { Cron } from '@nestjs/schedule';
+
 import { InjectRepository } from '@nestjs/typeorm';
-import { RedisService } from 'src/common/micro-services/redis/redis.service';
-import { QueryRunner, Repository, UpdateResult } from 'typeorm';
+
+import { QueryRunner, Repository } from 'typeorm';
 import { CreatePostViewCountDto } from './dto/create-post-view-count.dto';
-import { UpdatePostViewCountDto } from './dto/update-post-view-count.dto';
+
 import { PostViewCount } from './entities/post-view-count.entity';
 
 @Injectable()
@@ -38,7 +38,7 @@ export class PostViewCountService {
      * @param id
      * @returns
      */
-    async findOne(id: number): Promise<PostViewCount> {
+    async findOne(id: number): Promise<PostViewCount | null> {
         const model = await this.postViewCountRepository
             .createQueryBuilder('post_view_count')
             .select()

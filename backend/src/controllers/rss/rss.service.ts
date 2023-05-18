@@ -37,7 +37,7 @@ export class RssService {
         const { postUrl, author } = this.options;
         return FeedItem.of({
             title: post.title,
-            description: post.previewContent,
+            description: post.previewContent ?? '',
             url: `${postUrl}/${post.id}`,
             date: post.uploadDate.toUTCString().replace('GMT', '+0000'),
             author,

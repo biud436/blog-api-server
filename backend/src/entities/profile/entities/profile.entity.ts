@@ -12,7 +12,7 @@ import {
 export class Profile {
     @PrimaryGeneratedColumn()
     @Exclude()
-    id: number;
+    id!: number;
 
     /**
      * 이메일
@@ -23,7 +23,7 @@ export class Profile {
         nullable: false,
     })
     @Exclude()
-    email: string;
+    email!: string;
 
     /**
      * 생성일
@@ -33,7 +33,7 @@ export class Profile {
         nullable: false,
     })
     @Exclude()
-    createdAt: Date;
+    createdAt!: Date;
 
     /**
      * 수정일
@@ -43,7 +43,7 @@ export class Profile {
         nullable: false,
     })
     @Exclude()
-    updatedAt: Date;
+    updatedAt!: Date;
 
     /**
      * 닉네임
@@ -52,7 +52,7 @@ export class Profile {
         nullable: false,
         unique: true,
     })
-    nickname: string;
+    nickname!: string;
 
     /**
      * 깃허브 아바타 이미지
@@ -60,5 +60,5 @@ export class Profile {
     @Column({
         nullable: true,
     })
-    profileImage: string;
+    profileImage!: string;
 }

@@ -19,42 +19,42 @@ export class CreateImageDto {
     @ApiProperty()
     @IsString()
     @IsEmpty()
-    fieldname: string;
+    fieldname!: string;
 
     @ApiProperty()
     @IsString()
     @IsEmpty()
-    originalname: string;
+    originalname!: string;
 
     @ApiProperty()
     @IsString()
     @IsEmpty()
-    encoding: string;
+    encoding!: string;
 
     @ApiProperty()
     @IsMimeType()
     @IsEmpty()
-    mimetype: string;
+    mimetype!: string;
 
     @ApiProperty()
     @IsString()
     @IsEmpty()
-    destination: string;
+    destination!: string;
 
     @ApiProperty()
     @IsString()
     @IsEmpty()
-    filename: string;
+    filename!: string;
 
     @ApiProperty()
     @IsString()
     @IsEmpty()
-    path: string;
+    path!: string;
 
     @ApiProperty()
     @IsNumber()
     @MaxLength(1024 * 1024 * 2)
-    size: number;
+    size!: number;
 
     @ApiProperty()
     @IsNumber()

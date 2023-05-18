@@ -5,9 +5,9 @@ export class CreateProfileDto {
     @Assert.IsNotEmpty()
     @Assert.IsString()
     @Assert.MaxLength(100)
-    email: string;
+    email!: string;
 
     @ApiProperty()
     @Assert.IsNotEmpty()
-    nickname: string;
+    nickname!: string;
 }

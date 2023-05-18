@@ -79,7 +79,8 @@ export class PostsService {
                     await this.redisService.increasePostViewCount(postId);
                 }
 
-                totalCount = await this.redisService.getPostViewCount(postId);
+                totalCount =
+                    (await this.redisService.getPostViewCount(postId)) ?? '0';
             }
 
             const model = {

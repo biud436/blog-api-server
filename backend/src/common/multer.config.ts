@@ -22,7 +22,7 @@ export function getMyMulterOption(isProduction: boolean): MyMulterOption {
         fileFilter: (
             req: any,
             file: Express.Multer.File,
-            cb: (error: Error, acceptFile: boolean) => void,
+            cb: (error: Error | null, acceptFile: boolean) => void,
         ) => {
             if (
                 ['image/gif', 'image/jpeg', 'image/png'].includes(file.mimetype)

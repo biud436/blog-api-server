@@ -15,58 +15,58 @@ import {
 @Entity()
 export class Image {
     @PrimaryGeneratedColumn()
-    id: number;
+    id!: number;
 
     @Column({
         nullable: false,
     })
-    originalname: string;
-
-    @Column({
-        nullable: false,
-    })
-    @Exclude()
-    encoding: string;
-
-    @Column({
-        nullable: false,
-    })
-    mimetype: string;
+    originalname!: string;
 
     @Column({
         nullable: false,
     })
     @Exclude()
-    destination: string;
+    encoding!: string;
+
+    @Column({
+        nullable: false,
+    })
+    mimetype!: string;
+
+    @Column({
+        nullable: false,
+    })
+    @Exclude()
+    destination!: string;
 
     @Column({
         length: 256,
         nullable: false,
     })
     @Exclude()
-    filename: string;
+    filename!: string;
 
     @Column({
         length: 256,
         nullable: false,
     })
-    path: string;
+    path!: string;
 
     @Column({
         nullable: false,
     })
-    size: number;
+    size!: number;
 
     @Column({
         nullable: true,
         name: 'post_id',
     })
-    postId: number;
+    postId!: number;
 
     @ManyToOne(() => Post, (post) => post.images, {
         createForeignKeyConstraints: false,
         nullable: true,
     })
     @JoinColumn({ name: 'post_id', referencedColumnName: 'id' })
-    post: Post;
+    post!: Post;
 }

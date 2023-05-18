@@ -23,7 +23,7 @@ export class BasicStrategy extends PassportStrategy(Strategy, 'basic-auth') {
      * @link https://www.stewright.me/2021/03/add-basic-auth-to-nestjs-rest-api/
      * @returns [Response, RedirectException]
      */
-    async validate(username, password): Promise<boolean> {
+    async validate(username: string, password: string): Promise<boolean> {
         if (
             this.configService.get('DOCS_USERNAME') === username &&
             this.configService.get('DOCS_PASSWORD') === password

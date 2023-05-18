@@ -1,4 +1,3 @@
-import { plainToClass } from 'class-transformer';
 import { User } from 'src/entities/user/entities/user.entity';
 
 import {
@@ -14,27 +13,27 @@ import {
 @Entity()
 export class Admin {
     @PrimaryGeneratedColumn()
-    id: number;
+    id!: number;
 
     @Column({ nullable: false })
-    userId: number;
+    userId!: number;
 
     @ManyToOne(() => User, (user) => user.admins, {
         onDelete: 'RESTRICT',
         onUpdate: 'RESTRICT',
     })
     @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
-    user: User;
+    user!: User;
 
     @CreateDateColumn({
         default: () => 'CURRENT_TIMESTAMP',
         nullable: false,
     })
-    createdAt: Date;
+    createdAt!: Date;
 
     @UpdateDateColumn({
         default: () => 'CURRENT_TIMESTAMP',
         nullable: false,
     })
-    updatedAt: Date;
+    updatedAt!: Date;
 }

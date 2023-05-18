@@ -7,5 +7,5 @@ export class SendAuthCodeRequestDto {
         type: 'string',
     })
     @IsEmail()
-    email: EmailAddress;
+    email!: EmailAddress;
 }

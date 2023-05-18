@@ -1,4 +1,4 @@
-import { QueryRunner, Repository } from 'typeorm';
+import { DeepPartial, QueryRunner, Repository } from 'typeorm';
 import { CreateImageDto } from '../dto/create-image.dto';
 import { Image } from '../entities/image.entity';
 import { Injectable } from '@nestjs/common';
@@ -24,7 +24,9 @@ export class ImageCreateCommandImpl extends ImageCreateCommand {
         createImageDto: CreateImageDto,
         queryRunner?: QueryRunner,
     ): Promise<Image> {
-        const model = this.imageRepository.create(createImageDto);
+        const model = this.imageRepository.create(
+            createImageDto as DeepPartial<Image>,
+        );
 
         if (queryRunner) {
             return queryRunner.manager.save(model);

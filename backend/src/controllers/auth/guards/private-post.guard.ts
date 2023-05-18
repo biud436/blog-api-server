@@ -35,7 +35,7 @@ export class PrivatePostGuard implements CanActivate {
 
         const request = this.getRequest<Request>(context);
 
-        let user: Express.Request['user'] = null;
+        let user: Express.Request['user'] = undefined;
 
         try {
             const token = this.getToken(request);

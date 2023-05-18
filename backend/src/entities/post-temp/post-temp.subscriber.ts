@@ -21,7 +21,11 @@ export class PostTempSubscriber implements EntitySubscriberInterface<PostTemp> {
         return PostTemp;
     }
 
-    afterInsert(event: InsertEvent<PostTemp>): void | Promise<any> {}
+    afterInsert(event: InsertEvent<PostTemp>): void | Promise<any> {
+        // empty
+    }
 
-    afterUpdate(event: UpdateEvent<PostTemp>): void | Promise<any> {}
+    afterUpdate(event: UpdateEvent<PostTemp>): void | Promise<any> {
+        // empty
+    }
 }

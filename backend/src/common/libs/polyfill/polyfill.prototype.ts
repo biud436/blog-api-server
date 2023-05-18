@@ -85,6 +85,10 @@ SelectQueryBuilder.prototype.setPagination = function (
 ) {
     numberPerPage ??= PaginationConfig.limit.numberPerPage;
 
+    if (!pageNumber) {
+        pageNumber = 1;
+    }
+
     if (pageNumber < 1) {
         pageNumber = 1;
     }
@@ -100,6 +104,10 @@ SelectQueryBuilder.prototype.setPaginationWithJoin = function (
     numberPerPage?: number,
 ) {
     numberPerPage ??= PaginationConfig.limit.numberPerPage;
+
+    if (!pageNumber) {
+        pageNumber = 1;
+    }
 
     if (pageNumber < 1) {
         pageNumber = 1;

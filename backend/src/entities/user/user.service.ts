@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
@@ -45,6 +45,11 @@ export class UserService {
     ) {
         const model = await this.userRepository.create(createUserDto);
         model.profile = new Profile();
+
+        if (!profile.nickname || !profile.email) {
+            throw new BadRequestException('nickname or email is empty');
+        }
+
         model.profile.nickname = profile.nickname;
         model.profile.email = profile.email;
 
@@ -82,7 +87,7 @@ export class UserService {
         return result;
     }
 
-    async findProfileByUsername(username: string): Promise<User> {
+    async findProfileByUsername(username: string): Promise<User | null> {
         const qb = this.userRepository
             .createQueryBuilder('user')
             .select()
@@ -114,7 +119,7 @@ export class UserService {
         return await qb;
     }
 
-    async getUserIdWithoutFail(username: string): Promise<User> {
+    async getUserIdWithoutFail(username: string): Promise<User | null> {
         const qb = this.userRepository
             .createQueryBuilder('user')
             .select('user.id')
@@ -129,7 +134,9 @@ export class UserService {
         return await qb;
     }
 
-    async getUserList(pageNumber: number): Promise<Paginatable<User>> {
+    async getUserList(
+        pageNumber: number,
+    ): Promise<Paginatable<User> | undefined> {
         const qb = this.userRepository
             .createQueryBuilder('user')
             .select()
@@ -148,7 +155,7 @@ export class UserService {
             | keyof Pick<Profile, 'nickname'>
             | keyof Pick<User, 'id'>,
         searchQuery: string,
-    ): Promise<Paginatable<User>> {
+    ): Promise<Paginatable<User> | undefined> {
         const qb = this.userRepository
             .createQueryBuilder('user')
             .select()

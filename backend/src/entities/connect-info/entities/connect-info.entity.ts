@@ -9,16 +9,16 @@ import {
 @Entity()
 export class ConnectInfo {
     @PrimaryGeneratedColumn()
-    id: number;
+    id!: number;
 
     @Column()
-    ip: string;
+    ip!: string;
 
     @Column()
-    userAgent: string;
+    userAgent!: string;
 
     @CreateDateColumn()
-    createdAt: Date;
+    createdAt!: Date;
 
     @Expose()
     get browsers(): string[] {

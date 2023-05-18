@@ -80,7 +80,7 @@ export class CategoryService {
      * @returns
      */
     async selectParentNode(categoryName: string) {
-        return await this.selectParentNode(categoryName);
+        return await this.categoryRepository.selectParentNode(categoryName);
     }
 
     async getBreadcrumbs(categoryName: string) {
@@ -175,7 +175,7 @@ export class CategoryService {
 
         const convertRecursive = (
             data: CategoryDepthVO[],
-            parent: CategoryDepthVO,
+            parent?: CategoryDepthVO | null,
         ) => {
             data.forEach((item) => {
                 const node = [item.name, parent?.name ?? '', item.depth];
@@ -284,7 +284,7 @@ export class CategoryService {
 
         try {
             let qb: SelectQueryBuilder<Category>;
-            let currentCategory: Category;
+            let currentCategory: Category | null;
 
             // 이동할 위치에 부모 카테고리가 있는지 검증합니다.
             qb = this.categoryRepository.createQueryBuilder('node');
