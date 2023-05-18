@@ -14,6 +14,7 @@ import { UpdatePostDto } from './dto/update-post.dto';
 import { Post } from './entities/post.entity';
 import { ConfigData } from 'src/common/modules/config/types/my-config.decorator';
 import { Paginatable } from 'src/common/list-config';
+import { PaginationProvider } from 'src/common/modules/pagination/pagination-repository';
 
 @Injectable()
 export class PostService {
@@ -23,6 +24,7 @@ export class PostService {
         private readonly categoryService: CategoryService,
         private readonly imageService: ImageService,
         private readonly redisService: RedisService,
+        private readonly paginationProvider: PaginationProvider,
     ) {}
 
     /**
@@ -266,9 +268,9 @@ export class PostService {
 
         qb.orderBy('post.uploadDate', 'DESC');
 
-        const items = await qb
-            .setPagination(pageNumber)
-            .getManyWithPagination(pageNumber);
+        const items = await this.paginationProvider
+            .setPagination(qb, pageNumber)
+            .getManyWithPagination(qb, pageNumber);
 
         if (!items) {
             throw new BadRequestException('포스트가 존재하지 않습니다.');

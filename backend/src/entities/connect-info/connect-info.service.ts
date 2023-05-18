@@ -4,12 +4,14 @@ import { Paginatable } from 'src/common/list-config';
 import { DeleteResult, Repository } from 'typeorm';
 import { CreateConnectInfoDto } from './dto/create-connect-info.dto';
 import { ConnectInfo } from './entities/connect-info.entity';
+import { PaginationProvider } from 'src/common/modules/pagination/pagination-repository';
 
 @Injectable()
 export class ConnectInfoService {
     constructor(
         @InjectRepository(ConnectInfo)
         private connectInfoRepository: Repository<ConnectInfo>,
+        private readonly paginationProvider: PaginationProvider,
     ) {}
 
     protected isDevelopment(): boolean {
@@ -40,10 +42,11 @@ export class ConnectInfoService {
         const qb = this.connectInfoRepository
             .createQueryBuilder('connectInfo')
             .select()
-            .setPagination(pageNumber)
             .orderBy('connectInfo.id', 'DESC');
 
-        return await qb.getManyWithPagination(pageNumber);
+        return await this.paginationProvider
+            .setPagination(qb, pageNumber)
+            .getManyWithPagination(qb, pageNumber);
     }
 
     async delete(id: number): Promise<DeleteResult> {

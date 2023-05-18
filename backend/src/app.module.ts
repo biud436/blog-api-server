@@ -50,6 +50,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { ThrottlerBehindProxyGuard } from './common/guards/throttler-behind-proxy.guard';
 import { CacheModule } from '@nestjs/cache-manager';
 import { TaskModule } from './domains/task/task.module';
+import { PaginationModule } from './common/modules/pagination/pagination.module';
 
 @Module({
     imports: [
@@ -130,6 +131,7 @@ import { TaskModule } from './domains/task/task.module';
         }),
         ConnectInfoModule,
         TaskModule,
+        PaginationModule,
     ],
     controllers: [AppController],
     providers: [

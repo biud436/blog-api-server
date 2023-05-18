@@ -6,6 +6,7 @@ import { MicroServicesModule } from 'src/common/micro-services/micro-services.mo
 import { ImageModule } from 'src/controllers/image/image.module';
 import { CategoryModule } from '../category/category.module';
 import { PostSubscriber } from './post.subscriber';
+import { PaginationModule } from 'src/common/modules/pagination/pagination.module';
 
 @Module({
     imports: [
@@ -13,6 +14,7 @@ import { PostSubscriber } from './post.subscriber';
         forwardRef(() => ImageModule),
         MicroServicesModule,
         CategoryModule,
+        PaginationModule,
     ],
     providers: [PostService, PostSubscriber],
     exports: [PostService],
