@@ -27,6 +27,7 @@ import { Throttle } from '@nestjs/throttler';
 import { LOGIN_INTERVAL } from 'src/common/throttle-config';
 import { AuthGuard } from '@nestjs/passport';
 import { GithubUser } from './strategies/github.strategy';
+import { ILoginDto } from './dto/login.dto';
 
 @Controller('auth')
 @ApiTags('인증 API')
@@ -39,6 +40,7 @@ export class AuthController {
      * 로그인을 수행합니다.
      *
      * @tag 인증
+     * @assignHeaders authorization
      * @param ip 접속 IP
      * @param user 유저 정보
      * @param req 요청 객체
@@ -56,6 +58,7 @@ export class AuthController {
             passthrough: true,
         })
         res: Response,
+        @Body() login: ILoginDto,
     ) {
         await this.authService.createConnectInfo(ip);
         const token = await this.authService.login(user);

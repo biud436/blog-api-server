@@ -2646,6 +2646,18 @@
           "인증"
         ],
         "parameters": [],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ILoginDto"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
         "responses": {
           "201": {
             "description": "",
@@ -2668,6 +2680,15 @@
             "text": [
               {
                 "text": "인증",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "assignHeaders",
+            "text": [
+              {
+                "text": "authorization",
                 "kind": "text"
               }
             ]
@@ -3926,6 +3947,70 @@
           "x-typia-required": true,
           "x-typia-optional": false
         }
+      },
+      "ILoginDto": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "title": "아이디",
+            "description": "@title 아이디",
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "아이디",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "password": {
+            "title": "비밀번호",
+            "description": "@title 비밀번호\n@pattern ^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$",
+            "x-typia-metaTags": [
+              {
+                "kind": "pattern",
+                "value": "^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "비밀번호",
+                    "kind": "text"
+                  }
+                ]
+              },
+              {
+                "name": "pattern",
+                "text": [
+                  {
+                    "text": "^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "pattern": "^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "username",
+          "password"
+        ],
+        "description": "@title 비밀번호\n@pattern ^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$",
+        "x-typia-jsDocTags": []
       },
       "__type": {
         "type": "object",

@@ -681,8 +681,9 @@ export class AuthService {
      * @returns {Promise<any>}
      */
     async requestGithubUserIdentity() {
-        const client_id = this.configService.get<string>('GITHUB_CLIENT_ID');
-        const redirect_uri = this.configService.get<string>(
+        const client_id =
+            this.configService.getOrThrow<string>('GITHUB_CLIENT_ID');
+        const redirect_uri = this.configService.getOrThrow<string>(
             'GITHUB_REDIRECT_URI',
         );
         const state = CryptoUtil.uuid().split('-').join('').substring(0, 6);

@@ -143,6 +143,7 @@ export class NestBootstrapApplication extends EventEmitter {
 
         app.useGlobalGuards();
 
+        // 주석을 풀면 스웨거 접근 시 로그인 체크를 하게 됩니다.
         this.useSwagger(app);
 
         this.emit('[debug]', '미들웨어를 초기화하였습니다');
