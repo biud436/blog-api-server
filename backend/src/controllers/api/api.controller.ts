@@ -8,10 +8,12 @@ import {
 import { UploadFolder } from 'src/common/decorators/upload-folder';
 
 @Controller('api')
-@ApiTags('테스트 API')
 export class ApiController {
     /**
-     * 관리자 권한 확인
+     * 관리자 권한을 확인합니다.
+     *
+     * @tag API
+     * @returns
      */
     @Get('/check/admin')
     @JwtGuard()

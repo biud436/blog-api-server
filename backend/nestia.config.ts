@@ -3,6 +3,8 @@ import { INestiaConfig } from '@nestia/sdk';
 const config: INestiaConfig = {
     input: {
         include: [
+            '**/admin.controller.ts',
+            '**/api.controller.ts',
             '**/posts.controller.ts',
             '**/image.controller.ts',
             '**/auth.controller.ts',

@@ -11,16 +11,10 @@ import {
     ParseIntPipe,
     HttpStatus,
     Req,
-    BadRequestException,
 } from '@nestjs/common';
-import { ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
-import {
-    AdminOnly,
-    CustomApiOkResponse,
-    JwtGuard,
-} from 'src/common/decorators/custom.decorator';
+import { AdminOnly, JwtGuard } from 'src/common/decorators/custom.decorator';
 import { UserId } from 'src/common/decorators/user-id.decorator';
 import { MoveCategoryDto } from 'src/entities/category/dto/move-category.dto';
 import { CreatePostTempDto } from 'src/entities/post-temp/dto/create-post-temp.dto';
@@ -34,7 +28,6 @@ import { NewCategoryDto } from './dto/new-category.dto';
 import { Request } from 'express';
 
 @Controller('admin')
-@ApiTags('관리자')
 export class AdminController {
     constructor(
         private readonly adminService: AdminService,
@@ -44,6 +37,7 @@ export class AdminController {
     /**
      * 카테고리 명을 변경합니다.
      *
+     * @tag 관리
      * @param categoryId 카테고리 ID
      * @param updateCategoryNameDto 카테고리 정보
      * @returns
@@ -73,8 +67,9 @@ export class AdminController {
     /**
      * 카테고리를 이동합니다.
      *
-     * @param prevCategoryId  이전 카테고리 ID
-     * @param moveCategoryDto  이동할 카테고리 정보
+     * @tag 관리
+     * @param prevCategoryId 이전 카테고리 ID
+     * @param moveCategoryDto 이동할 카테고리 정보
      * @returns
      */
     @Post('/category/:prevCategoryId/move')
@@ -97,6 +92,7 @@ export class AdminController {
     /**
      * 부모 카테고리를 출력합니다.
      *
+     * @tag 관리
      * @param categoryName 카테고리 명
      * @returns
      */
@@ -113,6 +109,7 @@ export class AdminController {
     /**
      * 새로운 카테고리를 추가합니다.
      *
+     * @tag 관리
      * @param createCategoryDto 카테고리 DTO
      * @returns
      */
@@ -148,6 +145,7 @@ export class AdminController {
     /**
      * 카테고리를 출력합니다.
      *
+     * @tag 관리
      * @param req
      * @param isBeautify true면 트리를 JSON으로 보기 좋게 출력하고, false면 flat 모드로 출력합니다.
      * @returns
@@ -167,6 +165,8 @@ export class AdminController {
 
     /**
      * 임시 포스트를 저장합니다.
+     *
+     * @tag 관리
      * @param userId 유저 ID
      * @param createPostTempDto 임시 포스트 정보
      * @returns
@@ -193,6 +193,7 @@ export class AdminController {
     /**
      * 임시 포스트를 수정합니다.
      *
+     * @tag 관리
      * @param userId 유저 ID
      * @param postId 포스트 번호
      * @param updatePostTempDto 임시 포스트 정보
@@ -222,6 +223,7 @@ export class AdminController {
     /**
      * 특정 유저에 대한 모든 임시 포스트를 조회합니다.
      *
+     * @tag 관리
      * @param userId 유저 ID
      * @returns
      */
@@ -239,8 +241,9 @@ export class AdminController {
     }
 
     /**
-     * 임시 포스트 삭제
+     * 임시 포스트를 삭제합니다.
      *
+     * @tag 관리
      * @param userId 유저 ID
      * @param postId 포스트 번호
      * @returns
@@ -265,8 +268,9 @@ export class AdminController {
     }
 
     /**
-     * 임시 포스트 조회
+     * 임시 포스트를 조회합니다.
      *
+     * @tag 관리
      * @param userId 유저 ID
      * @param postId 포스트 번호
      * @returns

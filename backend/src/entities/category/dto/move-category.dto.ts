@@ -3,14 +3,13 @@ import { IsNumber } from 'class-validator';
 
 export class MoveCategoryDto {
     /**
-     * 기존 카테고리의 ID (PK)
+     * @title 기존 카테고리의 ID (PK)
      */
     prevCategoryId?: number;
 
     /**
-     * 이동할 곳의 부모 카테고리의 ID (PK)
+     * @title 이동할 곳의 부모 카테고리의 ID (PK)
      */
-    @ApiProperty()
     @IsNumber()
     newCategoryParentId!: number;
 }

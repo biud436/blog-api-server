@@ -16,6 +16,851 @@
     "description": "블로그 API 서버입니다."
   },
   "paths": {
+    "/admin/category/{categoryId}": {
+      "patch": {
+        "tags": [
+          "관리"
+        ],
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "path",
+            "description": "카테고리 ID",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "description": "카테고리 정보",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeCategoryDto"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "카테고리 명을 변경합니다",
+        "description": "카테고리 명을 변경합니다.",
+        "x-nestia-namespace": "admin.category.updateCategoryName",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "관리",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "categoryId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "카테고리 ID",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "updateCategoryNameDto",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "카테고리 정보",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      }
+    },
+    "/admin/category/{prevCategoryId}/move": {
+      "post": {
+        "tags": [
+          "관리"
+        ],
+        "parameters": [
+          {
+            "name": "prevCategoryId",
+            "in": "path",
+            "description": "이전 카테고리 ID",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "description": "이동할 카테고리 정보",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MoveCategoryDto"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "카테고리를 이동합니다",
+        "description": "카테고리를 이동합니다.",
+        "x-nestia-namespace": "admin.category.move.moveCategory",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "관리",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "prevCategoryId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "이전 카테고리 ID",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "moveCategoryDto",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "이동할 카테고리 정보",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      }
+    },
+    "/admin/category/{categoryName}": {
+      "get": {
+        "tags": [
+          "관리"
+        ],
+        "parameters": [
+          {
+            "name": "categoryName",
+            "in": "path",
+            "description": "카테고리 명",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "부모 카테고리를 출력합니다",
+        "description": "부모 카테고리를 출력합니다.",
+        "x-nestia-namespace": "admin.category.getAncestors",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "관리",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "categoryName",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "카테고리 명",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      }
+    },
+    "/admin/category": {
+      "post": {
+        "tags": [
+          "관리"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "카테고리 DTO",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewCategoryDto"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "새로운 카테고리를 추가합니다",
+        "description": "새로운 카테고리를 추가합니다.",
+        "x-nestia-namespace": "admin.category.createCategory",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "관리",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "createCategoryDto",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "카테고리 DTO",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "관리"
+        ],
+        "parameters": [
+          {
+            "name": "isBeautify",
+            "in": "query",
+            "description": "true면 트리를 JSON으로 보기 좋게 출력하고, false면 flat 모드로 출력합니다.",
+            "schema": {
+              "type": "boolean"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "카테고리를 출력합니다",
+        "description": "카테고리를 출력합니다.",
+        "x-nestia-namespace": "admin.category.getDepthList",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "관리",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "req",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "isBeautify",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "true면 트리를 JSON으로 보기 좋게 출력하고, false면 flat 모드로 출력합니다.",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      }
+    },
+    "/admin/temp/post": {
+      "post": {
+        "tags": [
+          "관리"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "임시 포스트 정보",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePostTempDto"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/IResponsableData"
+                    },
+                    {
+                      "$ref": "#/components/schemas/__object"
+                    }
+                  ]
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "임시 포스트를 저장합니다",
+        "description": "임시 포스트를 저장합니다.",
+        "x-nestia-namespace": "admin.temp.post.saveTempPost",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "관리",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "userId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "유저 ID",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "createPostTempDto",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "임시 포스트 정보",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "관리"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "특정 유저에 대한 모든 임시 포스트를 조회합니다",
+        "description": "특정 유저에 대한 모든 임시 포스트를 조회합니다.",
+        "x-nestia-namespace": "admin.temp.post.getTempAllPost",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "관리",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "userId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "유저 ID",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      }
+    },
+    "/admin/temp/post/{postId}": {
+      "patch": {
+        "tags": [
+          "관리"
+        ],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "description": "포스트 번호",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "description": "임시 포스트 정보",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePostTempDto"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/IResponsableData"
+                    },
+                    {
+                      "$ref": "#/components/schemas/__object"
+                    }
+                  ]
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "임시 포스트를 수정합니다",
+        "description": "임시 포스트를 수정합니다.",
+        "x-nestia-namespace": "admin.temp.post.updateTempPost",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "관리",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "userId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "유저 ID",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "postId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "포스트 번호",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "updatePostTempDto",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "임시 포스트 정보",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "관리"
+        ],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "description": "포스트 번호",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "임시 포스트를 삭제합니다",
+        "description": "임시 포스트를 삭제합니다.",
+        "x-nestia-namespace": "admin.temp.post.deleteTempPostById",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "관리",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "userId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "유저 ID",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "postId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "포스트 번호",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "관리"
+        ],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "description": "포스트 번호",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "임시 포스트를 조회합니다",
+        "description": "임시 포스트를 조회합니다.",
+        "x-nestia-namespace": "admin.temp.post.getTempPostById",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "관리",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "userId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "유저 ID",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "postId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "포스트 번호",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      }
+    },
+    "/api/check/admin": {
+      "get": {
+        "tags": [
+          "API"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/__object.o1"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "관리자 권한을 확인합니다",
+        "description": "관리자 권한을 확인합니다.",
+        "x-nestia-namespace": "api.check.admin.checkAdmin",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "API",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      }
+    },
     "/post/breadcrumbs": {
       "get": {
         "tags": [
@@ -2080,10 +2925,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/__object.o1"
+                      "$ref": "#/components/schemas/__object.o2"
                     },
                     {
-                      "$ref": "#/components/schemas/__object.o3"
+                      "$ref": "#/components/schemas/__object.o4"
                     }
                   ]
                 }
@@ -2401,6 +3246,35 @@
   },
   "components": {
     "schemas": {
+      "ChangeCategoryDto": {
+        "type": "object",
+        "properties": {
+          "categoryName": {
+            "title": "카테고리 이름",
+            "description": "@title 카테고리 이름",
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "카테고리 이름",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "categoryName"
+        ],
+        "description": "@title 카테고리 이름",
+        "x-typia-jsDocTags": []
+      },
       "IResponsableData": {
         "type": "object",
         "properties": {
@@ -2440,6 +3314,247 @@
           "statusCode",
           "message",
           "data"
+        ],
+        "description": "",
+        "x-typia-jsDocTags": []
+      },
+      "MoveCategoryDto": {
+        "type": "object",
+        "properties": {
+          "prevCategoryId": {
+            "title": "기존 카테고리의 ID (PK)",
+            "description": "@title 기존 카테고리의 ID (PK)",
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "기존 카테고리의 ID (PK)",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "number"
+          },
+          "newCategoryParentId": {
+            "title": "이동할 곳의 부모 카테고리의 ID (PK)",
+            "description": "@title 이동할 곳의 부모 카테고리의 ID (PK)",
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "이동할 곳의 부모 카테고리의 ID (PK)",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "newCategoryParentId"
+        ],
+        "description": "@title 이동할 곳의 부모 카테고리의 ID (PK)",
+        "x-typia-jsDocTags": []
+      },
+      "NewCategoryDto": {
+        "type": "object",
+        "properties": {
+          "categoryName": {
+            "title": "카테고리 이름",
+            "description": "@title 카테고리 이름",
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "카테고리 이름",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "rootNodeName": {
+            "title": "부모 카테고리 이름",
+            "description": "@title 부모 카테고리 이름",
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "부모 카테고리 이름",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "categoryName"
+        ],
+        "description": "@title 부모 카테고리 이름",
+        "x-typia-jsDocTags": []
+      },
+      "CreatePostTempDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "title": "제목",
+            "description": "@title 제목",
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "제목",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "content": {
+            "title": "내용",
+            "description": "@title 내용",
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "내용",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "title",
+          "content"
+        ],
+        "description": "@title 내용",
+        "x-typia-jsDocTags": []
+      },
+      "__object": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "statusCode": {
+            "description": "",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "message": {
+            "description": "",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "result": {
+            "description": "",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "name",
+          "statusCode",
+          "message",
+          "result"
+        ],
+        "description": "",
+        "x-typia-jsDocTags": []
+      },
+      "UpdatePostTempDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "title": "제목",
+            "description": "@title 제목",
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "제목",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": false,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "content": {
+            "title": "내용",
+            "description": "@title 내용",
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "내용",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": false,
+            "x-typia-optional": false,
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "description": "",
+        "x-typia-jsDocTags": []
+      },
+      "__object.o1": {
+        "type": "object",
+        "properties": {
+          "isAdmin": {
+            "description": "",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "boolean"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "isAdmin"
         ],
         "description": "",
         "x-typia-jsDocTags": []
@@ -2638,44 +3753,6 @@
         "type": "object",
         "properties": {},
         "nullable": false
-      },
-      "__object": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "",
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string"
-          },
-          "statusCode": {
-            "description": "",
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "number"
-          },
-          "message": {
-            "description": "",
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string"
-          },
-          "result": {
-            "description": "",
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "name",
-          "statusCode",
-          "message",
-          "result"
-        ],
-        "description": "",
-        "x-typia-jsDocTags": []
       },
       "UpdatePostDto": {
         "type": "object",
@@ -2897,11 +3974,11 @@
         "description": "@title 이메일",
         "x-typia-jsDocTags": []
       },
-      "__object.o1": {
+      "__object.o2": {
         "type": "object",
         "properties": {
           "user": {
-            "$ref": "#/components/schemas/__object.o2",
+            "$ref": "#/components/schemas/__object.o3",
             "description": "",
             "x-typia-required": true,
             "x-typia-optional": false
@@ -2914,18 +3991,18 @@
         "description": "",
         "x-typia-jsDocTags": []
       },
-      "__object.o2": {
+      "__object.o3": {
         "type": "object",
         "properties": {},
         "nullable": false,
         "description": "",
         "x-typia-jsDocTags": []
       },
-      "__object.o3": {
+      "__object.o4": {
         "type": "object",
         "properties": {
           "user": {
-            "$ref": "#/components/schemas/__object.o4",
+            "$ref": "#/components/schemas/__object.o5",
             "description": "",
             "x-typia-required": true,
             "x-typia-optional": false
@@ -2938,7 +4015,7 @@
         "description": "",
         "x-typia-jsDocTags": []
       },
-      "__object.o4": {
+      "__object.o5": {
         "type": "object",
         "properties": {},
         "nullable": false,
