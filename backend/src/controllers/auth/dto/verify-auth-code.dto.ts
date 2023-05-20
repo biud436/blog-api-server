@@ -3,12 +3,14 @@ import { IsEmail } from 'class-validator';
 import { EmailAddress } from '../utils/email-utils';
 
 export class VerifyAuthCodeRequestDto {
-    @ApiProperty({
-        type: 'string',
-    })
+    /**
+     * @title 이메일
+     */
     @IsEmail()
     email!: EmailAddress;
 
-    @ApiProperty()
+    /**
+     * @title 인증 코드
+     */
     authCode!: string;
 }

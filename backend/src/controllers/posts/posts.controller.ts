@@ -49,6 +49,8 @@ import { PrivatePostGuard } from '../auth/guards/private-post.guard';
 import { PostsService } from './posts.service';
 import { PostSearchProperty } from './types/post-search-type';
 
+import { TypedQuery, TypedRoute } from '@nestia/core';
+
 @Controller(['post', 'posts'])
 export class PostsController {
     private logger: Logger = new Logger(PostsController.name);
@@ -61,11 +63,13 @@ export class PostsController {
 
     /**
      * breadcrumbs 정보를 조회합니다.
+     *
+     * @tag Post
      * @param categoryName 카테고리 이름
      * @returns
      */
     @Get('/breadcrumbs')
-    async getBreadcrumbs(@Query('categoryName') categoryName: string) {
+    async getBreadcrumbs(@Query() categoryName: string) {
         try {
             const res = await this.categoryService.getBreadcrumbs(categoryName);
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
@@ -80,6 +84,7 @@ export class PostsController {
     /**
      * 카테고리 정보와 포스트 갯수를 조회합니다.
      *
+     * @tag Post
      * @returns
      */
     @Get('/categories')
@@ -98,6 +103,7 @@ export class PostsController {
     /**
      * 새로운 포스트를 생성합니다.
      *
+     * @tag Post
      * @param userId JWT에서 추출한 유저 아이디
      * @param createPostDto  생성할 포스트 정보
      * @returns
@@ -140,8 +146,9 @@ export class PostsController {
     }
 
     /**
-     * 포스트 검색
+     * 포스트를 검색합니다.
      *
+     * @tag Post
      * @param pageNumber 페이지 번호 (1부터 시작)
      * @param searchProperty 검색할 속성 title, content
      * @param searchQuery 검색할 값
@@ -174,6 +181,7 @@ export class PostsController {
     /**
      * 포스트를 삭제합니다.
      *
+     * @tag Post
      * @param postId
      * @returns
      */
@@ -202,6 +210,7 @@ export class PostsController {
     /**
      * 포스트를 수정합니다.
      *
+     * @tag Post
      * @param postId 포스트 ID
      * @param userId 유저 ID
      * @param updatePostDto 수정할 포스트 정보
@@ -243,6 +252,7 @@ export class PostsController {
     /**
      * 포스트를 페이지 단위로 조회합니다.
      *
+     * @tag Post
      * @param page 페이지 번호 (1부터 시작)
      * @param categoryId 카테고리 ID, 생략하면 전체 포스트를 조회합니다.
      * @returns
@@ -258,12 +268,14 @@ export class PostsController {
     /**
      * 포스트를 조회합니다.
      *
+     * @tag Post
      * @param postId 조회할 포스트 번호
      * @param ip 클라이언트 IP (중복 조회 방지 용도)
      * @param IsReadablePrivatePost 비공개 포스트 여부
      * @param anonymousId 익명 아이디
      * @returns
      */
+
     @Get(':id')
     @Anonymous()
     @UseGuards(PrivatePostGuard)

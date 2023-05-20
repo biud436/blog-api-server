@@ -6,7 +6,7 @@ import { CreatePostDto } from './create-post.dto';
 
 export class UpdatePostDto {
     /**
-     * 글 제목
+     * @title 글 제목
      */
     @ApiProperty()
     @Assert.IsNotEmpty('제목을 입력해주세요.')
@@ -14,7 +14,9 @@ export class UpdatePostDto {
     title!: string;
 
     /**
-     * 글 내용
+     * @title 글 내용
+     * @minLength 1
+     * @maxLength 4000
      */
     @ApiProperty()
     @Assert.MinLength(1, {
@@ -27,7 +29,7 @@ export class UpdatePostDto {
     authorId?: number;
 
     /**
-     * 대분류 (FK)
+     * @title 대분류 (FK)
      */
     @ApiProperty()
     @IsNumber()

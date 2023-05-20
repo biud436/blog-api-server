@@ -22,7 +22,7 @@
         "strictNullChecks": true,
         "plugins": [
             {
-                "transform": "@nestia/core/lib/transform",
+                "transform": "@nestia/core/lib/transform"
                 /**
                  * Validate request body.
                  *
@@ -30,7 +30,7 @@
                  *   - "is": Use typia.is() function
                  *   - "validate": Use typia.validate() function
                  */
-                "validate": "assert",
+                // "validate": "assert",
                 /**
                  * Validate JSON typed response body.
                  *
@@ -40,10 +40,7 @@
                  *   - "stringify": Use typia.stringify() function, but dangerous
                  *   - null: Just use JSON.stringify() function, without boosting
                  */
-                "stringify": "assert"
-            },
-            {
-                "transform": "typia/lib/transform"
+                // "stringify": "assert"
             }
         ]
     }

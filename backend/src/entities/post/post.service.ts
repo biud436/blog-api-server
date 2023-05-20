@@ -318,9 +318,9 @@ export class PostService {
 
         qb.orderBy('post.uploadDate', 'DESC');
 
-        const items = await qb
-            .setPagination(pageNumber)
-            .getManyWithPagination(pageNumber);
+        const items = await this.paginationProvider
+            .setPagination(qb, pageNumber)
+            .getManyWithPagination(qb, pageNumber);
 
         if (!items) {
             throw new BadRequestException('포스트가 존재하지 않습니다.');
@@ -345,10 +345,11 @@ export class PostService {
             .addSelect('post.isPrivate', 'isPrivate')
             .leftJoinAndSelect('post.category', 'category')
             .where('post.deletedAt IS NULL')
-            .andWhere('post.userId = :userId', { userId })
-            .setPaginationWithJoin(pageNumber);
+            .andWhere('post.userId = :userId', { userId });
 
-        return await qb.getManyWithPagination(pageNumber);
+        return await this.paginationProvider
+            .setPaginationWithJoin(qb, pageNumber)
+            .getManyWithPagination(qb, pageNumber);
     }
 
     /**
@@ -407,9 +408,9 @@ export class PostService {
 
         qb.orderBy('post.uploadDate', 'DESC');
 
-        const items = await qb
-            .setPagination(pageNumber)
-            .getManyWithPagination(pageNumber);
+        const items = await this.paginationProvider
+            .setPagination(qb, pageNumber)
+            .getManyWithPagination(qb, pageNumber);
 
         if (!items) {
             throw new BadRequestException('포스트가 존재하지 않습니다.');

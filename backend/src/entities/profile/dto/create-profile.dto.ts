@@ -1,6 +1,9 @@
 import { ApiProperty, Assert } from 'src/common/create-dto-common';
 
 export class CreateProfileDto {
+    /**
+     * @maxLength 100
+     */
     @ApiProperty()
     @Assert.IsNotEmpty()
     @Assert.IsString()

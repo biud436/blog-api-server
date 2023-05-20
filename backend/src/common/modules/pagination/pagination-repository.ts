@@ -79,9 +79,14 @@ export class PaginationProvider {
             pageNumber = maxPage;
 
             if (cloneQueryBuilder.expressionMap.offset !== undefined) {
-                cloneQueryBuilder.setPagination(pageNumber, numberPerPage);
+                this.setPagination(
+                    cloneQueryBuilder,
+                    pageNumber,
+                    numberPerPage,
+                );
             } else if (cloneQueryBuilder.expressionMap.skip !== undefined) {
-                cloneQueryBuilder.setPaginationWithJoin(
+                this.setPaginationWithJoin(
+                    cloneQueryBuilder,
                     pageNumber,
                     numberPerPage,
                 );
@@ -122,9 +127,14 @@ export class PaginationProvider {
             pageNumber = maxPage;
 
             if (cloneQueryBuilder.expressionMap.offset !== undefined) {
-                cloneQueryBuilder.setPagination(pageNumber, numberPerPage);
+                this.setPagination(
+                    cloneQueryBuilder,
+                    pageNumber,
+                    numberPerPage,
+                );
             } else if (cloneQueryBuilder.expressionMap.skip !== undefined) {
-                cloneQueryBuilder.setPaginationWithJoin(
+                this.setPaginationWithJoin(
+                    cloneQueryBuilder,
                     pageNumber,
                     numberPerPage,
                 );

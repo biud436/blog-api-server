@@ -7,6 +7,7 @@ import { Profile } from '../profile/entities/profile.entity';
 import { Brackets, QueryRunner, Repository } from 'typeorm';
 import { plainToClass } from 'class-transformer';
 import { Paginatable } from 'src/common/list-config';
+import { PaginationProvider } from 'src/common/modules/pagination/pagination-repository';
 
 type SafedUser = Omit<User, 'password' | 'hashPassword' | 'savePassword'>;
 
@@ -26,6 +27,7 @@ export class UserService {
     constructor(
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
+        private readonly paginationProvider: PaginationProvider,
     ) {}
 
     async create(
@@ -143,10 +145,13 @@ export class UserService {
             .innerJoinAndSelect('user.profile', 'profile')
             .innerJoinAndSelect('user.admins', 'admins')
             .where('admins.id IS NOT NULL')
-            .andWhere('user.isValid = :isValid', { isValid: true })
-            .setPaginationWithJoin(pageNumber);
+            .andWhere('user.isValid = :isValid', { isValid: true });
 
-        return await qb.getManyWithPagination(pageNumber);
+        const items = await this.paginationProvider
+            .setPaginationWithJoin(qb, pageNumber)
+            .getManyWithPagination(qb, pageNumber);
+
+        return items;
     }
 
     async searchUserList(
@@ -161,8 +166,7 @@ export class UserService {
             .select()
             .innerJoinAndSelect('user.profile', 'profile')
             .innerJoinAndSelect('user.admins', 'admins')
-            .where('admins.id IS NOT NULL')
-            .setPaginationWithJoin(pageNumber);
+            .where('admins.id IS NOT NULL');
 
         switch (searchProperty) {
             case 'id':
@@ -179,6 +183,8 @@ export class UserService {
 
         qb.andWhere('user.isValid = :isValid', { isValid: true });
 
-        return await qb.getManyWithPagination(pageNumber);
+        return await this.paginationProvider
+            .setPagination(qb, pageNumber)
+            .getManyWithPagination(qb, pageNumber);
     }
 }

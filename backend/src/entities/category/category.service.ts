@@ -27,8 +27,6 @@ import { CategoryRepository } from './entities/category.repository';
 @Injectable()
 export class CategoryService {
     constructor(
-        // @InjectRepository(Category)
-        // private readonly categoryRepository: Repository<Category>,
         private readonly categoryRepository: CategoryRepository,
         @InjectDataSource() private readonly dataSource: DataSource,
     ) {}

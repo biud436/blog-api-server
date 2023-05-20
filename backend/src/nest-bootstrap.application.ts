@@ -107,7 +107,9 @@ export class NestBootstrapApplication extends EventEmitter {
             await this._application.resolve<ConfigService>(ConfigService)
         );
 
-        this.initWithMiddleware(this._application).useNginxProxy(); // 쿠키 (NGINX 프록시 설정)
+        this.initWithMiddleware(this._application)
+            .initWithApiDocs()
+            .useNginxProxy(); // 쿠키 (NGINX 프록시 설정)
 
         await this._application.listen(NestBootstrapApplication.PORT);
     }
@@ -255,12 +257,15 @@ export class NestBootstrapApplication extends EventEmitter {
     }
 
     private initWithApiDocs(): NestBootstrapApplication {
-        const config = this.getSwaggerConfigBuilder();
-        const document = SwaggerModule.createDocument(
-            this._application!,
-            config,
-        );
-        SwaggerModule.setup('docs', this._application!, document, {
+        // const config = this.getSwaggerConfigBuilder();
+        // const document = SwaggerModule.createDocument(
+        //     this._application!,
+        //     config,
+        // );
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const docs = require('../public/swagger.json');
+
+        SwaggerModule.setup('docs', this._application!, docs, {
             explorer: true,
             swaggerOptions: {
                 defaultModelsExpandDepth: -1, // API 문서에서 하단 객체 제거
@@ -269,6 +274,15 @@ export class NestBootstrapApplication extends EventEmitter {
             customfavIcon: '/favicon.png',
             customJs: '/js/swagger-ui-inject.js',
         });
+        // SwaggerModule.setup('docs', this._application!, document, {
+        //     explorer: true,
+        //     swaggerOptions: {
+        //         defaultModelsExpandDepth: -1, // API 문서에서 하단 객체 제거
+        //         persistAuthorization: true, // 새로고침 해도 로그인 고정
+        //     },
+        //     customfavIcon: '/favicon.png',
+        //     customJs: '/js/swagger-ui-inject.js',
+        // });
 
         return this;
     }

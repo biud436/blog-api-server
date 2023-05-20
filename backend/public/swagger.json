@@ -1,0 +1,3036 @@
+{
+  "openapi": "3.0.1",
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local Server"
+    }
+  ],
+  "info": {
+    "version": "1.0.0",
+    "title": "blog-api-server",
+    "description": "블로그 API 서버입니다."
+  },
+  "paths": {
+    "/post/breadcrumbs": {
+      "get": {
+        "tags": [
+          "Post"
+        ],
+        "parameters": [
+          {
+            "name": "categoryName",
+            "in": "query",
+            "description": "카테고리 이름",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "breadcrumbs 정보를 조회합니다",
+        "description": "breadcrumbs 정보를 조회합니다.",
+        "x-nestia-namespace": "post.breadcrumbs.getBreadcrumbs",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "Post",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "categoryName",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "카테고리 이름",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      }
+    },
+    "/posts/breadcrumbs": {
+      "get": {
+        "tags": [
+          "Post"
+        ],
+        "parameters": [
+          {
+            "name": "categoryName",
+            "in": "query",
+            "description": "카테고리 이름",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "breadcrumbs 정보를 조회합니다",
+        "description": "breadcrumbs 정보를 조회합니다.",
+        "x-nestia-namespace": "posts.breadcrumbs.getBreadcrumbs",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "Post",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "categoryName",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "카테고리 이름",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      }
+    },
+    "/post/categories": {
+      "get": {
+        "tags": [
+          "Post"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "카테고리 정보와 포스트 갯수를 조회합니다",
+        "description": "카테고리 정보와 포스트 갯수를 조회합니다.",
+        "x-nestia-namespace": "post.categories.getPostCountByCategories",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "Post",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      }
+    },
+    "/posts/categories": {
+      "get": {
+        "tags": [
+          "Post"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "카테고리 정보와 포스트 갯수를 조회합니다",
+        "description": "카테고리 정보와 포스트 갯수를 조회합니다.",
+        "x-nestia-namespace": "posts.categories.getPostCountByCategories",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "Post",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      }
+    },
+    "/post": {
+      "post": {
+        "tags": [
+          "Post"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "생성할 포스트 정보",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePostDto"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "새로운 포스트를 생성합니다",
+        "description": "새로운 포스트를 생성합니다.",
+        "x-nestia-namespace": "post.create",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "Post",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "userId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "JWT에서 추출한 유저 아이디",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "createPostDto",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "생성할 포스트 정보",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Post"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "페이지 번호 (1부터 시작)",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "categoryId",
+            "in": "query",
+            "description": "카테고리 ID, 생략하면 전체 포스트를 조회합니다.",
+            "schema": {
+              "type": "number"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/IResponsableData"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ResponseUtil.FailureResponse"
+                    }
+                  ]
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "포스트를 페이지 단위로 조회합니다",
+        "description": "포스트를 페이지 단위로 조회합니다.",
+        "x-nestia-namespace": "post.findAll",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "Post",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "page",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "페이지 번호 (1부터 시작)",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "categoryId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "카테고리 ID, 생략하면 전체 포스트를 조회합니다.",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      }
+    },
+    "/posts": {
+      "post": {
+        "tags": [
+          "Post"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "생성할 포스트 정보",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePostDto"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "새로운 포스트를 생성합니다",
+        "description": "새로운 포스트를 생성합니다.",
+        "x-nestia-namespace": "posts.create",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "Post",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "userId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "JWT에서 추출한 유저 아이디",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "createPostDto",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "생성할 포스트 정보",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Post"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "페이지 번호 (1부터 시작)",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "categoryId",
+            "in": "query",
+            "description": "카테고리 ID, 생략하면 전체 포스트를 조회합니다.",
+            "schema": {
+              "type": "number"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/IResponsableData"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ResponseUtil.FailureResponse"
+                    }
+                  ]
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "포스트를 페이지 단위로 조회합니다",
+        "description": "포스트를 페이지 단위로 조회합니다.",
+        "x-nestia-namespace": "posts.findAll",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "Post",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "page",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "페이지 번호 (1부터 시작)",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "categoryId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "카테고리 ID, 생략하면 전체 포스트를 조회합니다.",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      }
+    },
+    "/post/search": {
+      "get": {
+        "tags": [
+          "Post"
+        ],
+        "parameters": [
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "description": "페이지 번호 (1부터 시작)",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "searchProperty",
+            "in": "query",
+            "description": "검색할 속성 title, content",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "title",
+                "content"
+              ]
+            },
+            "required": true
+          },
+          {
+            "name": "searchQuery",
+            "in": "query",
+            "description": "검색할 값",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "포스트를 검색합니다",
+        "description": "포스트를 검색합니다.",
+        "x-nestia-namespace": "post.search.searchPost",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "Post",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "pageNumber",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "페이지 번호 (1부터 시작)",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "searchProperty",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "검색할 속성 title, content",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "searchQuery",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "검색할 값",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "/posts/search": {
+      "get": {
+        "tags": [
+          "Post"
+        ],
+        "parameters": [
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "description": "페이지 번호 (1부터 시작)",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "searchProperty",
+            "in": "query",
+            "description": "검색할 속성 title, content",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "title",
+                "content"
+              ]
+            },
+            "required": true
+          },
+          {
+            "name": "searchQuery",
+            "in": "query",
+            "description": "검색할 값",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "포스트를 검색합니다",
+        "description": "포스트를 검색합니다.",
+        "x-nestia-namespace": "posts.search.searchPost",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "Post",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "pageNumber",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "페이지 번호 (1부터 시작)",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "searchProperty",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "검색할 속성 title, content",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "searchQuery",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "검색할 값",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "/post/{id}": {
+      "delete": {
+        "tags": [
+          "Post"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/IResponsableData"
+                    },
+                    {
+                      "$ref": "#/components/schemas/__object"
+                    }
+                  ]
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "포스트를 삭제합니다",
+        "description": "포스트를 삭제합니다.",
+        "x-nestia-namespace": "post.deletePost",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "Post",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "postId",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Post"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "포스트 ID",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "description": "수정할 포스트 정보",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePostDto"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/IResponsableData"
+                    },
+                    {
+                      "$ref": "#/components/schemas/__object"
+                    }
+                  ]
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "포스트를 수정합니다",
+        "description": "포스트를 수정합니다.",
+        "x-nestia-namespace": "post.updatePost",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "Post",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "postId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "포스트 ID",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "userId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "유저 ID",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "updatePostDto",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "수정할 포스트 정보",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Post"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "조회할 포스트 번호",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "포스트를 조회합니다",
+        "description": "포스트를 조회합니다.",
+        "x-nestia-namespace": "post.findOne",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "Post",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "postId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "조회할 포스트 번호",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "ip",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "클라이언트 IP (중복 조회 방지 용도)",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "IsReadablePrivatePost",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "비공개 포스트 여부",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "anonymousId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "익명 아이디",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      }
+    },
+    "/posts/{id}": {
+      "delete": {
+        "tags": [
+          "Post"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/IResponsableData"
+                    },
+                    {
+                      "$ref": "#/components/schemas/__object"
+                    }
+                  ]
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "포스트를 삭제합니다",
+        "description": "포스트를 삭제합니다.",
+        "x-nestia-namespace": "posts.deletePost",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "Post",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "postId",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Post"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "포스트 ID",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "description": "수정할 포스트 정보",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePostDto"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/IResponsableData"
+                    },
+                    {
+                      "$ref": "#/components/schemas/__object"
+                    }
+                  ]
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "포스트를 수정합니다",
+        "description": "포스트를 수정합니다.",
+        "x-nestia-namespace": "posts.updatePost",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "Post",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "postId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "포스트 ID",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "userId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "유저 ID",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "updatePostDto",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "수정할 포스트 정보",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Post"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "조회할 포스트 번호",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "포스트를 조회합니다",
+        "description": "포스트를 조회합니다.",
+        "x-nestia-namespace": "posts.findOne",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "Post",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "postId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "조회할 포스트 번호",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "ip",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "클라이언트 IP (중복 조회 방지 용도)",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "IsReadablePrivatePost",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "비공개 포스트 여부",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "anonymousId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "익명 아이디",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      }
+    },
+    "/image/upload": {
+      "post": {
+        "tags": [
+          "Image"
+        ],
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "x-nestia-encrypted": false
+          }
+        },
+        "description": "이미지 업로드",
+        "x-nestia-namespace": "image.upload.upload",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "Image",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "deprecated"
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "files",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "/image/s3/upload": {
+      "post": {
+        "tags": [
+          "Image"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/S3ImageUploadDto"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "커스텀으로 만든 AWS S3 파일 인터셉터를 이용하여 이미지 파일을 업로드합니다",
+        "description": "커스텀으로 만든 AWS S3 파일 인터셉터를 이용하여 이미지 파일을 업로드합니다.",
+        "x-nestia-namespace": "image.s3.upload.uploadImageUsingS3",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "Image",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "userId",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "files",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "data",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "/image/stats": {
+      "get": {
+        "tags": [
+          "Image"
+        ],
+        "parameters": [
+          {
+            "name": "text",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "username",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "color",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "textSize",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "y",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Record_lt_string_comma__space_any_gt_"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "깃허브 프로필용 이미지를 생성합니다",
+        "description": "깃허브 프로필용 이미지를 생성합니다.",
+        "x-nestia-namespace": "image.stats.getStatsSvg",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "Image",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "text",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "username",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "color",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "textSize",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "y",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "res",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      }
+    },
+    "/image/shake-profile": {
+      "get": {
+        "tags": [
+          "Image"
+        ],
+        "parameters": [
+          {
+            "name": "text",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "username",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "color",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "textSize",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "y",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Record_lt_string_comma__space_any_gt_"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "깃허브 프로필용 이미지를 생성합니다",
+        "description": "깃허브 프로필용 이미지를 생성합니다.",
+        "x-nestia-namespace": "image.shake-profile.getStatsSvg",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "Image",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "text",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "username",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "color",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "textSize",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "y",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "res",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "인증"
+        ],
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "로그인을 수행합니다",
+        "description": "로그인을 수행합니다.",
+        "x-nestia-namespace": "auth.login.login",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "인증",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "ip",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "접속 IP",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "user",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "유저 정보",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "req",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "요청 객체",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "res",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "응답 객체",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": [
+          "인증"
+        ],
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "로그아웃을 수행합니다",
+        "description": "로그아웃을 수행합니다.",
+        "x-nestia-namespace": "auth.logout.lgout",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "인증",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "res",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      }
+    },
+    "/auth/regenerate/access-token": {
+      "post": {
+        "tags": [
+          "인증"
+        ],
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/__type"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "액세스 토큰을 재발급합니다",
+        "description": "액세스 토큰을 재발급합니다.",
+        "x-nestia-namespace": "auth.regenerate.access-token.regenerateAccessToken",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "인증",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "deprecated"
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "req",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "res",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      }
+    },
+    "/auth/send-auth-code": {
+      "post": {
+        "tags": [
+          "인증"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendAuthCodeRequestDto"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "인증 코드를 이메일로 전송합니다",
+        "description": "인증 코드를 이메일로 전송합니다.",
+        "x-nestia-namespace": "auth.send-auth-code.sendAuthCodeByEmail",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "인증",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "data",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      }
+    },
+    "/auth/profile": {
+      "get": {
+        "tags": [
+          "인증"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/__object.o1"
+                    },
+                    {
+                      "$ref": "#/components/schemas/__object.o3"
+                    }
+                  ]
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "프로필을 조회합니다",
+        "description": "프로필을 조회합니다. 이 기능은 Next.js에서 인증을 수행하기 위해 사용됩니다.",
+        "x-nestia-namespace": "auth.profile.getProfile",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "인증",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "payload",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      }
+    },
+    "/auth/verify-auth-code": {
+      "post": {
+        "tags": [
+          "인증"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyAuthCodeRequestDto"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "인증 코드를 확인합니다",
+        "description": "인증 코드를 확인합니다.",
+        "x-nestia-namespace": "auth.verify-auth-code.verifyAuthCode",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "인증",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "data",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      }
+    },
+    "/auth/signup": {
+      "post": {
+        "tags": [
+          "인증"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthRequest.RequestDto"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "회원 가입을 처리합니다",
+        "description": "회원 가입을 처리합니다.",
+        "x-nestia-namespace": "auth.signup.signup",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "인증",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "data",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      }
+    },
+    "/auth/github/login": {
+      "get": {
+        "tags": [
+          "인증"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "깃허브 계정으로 로그인을 수행합니다",
+        "description": "깃허브 계정으로 로그인을 수행합니다.",
+        "x-nestia-namespace": "auth.github.login.loginByGithub",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "인증",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      }
+    },
+    "/auth/github/callback": {
+      "get": {
+        "tags": [
+          "인증"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "깃허브 계정으로 로그인에 성공하면 액세스 토큰을 발급합니다",
+        "description": "깃허브 계정으로 로그인에 성공하면 액세스 토큰을 발급합니다.",
+        "x-nestia-namespace": "auth.github.callback.loginGithubUser",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "인증",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "req",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "res",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "IResponsableData": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "",
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "string"
+          },
+          "result": {
+            "description": "",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "statusCode": {
+            "description": "",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "message": {
+            "description": "",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "data": {
+            "description": "",
+            "x-typia-required": true,
+            "x-typia-optional": false
+          }
+        },
+        "nullable": false,
+        "required": [
+          "result",
+          "statusCode",
+          "message",
+          "data"
+        ],
+        "description": "",
+        "x-typia-jsDocTags": []
+      },
+      "CreatePostDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "title": "포스트 ID",
+            "description": "@title 포스트 ID",
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "포스트 ID",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "number"
+          },
+          "title": {
+            "title": "글 제목",
+            "description": "@title 글 제목\n@default '제목 없음'",
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "글 제목",
+                    "kind": "text"
+                  }
+                ]
+              },
+              {
+                "name": "default",
+                "text": [
+                  {
+                    "text": "'제목 없음'",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "default": "'제목 없음'"
+          },
+          "content": {
+            "title": "글 내용",
+            "description": "@title 글 내용\n@minLength 1",
+            "x-typia-metaTags": [
+              {
+                "kind": "minLength",
+                "value": 1
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "글 내용",
+                    "kind": "text"
+                  }
+                ]
+              },
+              {
+                "name": "minLength",
+                "text": [
+                  {
+                    "text": "1",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "minLength": 1
+          },
+          "uploadDate": {
+            "title": "업로드 일",
+            "description": "@title 업로드 일",
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "업로드 일",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "$ref": "#/components/schemas/Date"
+          },
+          "authorId": {
+            "title": "작성자 ID",
+            "description": "@title 작성자 ID",
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "작성자 ID",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "number"
+          },
+          "categoryId": {
+            "title": "대분류 (FK)",
+            "description": "@title 대분류 (FK)\n@type uint",
+            "x-typia-metaTags": [
+              {
+                "kind": "type",
+                "value": "uint"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "대분류 (FK)",
+                    "kind": "text"
+                  }
+                ]
+              },
+              {
+                "name": "type",
+                "text": [
+                  {
+                    "text": "uint",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "integer",
+            "minimum": 0
+          },
+          "isPrivate": {
+            "title": "비공개 글 작성 여부",
+            "description": "@title 비공개 글 작성 여부\n@default false",
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "비공개 글 작성 여부",
+                    "kind": "text"
+                  }
+                ]
+              },
+              {
+                "name": "default",
+                "text": [
+                  {
+                    "text": "false",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "default": true,
+            "type": "boolean"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "title",
+          "content"
+        ],
+        "description": "@title 비공개 글 작성 여부\n@default false",
+        "x-typia-jsDocTags": []
+      },
+      "Date": {
+        "type": "object",
+        "properties": {},
+        "nullable": false
+      },
+      "__object": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "statusCode": {
+            "description": "",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "message": {
+            "description": "",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "result": {
+            "description": "",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "name",
+          "statusCode",
+          "message",
+          "result"
+        ],
+        "description": "",
+        "x-typia-jsDocTags": []
+      },
+      "UpdatePostDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "title": "글 제목",
+            "description": "@title 글 제목",
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "글 제목",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "content": {
+            "title": "글 내용",
+            "description": "@title 글 내용\n@minLength 1\n@maxLength 4000",
+            "x-typia-metaTags": [
+              {
+                "kind": "minLength",
+                "value": 1
+              },
+              {
+                "kind": "maxLength",
+                "value": 4000
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "글 내용",
+                    "kind": "text"
+                  }
+                ]
+              },
+              {
+                "name": "minLength",
+                "text": [
+                  {
+                    "text": "1",
+                    "kind": "text"
+                  }
+                ]
+              },
+              {
+                "name": "maxLength",
+                "text": [
+                  {
+                    "text": "4000",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          },
+          "authorId": {
+            "description": "",
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "number"
+          },
+          "categoryId": {
+            "title": "대분류 (FK)",
+            "description": "@title 대분류 (FK)",
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "대분류 (FK)",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "number"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "title",
+          "content"
+        ],
+        "description": "@title 대분류 (FK)",
+        "x-typia-jsDocTags": []
+      },
+      "ResponseUtil.FailureResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "description": "",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "statusCode": {
+            "description": "",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "error": {
+            "description": "",
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "string"
+          },
+          "name": {
+            "description": "",
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "string"
+          },
+          "result": {
+            "description": "",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "message",
+          "statusCode",
+          "result"
+        ],
+        "x-typia-jsDocTags": []
+      },
+      "S3ImageUploadDto": {
+        "type": "object",
+        "properties": {
+          "postId": {
+            "description": "",
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "number"
+          }
+        },
+        "nullable": false,
+        "description": "",
+        "x-typia-jsDocTags": []
+      },
+      "Record_lt_string_comma__space_any_gt_": {
+        "type": "object",
+        "properties": {},
+        "nullable": false,
+        "description": "",
+        "x-typia-jsDocTags": [],
+        "x-typia-additionalProperties": {
+          "x-typia-required": true,
+          "x-typia-optional": false
+        },
+        "additionalProperties": {
+          "x-typia-required": true,
+          "x-typia-optional": false
+        }
+      },
+      "__type": {
+        "type": "object",
+        "properties": {
+          "isRenew": {
+            "description": "",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "boolean"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "isRenew"
+        ],
+        "description": "",
+        "x-typia-jsDocTags": []
+      },
+      "SendAuthCodeRequestDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "title": "이메일",
+            "description": "@title 이메일",
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "이메일",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "pattern": "(((.*)@gmail\\.com)|((.*)@hanmail\\.net)|((.*)@naver\\.com)|((.*)@nate\\.com)|((.*)@daum\\.net)|((.*)@kakao\\.com))$"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "email"
+        ],
+        "description": "@title 이메일",
+        "x-typia-jsDocTags": []
+      },
+      "__object.o1": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/__object.o2",
+            "description": "",
+            "x-typia-required": true,
+            "x-typia-optional": false
+          }
+        },
+        "nullable": false,
+        "required": [
+          "user"
+        ],
+        "description": "",
+        "x-typia-jsDocTags": []
+      },
+      "__object.o2": {
+        "type": "object",
+        "properties": {},
+        "nullable": false,
+        "description": "",
+        "x-typia-jsDocTags": []
+      },
+      "__object.o3": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/__object.o4",
+            "description": "",
+            "x-typia-required": true,
+            "x-typia-optional": false
+          }
+        },
+        "nullable": false,
+        "required": [
+          "user"
+        ],
+        "description": "",
+        "x-typia-jsDocTags": []
+      },
+      "__object.o4": {
+        "type": "object",
+        "properties": {},
+        "nullable": false,
+        "description": "",
+        "x-typia-jsDocTags": []
+      },
+      "VerifyAuthCodeRequestDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "title": "이메일",
+            "description": "@title 이메일",
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "이메일",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "pattern": "(((.*)@gmail\\.com)|((.*)@hanmail\\.net)|((.*)@naver\\.com)|((.*)@nate\\.com)|((.*)@daum\\.net)|((.*)@kakao\\.com))$"
+          },
+          "authCode": {
+            "title": "인증 코드",
+            "description": "@title 인증 코드",
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "인증 코드",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "email",
+          "authCode"
+        ],
+        "description": "@title 인증 코드",
+        "x-typia-jsDocTags": []
+      },
+      "AuthRequest.RequestDto": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "title": "유저 아이디",
+            "description": "@title 유저 아이디",
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "유저 아이디",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "password": {
+            "title": "비밀 번호",
+            "description": "@title 비밀 번호",
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "비밀 번호",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "email": {
+            "title": "이메일",
+            "description": "@title 이메일\n@format email",
+            "x-typia-metaTags": [
+              {
+                "kind": "format",
+                "value": "email"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "이메일",
+                    "kind": "text"
+                  }
+                ]
+              },
+              {
+                "name": "format",
+                "text": [
+                  {
+                    "text": "email",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "format": "email"
+          },
+          "nickname": {
+            "title": "별명",
+            "description": "@title 별명",
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "별명",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "username",
+          "password",
+          "email",
+          "nickname"
+        ],
+        "description": "@title 별명",
+        "x-typia-jsDocTags": []
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
+}

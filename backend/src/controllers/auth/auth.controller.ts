@@ -36,12 +36,13 @@ export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
     /**
-     * 로그인
+     * 로그인을 수행합니다.
      *
-     * @param ip
-     * @param user
-     * @param req
-     * @param res
+     * @tag 인증
+     * @param ip 접속 IP
+     * @param user 유저 정보
+     * @param req 요청 객체
+     * @param res 응답 객체
      * @returns
      */
     @Post('/login')
@@ -63,8 +64,9 @@ export class AuthController {
     }
 
     /**
-     * 로그 아웃
+     * 로그아웃을 수행합니다.
      *
+     * @tag 인증
      * @param res
      * @returns
      */
@@ -82,8 +84,9 @@ export class AuthController {
     }
 
     /**
-     * 액세스 토큰 재발급
+     * 액세스 토큰을 재발급합니다.
      *
+     * @tag 인증
      * @deprecated
      * @param req
      * @param res
@@ -101,8 +104,9 @@ export class AuthController {
     }
 
     /**
-     * 인증 코드 발송
+     * 인증 코드를 이메일로 전송합니다.
      *
+     * @tag 인증
      * @param data
      * @returns
      */
@@ -120,8 +124,9 @@ export class AuthController {
     }
 
     /**
-     * 프로필 조회
+     * 프로필을 조회합니다. 이 기능은 Next.js에서 인증을 수행하기 위해 사용됩니다.
      *
+     * @tag 인증
      * @param payload
      * @returns
      */
@@ -151,8 +156,9 @@ export class AuthController {
     }
 
     /**
-     * 인증 코드 확인
+     * 인증 코드를 확인합니다.
      *
+     * @tag 인증
      * @param data
      * @returns
      */
@@ -173,8 +179,9 @@ export class AuthController {
     }
 
     /**
-     * 회원 가입
+     * 회원 가입을 처리합니다.
      *
+     * @tag 인증
      * @param data
      * @returns
      */
@@ -195,8 +202,9 @@ export class AuthController {
     }
 
     /**
-     * 깃허브 계정으로 로그인하기
+     * 깃허브 계정으로 로그인을 수행합니다.
      *
+     * @tag 인증
      * @returns
      */
     @Get('/github/login')
@@ -208,6 +216,7 @@ export class AuthController {
     /**
      * 깃허브 계정으로 로그인에 성공하면 액세스 토큰을 발급합니다.
      *
+     * @tag 인증
      * @param req
      * @param res
      * @returns

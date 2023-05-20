@@ -36,10 +36,9 @@ import {
     ImageCreateSvgCommandImpl,
 } from './commands/image-create-svg.command';
 import { Image } from './entities/image.entity';
-import { TypedRoute } from '@nestia/core';
+import { TypedBody, TypedRoute } from '@nestia/core';
 
 @Controller('image')
-@ApiTags('이미지')
 export class ImageController {
     private readonly logger = new Logger(ImageController.name);
 
@@ -52,6 +51,7 @@ export class ImageController {
     /**
      * 이미지 업로드
      *
+     * @tag Image
      * @deprecated
      * @param files
      */
@@ -84,6 +84,11 @@ export class ImageController {
 
     /**
      * 커스텀으로 만든 AWS S3 파일 인터셉터를 이용하여 이미지 파일을 업로드합니다.
+     *
+     * @tag Image
+     * @param userId
+     * @param files
+     * @param data
      */
     @JwtGuard()
     @AdminOnly()
@@ -92,7 +97,7 @@ export class ImageController {
     async uploadImageUsingS3(
         @UserId() userId: number,
         @UploadedFiles() files: MulterS3File[],
-        @Body() data: S3ImageUploadDto,
+        @TypedBody() data: S3ImageUploadDto,
     ) {
         try {
             const res = await this.imageService.upload(userId, files, data);
@@ -106,6 +111,7 @@ export class ImageController {
     /**
      * 깃허브 프로필용 이미지를 생성합니다.
      *
+     * @tag Image
      * @param text
      * @param username
      * @param color
