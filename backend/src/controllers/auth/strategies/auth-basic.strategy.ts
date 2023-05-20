@@ -25,8 +25,8 @@ export class BasicStrategy extends PassportStrategy(Strategy, 'basic-auth') {
      */
     async validate(username: string, password: string): Promise<boolean> {
         if (
-            this.configService.get('DOCS_USERNAME') === username &&
-            this.configService.get('DOCS_PASSWORD') === password
+            this.configService.getOrThrow('DOCS_USERNAME') === username &&
+            this.configService.getOrThrow('DOCS_PASSWORD') === password
         ) {
             return true;
         }

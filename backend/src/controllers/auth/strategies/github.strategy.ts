@@ -24,13 +24,13 @@ export interface GithubUser {
 export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
     constructor(configService: ConfigService) {
         super({
-            clientID: configService.get('GITHUB_CLIENT_ID', {
+            clientID: configService.getOrThrow('GITHUB_CLIENT_ID', {
                 infer: true,
             }),
-            clientSecret: configService.get('GITHUB_CLIENT_SECRET', {
+            clientSecret: configService.getOrThrow('GITHUB_CLIENT_SECRET', {
                 infer: true,
             }),
-            callbackURL: configService.get('GITHUB_CALLBACK_URL', {
+            callbackURL: configService.getOrThrow('GITHUB_CALLBACK_URL', {
                 infer: true,
             }),
             scope: ['user', 'public_profile'],
