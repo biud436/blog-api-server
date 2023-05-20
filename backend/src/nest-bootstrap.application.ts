@@ -7,7 +7,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { ServerLog } from './common/libs/logger/ServerLog';
 import * as path from 'path';
@@ -237,7 +237,7 @@ export class NestBootstrapApplication extends EventEmitter {
     }
 
     private getSwaggerConfigBuilder() {
-        return new DocumentBuilder()
+        const builder = new DocumentBuilder()
             .setTitle('블로그 서버의 API')
             .setDescription(
                 [
@@ -250,21 +250,34 @@ export class NestBootstrapApplication extends EventEmitter {
                 scheme: 'bearer',
                 bearerFormat: 'JWT',
             })
-            .setContact('the developer', '', 'biud436@gmail.com')
-            .addServer(NestBootstrapApplication.LOCAL_HOST, '로컬 서버')
-            .addServer(NestBootstrapApplication.PRODUCTION_HOST[0], '배포 서버')
-            .setVersion('1.0')
-            .build();
+            .setContact('the developer', '', 'biud436@gmail.com');
+
+        if (this.isDelvelopment()) {
+            builder.addServer(NestBootstrapApplication.LOCAL_HOST, '로컬 서버');
+        } else {
+            builder.addServer(
+                NestBootstrapApplication.PRODUCTION_HOST[0],
+                '배포 서버',
+            );
+        }
+        builder.setVersion('1.0');
+
+        return builder.build();
     }
 
     private initWithApiDocs(): NestBootstrapApplication {
-        // const config = this.getSwaggerConfigBuilder();
-        // const document = SwaggerModule.createDocument(
-        //     this._application!,
-        //     config,
-        // );
+        const config = this.getSwaggerConfigBuilder();
+        const document = SwaggerModule.createDocument(
+            this._application!,
+            config,
+        );
+
         // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const docs = require('../public/swagger.json');
+        const docs = require('../public/swagger.json') as OpenAPIObject;
+        if (docs.servers) {
+            docs.info = document.info;
+            docs.servers = document.servers;
+        }
 
         SwaggerModule.setup('docs', this._application!, docs, {
             explorer: true,
@@ -275,6 +288,7 @@ export class NestBootstrapApplication extends EventEmitter {
             customfavIcon: '/favicon.png',
             customJs: '/js/swagger-ui-inject.js',
         });
+
         // SwaggerModule.setup('docs', this._application!, document, {
         //     explorer: true,
         //     swaggerOptions: {
