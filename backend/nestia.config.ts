@@ -6,6 +6,8 @@ const config: INestiaConfig = {
             '**/posts.controller.ts',
             '**/image.controller.ts',
             '**/auth.controller.ts',
+            '**/health-check.controller.ts',
+            '**/rss.controller.ts',
         ],
         // exclude: ['apps/page-service/**/*', 'apps/user-service/**/*'],
     },
@@ -22,6 +24,10 @@ const config: INestiaConfig = {
             {
                 url: 'http://localhost:3000',
                 description: 'Local Server',
+            },
+            {
+                url: 'https://blog-api.biud436.com',
+                description: 'Production Server',
             },
         ],
     },

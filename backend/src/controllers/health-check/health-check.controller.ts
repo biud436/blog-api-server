@@ -23,7 +23,6 @@ import {
 } from './health-check.constant';
 
 @Controller('health-check')
-@ApiTags('헬스 체크')
 export class HealthCheckController {
     constructor(
         private health: HealthCheckService,
@@ -35,8 +34,9 @@ export class HealthCheckController {
     ) {}
 
     /**
-     * 헬스 체크
+     * 헬스 체크를 수행합니다.
      *
+     * @tag 헬스 체크
      * @returns
      */
     @Get()

@@ -4,6 +4,10 @@
     {
       "url": "http://localhost:3000",
       "description": "Local Server"
+    },
+    {
+      "url": "https://blog-api.biud436.com",
+      "description": "Production Server"
     }
   ],
   "info": {
@@ -2320,6 +2324,79 @@
           }
         ]
       }
+    },
+    "/health-check": {
+      "get": {
+        "tags": [
+          "헬스 체크"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthCheckResult"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "헬스 체크를 수행합니다",
+        "description": "헬스 체크를 수행합니다.",
+        "x-nestia-namespace": "health-check.check",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "헬스 체크",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      }
+    },
+    "/rss": {
+      "get": {
+        "tags": [
+          "RSS"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "RSS 피드를 생성합니다",
+        "description": "RSS 피드를 생성합니다.",
+        "x-nestia-namespace": "rss.getFeeds",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "RSS",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -3018,6 +3095,97 @@
         ],
         "description": "@title 별명",
         "x-typia-jsDocTags": []
+      },
+      "HealthCheckResult": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "description": "The overall status of the Health Check",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "enum": [
+              "error",
+              "ok",
+              "shutting_down"
+            ]
+          },
+          "info": {
+            "$ref": "#/components/schemas/HealthIndicatorResult",
+            "description": "The info object contains information of each health indicator\nwhich is of status \"up\"",
+            "x-typia-required": false,
+            "x-typia-optional": true
+          },
+          "error": {
+            "$ref": "#/components/schemas/HealthIndicatorResult",
+            "description": "The error object contains information of each health indicator\nwhich is of status \"down\"",
+            "x-typia-required": false,
+            "x-typia-optional": true
+          },
+          "details": {
+            "$ref": "#/components/schemas/HealthIndicatorResult",
+            "description": "The details object contains information of every health indicator.",
+            "x-typia-required": true,
+            "x-typia-optional": false
+          }
+        },
+        "nullable": false,
+        "required": [
+          "status",
+          "details"
+        ],
+        "description": "The details object contains information of every health indicator.",
+        "x-typia-jsDocTags": [
+          {
+            "name": "publicApi"
+          }
+        ]
+      },
+      "HealthIndicatorResult": {
+        "type": "object",
+        "properties": {},
+        "nullable": false,
+        "description": "Optional settings of the health indicator result",
+        "x-typia-jsDocTags": [],
+        "x-typia-additionalProperties": {
+          "$ref": "#/components/schemas/__type.o1",
+          "x-typia-required": true,
+          "x-typia-optional": false
+        },
+        "additionalProperties": {
+          "$ref": "#/components/schemas/__type.o1",
+          "x-typia-required": true,
+          "x-typia-optional": false
+        }
+      },
+      "__type.o1": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "description": "The status if the given health indicator was successful or not",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "enum": [
+              "up",
+              "down"
+            ]
+          }
+        },
+        "nullable": false,
+        "required": [
+          "status"
+        ],
+        "description": "Optional settings of the health indicator result",
+        "x-typia-jsDocTags": [],
+        "x-typia-additionalProperties": {
+          "x-typia-required": true,
+          "x-typia-optional": false
+        },
+        "additionalProperties": {
+          "x-typia-required": true,
+          "x-typia-optional": false
+        }
       }
     },
     "securitySchemes": {

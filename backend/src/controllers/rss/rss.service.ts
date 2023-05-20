@@ -27,7 +27,7 @@ export class RssService {
         return feed.xml();
     }
 
-    createFeed(options: RssModuleOptions): RSSFeed {
+    createFeed(options: RssModuleOptions): RSS {
         return new RSS({
             ...options,
         });
