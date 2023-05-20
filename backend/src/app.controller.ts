@@ -1,3 +1,4 @@
+import { TypedRoute } from '@nestia/core';
 import { Controller, Get, Render, Res } from '@nestjs/common';
 import { Response } from 'express';
 
@@ -8,7 +9,7 @@ export class AppController {
      * @internal
      * @param res
      */
-    @Get()
+    @Get('/')
     getHello(
         @Res({
             passthrough: true,
