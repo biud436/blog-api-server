@@ -4,8 +4,6 @@
 
 This project is the blog server that is made with the server framework called nestjs@v9.4.0, it is also included devops file that allows you to set and start the blog server using docker. This will introduce you to the basic elements of blog implementation. Learning something new is always a little daunting at first. but I think that things will start to become familiar in no time.
 
-[🔖 Swagger Docs](https://editor.swagger.io/?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbiud436%2Fblog-api-server%2Fmain%2Fbackend%2Fpublic%2Fswagger.json)
-
 # Setting up the server
 
 In this directory named `backend` will finish off the features of our server by adding a lot of controllers, services, pipes of `Nest.js` for blog service.

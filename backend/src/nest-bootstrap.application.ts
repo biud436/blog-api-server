@@ -289,16 +289,6 @@ export class NestBootstrapApplication extends EventEmitter {
             customJs: '/js/swagger-ui-inject.js',
         });
 
-        // SwaggerModule.setup('docs', this._application!, document, {
-        //     explorer: true,
-        //     swaggerOptions: {
-        //         defaultModelsExpandDepth: -1, // API 문서에서 하단 객체 제거
-        //         persistAuthorization: true, // 새로고침 해도 로그인 고정
-        //     },
-        //     customfavIcon: '/favicon.png',
-        //     customJs: '/js/swagger-ui-inject.js',
-        // });
-
         return this;
     }
 
