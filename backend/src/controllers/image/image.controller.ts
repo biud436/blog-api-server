@@ -97,7 +97,7 @@ export class ImageController {
     async uploadImageUsingS3(
         @UserId() userId: number,
         @UploadedFiles() files: MulterS3File[],
-        @TypedBody() data: S3ImageUploadDto,
+        @Body() data: S3ImageUploadDto,
     ) {
         try {
             const res = await this.imageService.upload(userId, files, data);
