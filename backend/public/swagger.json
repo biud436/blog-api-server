@@ -2251,45 +2251,6 @@
         ]
       }
     },
-    "/image/upload": {
-      "post": {
-        "tags": [
-          "Image"
-        ],
-        "parameters": [],
-        "responses": {
-          "201": {
-            "description": "",
-            "x-nestia-encrypted": false
-          }
-        },
-        "description": "이미지 업로드",
-        "x-nestia-namespace": "image.upload.upload",
-        "x-nestia-jsDocTags": [
-          {
-            "name": "tag",
-            "text": [
-              {
-                "text": "Image",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "deprecated"
-          },
-          {
-            "name": "param",
-            "text": [
-              {
-                "text": "files",
-                "kind": "text"
-              }
-            ]
-          }
-        ]
-      }
-    },
     "/image/s3/upload": {
       "post": {
         "tags": [
@@ -3923,14 +3884,26 @@
         "type": "object",
         "properties": {
           "postId": {
-            "description": "",
+            "title": "포스트 아이디",
+            "description": "@title 포스트 아이디",
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "포스트 아이디",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
             "x-typia-required": false,
             "x-typia-optional": true,
             "type": "number"
           }
         },
         "nullable": false,
-        "description": "",
+        "description": "@title 포스트 아이디",
         "x-typia-jsDocTags": []
       },
       "Record_lt_string_comma__space_any_gt_": {

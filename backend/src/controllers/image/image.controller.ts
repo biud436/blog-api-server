@@ -49,9 +49,10 @@ export class ImageController {
     ) {}
 
     /**
-     * 이미지 업로드
+     * 이미지를 업로드합니다.
      *
      * @tag Image
+     * @internal
      * @deprecated
      * @param files
      */
