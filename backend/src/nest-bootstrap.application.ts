@@ -13,7 +13,7 @@ import { ServerLog } from './common/libs/logger/ServerLog';
 import * as path from 'path';
 import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
-import winstonLogger from 'src/common/winston-config';
+import winstonLogger from 'src/common/config/winston-config';
 import helmet from 'helmet';
 import * as session from 'express-session';
 import * as passport from 'passport';

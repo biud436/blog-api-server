@@ -2,7 +2,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
-import { encodeHtml } from 'src/common/html-escpse';
+import { encodeHtml } from 'src/common/config/html-escpse';
 import { ImageService } from 'src/controllers/image/image.service';
 import { PostSearchProperty } from 'src/controllers/posts/types/post-search-type';
 import { RedisService } from 'src/common/micro-services/redis/redis.service';
@@ -13,7 +13,7 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Post } from './entities/post.entity';
 import { ConfigData } from 'src/common/modules/config/types/my-config.decorator';
-import { Paginatable } from 'src/common/list-config';
+import { Paginatable } from 'src/common/config/list-config';
 import { PaginationProvider } from 'src/common/modules/pagination/pagination-repository';
 
 @Injectable()

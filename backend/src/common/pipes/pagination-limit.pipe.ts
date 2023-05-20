@@ -1,5 +1,5 @@
 import { ArgumentMetadata, Injectable, ParseIntPipe } from '@nestjs/common';
-import { PaginationConfig } from 'src/common/list-config';
+import { PaginationConfig } from 'src/common/config/list-config';
 
 @Injectable()
 export class PaginationLimitPipe extends ParseIntPipe {

@@ -24,7 +24,7 @@ import { UserInfo } from 'src/common/decorators/user.decorator';
 import { User } from 'src/entities/user/entities/user.entity';
 import { SessionAuthGuard } from './guards/session-auth.guard';
 import { Throttle } from '@nestjs/throttler';
-import { LOGIN_INTERVAL } from 'src/common/throttle-config';
+import { LOGIN_INTERVAL } from 'src/common/config/throttle-config';
 import { AuthGuard } from '@nestjs/passport';
 import { GithubUser } from './strategies/github.strategy';
 import { ILoginDto } from './dto/login.dto';

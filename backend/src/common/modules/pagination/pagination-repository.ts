@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { PaginationConfig, PaginationResult } from 'src/common/list-config';
+import {
+    PaginationConfig,
+    PaginationResult,
+} from 'src/common/config/list-config';
 import {
     EntityManager,
     EntityTarget,

@@ -3,7 +3,7 @@ import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import Mail from 'nodemailer/lib/mailer';
 import { Injectable } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TEnvironmentFile } from 'src/common/my-config-service.type';
+import { TEnvironmentFile } from 'src/common/config/my-config-service.type';
 
 export type MailForm = Record<string, SMTPTransport.Options>;
 export type MailAdminFrom<T extends MailForm, VP extends keyof T> = {

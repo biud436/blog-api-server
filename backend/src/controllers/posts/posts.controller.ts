@@ -24,8 +24,8 @@ import {
     ApiTags,
 } from '@nestjs/swagger';
 import { InjectDataSource } from '@nestjs/typeorm';
-import { SearchOption } from 'src/common/list-config';
-import { DocsMapper } from 'src/common/swagger-config';
+import { SearchOption } from 'src/common/config/list-config';
+import { DocsMapper } from 'src/common/config/swagger-config';
 import {
     AdminOnly,
     CustomApiOkResponse,

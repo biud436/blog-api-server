@@ -22,7 +22,7 @@ import { ImageService } from '../../controllers/image/image.service';
 import { AES256Provider } from 'src/common/modules/aes/aes-256.provider';
 import { JwtPayload } from '../../controllers/auth/validator/response.dto';
 import { S3Client } from '@aws-sdk/client-s3';
-import { TEnvironmentFile } from '../my-config-service.type';
+import { TEnvironmentFile } from '../config/my-config-service.type';
 
 type MulterInstance = any;
 

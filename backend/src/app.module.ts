@@ -26,7 +26,7 @@ import { PostViewCountModule } from './entities/post-view-count/post-view-count.
 import { UserCopyModule } from './entities/user-copy/user-copy.module';
 import './common/libs/polyfill';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import dbconnect from './common/config';
+import dbconnect from './common/config/config';
 import { ApiModule } from './controllers/api/api.module';
 import { AdminModule as AdminControllerModule } from './controllers/admin/admin.module';
 import { ApiKeyModule } from './entities/api-key/api-key.module';
@@ -49,7 +49,7 @@ import { ConnectInfoModule } from './entities/connect-info/connect-info.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { ThrottlerBehindProxyGuard } from './common/guards/throttler-behind-proxy.guard';
 import { CacheModule } from '@nestjs/cache-manager';
-import { TaskModule } from './domains/task/task.module';
+import { TaskModule } from './common/domains/task/task.module';
 import { PaginationModule } from './common/modules/pagination/pagination.module';
 
 @Module({

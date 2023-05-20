@@ -14,7 +14,7 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
-import { decodeHtml } from 'src/common/html-escpse';
+import { decodeHtml } from 'src/common/config/html-escpse';
 import { Image } from 'src/controllers/image/entities/image.entity';
 import removeMarkdown from 'markdown-to-text';
 @Entity()

@@ -1,4 +1,4 @@
-import { ApiProperty, Assert } from 'src/common/create-dto-common';
+import { ApiProperty, Assert } from 'src/common/config/create-dto-common';
 
 export class CreateAdminDto {
     @ApiProperty()

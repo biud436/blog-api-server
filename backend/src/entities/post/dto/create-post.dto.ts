@@ -7,7 +7,7 @@ import {
     IsOptional,
     IsString,
 } from 'class-validator';
-import { ApiProperty, Assert } from 'src/common/create-dto-common';
+import { ApiProperty, Assert } from 'src/common/config/create-dto-common';
 import { PostViewCount } from 'src/entities/post-view-count/entities/post-view-count.entity';
 
 export class CreatePostDto {

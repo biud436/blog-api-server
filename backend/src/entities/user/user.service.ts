@@ -6,7 +6,7 @@ import { User } from './entities/user.entity';
 import { Profile } from '../profile/entities/profile.entity';
 import { Brackets, QueryRunner, Repository } from 'typeorm';
 import { plainToClass } from 'class-transformer';
-import { Paginatable } from 'src/common/list-config';
+import { Paginatable } from 'src/common/config/list-config';
 import { PaginationProvider } from 'src/common/modules/pagination/pagination-repository';
 
 type SafedUser = Omit<User, 'password' | 'hashPassword' | 'savePassword'>;

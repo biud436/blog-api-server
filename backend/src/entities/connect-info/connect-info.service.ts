@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Paginatable } from 'src/common/list-config';
+import { Paginatable } from 'src/common/config/list-config';
 import { DeleteResult, Repository } from 'typeorm';
 import { CreateConnectInfoDto } from './dto/create-connect-info.dto';
 import { ConnectInfo } from './entities/connect-info.entity';

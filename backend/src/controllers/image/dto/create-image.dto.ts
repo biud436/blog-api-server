@@ -8,7 +8,7 @@ import {
     Length,
     MaxLength,
 } from 'class-validator';
-import { ApiProperty } from 'src/common/create-dto-common';
+import { ApiProperty } from 'src/common/config/create-dto-common';
 
 export class CreateImageDto {
     @ApiProperty()

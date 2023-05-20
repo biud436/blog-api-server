@@ -1,6 +1,6 @@
 import { DynamicModule, Global, Module } from '@nestjs/common';
 import { MulterModule } from '@nestjs/platform-express';
-import { getMyMulterOption } from 'src/common/multer.config';
+import { getMyMulterOption } from 'src/common/config/multer.config';
 import { XMulterModuleOptions } from './interfaces/x-multer-option.interface';
 import { MULTER_UPLOAD_PATH } from './x-multer.constants';
 
