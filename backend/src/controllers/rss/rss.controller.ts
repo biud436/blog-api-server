@@ -1,6 +1,6 @@
-import { Controller, Get, Header, CacheTTL } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Header } from '@nestjs/common';
 import { RssService } from './rss.service';
+import { CacheTTL } from '@nestjs/cache-manager';
 
 @Controller('rss')
 export class RssController {

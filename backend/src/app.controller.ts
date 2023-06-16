@@ -5,21 +5,6 @@ import { Response } from 'express';
 @Controller()
 export class AppController {
     /**
-     *
-     * @internal
-     * @param res
-     */
-    @Get('/')
-    getHello(
-        @Res({
-            passthrough: true,
-        })
-        res: Response,
-    ): void {
-        res.redirect('https://github.com/biud436/blog-api-server');
-    }
-
-    /**
      * @internal
      * @returns
      */

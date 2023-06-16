@@ -1,4 +1,4 @@
-import { CacheModuleAsyncOptions } from '@nestjs/common';
+import { CacheModuleAsyncOptions } from '@nestjs/cache-manager';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { redisStore } from 'cache-manager-redis-store';
 import { TEnvironmentFile } from 'src/common/config/my-config-service.type';

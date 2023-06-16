@@ -1,9 +1,5 @@
-import {
-    CacheModuleAsyncOptions,
-    MiddlewareConsumer,
-    Module,
-    NestModule,
-} from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+
 import { HttpModule } from '@nestjs/axios';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
