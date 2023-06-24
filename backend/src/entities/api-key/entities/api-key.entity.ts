@@ -5,6 +5,7 @@ import {
     JoinColumn,
     ManyToOne,
     PrimaryGeneratedColumn,
+    Relation,
 } from 'typeorm';
 import * as moment from 'moment';
 import { User } from 'src/entities/user/entities/user.entity';
@@ -43,7 +44,7 @@ export class ApiKey {
         onUpdate: 'CASCADE',
     })
     @JoinColumn({ name: 'user_id' })
-    user!: User;
+    user!: Relation<User>;
 
     static of(
         data: Omit<Partial<ApiKey>, 'expiresAt'> & {

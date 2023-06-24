@@ -7,6 +7,7 @@ import {
     JoinColumn,
     ManyToOne,
     PrimaryGeneratedColumn,
+    Relation,
     UpdateDateColumn,
 } from 'typeorm';
 
@@ -23,7 +24,7 @@ export class Admin {
         onUpdate: 'RESTRICT',
     })
     @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
-    user!: User;
+    user!: Relation<User>;
 
     @CreateDateColumn({
         default: () => 'CURRENT_TIMESTAMP',

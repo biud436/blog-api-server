@@ -5,6 +5,7 @@ import {
     JoinColumn,
     ManyToOne,
     PrimaryGeneratedColumn,
+    Relation,
 } from 'typeorm';
 
 @Entity()
@@ -25,5 +26,5 @@ export class BlogMetaData {
 
     @ManyToOne(() => User, (user) => user.blogMetaData)
     @JoinColumn({ name: 'user_id' })
-    user!: User;
+    user!: Relation<User>;
 }

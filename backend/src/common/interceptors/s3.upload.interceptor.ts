@@ -10,13 +10,13 @@ import {
 } from '@nestjs/common';
 import { MulterModuleOptions } from '@nestjs/platform-express';
 import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
-import * as multer from 'multer';
+import multer from 'multer';
 import { Observable } from 'rxjs';
 import { transformException } from '@nestjs/platform-express/multer/multer/multer.utils';
 import { MULTER_MODULE_OPTIONS } from '@nestjs/platform-express/multer/files.constants';
 import { ConfigService } from '@nestjs/config';
 import * as AWS from 'aws-sdk';
-import * as multerS3 from 'multer-s3';
+import multerS3 from 'multer-s3';
 import { CryptoUtil } from 'src/common/libs/crypto/CryptoUtil';
 import { ImageService } from '../../controllers/image/image.service';
 import { AES256Provider } from 'src/common/modules/aes/aes-256.provider';

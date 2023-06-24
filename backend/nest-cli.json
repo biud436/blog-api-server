@@ -1,18 +1,20 @@
 {
-  "collection": "@nestjs/schematics",
-  "sourceRoot": "src",
-  "projects": {
-    "env": {
-      "type": "library",
-      "root": "libs/env",
-      "entryFile": "index",
-      "sourceRoot": "libs/env/src",
-      "compilerOptions": {
-        "tsConfigPath": "libs/env/tsconfig.lib.json"
-      }
+    "collection": "@nestjs/schematics",
+    "sourceRoot": "src",
+    "projects": {
+        "env": {
+            "type": "library",
+            "root": "libs/env",
+            "entryFile": "index",
+            "sourceRoot": "libs/env/src",
+            "compilerOptions": {
+                "tsConfigPath": "libs/env/tsconfig.lib.json"
+            }
+        }
+    },
+    "compilerOptions": {
+        "webpack": false,
+        "builder": "swc",
+        "typeCheck": true
     }
-  },
-  "compilerOptions": {
-    "webpack": true
-  }
 }

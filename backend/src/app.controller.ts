@@ -4,6 +4,11 @@ import { Response } from 'express';
 
 @Controller()
 export class AppController {
+    @Get('/')
+    index() {
+        return { message: 'Hello world!' };
+    }
+
     /**
      * @internal
      * @returns

@@ -8,6 +8,7 @@ import {
     ManyToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
+    Relation,
 } from 'typeorm';
 
 /**
@@ -48,7 +49,7 @@ export class PostTemp {
         onUpdate: 'RESTRICT',
     })
     @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
-    user!: User;
+    user!: Relation<User>;
 
     @CreateDateColumn({
         default: () => 'CURRENT_TIMESTAMP',
