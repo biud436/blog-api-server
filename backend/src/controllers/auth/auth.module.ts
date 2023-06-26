@@ -11,7 +11,6 @@ import { ProfileModule } from 'src/entities/profile/profile.module';
 import { MicroServicesModule } from 'src/common/micro-services/micro-services.module';
 import { MailModule } from 'src/common/modules/mail/mail.module';
 import { GithubStrategy } from './strategies/github.strategy';
-import { UserCopyModule } from 'src/entities/user-copy/user-copy.module';
 import { PassportModule } from '@nestjs/passport';
 import { SessionSerializer } from './session.serializer';
 import { ApiKeyModule } from 'src/entities/api-key/api-key.module';
@@ -29,7 +28,6 @@ import { ConnectInfoModule } from 'src/entities/connect-info/connect-info.module
         ProfileModule,
         MicroServicesModule,
         MailModule,
-        UserCopyModule,
         HttpModule,
         ApiKeyModule,
         PostsModule,

@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
-import { UserCopy } from 'src/entities/user-copy/entities/user-copy.entity';
 import {
     DataSource,
     EntitySubscriberInterface,
@@ -17,13 +16,5 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
 
     listenTo() {
         return User;
-    }
-
-    afterInsert(event: InsertEvent<User>): void | Promise<any> {
-        const userCopy = new UserCopy();
-
-        userCopy.username = event.entity.username;
-
-        event.queryRunner.manager.save(userCopy);
     }
 }
