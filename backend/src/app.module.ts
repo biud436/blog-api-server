@@ -19,7 +19,6 @@ import { OrmModule } from './common/modules/orm/orm.module';
 import { ImageModule } from './controllers/image/image.module';
 import { AesModule } from './common/modules/aes/aes.module';
 import { PostViewCountModule } from './entities/post-view-count/post-view-count.module';
-import './common/libs/polyfill';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import dbconnect from './common/config/config';
 import { ApiModule } from './controllers/api/api.module';

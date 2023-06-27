@@ -105,6 +105,7 @@ export class ImageController {
 
             return ResponseUtil.success(RESPONSE_MESSAGE.SAVE_SUCCESS, res);
         } catch (e: any) {
+            console.warn(e);
             throw ResponseUtil.failure(e.message);
         }
     }

@@ -51,7 +51,11 @@ export class ImageUploadCommandImpl extends ImageUploadCommand {
      * @param file
      * @returns
      */
-    getValidDto(postId: number, key: string, file: MulterS3File) {
+    getValidDto(
+        postId: number | null | undefined,
+        key: string,
+        file: MulterS3File,
+    ) {
         return <CreateImageDto>{
             filename: key,
             originalname: file.originalname,
@@ -83,10 +87,6 @@ export class ImageUploadCommandImpl extends ImageUploadCommand {
         files: MulterS3File[],
         { postId }: S3ImageUploadDto,
     ) {
-        if (!postId) {
-            throw new BadRequestException('포스트 아이디가 존재하지 않습니다.');
-        }
-
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();

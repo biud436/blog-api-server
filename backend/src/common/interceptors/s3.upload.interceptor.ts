@@ -15,16 +15,13 @@ import { Observable } from 'rxjs';
 import { transformException } from '@nestjs/platform-express/multer/multer/multer.utils';
 import { MULTER_MODULE_OPTIONS } from '@nestjs/platform-express/multer/files.constants';
 import { ConfigService } from '@nestjs/config';
-import * as AWS from 'aws-sdk';
 import multerS3 from 'multer-s3';
-import { CryptoUtil } from 'src/common/libs/crypto/CryptoUtil';
 import { ImageService } from '../../controllers/image/image.service';
-import { AES256Provider } from 'src/common/modules/aes/aes-256.provider';
 import { JwtPayload } from '../../controllers/auth/validator/response.dto';
 import { S3Client } from '@aws-sdk/client-s3';
 import { TEnvironmentFile } from '../config/my-config-service.type';
 
-type MulterInstance = any;
+type MulterInstance = multer.Multer;
 
 /**
  * ? @types/multer-s3의 Express.MulterS3.File[] 타입을 사용하면 버전 호환 문제로 컴파일이 되지 않았습니다.
