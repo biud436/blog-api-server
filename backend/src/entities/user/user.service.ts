@@ -41,23 +41,6 @@ export class UserService {
         return await queryRunner.manager.save(model);
     }
 
-    async createByGithub(
-        createUserDto: CreateUserDto,
-        profile: Optional<Profile>,
-    ) {
-        const model = await this.userRepository.create(createUserDto);
-        model.profile = new Profile();
-
-        if (!profile.nickname || !profile.email) {
-            throw new BadRequestException('nickname or email is empty');
-        }
-
-        model.profile.nickname = profile.nickname;
-        model.profile.email = profile.email;
-
-        return await this.userRepository.save(model);
-    }
-
     async validateUser(
         username: string,
         password_: string,
@@ -152,39 +135,5 @@ export class UserService {
             .getManyWithPagination(qb, pageNumber);
 
         return items;
-    }
-
-    async searchUserList(
-        pageNumber: number,
-        searchProperty:
-            | keyof Pick<Profile, 'nickname'>
-            | keyof Pick<User, 'id'>,
-        searchQuery: string,
-    ): Promise<Paginatable<User> | undefined> {
-        const qb = this.userRepository
-            .createQueryBuilder('user')
-            .select()
-            .innerJoinAndSelect('user.profile', 'profile')
-            .innerJoinAndSelect('user.admins', 'admins')
-            .where('admins.id IS NOT NULL');
-
-        switch (searchProperty) {
-            case 'id':
-                qb.andWhere('user.id = :id', {
-                    id: searchQuery,
-                });
-                break;
-            case 'nickname':
-                qb.andWhere('profile.nickname LIKE :nickname', {
-                    nickname: `%${searchQuery}%`,
-                });
-                break;
-        }
-
-        qb.andWhere('user.isValid = :isValid', { isValid: true });
-
-        return await this.paginationProvider
-            .setPagination(qb, pageNumber)
-            .getManyWithPagination(qb, pageNumber);
     }
 }
