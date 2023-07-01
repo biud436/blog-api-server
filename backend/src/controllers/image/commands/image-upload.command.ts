@@ -36,7 +36,7 @@ export class ImageUploadCommandImpl extends ImageUploadCommand {
      * @param key
      * @returns
      */
-    extractFilenameFromKey(key: string) {
+    private extractFilenameFromKey(key: string) {
         if (!key.includes('.')) {
             return key;
         }
@@ -51,7 +51,7 @@ export class ImageUploadCommandImpl extends ImageUploadCommand {
      * @param file
      * @returns
      */
-    getValidDto(
+    private getValidDto(
         postId: number | null | undefined,
         key: string,
         file: MulterS3File,
@@ -75,7 +75,7 @@ export class ImageUploadCommandImpl extends ImageUploadCommand {
      * @param userId
      * @param imageId
      */
-    async saveTemporarilyImageIds(userId: number, imageId: number) {
+    private async saveTemporarilyImageIds(userId: number, imageId: number) {
         await this.redisService.saveTemporarilyImageIds(
             userId.toString(),
             imageId.toString(),
