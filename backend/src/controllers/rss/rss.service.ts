@@ -27,13 +27,13 @@ export class RssService {
         return feed.xml();
     }
 
-    createFeed(options: RssModuleOptions): RSS {
+    private createFeed(options: RssModuleOptions): RSS {
         return new RSS({
             ...options,
         });
     }
 
-    createFeedItem(post: Post): FeedItem {
+    private createFeedItem(post: Post): FeedItem {
         const { postUrl, author } = this.options;
         return FeedItem.of({
             title: post.title,

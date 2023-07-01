@@ -60,14 +60,14 @@ export class CategoryService {
      *
      * @returns
      */
-    async selectTreeNodeList(): Promise<CategoryDepthVO[]> {
+    private async selectTreeNodeList(): Promise<CategoryDepthVO[]> {
         return await this.categoryRepository.selectTreeNodeList();
     }
 
     /**
      * 마지막 깊이의 카테고리를 조회합니다.
      */
-    async selectLeafNodes(): Promise<Category[]> {
+    private async selectLeafNodes(): Promise<Category[]> {
         return await this.categoryRepository.selectLeafNodes();
     }
 
@@ -77,7 +77,7 @@ export class CategoryService {
      * @param categoryName
      * @returns
      */
-    async selectParentNode(categoryName: string) {
+    private async selectParentNode(categoryName: string) {
         return await this.categoryRepository.selectParentNode(categoryName);
     }
 
@@ -113,7 +113,7 @@ export class CategoryService {
      * @param targetNode
      * @returns
      */
-    async getDescendants(nodes: Category[], targetNode: Category) {
+    private async getDescendants(nodes: Category[], targetNode: Category) {
         const descendants: Category[] = [];
 
         nodes.forEach((node) => {
@@ -138,7 +138,7 @@ export class CategoryService {
      * @param targetNode
      * @returns
      */
-    async getAncestorsWithDepth(
+    private async getAncestorsWithDepth(
         nodes: CategoryDepthVO[],
         targetNode: CategoryDepthVO,
     ) {
@@ -162,7 +162,7 @@ export class CategoryService {
      * @param targetNode
      * @returns
      */
-    async getNumberOfChildren(targetNode: CategoryDepthVO) {
+    private async getNumberOfChildren(targetNode: CategoryDepthVO) {
         const n = (targetNode.right - (targetNode.left + 1)) / 2;
 
         return n;
@@ -251,7 +251,7 @@ export class CategoryService {
      * @param queryRunner
      * @returns
      */
-    async deleteNode(categoryId: number, queryRunner: QueryRunner) {
+    private async deleteNode(categoryId: number, queryRunner: QueryRunner) {
         return this.categoryRepository.deleteNode(categoryId, queryRunner);
     }
 
