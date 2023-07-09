@@ -14,6 +14,10 @@ import {
 } from 'typeorm';
 import { IPaginationProvider } from './pagination-provider.interface';
 
+/**
+ * @class PaginationProvider
+ * @author Jinseok Eo(biud436)
+ */
 @Injectable()
 export class PaginationProvider implements IPaginationProvider {
     setPagination<Entity extends ObjectLiteral>(
@@ -175,6 +179,18 @@ export class PaginationProvider implements IPaginationProvider {
         numberPerPage?: number | undefined,
     ): Promise<Paginatable<Entity>> {
         return this.setPagination(
+            queryBuilder,
+            pageNumber,
+            numberPerPage,
+        ).getManyWithPagination(queryBuilder, pageNumber, numberPerPage);
+    }
+
+    async executeWithJoinStrategy<Entity extends ObjectLiteral>(
+        queryBuilder: SelectQueryBuilder<Entity>,
+        pageNumber: number,
+        numberPerPage?: number | undefined,
+    ): Promise<Paginatable<Entity>> {
+        return this.setPaginationWithJoin(
             queryBuilder,
             pageNumber,
             numberPerPage,

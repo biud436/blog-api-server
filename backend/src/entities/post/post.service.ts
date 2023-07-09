@@ -345,9 +345,10 @@ export class PostService {
             .where('post.deletedAt IS NULL')
             .andWhere('post.userId = :userId', { userId });
 
-        return await this.paginationProvider
-            .setPaginationWithJoin(qb, pageNumber)
-            .getManyWithPagination(qb, pageNumber);
+        return await this.paginationProvider.executeWithJoinStrategy(
+            qb,
+            pageNumber,
+        );
     }
 
     /**
