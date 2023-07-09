@@ -56,6 +56,7 @@ export class CreatePostDto {
      * @type uint
      */
     @ApiProperty()
+    @IsOptional()
     @IsNumber()
     categoryId?: number;
 

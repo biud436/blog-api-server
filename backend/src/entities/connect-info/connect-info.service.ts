@@ -10,7 +10,7 @@ import { PaginationProvider } from 'src/common/modules/pagination/pagination-rep
 export class ConnectInfoService {
     constructor(
         @InjectRepository(ConnectInfo)
-        private connectInfoRepository: Repository<ConnectInfo>,
+        private readonly connectInfoRepository: Repository<ConnectInfo>,
         private readonly paginationProvider: PaginationProvider,
     ) {}
 

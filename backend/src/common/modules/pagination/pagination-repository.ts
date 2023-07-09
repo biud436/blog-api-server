@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import {
+    Paginatable,
     PaginationConfig,
     PaginationResult,
 } from 'src/common/config/list-config';
@@ -11,9 +12,10 @@ import {
     Repository,
     SelectQueryBuilder,
 } from 'typeorm';
+import { IPaginationProvider } from './pagination-provider.interface';
 
 @Injectable()
-export class PaginationProvider {
+export class PaginationProvider implements IPaginationProvider {
     setPagination<Entity extends ObjectLiteral>(
         queryBuilder: SelectQueryBuilder<Entity>,
         pageNumber?: number,
@@ -165,5 +167,17 @@ export class PaginationProvider {
             pagination: result,
             entities,
         };
+    }
+
+    async execute<Entity extends ObjectLiteral>(
+        queryBuilder: SelectQueryBuilder<Entity>,
+        pageNumber: number,
+        numberPerPage?: number | undefined,
+    ): Promise<Paginatable<Entity>> {
+        return this.setPagination(
+            queryBuilder,
+            pageNumber,
+            numberPerPage,
+        ).getManyWithPagination(queryBuilder, pageNumber, numberPerPage);
     }
 }

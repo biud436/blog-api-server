@@ -268,9 +268,7 @@ export class PostService {
 
         qb.orderBy('post.uploadDate', 'DESC');
 
-        const items = await this.paginationProvider
-            .setPagination(qb, pageNumber)
-            .getManyWithPagination(qb, pageNumber);
+        const items = await this.paginationProvider.execute(qb, pageNumber);
 
         if (!items) {
             throw new BadRequestException('포스트가 존재하지 않습니다.');
@@ -365,6 +363,8 @@ export class PostService {
         searchProperty: PostSearchProperty,
         searchQuery: string,
     ) {
+        const IS_PRIVATE = 0;
+
         const qb = this.postRepository
             .createQueryBuilder('post')
             .select()
@@ -383,13 +383,11 @@ export class PostService {
             });
         }
 
-        qb.andWhere('post.isPrivate = 0');
+        qb.andWhere('post.isPrivate = :isPrivate', { isPrivate: IS_PRIVATE });
 
         qb.orderBy('post.uploadDate', 'DESC');
 
-        const items = await this.paginationProvider
-            .setPagination(qb, pageNumber)
-            .getManyWithPagination(qb, pageNumber);
+        const items = await this.paginationProvider.execute(qb, pageNumber);
 
         if (!items) {
             throw new BadRequestException('포스트가 존재하지 않습니다.');

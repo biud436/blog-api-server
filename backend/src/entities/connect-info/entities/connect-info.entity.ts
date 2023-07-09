@@ -37,7 +37,7 @@ export class ConnectInfo {
         } else if (this.userAgent.includes('MSIE')) {
             result.push('Internet Explorer');
         } else {
-            result.push('Unknown');
+            result.push('Non_Browser');
         }
 
         return result;

@@ -12,12 +12,6 @@ export class BlogMetaDataService {
         private readonly blogMetaDataRepository: Repository<BlogMetaData>,
     ) {}
 
-    /**
-     * PK로 블로그 메타 데이터를 조회합니다.
-     *
-     * @param userId
-     * @returns
-     */
     async findOne(userId: number): Promise<BlogMetaData> {
         return await this.blogMetaDataRepository.findOneOrFail({
             where: {
