@@ -18,12 +18,12 @@ export class BlogMetaDataService {
      * @param userId
      * @returns
      */
-    async findOne(userId: string): Promise<BlogMetaData> {
-        return await this.blogMetaDataRepository
-            .createQueryBuilder('blogMetaData')
-            .select()
-            .where('blogMetaData.userId = :userId', { userId: userId })
-            .getOneOrFail();
+    async findOne(userId: number): Promise<BlogMetaData> {
+        return await this.blogMetaDataRepository.findOneOrFail({
+            where: {
+                userId: userId,
+            },
+        });
     }
 
     /**
