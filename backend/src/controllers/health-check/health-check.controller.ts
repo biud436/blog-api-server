@@ -25,11 +25,11 @@ import {
 @Controller('health-check')
 export class HealthCheckController {
     constructor(
-        private health: HealthCheckService,
-        private http: HttpHealthIndicator,
-        private db: TypeOrmHealthIndicator,
-        private memory: MemoryHealthIndicator,
-        private disk: DiskHealthIndicator,
+        private readonly health: HealthCheckService,
+        private readonly http: HttpHealthIndicator,
+        private readonly db: TypeOrmHealthIndicator,
+        private readonly memory: MemoryHealthIndicator,
+        private readonly disk: DiskHealthIndicator,
         @Inject(HEALTH_CHECK_OPTIONS) private options: HealthCheckOptions,
     ) {}
 

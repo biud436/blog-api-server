@@ -4,7 +4,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import { User } from './entities/user.entity';
 import { Profile } from '../profile/entities/profile.entity';
-import { Brackets, QueryRunner, Repository } from 'typeorm';
+import { Brackets, IsNull, Not, QueryRunner, Repository } from 'typeorm';
 import { plainToClass } from 'class-transformer';
 import { Paginatable } from 'src/common/config/list-config';
 import { PaginationProvider } from 'src/common/modules/pagination/pagination-repository';
@@ -73,7 +73,7 @@ export class UserService {
     }
 
     async findProfileByUsername(username: string): Promise<User | null> {
-        const qb = this.userRepository
+        const item = await this.userRepository
             .createQueryBuilder('user')
             .select()
             .innerJoinAndSelect('user.profile', 'profile')
@@ -85,7 +85,18 @@ export class UserService {
             .andWhere('admins.id IS NOT NULL')
             .getOne();
 
-        return await qb;
+        return item;
+
+        // const item = await this.userRepository.findOne({
+        //     relations: ['profile', 'admins'],
+        //     where: {
+        //         username,
+        //         isValid: true,
+        //         admins: Not(IsNull()),
+        //     },
+        // });
+
+        return item;
     }
 
     async getUserId(username: string): Promise<User> {

@@ -19,11 +19,11 @@ export class ApiKeyService {
     }
 
     async getUserId(apiKey: string): Promise<number> {
-        const model = await this.apiKeyRepository
-            .createQueryBuilder('apiKey')
-            .select()
-            .where('apiKey.accessKey = :accessKey', { accessKey: apiKey })
-            .getOneOrFail();
+        const model = await this.apiKeyRepository.findOneOrFail({
+            where: {
+                accessKey: apiKey,
+            },
+        });
 
         const { userId } = model;
 
@@ -31,12 +31,12 @@ export class ApiKeyService {
     }
 
     async getCount(apiKey: string): Promise<number> {
-        const cnt = this.apiKeyRepository
-            .createQueryBuilder('apiKey')
-            .select()
-            .where('apiKey.accessKey = :accessKey', { accessKey: apiKey })
-            .getCount();
+        const count = await this.apiKeyRepository.count({
+            where: {
+                accessKey: apiKey,
+            },
+        });
 
-        return cnt;
+        return count;
     }
 }
