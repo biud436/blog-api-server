@@ -5,7 +5,7 @@ import { UserInfo } from './user.decorator';
 
 export const ANONYMOUS_ID = 'AnonymousId';
 export const Anonymous = () => SetMetadata(ANONYMOUS_ID, true);
-export const IsReadablePrivatePost = (additionalOptions?: any) => {
+export const IsPrivatePost = (additionalOptions?: any) => {
     return UserInfo(additionalOptions, ParseReadablePrivatePostPipe);
 };
 export const AnonymousId = (additionalOptions?: any) => {

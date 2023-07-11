@@ -40,7 +40,7 @@ import { HealthCheckModule } from './controllers/health-check/health-check.modul
 import { HealthCheckConstant } from './controllers/health-check/health-check.constant';
 import { PrivatePostGuard } from './controllers/auth/guards/private-post.guard';
 import { ConnectInfoModule } from './entities/connect-info/connect-info.module';
-import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { ThrottlerBehindProxyGuard } from './common/guards/throttler-behind-proxy.guard';
 import { CacheModule } from '@nestjs/cache-manager';
 import { TaskModule } from './common/domains/task/task.module';
@@ -75,8 +75,8 @@ import { PaginationModule } from './common/modules/pagination/pagination.module'
         }),
         ScheduleModule.forRoot(),
         ThrottlerModule.forRoot({
-            // 1초에 40번까지만 요청 가능
-            ttl: 1,
+            // 60초에 40번까지만 요청 가능
+            ttl: 60,
             limit: 40,
         }),
         HttpModule,

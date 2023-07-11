@@ -37,7 +37,7 @@ import { UserId } from 'src/common/decorators/user-id.decorator';
 import {
     Anonymous,
     AnonymousId,
-    IsReadablePrivatePost,
+    IsPrivatePost,
 } from 'src/common/decorators/anonymous.decorator';
 import { CategoryService } from 'src/entities/category/category.service';
 import { CreatePostDto } from 'src/entities/post/dto/create-post.dto';
@@ -271,7 +271,7 @@ export class PostsController {
      * @tag Post
      * @param postId 조회할 포스트 번호
      * @param ip 클라이언트 IP (중복 조회 방지 용도)
-     * @param IsReadablePrivatePost 비공개 포스트 여부
+     * @param isPrivatePost 비공개 포스트 여부
      * @param anonymousId 익명 아이디
      * @returns
      */
@@ -282,13 +282,13 @@ export class PostsController {
     async findOne(
         @PostId() postId: number,
         @Ip() ip: string,
-        @IsReadablePrivatePost() IsReadablePrivatePost?: boolean,
+        @IsPrivatePost() isPrivatePost?: boolean,
         @AnonymousId() anonymousId?: number,
     ) {
         return await this.postsService.findOne(
             postId,
             ip,
-            IsReadablePrivatePost,
+            isPrivatePost,
             anonymousId,
         );
     }
