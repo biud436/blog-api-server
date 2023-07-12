@@ -31,10 +31,10 @@ export namespace ResponseUtil {
         };
     }
 
-    export function successWrap<T extends IResponse>(
-        resMessage: T,
-        data: any,
-    ): IResponsableData {
+    export function successWrap<
+        T extends IResponse,
+        R extends Record<string, any>,
+    >(resMessage: T, data: R): IResponsableData {
         return {
             ...resMessage,
             message: resMessage.message,
@@ -58,6 +58,7 @@ export namespace ResponseUtil {
     export const FAILED_SEARCH = failureWrap({
         message: '검색에 실패하였습니다.',
         statusCode: HttpStatus.BAD_REQUEST,
+        name: 'SearchError',
     });
 
     /**
@@ -75,11 +76,11 @@ export namespace ResponseUtil {
         };
     }
 
-    export function failureWrap<T extends IResponse>(customMessage: T) {
+    export function failureWrap<T extends Error>(error: T): FailureResponse {
         return {
-            name: 'customError',
-            statusCode: customMessage.statusCode,
-            message: customMessage.message,
+            name: error.name || 'customError',
+            statusCode: (error as any).statusCode || 500,
+            message: error.message,
             result: 'failure',
         };
     }
