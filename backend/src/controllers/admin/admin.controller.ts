@@ -58,6 +58,7 @@ export class AdminController {
             return ResponseUtil.success(RESPONSE_MESSAGE.UPDATE_SUCCESS, res);
         } catch (e: any) {
             throw ResponseUtil.failureWrap({
+                name: 'UpdateCategoryNameError',
                 message: '카테고리 이름 변경에 실패했습니다.',
                 statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
             });

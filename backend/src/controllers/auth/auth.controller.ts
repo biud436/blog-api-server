@@ -122,6 +122,7 @@ export class AuthController {
             throw ResponseUtil.failureWrap({
                 message: '인증 코드가 일치하지 않습니다.',
                 statusCode: HttpStatus.BAD_REQUEST,
+                name: 'INVALID_AUTH_CODE',
             });
         }
     }
@@ -177,6 +178,7 @@ export class AuthController {
             throw ResponseUtil.failureWrap({
                 message: e ? e.message : '인증 코드가 일치하지 않습니다.',
                 statusCode: HttpStatus.BAD_REQUEST,
+                name: 'INVALID_AUTH_CODE',
             });
         }
     }
@@ -200,6 +202,7 @@ export class AuthController {
             throw ResponseUtil.failureWrap({
                 message: '회원가입에 실패하였습니다',
                 statusCode: HttpStatus.BAD_REQUEST,
+                name: 'SIGNUP_FAILED',
             });
         }
     }
