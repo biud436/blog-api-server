@@ -95,6 +95,7 @@ export class PostsService {
             throw ResponseUtil.failureWrap({
                 message: '포스트를 찾을 수 없거나 비공개 포스트입니다.',
                 statusCode: 403,
+                name: 'NOT_FOUND',
             });
         }
     }

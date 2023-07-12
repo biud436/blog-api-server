@@ -139,6 +139,7 @@ export class PostsController {
             throw ResponseUtil.failureWrap({
                 statusCode: 500,
                 message: '포스트를 작성할 수 없습니다.',
+                name: 'INTERNAL_SERVER_ERROR',
             });
         } finally {
             await queryRunner.release();
