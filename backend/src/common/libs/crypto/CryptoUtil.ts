@@ -125,4 +125,19 @@ export namespace CryptoUtil {
 
         return buff.toString('utf8');
     }
+
+    /**
+     * UUID를 생성합니다.
+     *
+     * @returns
+     */
+    export function createUUIDV4(): string {
+        const value: string = uuidv4();
+
+        return value.replace(/-/g, '');
+    }
+
+    export function isUUIDv4(uuid: string): boolean {
+        return /^[0-9a-f]{32}$/i.test(uuid);
+    }
 }

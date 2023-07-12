@@ -627,10 +627,9 @@ export class AuthService {
     }
 
     async validateApiKey(apiKey: string) {
-        const cnt = await this.apiKeyService.getCount(apiKey);
-        const isFoundAccessKey = cnt > 0;
+        const model = await this.apiKeyService.findOneByApiKey(apiKey);
 
-        return isFoundAccessKey;
+        return model;
     }
 
     async getProfile(payload: { user: { username: string }; role: string }) {

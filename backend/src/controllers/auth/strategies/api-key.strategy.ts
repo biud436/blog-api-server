@@ -11,10 +11,7 @@ export class ApiKeyStrategy extends PassportStrategy(HeaderAPIKeyStrategy) {
                 header: 'X-API-KEY',
                 prefix: '',
             },
-            true,
-            (apiKey: any, done: any, req: any) => {
-                this.validate(apiKey, done);
-            },
+            false,
         );
     }
 
@@ -25,14 +22,9 @@ export class ApiKeyStrategy extends PassportStrategy(HeaderAPIKeyStrategy) {
      * @param done
      * @returns
      */
-    async validate(
-        apiKey: string,
-        done: (err: Error | null, user: any) => void,
-    ): Promise<any> {
+    async validate(apiKey: string) {
         const user = await this.authService.validateApiKey(apiKey);
-        if (!user) {
-            return done(null, false);
-        }
-        return done(null, user);
+
+        return user;
     }
 }
