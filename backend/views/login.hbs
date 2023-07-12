@@ -4,64 +4,94 @@
         <meta http-equiv='X-UA-Compatible' content='IE=edge' />
         <meta name='viewport' content='width=device-width, initial-scale=1.0' />
         <title>로그인</title>
-        <script src="https://cdn.tailwindcss.com"></script>
         <style>
             html {
-
                 height: 100vh;
-
+                font-size: 16pt;
+                background-color: #657c74;           
             }
 
             * {
                 padding: 0;
                 margin: 0;
             }
-
             .container {
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 height: 100vh;
+                z-index: 2;
+
             }
 
             .center {
                 display: flex;
-                flex-direction: row;
+                flex-direction: column;
                 justify-content: center;
                 align-items: center;
                 width: 400px;
                 height: 400px;
+                padding: 1em;
+                border-radius: 0.3em;
             }
 
-            form[action="/auth/login"] {
+            #loginForm {
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
                 width: 100%;
-                height: 100%;
+                gap: 0.5em;
             }
 
-            form[action="/auth/login"] > input[type='text'], form[action="/auth/login"] > input[type='password'] {
+            #loginForm > input[type='text'], #loginForm > input[type='password'] {
                 padding: 1em;
                 margin: 0.02em;
-                border: 1px solid #ccc;
+                border: none;
                 width: 100%;
+                border-radius: 0.3em;
+                background-color: rgba(0, 0, 0, 0.3);
+                color: #e9f0ee;
             }
 
-            form[action="/auth/login"] > button {
-                padding: 1em;
+            input::placeholder {
+                color: #e9f0ee;
+            }
+
+            #loginButton {
+                padding: 0.7em;
                 margin: 0.02em;
                 margin-top: 1em;
                 width: 100%;
-                border: 1px solid #ccc;
-                background-color: #ccc;
+                border: none;
+                background-color: #0ee4ae;
+                border-radius: 0.3em;
+                color: #f0f5f4;
+                font-size: 0.75rem;
+                text-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+            }
+
+            #loginButton:hover {
+                background: #0dcf9f;
+                cursor: pointer;
+            }
+
+            .info_text {
+                font-size: 1.7rem;
+                font-weight: bold;
+                color: #e9f0ee;
+                margin-bottom: 1em;
+                font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            }     
+            .info_text > span {
+                text-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
             }
         </style>
     </head>
     <body>
         <div class='container'>
             <div class='center'>
+                <div class="info_text"><span>Login</span></div>
                 <form action='/auth/login' method='POST' id="loginForm">
                     <input type='text' name='username' placeholder='아이디' />
                     <input
@@ -69,7 +99,7 @@
                         name='password'
                         placeholder='비밀번호'
                     />
-                    <button type='submit' id="login">로그인</button>
+                    <button type='submit' id="loginButton">로그인</button>
                 </form>
             </div>
         </div>
