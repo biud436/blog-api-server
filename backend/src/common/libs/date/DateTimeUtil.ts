@@ -5,11 +5,19 @@ import {
     DateTimeFormatter,
     LocalDate,
     LocalDateTime,
+    LocalTime,
     nativeJs,
     ZonedDateTime,
     ZoneId,
     ZoneOffset,
 } from '@js-joda/core';
+import { BadRequestException } from '@nestjs/common';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 interface UTCTimeCollection {
     toUTCStart: string;
@@ -18,9 +26,6 @@ interface UTCTimeCollection {
 
 /**
  * @interface DateTimeUtilImpl
- * @deprecated
- * @description
- * 다양한 날짜 라이브러리를 테스트 했지만 현재, 기본 Date를 사용하고 있습니다.
  */
 interface DateTimeUtilImpl {
     /**
@@ -91,6 +96,8 @@ interface DateTimeUtilImpl {
      * 현재 시간을 반환합니다.
      */
     now(): LocalDateTime;
+
+    of(date: Date): LocalDateTime;
 }
 
 /**
@@ -150,12 +157,22 @@ class InternalDataTimeUtil implements DateTimeUtilImpl {
         return LocalDate.from(nativeJs(date));
     }
 
-    toLocalDateTime(date: Date): LocalDateTime | null {
-        if (!date) {
+    addYears(date: Date, _years = 50): LocalDate | null {
+        const localDate = this.toLocalDate(date);
+        if (!localDate) {
             return null;
         }
 
-        return LocalDateTime.from(nativeJs(date));
+        return localDate.plusYears(_years);
+    }
+
+    addDay(date: Date, days: number): LocalDate | null {
+        const localDate = this.toLocalDate(date);
+        if (!localDate) {
+            return null;
+        }
+
+        return localDate.plusDays(days);
     }
 
     now() {
@@ -207,7 +224,29 @@ class InternalDataTimeUtil implements DateTimeUtilImpl {
         return utcTime;
     }
 
-    toUTCString(date: ZonedDateTime, zoneId: string): UTCTimeCollection {
+    toUTCString(
+        date: ZonedDateTime | string,
+        zoneId: string,
+    ): UTCTimeCollection {
+        // 변환 처리
+        if (typeof date === 'string') {
+            try {
+                const jodaDate = LocalDate.parse(
+                    date,
+                    DateTimeFormatter.ISO_LOCAL_DATE,
+                );
+                const zonedDateTime = ZonedDateTime.of(
+                    jodaDate,
+                    LocalTime.of(0, 0),
+                    ZoneId.of('UTC'),
+                );
+
+                date = zonedDateTime;
+            } catch (e) {
+                throw new BadRequestException('날짜 타입이 올바르지 않습니다.');
+            }
+        }
+
         // 타겟 시간대
         const baseZoneId = ZoneId.of(zoneId);
 
@@ -241,6 +280,12 @@ class InternalDataTimeUtil implements DateTimeUtilImpl {
         return useTimeZone.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
     }
 
+    /**
+     * 토큰 만료 시간을 반환합니다.
+     *
+     * @param jwtSecretExpirationTime 2h
+     * @returns
+     */
     extractJwtExpirationTime(jwtSecretExpirationTime: string) {
         let expires = DateTimeUtil.now();
         jwtSecretExpirationTime.split(' ').forEach((time) => {
@@ -268,6 +313,80 @@ class InternalDataTimeUtil implements DateTimeUtilImpl {
         });
 
         return expires;
+    }
+
+    toServerTime(selectedDay: string, timezone: string) {
+        const day = selectedDay;
+        const date = { startUtc: null, endUtc: null } as Record<
+            string,
+            string | null
+        >;
+        const zoneId = timezone;
+        const format = 'YYYY-MM-DD HH:mm:ss';
+
+        date.startUtc = dayjs
+            .tz(day, zoneId)
+            .startOf('day')
+            .utc()
+            .format(format);
+        date.endUtc = dayjs.tz(day, zoneId).endOf('day').utc().format(format);
+
+        return date;
+    }
+
+    toWhereQuery(
+        columnAliasName: string,
+        selectedDay: string,
+        timezone = 'UTC',
+    ): [string, Record<string, string | null>] {
+        const query = `${columnAliasName} >= :startUtc and ${columnAliasName} <= :endUtc`;
+        const date = this.toServerTime(selectedDay, timezone);
+
+        return [query, date];
+    }
+
+    of(date: Date): LocalDateTime {
+        return LocalDateTime.of(
+            date.getFullYear(),
+            date.getMonth() + 1,
+            date.getDate(),
+            date.getHours(),
+            date.getMinutes(),
+            date.getSeconds(),
+        );
+    }
+
+    /**
+     * moment.js를 이용하여 타임존을 변환합니다.
+     *
+     * @deprecated
+     * @param date
+     * @param timezone
+     * @returns
+     */
+    toTimezone(date: dayjs.Dayjs, timezone: string): Date {
+        let raw = '';
+        let format = 'YYYY-MM-DD HH:mm:ss';
+
+        if (date instanceof Date) {
+            raw = date.toString();
+            format = 'YYYY-MM-DDTHH:mm:ss.SSSZ';
+        }
+
+        return dayjs.utc(date).tz(timezone).toDate();
+    }
+
+    /**
+     * moment.js를 사용하여 날짜를 변환합니다.
+     *
+     * @deprecated
+     * @param date
+     * @returns
+     */
+    toDateFormat(date: dayjs.Dayjs): Date {
+        const expectFormat = 'YYYY-MM-DD HH:mm:ss.SSS';
+
+        return dayjs(date, expectFormat).toDate();
     }
 }
 
