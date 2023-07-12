@@ -678,7 +678,7 @@ export class AuthService {
                     message: '유저 목록',
                     statusCode: 200,
                 },
-                users,
+                users as any,
             );
         } catch (e: any) {
             throw new InternalServerErrorException(e.message);
