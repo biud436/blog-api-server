@@ -13,8 +13,12 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Post } from './entities/post.entity';
 import { ConfigData } from 'src/common/modules/config/types/my-config.decorator';
-import { Paginatable } from 'src/common/config/list-config';
+import { Paginatable, PaginationConfig } from 'src/common/config/list-config';
 import { PaginationProvider } from 'src/common/modules/pagination/pagination-repository';
+import {
+    PaginationGetStrategy,
+    PaginationStrategy,
+} from 'src/common/modules/pagination/pagination.constant';
 
 @Injectable()
 export class PostService {
@@ -345,9 +349,12 @@ export class PostService {
             .where('post.deletedAt IS NULL')
             .andWhere('post.userId = :userId', { userId });
 
-        return await this.paginationProvider.executeWithJoinStrategy(
+        return await this.paginationProvider.execute(
             qb,
             pageNumber,
+            PaginationConfig.limit.numberPerPage,
+            PaginationGetStrategy.GET_MANY,
+            PaginationStrategy.SKIP,
         );
     }
 

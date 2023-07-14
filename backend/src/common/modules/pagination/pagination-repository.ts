@@ -13,6 +13,10 @@ import {
     SelectQueryBuilder,
 } from 'typeorm';
 import { IPaginationProvider } from './pagination-provider.interface';
+import {
+    PaginationGetStrategy,
+    PaginationStrategy,
+} from './pagination.constant';
 
 /**
  * @class PaginationProvider
@@ -174,26 +178,34 @@ export class PaginationProvider implements IPaginationProvider {
     }
 
     async execute<Entity extends ObjectLiteral>(
-        queryBuilder: SelectQueryBuilder<Entity>,
+        qb: SelectQueryBuilder<Entity>,
         pageNumber: number,
         numberPerPage?: number | undefined,
+        getStrategy = PaginationGetStrategy.GET_MANY,
+        strategy = PaginationStrategy.OFFSET,
     ): Promise<Paginatable<Entity>> {
-        return this.setPagination(
-            queryBuilder,
-            pageNumber,
-            numberPerPage,
-        ).getManyWithPagination(queryBuilder, pageNumber, numberPerPage);
-    }
+        const setPagination: (
+            qb: SelectQueryBuilder<Entity>,
+            pageNumber: number,
+            numberPerPage?: number,
+        ) => this =
+            strategy === PaginationStrategy.SKIP
+                ? this.setPaginationWithJoin.bind(this)
+                : this.setPagination.bind(this);
 
-    async executeWithJoinStrategy<Entity extends ObjectLiteral>(
-        queryBuilder: SelectQueryBuilder<Entity>,
-        pageNumber: number,
-        numberPerPage?: number | undefined,
-    ): Promise<Paginatable<Entity>> {
-        return this.setPaginationWithJoin(
-            queryBuilder,
-            pageNumber,
-            numberPerPage,
-        ).getManyWithPagination(queryBuilder, pageNumber, numberPerPage);
+        switch (getStrategy) {
+            case PaginationGetStrategy.GET_MANY:
+                return setPagination(
+                    qb,
+                    pageNumber,
+                    numberPerPage,
+                ).getManyWithPagination(qb, pageNumber, numberPerPage);
+            case PaginationGetStrategy.GET_RAW_MANY:
+                return setPagination(
+                    qb,
+                    pageNumber,
+                    numberPerPage,
+                ).getRawManyWithPagination(qb, pageNumber, numberPerPage);
+        }
     }
 }

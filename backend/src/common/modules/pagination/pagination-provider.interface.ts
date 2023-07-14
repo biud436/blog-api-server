@@ -1,5 +1,9 @@
 import { Paginatable } from 'src/common/config/list-config';
 import { ObjectLiteral, SelectQueryBuilder } from 'typeorm';
+import {
+    PaginationGetStrategy,
+    PaginationStrategy,
+} from './pagination.constant';
 
 export interface IPaginationProvider {
     /**
@@ -53,28 +57,18 @@ export interface IPaginationProvider {
     ): Promise<Paginatable<Entity>>;
 
     /**
-     * Execute query builder with pagination (offset pagination)
+     * 페이지네이션을 실행합니다.
      *
-     * @param queryBuilder
+     * @param qb
      * @param pageNumber
      * @param numberPerPage
+     * @param getStrategy
      */
     execute<Entity extends ObjectLiteral>(
-        queryBuilder: SelectQueryBuilder<Entity>,
-        pageNumber?: number,
-        numberPerPage?: number,
-    ): Promise<Paginatable<Entity>>;
-
-    /**
-     * Execute query builder with join pagination (offset pagination)
-     *
-     * @param queryBuilder
-     * @param pageNumber
-     * @param numberPerPage
-     */
-    executeWithJoinStrategy<Entity extends ObjectLiteral>(
-        queryBuilder: SelectQueryBuilder<Entity>,
-        pageNumber?: number,
-        numberPerPage?: number,
+        qb: SelectQueryBuilder<Entity>,
+        pageNumber: number,
+        numberPerPage?: number | undefined,
+        getStrategy?: PaginationGetStrategy,
+        offsetStrategy?: PaginationStrategy,
     ): Promise<Paginatable<Entity>>;
 }
