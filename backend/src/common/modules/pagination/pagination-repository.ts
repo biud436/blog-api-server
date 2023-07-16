@@ -74,7 +74,11 @@ export class PaginationProvider implements IPaginationProvider {
         numberPerPage ??= PaginationConfig.limit.numberPerPage;
 
         const cloneQueryBuilder = queryBuilder.clone();
+
+        // TODO: 이전 쿼리를 복제하였기 때문에 불필요한 order by 와 join 절이 같이 복제돼 성능 저하가 발생할 수 있다.
+        cloneQueryBuilder.expressionMap.orderBys = [] as any;
         const totalCount = await cloneQueryBuilder.getCount();
+
         const maxPage = Math.ceil(totalCount / numberPerPage);
 
         if (pageNumber < 1) {
@@ -91,15 +95,11 @@ export class PaginationProvider implements IPaginationProvider {
         if (pageNumber > maxPage) {
             pageNumber = maxPage;
 
-            if (cloneQueryBuilder.expressionMap.offset !== undefined) {
-                this.setPagination(
-                    cloneQueryBuilder,
-                    pageNumber,
-                    numberPerPage,
-                );
-            } else if (cloneQueryBuilder.expressionMap.skip !== undefined) {
+            if (queryBuilder.expressionMap.offset !== undefined) {
+                this.setPagination(queryBuilder, pageNumber, numberPerPage);
+            } else if (queryBuilder.expressionMap.skip !== undefined) {
                 this.setPaginationWithJoin(
-                    cloneQueryBuilder,
+                    queryBuilder,
                     pageNumber,
                     numberPerPage,
                 );
@@ -113,7 +113,7 @@ export class PaginationProvider implements IPaginationProvider {
             currentBlock,
             maxBlock,
         };
-        const entities = await cloneQueryBuilder.getMany();
+        const entities = await queryBuilder.getMany();
 
         return {
             pagination: result,
