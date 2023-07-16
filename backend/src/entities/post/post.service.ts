@@ -12,7 +12,6 @@ import { CategoryService } from '../category/category.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Post } from './entities/post.entity';
-import { ConfigData } from 'src/common/modules/config/types/my-config.decorator';
 import { Paginatable, PaginationConfig } from 'src/common/config/list-config';
 import { PaginationProvider } from 'src/common/modules/pagination/pagination-repository';
 import {
@@ -80,7 +79,8 @@ export class PostService {
 
         let post = await queuryRunner.manager.save(model);
 
-        if (post.images && post.images.length > 0) {
+        const len = post.images.length;
+        if (post.images && len > 0) {
             post.images = post.images.map((e) => {
                 return {
                     ...e,
@@ -88,7 +88,7 @@ export class PostService {
                 };
             });
 
-            for (let i = 0; i < post.images.length; i++) {
+            for (let i = 0; i < len; i++) {
                 const image = post.images[i];
                 await this.redisService.deleteTemporarilyImageIds(
                     model.authorId + '',
@@ -155,8 +155,9 @@ export class PostService {
         }
 
         let post = await queuryRunner.manager.save(model);
+        const len = post.images.length;
 
-        if (post.images && post.images.length > 0) {
+        if (post.images && len > 0) {
             post.images = post.images.map((e) => {
                 return {
                     ...e,
@@ -164,7 +165,7 @@ export class PostService {
                 };
             });
 
-            for (let i = 0; i < post.images.length; i++) {
+            for (let i = 0; i < len; i++) {
                 const image = post.images[i];
                 await this.redisService.deleteTemporarilyImageIds(
                     model.authorId + '',
