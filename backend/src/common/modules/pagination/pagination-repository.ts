@@ -70,6 +70,7 @@ export class PaginationProvider implements IPaginationProvider {
         queryBuilder: SelectQueryBuilder<Entity>,
         pageNumber: number,
         numberPerPage?: number,
+        cacheTotalCount?: number | undefined,
     ) {
         numberPerPage ??= PaginationConfig.limit.numberPerPage;
 
@@ -77,7 +78,9 @@ export class PaginationProvider implements IPaginationProvider {
 
         // TODO: 이전 쿼리를 복제하였기 때문에 불필요한 order by 와 join 절이 같이 복제돼 성능 저하가 발생할 수 있다.
         cloneQueryBuilder.expressionMap.orderBys = [] as any;
-        const totalCount = await cloneQueryBuilder.getCount();
+        const totalCount = cacheTotalCount
+            ? cacheTotalCount
+            : await cloneQueryBuilder.getCount();
 
         const maxPage = Math.ceil(totalCount / numberPerPage);
 
@@ -125,12 +128,15 @@ export class PaginationProvider implements IPaginationProvider {
         queryBuilder: SelectQueryBuilder<Entity>,
         pageNumber: number,
         numberPerPage?: number,
+        cacheTotalCount?: number | undefined,
     ) {
         numberPerPage ??= PaginationConfig.limit.numberPerPage;
 
         const cloneQueryBuilder = queryBuilder.clone();
 
-        const totalCount = await queryBuilder.getCount();
+        const totalCount = cacheTotalCount
+            ? cacheTotalCount
+            : await queryBuilder.getCount();
         const maxPage = Math.ceil(totalCount / numberPerPage);
         if (pageNumber < 1) {
             pageNumber = 1;
@@ -183,6 +189,7 @@ export class PaginationProvider implements IPaginationProvider {
         numberPerPage?: number | undefined,
         getStrategy = PaginationGetStrategy.GET_MANY,
         strategy = PaginationStrategy.OFFSET,
+        cacheTotalCount?: number | undefined,
     ): Promise<Paginatable<Entity>> {
         const setPagination: (
             qb: SelectQueryBuilder<Entity>,
@@ -199,13 +206,23 @@ export class PaginationProvider implements IPaginationProvider {
                     qb,
                     pageNumber,
                     numberPerPage,
-                ).getManyWithPagination(qb, pageNumber, numberPerPage);
+                ).getManyWithPagination(
+                    qb,
+                    pageNumber,
+                    numberPerPage,
+                    cacheTotalCount,
+                );
             case PaginationGetStrategy.GET_RAW_MANY:
                 return setPagination(
                     qb,
                     pageNumber,
                     numberPerPage,
-                ).getRawManyWithPagination(qb, pageNumber, numberPerPage);
+                ).getRawManyWithPagination(
+                    qb,
+                    pageNumber,
+                    numberPerPage,
+                    cacheTotalCount,
+                );
         }
     }
 }

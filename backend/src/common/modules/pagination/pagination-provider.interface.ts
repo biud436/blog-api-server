@@ -42,6 +42,7 @@ export interface IPaginationProvider {
         queryBuilder: SelectQueryBuilder<Entity>,
         pageNumber: number,
         numberPerPage?: number,
+        cacheTotalCount?: number | undefined,
     ): Promise<Paginatable<Entity>>;
 
     /**
@@ -54,6 +55,7 @@ export interface IPaginationProvider {
         queryBuilder: SelectQueryBuilder<Entity>,
         pageNumber: number,
         numberPerPage?: number,
+        cacheTotalCount?: number | undefined,
     ): Promise<Paginatable<Entity>>;
 
     /**
@@ -70,5 +72,6 @@ export interface IPaginationProvider {
         numberPerPage?: number | undefined,
         getStrategy?: PaginationGetStrategy,
         offsetStrategy?: PaginationStrategy,
+        cacheTotalCount?: number | undefined,
     ): Promise<Paginatable<Entity>>;
 }

@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import * as RSS from 'rss';
+import RSS from 'rss';
 import { RSS_MODULE_OPTIONS } from './rss.constant';
 import { RssModuleOptions } from './interfaces/rss-option.interface';
 import { PostService } from 'src/entities/post/post.service';

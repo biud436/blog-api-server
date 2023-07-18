@@ -79,8 +79,8 @@ export class PostService {
 
         let post = await queuryRunner.manager.save(model);
 
-        const len = post.images.length;
-        if (post.images && len > 0) {
+        if (post.images?.length > 0) {
+            const len = post.images.length;
             post.images = post.images.map((e) => {
                 return {
                     ...e,
@@ -155,9 +155,8 @@ export class PostService {
         }
 
         let post = await queuryRunner.manager.save(model);
-        const len = post.images.length;
-
-        if (post.images && len > 0) {
+        if (post.images?.length > 0) {
+            const len = post.images.length;
             post.images = post.images.map((e) => {
                 return {
                     ...e,
@@ -268,12 +267,22 @@ export class PostService {
             qb.andWhere('post.categoryId IN (:...ids)', { ids });
         }
 
-        // 비공개 포스트는 조회하지 않습니다.
-        // qb.andWhere('post.isPrivate = 0');
+        const totalCount = await this.postRepository
+            .createQueryBuilder('post')
+            .select()
+            .where('post.deletedAt IS NULL')
+            .getCount();
 
         qb.orderBy('post.uploadDate', 'DESC');
 
-        const items = await this.paginationProvider.execute(qb, pageNumber);
+        const items = await this.paginationProvider.execute(
+            qb,
+            pageNumber,
+            PaginationConfig.limit.numberPerPage,
+            PaginationGetStrategy.GET_MANY,
+            PaginationStrategy.OFFSET,
+            totalCount,
+        );
 
         if (!items) {
             throw new BadRequestException('포스트가 존재하지 않습니다.');
