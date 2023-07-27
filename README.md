@@ -1,4 +1,4 @@
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/badge/nest-10.0.0-red?logo=nestjs" alt="NPM Version" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/badge/nest-10.1.2-red?logo=nestjs" alt="NPM Version" /></a>
 
 # Introduction
 
