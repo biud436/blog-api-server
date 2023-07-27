@@ -187,7 +187,7 @@ export class AdminController {
 
             return ResponseUtil.success(RESPONSE_MESSAGE.SAVE_SUCCESS, res);
         } catch (e: any) {
-            return ResponseUtil.failureWrap(e);
+            throw ResponseUtil.failureWrap(e);
         }
     }
 
@@ -217,7 +217,7 @@ export class AdminController {
 
             return ResponseUtil.success(RESPONSE_MESSAGE.UPDATE_SUCCESS, res);
         } catch (e: any) {
-            return ResponseUtil.failureWrap(e);
+            throw ResponseUtil.failureWrap(e);
         }
     }
 

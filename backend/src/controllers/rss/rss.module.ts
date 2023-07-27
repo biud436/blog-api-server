@@ -1,4 +1,4 @@
-import { DynamicModule, Module } from '@nestjs/common';
+import { DynamicModule, Module, ModuleMetadata } from '@nestjs/common';
 import { RssService } from './rss.service';
 import { RssController } from './rss.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
