@@ -247,7 +247,7 @@ export class PostService {
      * @param categoryId
      * @returns
      */
-    async findAll(pageNumber: number, categoryId?: number) {
+    async findAll(pageNumber: number, categoryId?: number, pageSize?: number) {
         const qb = this.postRepository
             .createQueryBuilder('post')
             .select()
@@ -278,7 +278,7 @@ export class PostService {
         const items = await this.paginationProvider.execute(
             qb,
             pageNumber,
-            PaginationConfig.limit.numberPerPage,
+            pageSize || PaginationConfig.limit.numberPerPage,
             PaginationGetStrategy.GET_MANY,
             PaginationStrategy.OFFSET,
             totalCount,

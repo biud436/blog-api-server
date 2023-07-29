@@ -425,14 +425,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/IResponsableData"
-                    },
-                    {
-                      "$ref": "#/components/schemas/__object"
-                    }
-                  ]
+                  "$ref": "#/components/schemas/IResponsableData"
                 }
               }
             },
@@ -579,14 +572,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/IResponsableData"
-                    },
-                    {
-                      "$ref": "#/components/schemas/__object"
-                    }
-                  ]
+                  "$ref": "#/components/schemas/IResponsableData"
                 }
               }
             },
@@ -835,7 +821,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/__object.o1"
+                  "$ref": "#/components/schemas/__object"
                 }
               }
             },
@@ -851,6 +837,81 @@
             "text": [
               {
                 "text": "API",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      }
+    },
+    "/api/post": {
+      "get": {
+        "tags": [
+          "API"
+        ],
+        "parameters": [
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "Gets post list in the admin page",
+        "description": "Gets post list in the admin page.",
+        "x-nestia-namespace": "api.post.getPost",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "API",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "pageNumber",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "pageSize",
                 "kind": "text"
               }
             ]
@@ -1690,7 +1751,7 @@
                       "$ref": "#/components/schemas/IResponsableData"
                     },
                     {
-                      "$ref": "#/components/schemas/__object"
+                      "$ref": "#/components/schemas/ResponseUtil.FailureResponse"
                     }
                   ]
                 }
@@ -1764,7 +1825,7 @@
                       "$ref": "#/components/schemas/IResponsableData"
                     },
                     {
-                      "$ref": "#/components/schemas/__object"
+                      "$ref": "#/components/schemas/ResponseUtil.FailureResponse"
                     }
                   ]
                 }
@@ -1921,7 +1982,7 @@
             "name": "param",
             "text": [
               {
-                "text": "IsReadablePrivatePost",
+                "text": "isPrivatePost",
                 "kind": "parameterName"
               },
               {
@@ -1984,7 +2045,7 @@
                       "$ref": "#/components/schemas/IResponsableData"
                     },
                     {
-                      "$ref": "#/components/schemas/__object"
+                      "$ref": "#/components/schemas/ResponseUtil.FailureResponse"
                     }
                   ]
                 }
@@ -2058,7 +2119,7 @@
                       "$ref": "#/components/schemas/IResponsableData"
                     },
                     {
-                      "$ref": "#/components/schemas/__object"
+                      "$ref": "#/components/schemas/ResponseUtil.FailureResponse"
                     }
                   ]
                 }
@@ -2215,7 +2276,7 @@
             "name": "param",
             "text": [
               {
-                "text": "IsReadablePrivatePost",
+                "text": "isPrivatePost",
                 "kind": "parameterName"
               },
               {
@@ -2907,10 +2968,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/__object.o2"
+                      "$ref": "#/components/schemas/__object.o1"
                     },
                     {
-                      "$ref": "#/components/schemas/__object.o4"
+                      "$ref": "#/components/schemas/__object.o3"
                     }
                   ]
                 }
@@ -3442,44 +3503,6 @@
         "description": "@title 내용",
         "x-typia-jsDocTags": []
       },
-      "__object": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "",
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string"
-          },
-          "statusCode": {
-            "description": "",
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "number"
-          },
-          "message": {
-            "description": "",
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string"
-          },
-          "result": {
-            "description": "",
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "name",
-          "statusCode",
-          "message",
-          "result"
-        ],
-        "description": "",
-        "x-typia-jsDocTags": []
-      },
       "UpdatePostTempDto": {
         "type": "object",
         "properties": {
@@ -3524,7 +3547,7 @@
         "description": "",
         "x-typia-jsDocTags": []
       },
-      "__object.o1": {
+      "__object": {
         "type": "object",
         "properties": {
           "isAdmin": {
@@ -3736,6 +3759,48 @@
         "properties": {},
         "nullable": false
       },
+      "ResponseUtil.FailureResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "description": "",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "statusCode": {
+            "description": "",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "error": {
+            "description": "",
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "string"
+          },
+          "name": {
+            "description": "",
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "string"
+          },
+          "result": {
+            "description": "",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "message",
+          "statusCode",
+          "result"
+        ],
+        "x-typia-jsDocTags": []
+      },
       "UpdatePostDto": {
         "type": "object",
         "properties": {
@@ -3838,48 +3903,6 @@
         "description": "@title 대분류 (FK)",
         "x-typia-jsDocTags": []
       },
-      "ResponseUtil.FailureResponse": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "description": "",
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string"
-          },
-          "statusCode": {
-            "description": "",
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "number"
-          },
-          "error": {
-            "description": "",
-            "x-typia-required": false,
-            "x-typia-optional": true,
-            "type": "string"
-          },
-          "name": {
-            "description": "",
-            "x-typia-required": false,
-            "x-typia-optional": true,
-            "type": "string"
-          },
-          "result": {
-            "description": "",
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "message",
-          "statusCode",
-          "result"
-        ],
-        "x-typia-jsDocTags": []
-      },
       "S3ImageUploadDto": {
         "type": "object",
         "properties": {
@@ -3899,7 +3922,8 @@
             ],
             "x-typia-required": false,
             "x-typia-optional": true,
-            "type": "number"
+            "type": "number",
+            "nullable": true
           }
         },
         "nullable": false,
@@ -4032,11 +4056,11 @@
         "description": "@title 이메일",
         "x-typia-jsDocTags": []
       },
-      "__object.o2": {
+      "__object.o1": {
         "type": "object",
         "properties": {
           "user": {
-            "$ref": "#/components/schemas/__object.o3",
+            "$ref": "#/components/schemas/__object.o2",
             "description": "",
             "x-typia-required": true,
             "x-typia-optional": false
@@ -4049,18 +4073,18 @@
         "description": "",
         "x-typia-jsDocTags": []
       },
-      "__object.o3": {
+      "__object.o2": {
         "type": "object",
         "properties": {},
         "nullable": false,
         "description": "",
         "x-typia-jsDocTags": []
       },
-      "__object.o4": {
+      "__object.o3": {
         "type": "object",
         "properties": {
           "user": {
-            "$ref": "#/components/schemas/__object.o5",
+            "$ref": "#/components/schemas/__object.o4",
             "description": "",
             "x-typia-required": true,
             "x-typia-optional": false
@@ -4073,7 +4097,7 @@
         "description": "",
         "x-typia-jsDocTags": []
       },
-      "__object.o5": {
+      "__object.o4": {
         "type": "object",
         "properties": {},
         "nullable": false,
