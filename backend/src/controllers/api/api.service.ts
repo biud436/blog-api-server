@@ -16,7 +16,11 @@ export class ApiService {
     async getPost(pageNumber: number, pageSize: number) {
         try {
             const categoryId = undefined;
-            const res = await this.postsService.findAll(pageNumber, categoryId);
+            const res = await this.postsService.findAll(
+                pageNumber,
+                categoryId,
+                pageSize,
+            );
 
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
         } catch (e: any) {
