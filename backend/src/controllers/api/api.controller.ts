@@ -1,4 +1,11 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import {
+    Controller,
+    Delete,
+    Get,
+    Param,
+    ParseIntPipe,
+    Query,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import {
     AdminOnly,
@@ -25,6 +32,18 @@ export class ApiController {
     @AdminOnly()
     async checkAdmin() {
         return await this.apiService.isAdmin();
+    }
+
+    /**
+     * Delete post by post id in the admin page.
+     * @param postId
+     * @returns
+     */
+    @Delete('/post/:postId')
+    @JwtGuard()
+    @AdminOnly()
+    async deletePost(@Param('postId', ParseIntPipe) postId: number) {
+        return await this.apiService.deletePost(postId);
     }
 
     /**
