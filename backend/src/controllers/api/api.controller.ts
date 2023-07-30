@@ -36,6 +36,7 @@ export class ApiController {
 
     /**
      * Delete post by post id in the admin page.
+     * @tag API
      * @param postId
      * @returns
      */
