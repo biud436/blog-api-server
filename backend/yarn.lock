@@ -2477,15 +2477,15 @@
   resolved "https://registry.yarnpkg.com/@lukeed/csprng/-/csprng-1.1.0.tgz#1e3e4bd05c1cc7a0b2ddbd8a03f39f6e4b5e6cfe"
   integrity sha512-Z7C/xXCiGWsg0KuKsHTKJxbWhpI3Vs5GwLfOean7MGyVFGqdRgBbAjOCh6u4bbjPc/8MJ2pZmK/0DLdCbivLDA==
 
-"@mapbox/node-pre-gyp@^1.0.0":
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/@mapbox/node-pre-gyp/-/node-pre-gyp-1.0.8.tgz#32abc8a5c624bc4e46c43d84dfb8b26d33a96f58"
-  integrity sha512-CMGKi28CF+qlbXh26hDe6NxCd7amqeAzEqnS6IHeO6LoaKyM/n+Xw3HT1COdq8cuioOdlKdqn/hCmqPUOMOywg==
+"@mapbox/node-pre-gyp@^1.0.10":
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/@mapbox/node-pre-gyp/-/node-pre-gyp-1.0.11.tgz#417db42b7f5323d79e93b34a6d7a2a12c0df43fa"
+  integrity sha512-Yhlar6v9WQgUp/He7BdgzOz8lqMQ8sU+jkCq7Wx8Myc5YFJLbEe7lgui/V7G1qB1DJykHSGwreceSaD60Y0PUQ==
   dependencies:
-    detect-libc "^1.0.3"
+    detect-libc "^2.0.0"
     https-proxy-agent "^5.0.0"
     make-dir "^3.1.0"
-    node-fetch "^2.6.5"
+    node-fetch "^2.6.7"
     nopt "^5.0.0"
     npmlog "^5.0.1"
     rimraf "^3.0.2"
@@ -2506,12 +2506,12 @@
     got "^11.8.5"
     os-filter-obj "^2.0.0"
 
-"@nestia/core@^1.4.4":
-  version "1.4.4"
-  resolved "https://registry.yarnpkg.com/@nestia/core/-/core-1.4.4.tgz#d059800015b5120c897833810ffa2b658d096d7b"
-  integrity sha512-Tk8mNzTUyrdtBzaTCOv8OMwSXFAdEGfnI3OS57TeX1sQt8wHzWwc3Q3BqBUFET7VlrWPjKGFQ2GJng13fLCDZQ==
+"@nestia/core@^1.6.2":
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/@nestia/core/-/core-1.6.2.tgz#5c82d2f3c51316908efb65cdbe9bab2f445250a8"
+  integrity sha512-oHHh32/ihVHdoOvLSs+1jfZBcXFBChO9nhqc+VR9P8/n+Y2fbERkLzQ9+NuUcqb3WVwI4+IQ4m77MsSj3Z/fDg==
   dependencies:
-    "@nestia/fetcher" "^1.4.0"
+    "@nestia/fetcher" "^1.6.2"
     "@nestjs/common" ">= 7.0.1"
     "@nestjs/core" ">= 7.0.1"
     "@nestjs/platform-express" ">= 7.0.1"
@@ -2521,7 +2521,7 @@
     raw-body ">= 2.0.0"
     reflect-metadata ">= 0.1.12"
     rxjs ">= 6.0.0"
-    typia "^4.1.6"
+    typia "^4.2.1"
 
 "@nestia/e2e@^0.2.3":
   version "0.2.3"
@@ -2536,6 +2536,14 @@
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@nestia/fetcher/-/fetcher-1.4.0.tgz#d50ab71ba47a43cfc24f49652cd8a2cf561c512f"
   integrity sha512-mDrbQyxs9yJOHx8Ojz2b2Qumnuk/ggHGQBm872VywvUcSJ/7G3GxWGjeazrhoP39e/roXBu9WgU1CVQOdKhJlQ==
+  dependencies:
+    import2 "^1.0.3"
+    node-fetch "^2.6.7"
+
+"@nestia/fetcher@^1.6.2":
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/@nestia/fetcher/-/fetcher-1.6.2.tgz#37c8afd9ecb8690c25313748372e5c24c2af85c4"
+  integrity sha512-OQg9v87fqd9SRLUVPyFAJpra05vEuBVujeQaEUyKVj3u0YP7ehkKBNf88byONikHB4sUlrzroXc1JtVyWxSl3g==
   dependencies:
     import2 "^1.0.3"
     node-fetch "^2.6.7"
@@ -3413,10 +3421,10 @@
   dependencies:
     "@types/express" "*"
 
-"@types/passport@1.0.8":
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/@types/passport/-/passport-1.0.8.tgz#cc3ee653777365ac02f630c3c08fb755567b7387"
-  integrity sha512-Gdcvis7+7G/Mobm+25AeFi+oe5teBhHzpbCOFWeN10Bj8tnoEE1L5lkraQjzmDEKkJQuM7xSJUGIFGl/giyRfQ==
+"@types/passport@^1.0.12":
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/@types/passport/-/passport-1.0.12.tgz#7dc8ab96a5e895ec13688d9e3a96920a7f42e73e"
+  integrity sha512-QFdJ2TiAEoXfEQSNDISJR1Tm51I78CymqcBa8imbjo6dNNu+l2huDxxbDEIoFIwOSKMkOfHEikyDuZ38WwWsmw==
   dependencies:
     "@types/express" "*"
 
@@ -4117,13 +4125,13 @@ basic-auth@^2.0.1:
   dependencies:
     safe-buffer "5.1.2"
 
-bcrypt@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/bcrypt/-/bcrypt-5.0.1.tgz#f1a2c20f208e2ccdceea4433df0c8b2c54ecdf71"
-  integrity sha512-9BTgmrhZM2t1bNuDtrtIMVSmmxZBrJ71n8Wg+YgdjHuIWYF7SjjmCPZFB+/5i/o/PIeRpwVJR3P+NrpIItUjqw==
+bcrypt@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/bcrypt/-/bcrypt-5.1.0.tgz#bbb27665dbc400480a524d8991ac7434e8529e17"
+  integrity sha512-RHBS7HI5N5tEnGTmtR/pppX0mmDSBpQ4aCBsj7CEQfYXDcO74A8sIBYcJMuCsis2E81zDxeENYhv66oZwLiA+Q==
   dependencies:
-    "@mapbox/node-pre-gyp" "^1.0.0"
-    node-addon-api "^3.1.0"
+    "@mapbox/node-pre-gyp" "^1.0.10"
+    node-addon-api "^5.0.0"
 
 big.js@^5.2.2:
   version "5.2.2"
@@ -4959,10 +4967,10 @@ destroy@1.2.0:
   resolved "https://registry.yarnpkg.com/destroy/-/destroy-1.2.0.tgz#4803735509ad8be552934c67df614f94e66fa015"
   integrity sha512-2sJGJTaXIIaR1w4iJSNoN0hnMY7Gpc/n8D4qSCJw8QqFWXf7cuAgnEHxBpweaVcPevC2l3KpjYCx3NypQQgaJg==
 
-detect-libc@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/detect-libc/-/detect-libc-1.0.3.tgz#fa137c4bd698edf55cd5cd02ac559f91a4c4ba9b"
-  integrity sha1-+hN8S9aY7fVc1c0CrFWfkaTEups=
+detect-libc@^2.0.0:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/detect-libc/-/detect-libc-2.0.2.tgz#8ccf2ba9315350e1241b88d0ac3b0e1fbd99605d"
+  integrity sha512-UX6sGumvvqSaXgdKGUsgZWqcUyIXZ/vZTrlRT/iobiKhGL0zL4d3osHj3uqllWJK+i+sixDS/3COVEOFbupFyw==
 
 detect-newline@^3.0.0:
   version "3.1.0"
@@ -7750,10 +7758,10 @@ nest-winston@^1.6.2:
     cli-color "^2.0.1"
     fast-safe-stringify "^2.1.1"
 
-nestia@^4.2.0:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/nestia/-/nestia-4.2.0.tgz#3376b4c4d520336a1b860f11a90b257d932f8ded"
-  integrity sha512-ysNaogHD8Gis15U6KISEkSdeicQwgJC4cgkF/0EjQlmaN++qvcocaXj02APaJzpOxaNLTeqBJ+soOLjAhiLKbg==
+nestia@^4.4.0:
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/nestia/-/nestia-4.4.0.tgz#0af00abc424b28e6d9e2ad06181d43766395ec98"
+  integrity sha512-4Wq05TtkEO4u0C4PuWpTcDcgEpC/qJJA007VnBR5fOLw9cs1gENZVgzBuVvGEaOQDfGK5WFn2C7GPx3EGJnToQ==
   dependencies:
     commander "^10.0.0"
     comment-json "^4.2.3"
@@ -7769,10 +7777,10 @@ node-abort-controller@^3.0.1:
   resolved "https://registry.yarnpkg.com/node-abort-controller/-/node-abort-controller-3.1.1.tgz#a94377e964a9a37ac3976d848cb5c765833b8548"
   integrity sha512-AGK2yQKIjRuqnc6VkX2Xj5d+QW8xZ87pa1UK6yA6ouUyuxfHuMP6umE5QK7UmTeOAymo+Zx1Fxiuw9rVx8taHQ==
 
-node-addon-api@^3.1.0:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/node-addon-api/-/node-addon-api-3.2.1.tgz#81325e0a2117789c0128dab65e7e38f07ceba161"
-  integrity sha512-mmcei9JghVNDYydghQmeDX8KoAm0FAiYyIcUt/N4nhyAipB17pllZQDOJD2fotxABnt4Mdz+dKTO7eftLg4d0A==
+node-addon-api@^5.0.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/node-addon-api/-/node-addon-api-5.1.0.tgz#49da1ca055e109a23d537e9de43c09cca21eb762"
+  integrity sha512-eh0GgfEkpnoWDq+VY8OyvYhFEzBk6jIYbRKdIlyTiAXIVJ8PyBaKb0rp7oDtoddbdoHWhq8wwr+XZ81F1rpNdA==
 
 node-emoji@1.11.0:
   version "1.11.0"
@@ -7785,13 +7793,6 @@ node-fetch@^2.6.1, node-fetch@^2.6.7:
   version "2.6.11"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.11.tgz#cde7fc71deef3131ef80a738919f999e6edfff25"
   integrity sha512-4I6pdBY1EthSqDmJkiNk3JIT8cswwR9nfeW/cPdUagJYEQG7R95WRH74wpz7ma8Gh/9dI9FP+OU+0E4FvtA55w==
-  dependencies:
-    whatwg-url "^5.0.0"
-
-node-fetch@^2.6.5:
-  version "2.6.7"
-  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.7.tgz#24de9fba827e3b4ae44dc8b20256a379160052ad"
-  integrity sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==
   dependencies:
     whatwg-url "^5.0.0"
 
@@ -8108,13 +8109,14 @@ passport-strategy@1.x.x, passport-strategy@^1.0.0:
   resolved "https://registry.yarnpkg.com/passport-strategy/-/passport-strategy-1.0.0.tgz#b5539aa8fc225a3d1ad179476ddf236b440f52e4"
   integrity sha1-tVOaqPwiWj0a0XlHbd8ja0QPUuQ=
 
-passport@^0.5.2:
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/passport/-/passport-0.5.2.tgz#0cb38dd8a71552c8390dfa6a9a6f7f3909954bcf"
-  integrity sha512-w9n/Ot5I7orGD4y+7V3EFJCQEznE5RxHamUxcqLT2QoJY0f2JdN8GyHonYFvN0Vz+L6lUJfVhrk2aZz2LbuREw==
+passport@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/passport/-/passport-0.6.0.tgz#e869579fab465b5c0b291e841e6cc95c005fac9d"
+  integrity sha512-0fe+p3ZnrWRW74fe8+SvCyf4a3Pb2/h7gFkQ8yTJpAO50gDzlfjZUZTO1k5Eg9kUct22OxHLqDZoKUWRHOh9ug==
   dependencies:
     passport-strategy "1.x.x"
     pause "0.0.1"
+    utils-merge "^1.0.1"
 
 path-exists@^4.0.0:
   version "4.0.0"
@@ -9691,7 +9693,7 @@ typia@^3.8.5:
     inquirer "^8.2.5"
     randexp "^0.5.3"
 
-typia@^4.1.6, typia@^4.1.8:
+typia@^4.1.8:
   version "4.1.8"
   resolved "https://registry.yarnpkg.com/typia/-/typia-4.1.8.tgz#089d8f05bf2c826089e1db884035c0edccbeef8d"
   integrity sha512-VjLJseLBRm14H+YZ+TclFFWjeSf60NKlQactGebB39+TifjB34skyGIs32sZajO00HyKjmE1kztOh6eAeJdq3g==
@@ -9701,6 +9703,16 @@ typia@^4.1.6, typia@^4.1.8:
     inquirer "^8.2.5"
     randexp "^0.5.3"
     raw-loader "^4.0.2"
+
+typia@^4.2.1:
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/typia/-/typia-4.2.1.tgz#868d1c669f366eccf616331fecf1eadc1d9aea1f"
+  integrity sha512-X2cp2w+t59wcIO7n5qQRGb0T6N0rsCxF4Dgfy7hy2IqgKL2+GrVUWHG+KvCf5CgcKmDyql+A9CgVwoxJeiZkpg==
+  dependencies:
+    commander "^10.0.0"
+    comment-json "^4.2.3"
+    inquirer "^8.2.5"
+    randexp "^0.5.3"
 
 uglify-js@^3.1.4:
   version "3.15.3"
@@ -9785,7 +9797,7 @@ util@^0.12.4:
     is-typed-array "^1.1.3"
     which-typed-array "^1.1.2"
 
-utils-merge@1.0.1, utils-merge@1.x.x:
+utils-merge@1.0.1, utils-merge@1.x.x, utils-merge@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
   integrity sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==
@@ -10032,11 +10044,12 @@ winston-transport@^4.4.0, winston-transport@^4.5.0:
     readable-stream "^3.6.0"
     triple-beam "^1.3.0"
 
-winston@^3.7.2:
-  version "3.7.2"
-  resolved "https://registry.yarnpkg.com/winston/-/winston-3.7.2.tgz#95b4eeddbec902b3db1424932ac634f887c400b1"
-  integrity sha512-QziIqtojHBoyzUOdQvQiar1DH0Xp9nF1A1y7NVy2DGEsz82SBDtOalS0ulTRGVT14xPX3WRWkCsdcJKqNflKng==
+winston@^3.10.0:
+  version "3.10.0"
+  resolved "https://registry.yarnpkg.com/winston/-/winston-3.10.0.tgz#d033cb7bd3ced026fed13bf9d92c55b903116803"
+  integrity sha512-nT6SIDaE9B7ZRO0u3UvdrimG0HkB7dSTAgInQnNR2SOPJ4bvq5q79+pXLftKmP52lJGW15+H5MCK0nM9D3KB/g==
   dependencies:
+    "@colors/colors" "1.5.0"
     "@dabh/diagnostics" "^2.0.2"
     async "^3.2.3"
     is-stream "^2.0.0"
