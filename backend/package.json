@@ -96,8 +96,7 @@
         "typia": "^4.1.8",
         "uuid": "^8.3.2",
         "winston": "^3.10.0",
-        "winston-daily-rotate-file": "^4.6.1",
-        "yaml": "^2.3.1"
+        "winston-daily-rotate-file": "^4.6.1"
     },
     "devDependencies": {
         "@nestia/e2e": "^0.2.3",
