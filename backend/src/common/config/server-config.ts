@@ -57,23 +57,23 @@ export class ServerConfigFactory {
         }
     }
 
-    async ready() {
-        try {
-            const content = await fs.promises.readFile(
-                path.join(__dirname, '..', '..', '..', this.readTargetFile()),
-                'utf-8',
-            );
-            const config = YAML.parse(content);
+    // async ready() {
+    //     try {
+    //         const content = await fs.promises.readFile(
+    //             path.join(__dirname, '..', '..', '..', this.readTargetFile()),
+    //             'utf-8',
+    //         );
+    //         const config = YAML.parse(content);
 
-            const serverConfig = new ServerConfig(config);
+    //         const serverConfig = new ServerConfig(config);
 
-            ServerConfigFactory.EVENT.emit('load', serverConfig);
+    //         ServerConfigFactory.EVENT.emit('load', serverConfig);
 
-            return serverConfig;
-        } catch (e: any) {
-            throw new Error(
-                `설정 파일을 읽는 도중 오류가 발생했습니다. ${e.message}`,
-            );
-        }
-    }
+    //         return serverConfig;
+    //     } catch (e: any) {
+    //         throw new Error(
+    //             `설정 파일을 읽는 도중 오류가 발생했습니다. ${e.message}`,
+    //         );
+    //     }
+    // }
 }

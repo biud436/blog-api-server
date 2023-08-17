@@ -61,11 +61,11 @@ export class NestBootstrapApplication extends EventEmitter {
     private constructor() {
         super();
 
-        ServerConfigFactory.EVENT.on('load', (config: ServerConfig) => {
-            SlackLog.info(config.server.whitelist?.join('\n'));
+        // ServerConfigFactory.EVENT.on('load', (config: ServerConfig) => {
+        //     SlackLog.info(config.server.whitelist?.join('\n'));
 
-            this.config = config;
-        });
+        //     this.config = config;
+        // });
 
         this.on('ready', () => {
             this.prepare().start();
@@ -79,11 +79,11 @@ export class NestBootstrapApplication extends EventEmitter {
         return this._application;
     }
 
-    createConfigFactory() {
-        const factory = new ServerConfigFactory();
+    // createConfigFactory() {
+    //     const factory = new ServerConfigFactory();
 
-        factory.ready();
-    }
+    //     factory.ready();
+    // }
 
     public prepare(): NestBootstrapApplication {
         process.on('uncaughtException', (err) => {
@@ -93,7 +93,7 @@ export class NestBootstrapApplication extends EventEmitter {
             ServerLog.error((err as any).stack);
         });
 
-        this.createConfigFactory();
+        // this.createConfigFactory();
 
         return this;
     }
