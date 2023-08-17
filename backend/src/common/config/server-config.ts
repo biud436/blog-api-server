@@ -60,7 +60,7 @@ export class ServerConfigFactory {
     async ready() {
         try {
             const content = await fs.promises.readFile(
-                path.join(process.cwd(), this.readTargetFile()),
+                path.join(__dirname, '..', '..', '..', this.readTargetFile()),
                 'utf-8',
             );
             const config = YAML.parse(content);
