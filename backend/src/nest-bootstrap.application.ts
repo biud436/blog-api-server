@@ -74,12 +74,6 @@ export class NestBootstrapApplication extends EventEmitter {
         return this._application;
     }
 
-    // createConfigFactory() {
-    //     const factory = new ServerConfigFactory();
-
-    //     factory.ready();
-    // }
-
     public prepare(): NestBootstrapApplication {
         process.on('uncaughtException', (err) => {
             ServerLog.error(err.stack);
@@ -87,8 +81,6 @@ export class NestBootstrapApplication extends EventEmitter {
         process.on('unhandledRejection', (err) => {
             ServerLog.error((err as any).stack);
         });
-
-        // this.createConfigFactory();
 
         return this;
     }
