@@ -25,6 +25,11 @@ import { useGlobalPipes } from './common/middlewares/global-pipes.middleware';
 import { useStaticImageFiles } from './common/middlewares/images.middleware';
 import { useHelmet } from './common/middlewares/helmet.middleware';
 import { useCookieParser } from './common/middlewares/cookie-parser.middleware';
+import {
+    ServerConfig,
+    ServerConfigFactory,
+} from './common/config/server-config';
+import { SlackLog } from './common/libs/logger/SlackLog';
 
 export class NestBootstrapApplication extends EventEmitter {
     private static INSTANCE: NestBootstrapApplication;
@@ -51,8 +56,17 @@ export class NestBootstrapApplication extends EventEmitter {
         process.platform === 'linux' ? 'redis' : 'localhost';
     private static readonly REDIS_PORT = 6379;
 
+    private config: ServerConfig | null = null;
+
     private constructor() {
         super();
+
+        ServerConfigFactory.EVENT.on('load', (config: ServerConfig) => {
+            SlackLog.info(config.server.whitelist?.join('\n'));
+
+            this.config = config;
+        });
+
         this.on('ready', () => {
             this.prepare().start();
         });
@@ -65,6 +79,12 @@ export class NestBootstrapApplication extends EventEmitter {
         return this._application;
     }
 
+    createConfigFactory() {
+        const factory = new ServerConfigFactory();
+
+        factory.ready();
+    }
+
     public prepare(): NestBootstrapApplication {
         process.on('uncaughtException', (err) => {
             ServerLog.error(err.stack);
@@ -72,6 +92,8 @@ export class NestBootstrapApplication extends EventEmitter {
         process.on('unhandledRejection', (err) => {
             ServerLog.error((err as any).stack);
         });
+
+        this.createConfigFactory();
 
         return this;
     }

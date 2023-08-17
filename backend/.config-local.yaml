@@ -1,0 +1,13 @@
+server:
+  whitelist:
+    - 'http://localhost:8080'
+    - 'http://127.0.0.1:8080'
+    - 'http://localhost:3000'
+  host:
+    local: 'http://localhost:3000'
+    production: 
+      - 'https://blog.biud436.com'
+  port: 3000
+redis:
+  host: localhost
+  port: 6379

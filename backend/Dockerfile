@@ -19,6 +19,7 @@ FROM node:16-alpine
 COPY --from=builder /usr/src/app/nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /usr/src/app/dist ./dist
 COPY --from=builder /usr/src/app/node_modules ./node_modules 
+COPY --from=builder /usr/src/app/.config.yaml ./.config.yaml
 COPY --from=builder /usr/src/app/public ./public
 COPY --from=builder /usr/src/app/views ./views
 
