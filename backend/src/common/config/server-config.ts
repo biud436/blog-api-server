@@ -1,4 +1,4 @@
-import { EventEmitter } from 'stream';
+import { EventEmitter } from 'events';
 // import * as fs from 'fs';
 // import * as path from 'path';
 // import YAML from 'yaml';
@@ -45,8 +45,7 @@ export class ServerConfigFactory {
     public static EVENT = new EventEmitter();
 
     private readTargetFile(): string {
-        const target =
-            process.env.NODE_ENV?.toLocaleLowerCase() || 'development';
+        const target = process.env.NODE_ENV || 'development';
 
         switch (target) {
             default:

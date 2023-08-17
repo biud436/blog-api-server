@@ -25,11 +25,6 @@ import { useGlobalPipes } from './common/middlewares/global-pipes.middleware';
 import { useStaticImageFiles } from './common/middlewares/images.middleware';
 import { useHelmet } from './common/middlewares/helmet.middleware';
 import { useCookieParser } from './common/middlewares/cookie-parser.middleware';
-import {
-    ServerConfig,
-    ServerConfigFactory,
-} from './common/config/server-config';
-import { SlackLog } from './common/libs/logger/SlackLog';
 
 export class NestBootstrapApplication extends EventEmitter {
     private static INSTANCE: NestBootstrapApplication;
@@ -56,7 +51,7 @@ export class NestBootstrapApplication extends EventEmitter {
         process.platform === 'linux' ? 'redis' : 'localhost';
     private static readonly REDIS_PORT = 6379;
 
-    private config: ServerConfig | null = null;
+    // private config: ServerConfig | null = null;
 
     private constructor() {
         super();
