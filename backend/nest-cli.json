@@ -13,8 +13,6 @@
         }
     },
     "compilerOptions": {
-        "webpack": false,
-        "builder": "swc",
-        "typeCheck": true
+        "webpack": true
     }
 }
