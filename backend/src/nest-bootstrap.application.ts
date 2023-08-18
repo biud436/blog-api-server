@@ -14,7 +14,6 @@ import * as path from 'path';
 import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 import winstonLogger from 'src/common/config/winston-config';
-import helmet from 'helmet';
 import session from 'express-session';
 import passport from 'passport';
 import { createClient } from 'redis';
@@ -42,16 +41,6 @@ export class NestBootstrapApplication extends EventEmitter {
     private static readonly SWAGGER_GLOB = ['/docs', '/docs-json'];
     private static readonly DEFAULT_VIEW_ENGINE = 'hbs';
 
-    private static readonly CORS_WHITELIST = [
-        'http://localhost:8080',
-        'http://127.0.0.1:8080',
-        'http://localhost:3000',
-    ];
-    private static readonly LOCAL_HOST = 'http://localhost:3000';
-    private static readonly PRODUCTION_HOST: [string] = [
-        'https://blog.biud436.com',
-    ];
-
     private static readonly REDIS_HOST =
         process.platform === 'linux' ? 'redis' : 'localhost';
     private static readonly REDIS_PORT = 6379;
@@ -72,6 +61,7 @@ export class NestBootstrapApplication extends EventEmitter {
         });
         this.on('[debug]', (message: string) => {
             NestBootstrapApplication.LOGGER.verbose(message);
+            SlackLog.info(message);
         });
     }
 
@@ -133,7 +123,7 @@ export class NestBootstrapApplication extends EventEmitter {
             .initWithApiDocs()
             .useNginxProxy(); // 쿠키 (NGINX 프록시 설정)
 
-        await this._application.listen(NestBootstrapApplication.PORT);
+        await this._application.listen(this.config!.server.port ?? 3000);
     }
 
     private useGlobalPipes = useGlobalPipes;
@@ -184,11 +174,11 @@ export class NestBootstrapApplication extends EventEmitter {
 
     private useCors(app: NestExpressApplication) {
         const whitelist = this.isDelvelopment()
-            ? NestBootstrapApplication.CORS_WHITELIST
-            : [...NestBootstrapApplication.PRODUCTION_HOST];
+            ? this.config!.server.whitelist
+            : [...this.config!.server.host.production];
 
         app.enableCors({
-            origin: (origin, callback) => {
+            origin: (origin: any, callback: any) => {
                 if (!origin || whitelist.indexOf(origin) !== -1) {
                     callback(null, true);
                 } else {
@@ -275,10 +265,10 @@ export class NestBootstrapApplication extends EventEmitter {
             .setContact('the developer', '', 'biud436@gmail.com');
 
         if (this.isDelvelopment()) {
-            builder.addServer(NestBootstrapApplication.LOCAL_HOST, '로컬 서버');
+            builder.addServer(this.config!.server.host.local, '로컬 서버');
         } else {
             builder.addServer(
-                NestBootstrapApplication.PRODUCTION_HOST[0],
+                this.config!.server.host.production[0],
                 '배포 서버',
             );
         }
