@@ -32,7 +32,6 @@ import { SlackLog } from './common/libs/logger/SlackLog';
 
 export class NestBootstrapApplication extends EventEmitter {
     private static INSTANCE: NestBootstrapApplication;
-    private static PORT = 3000;
     private static CONFIG: ConfigService;
     private static LOGGER: Logger = new Logger(NestBootstrapApplication.name);
 
