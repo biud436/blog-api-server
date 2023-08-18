@@ -1216,8 +1216,7 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "새로운 포스트를 생성합니다",
-        "description": "새로운 포스트를 생성합니다.",
+        "description": "새로운 포스트를 생성합니다 (관리자만 가능)",
         "x-nestia-namespace": "post.create",
         "x-nestia-jsDocTags": [
           {
@@ -1396,8 +1395,7 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "새로운 포스트를 생성합니다",
-        "description": "새로운 포스트를 생성합니다.",
+        "description": "새로운 포스트를 생성합니다 (관리자만 가능)",
         "x-nestia-namespace": "posts.create",
         "x-nestia-jsDocTags": [
           {
@@ -1541,6 +1539,276 @@
           },
           {
             "name": "returns"
+          }
+        ]
+      }
+    },
+    "/post/{id}/comment": {
+      "get": {
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "댓글을 조회합니다",
+        "description": "댓글을 조회합니다.",
+        "x-nestia-namespace": "post.comment.getComments",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "id",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "댓글 ID",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      }
+    },
+    "/posts/{id}/comment": {
+      "get": {
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "댓글을 조회합니다",
+        "description": "댓글을 조회합니다.",
+        "x-nestia-namespace": "posts.comment.getComments",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "id",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "댓글 ID",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns"
+          }
+        ]
+      }
+    },
+    "/post/comment": {
+      "post": {
+        "tags": [
+          "Post"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "생성할 댓글 정보",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCommentDto"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "새로운 댓글을 작성합니다",
+        "description": "새로운 댓글을 작성합니다.",
+        "x-nestia-namespace": "post.comment.createComment",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "Post",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "userId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "JWT에서 추출한 유저 아이디",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "createCommentDto",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "생성할 댓글 정보",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "/posts/comment": {
+      "post": {
+        "tags": [
+          "Post"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "생성할 댓글 정보",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCommentDto"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "새로운 댓글을 작성합니다",
+        "description": "새로운 댓글을 작성합니다.",
+        "x-nestia-namespace": "posts.comment.createComment",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "Post",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "userId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "JWT에서 추출한 유저 아이디",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "createCommentDto",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "생성할 댓글 정보",
+                "kind": "text"
+              }
+            ]
           }
         ]
       }
@@ -3815,6 +4083,72 @@
         "type": "object",
         "properties": {},
         "nullable": false
+      },
+      "CreateCommentDto": {
+        "type": "object",
+        "properties": {
+          "postId": {
+            "title": "포스트 ID",
+            "description": "@title 포스트 ID",
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "포스트 ID",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "content": {
+            "title": "내용",
+            "description": "@title 내용",
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "내용",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "parentId": {
+            "title": "부모 댓글 ID",
+            "description": "부모 댓글이 없다면, 조상 댓글 ID와 같은 값을 가짐\n@title 부모 댓글 ID",
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "부모 댓글 ID",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "number"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "postId",
+          "content"
+        ],
+        "description": "부모 댓글이 없다면, 조상 댓글 ID와 같은 값을 가짐\n@title 부모 댓글 ID",
+        "x-typia-jsDocTags": []
       },
       "ResponseUtil.FailureResponse": {
         "type": "object",

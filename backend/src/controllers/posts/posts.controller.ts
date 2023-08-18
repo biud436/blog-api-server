@@ -50,6 +50,7 @@ import { PostsService } from './posts.service';
 import { PostSearchProperty } from './types/post-search-type';
 
 import { TypedQuery, TypedRoute } from '@nestia/core';
+import { CreateCommentDto } from 'src/entities/comment/dto/create-comment.dto';
 
 @Controller(['post', 'posts'])
 export class PostsController {
@@ -101,7 +102,7 @@ export class PostsController {
     }
 
     /**
-     * 새로운 포스트를 생성합니다.
+     * 새로운 포스트를 생성합니다 (관리자만 가능)
      *
      * @tag Post
      * @param userId JWT에서 추출한 유저 아이디
@@ -144,6 +145,34 @@ export class PostsController {
         } finally {
             await queryRunner.release();
         }
+    }
+
+    /**
+     * 댓글을 조회합니다.
+     *
+     * @tags Post
+     * @param id 댓글 ID
+     * @returns
+     */
+    @Get('/:id/comment')
+    async getComments(@PostId() postId: number) {
+        return await this.postsService.getComments(postId);
+    }
+
+    /**
+     * 새로운 댓글을 작성합니다.
+     *
+     * @tag Post
+     * @param userId JWT에서 추출한 유저 아이디
+     * @param createCommentDto 생성할 댓글 정보
+     */
+    @Post('/comment')
+    @JwtGuard()
+    async createComment(
+        @UserId() userId: number,
+        @Body() createCommentDto: CreateCommentDto,
+    ) {
+        return await this.postsService.createComment(createCommentDto, userId);
     }
 
     /**

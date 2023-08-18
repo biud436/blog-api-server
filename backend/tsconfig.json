@@ -21,7 +21,6 @@
         "strict": true,
         "strictNullChecks": true,
         "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
         "plugins": [
             {
                 "transform": "@nestia/core/lib/transform",

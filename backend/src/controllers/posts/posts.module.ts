@@ -7,6 +7,7 @@ import { MicroServicesModule } from 'src/common/micro-services/micro-services.mo
 import { UserModule } from 'src/entities/user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from '../auth/auth.module';
+import { CommentModule } from 'src/entities/comment/comment.module';
 
 @Module({
     imports: [
@@ -16,6 +17,7 @@ import { AuthModule } from '../auth/auth.module';
         UserModule,
         forwardRef(() => AuthModule),
         ConfigModule,
+        CommentModule,
     ],
     controllers: [PostsController],
     providers: [PostsService],

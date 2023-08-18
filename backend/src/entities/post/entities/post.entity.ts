@@ -17,6 +17,7 @@ import {
 import { decodeHtml } from 'src/common/config/html-escpse';
 import { Image } from 'src/controllers/image/entities/image.entity';
 import removeMarkdown from 'markdown-to-text';
+import { PostComment } from 'src/entities/comment/entities/comment.entity';
 @Entity()
 export class Post {
     @PrimaryGeneratedColumn()
@@ -106,6 +107,9 @@ export class Post {
         referencedColumnName: 'id',
     })
     category!: Category;
+
+    @OneToMany(() => PostComment, (comment) => comment.post)
+    comments!: PostComment[];
 
     /**
      * 이미지

@@ -45,6 +45,7 @@ import { ThrottlerBehindProxyGuard } from './common/guards/throttler-behind-prox
 import { CacheModule } from '@nestjs/cache-manager';
 import { TaskModule } from './common/domains/task/task.module';
 import { PaginationModule } from './common/modules/pagination/pagination.module';
+import { CommentModule } from './entities/comment/comment.module';
 
 @Module({
     imports: [
@@ -125,6 +126,7 @@ import { PaginationModule } from './common/modules/pagination/pagination.module'
         ConnectInfoModule,
         TaskModule,
         PaginationModule,
+        CommentModule,
     ],
     controllers: [AppController],
     providers: [

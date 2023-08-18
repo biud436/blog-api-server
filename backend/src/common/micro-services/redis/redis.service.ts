@@ -112,11 +112,11 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
         const key = `temporarily_image_path:${userId}:*`;
         const keys = await this.client.KEYS(key);
 
-        const ids = [];
+        const ids = [] as string[];
 
         for (const key of keys) {
             const id = await this.client.GET(key);
-            ids.push(id);
+            ids.push(id as string);
         }
 
         return ids;
@@ -200,7 +200,7 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
 
     async collectAllPostViewCount(): Promise<{ id: number; count: number }[]> {
         const keys = await this.client.KEYS('post_view_count:*');
-        const result = [];
+        const result = [] as { id: number; count: number }[];
 
         for (const key of keys) {
             const postId = key.replace('post_view_count:', '');

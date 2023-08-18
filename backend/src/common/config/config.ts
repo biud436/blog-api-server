@@ -42,7 +42,7 @@ export default (
         dev: {
             ...defaultOption,
             synchronize: true,
-            // logging: true,
+            logging: true,
         },
         production: {
             type: 'mysql',

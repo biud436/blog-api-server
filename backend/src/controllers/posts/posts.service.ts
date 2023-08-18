@@ -4,10 +4,13 @@ import { CreatePostDto } from 'src/entities/post/dto/create-post.dto';
 import { UpdatePostDto } from 'src/entities/post/dto/update-post.dto';
 import { PostService } from 'src/entities/post/post.service';
 import { RedisService } from 'src/common/micro-services/redis/redis.service';
-import { QueryRunner } from 'typeorm';
+import { DataSource, QueryRunner } from 'typeorm';
 import { PostSearchProperty } from './types/post-search-type';
 import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
 import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
+import { CommentService } from 'src/entities/comment/comment.service';
+import { CreateCommentDto } from 'src/entities/comment/dto/create-comment.dto';
+import { InjectDataSource } from '@nestjs/typeorm';
 
 @Injectable()
 export class PostsService {
@@ -15,6 +18,8 @@ export class PostsService {
         private readonly postService: PostService,
         private readonly redisService: RedisService,
         private readonly categoryService: CategoryService,
+        private readonly commentService: CommentService,
+        @InjectDataSource() private readonly dataSource: DataSource,
     ) {}
 
     /**
@@ -26,6 +31,40 @@ export class PostsService {
      */
     async create(createPostDto: CreatePostDto, queryRunner: QueryRunner) {
         return await this.postService.create(createPostDto, queryRunner);
+    }
+
+    async createComment(createCommentDto: CreateCommentDto, userId: number) {
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+
+        try {
+            const res = await this.commentService.createComment(
+                createCommentDto,
+                userId,
+                queryRunner,
+            );
+
+            await queryRunner.commitTransaction();
+
+            return ResponseUtil.success(RESPONSE_MESSAGE.SAVE_SUCCESS, res);
+        } catch (e: any) {
+            await queryRunner.rollbackTransaction();
+
+            throw ResponseUtil.failureWrap(e);
+        } finally {
+            await queryRunner.release();
+        }
+    }
+
+    async getComments(postId: number) {
+        try {
+            const items = await this.commentService.findAll(postId);
+
+            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, items);
+        } catch (e: any) {
+            throw ResponseUtil.failureWrap(e);
+        }
     }
 
     /**

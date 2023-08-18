@@ -19,6 +19,7 @@ import { ApiKey } from 'src/entities/api-key/entities/api-key.entity';
 import { BlogMetaData } from 'src/entities/blog-meta-data/entities/blog-meta-data.entity';
 import { PostTemp } from 'src/entities/post-temp/entities/post-temp.entity';
 import { Role } from 'src/common/decorators/role.enum';
+import { PostComment } from 'src/entities/comment/entities/comment.entity';
 
 @Entity()
 export class User {
@@ -67,6 +68,9 @@ export class User {
 
     @OneToMany(() => PostTemp, (postTemp) => postTemp.user)
     postTemps!: PostTemp[];
+
+    @OneToMany(() => PostComment, (postComment) => postComment.user)
+    comments!: PostComment[];
 
     @Column({
         nullable: false,
