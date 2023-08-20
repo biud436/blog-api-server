@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PostComment } from './entities/comment.entity';
 import { QueryRunner, Repository, TreeRepository } from 'typeorm';
 import { CreateCommentDto } from './dto/create-comment.dto';
+import { PaginationProvider } from 'src/common/modules/pagination/pagination-repository';
 
 @Injectable()
 export class CommentService implements OnModuleInit {
     constructor(
         @InjectRepository(PostComment)
         private readonly commentRepository: Repository<PostComment>,
+        private readonly paginationProvider: PaginationProvider,
     ) {}
 
     async onModuleInit() {
@@ -84,16 +86,21 @@ export class CommentService implements OnModuleInit {
         return await queryRunner.manager.save(comment);
     }
 
-    async findAll(postId: number) {
+    async findAll(postId: number, pageNumber: number, pageSize: number) {
         const qb = this.commentRepository.createQueryBuilder('comment');
 
-        const roots = await qb
+        const roots = qb
             .select()
             .where('comment.postId = :postId', { postId })
             .orderBy('comment.parentId', 'ASC')
-            .addOrderBy('comment.pos', 'ASC')
-            .getMany();
+            .addOrderBy('comment.pos', 'ASC');
 
-        return roots;
+        const items = await this.paginationProvider.execute(
+            roots,
+            pageNumber,
+            pageSize,
+        );
+
+        return items;
     }
 }

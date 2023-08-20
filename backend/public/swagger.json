@@ -1557,6 +1557,24 @@
               "type": "number"
             },
             "required": true
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "description": "페이지 번호 (1부터 시작)",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "페이지 사이즈",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -1603,6 +1621,40 @@
             ]
           },
           {
+            "name": "param",
+            "text": [
+              {
+                "text": "pageNumber",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "페이지 번호 (1부터 시작)",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "pageSize",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "페이지 사이즈",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "returns"
           }
         ]
@@ -1618,6 +1670,24 @@
             "name": "id",
             "in": "path",
             "description": "",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "description": "페이지 번호 (1부터 시작)",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "페이지 사이즈",
             "schema": {
               "type": "number"
             },
@@ -1663,6 +1733,40 @@
               },
               {
                 "text": "댓글 ID",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "pageNumber",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "페이지 번호 (1부터 시작)",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "pageSize",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "페이지 사이즈",
                 "kind": "text"
               }
             ]
@@ -4154,6 +4258,24 @@
                 "text": [
                   {
                     "text": "위치",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "number"
+          },
+          "depth": {
+            "title": "깊이",
+            "description": "@title 깊이",
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "깊이",
                     "kind": "text"
                   }
                 ]

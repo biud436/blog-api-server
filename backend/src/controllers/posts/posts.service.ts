@@ -57,9 +57,13 @@ export class PostsService {
         }
     }
 
-    async getComments(postId: number) {
+    async getComments(postId: number, pageNumber: number, pageSize: number) {
         try {
-            const items = await this.commentService.findAll(postId);
+            const items = await this.commentService.findAll(
+                postId,
+                pageNumber,
+                pageSize,
+            );
 
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, items);
         } catch (e: any) {

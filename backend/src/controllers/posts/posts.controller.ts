@@ -51,6 +51,7 @@ import { PostSearchProperty } from './types/post-search-type';
 
 import { TypedQuery, TypedRoute } from '@nestia/core';
 import { CreateCommentDto } from 'src/entities/comment/dto/create-comment.dto';
+import { PageSize } from 'src/common/decorators/page-size.decorator';
 
 @Controller(['post', 'posts'])
 export class PostsController {
@@ -152,11 +153,21 @@ export class PostsController {
      *
      * @tag Post
      * @param id 댓글 ID
+     * @param pageNumber 페이지 번호 (1부터 시작)
+     * @param pageSize 페이지 사이즈
      * @returns
      */
     @Get('/:id/comment')
-    async getComments(@PostId() postId: number) {
-        return await this.postsService.getComments(postId);
+    async getComments(
+        @PostId() postId: number,
+        @PageNumber('pageNumber') pageNumber: number,
+        @PageSize() pageSize: number,
+    ) {
+        return await this.postsService.getComments(
+            postId,
+            pageNumber,
+            pageSize,
+        );
     }
 
     /**
