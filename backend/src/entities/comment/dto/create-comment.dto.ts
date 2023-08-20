@@ -23,6 +23,20 @@ export class CreateCommentDto {
     content!: string;
 
     /**
+     * @title 위치
+     */
+    @IsNumber()
+    @IsNullable()
+    pos?: number;
+
+    /**
+     * @title 깊이
+     */
+    @IsNumber()
+    @IsNullable()
+    depth?: number;
+
+    /**
      * 부모 댓글이 없다면, 조상 댓글 ID와 같은 값을 가짐
      * @title 부모 댓글 ID
      */

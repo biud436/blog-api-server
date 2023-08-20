@@ -150,7 +150,7 @@ export class PostsController {
     /**
      * 댓글을 조회합니다.
      *
-     * @tags Post
+     * @tag Post
      * @param id 댓글 ID
      * @returns
      */

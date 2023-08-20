@@ -45,30 +45,31 @@ export class CommentService implements OnModuleInit {
             comment.parent = parentComment;
             comment.parentId = parentComment.id;
 
-            /**
-             * 조상의 ID를 구한다.
-             */
-            if (parentComment.ancestorId) {
-                comment.ancestorId = parentComment.ancestorId;
+            // pos 처리
+            if (createCommentDto.pos) {
+                comment.pos = createCommentDto.pos + 1;
             } else {
-                comment.ancestorId = parentComment.id;
+                comment.pos = parentComment.pos + 1;
+
+                const lastPos = await this.commentRepository
+                    .createQueryBuilder('comment')
+                    .select()
+                    .where('comment.parent_id = :parentId', {
+                        parentId: parentComment.id,
+                    })
+                    .andWhere('comment.pos > 0')
+                    .orderBy('comment.pos', 'DESC')
+                    .setQueryRunner(queryRunner)
+                    .getOne();
+
+                if (lastPos) {
+                    comment.pos = lastPos.pos + 1;
+                }
             }
 
-            comment.pos = parentComment.pos + 1;
-
-            const lastPos = await this.commentRepository
-                .createQueryBuilder('comment')
-                .select()
-                .where('comment.parent_id = :parentId', {
-                    parentId: parentComment.id,
-                })
-                .andWhere('comment.pos > 0')
-                .orderBy('comment.pos', 'DESC')
-                .setQueryRunner(queryRunner)
-                .getOne();
-
-            if (lastPos) {
-                comment.pos = lastPos.pos + 1;
+            // depth 처리
+            if (createCommentDto.depth) {
+                comment.depth = createCommentDto.depth + 1;
             }
 
             isExistParent = true;
@@ -78,7 +79,6 @@ export class CommentService implements OnModuleInit {
 
         if (!isExistParent) {
             comment.parentId = result.id;
-            comment.ancestorId = result.id;
         }
 
         return await queryRunner.manager.save(comment);
@@ -90,8 +90,7 @@ export class CommentService implements OnModuleInit {
         const roots = await qb
             .select()
             .where('comment.postId = :postId', { postId })
-            .orderBy('comment.ancestorId', 'ASC')
-            .addOrderBy('comment.parentId', 'ASC')
+            .orderBy('comment.parentId', 'ASC')
             .addOrderBy('comment.pos', 'ASC')
             .getMany();
 

@@ -56,15 +56,6 @@ export class PostComment {
     @JoinColumn({ name: 'user_id' })
     user!: User;
 
-    /**
-     * 조상 ID
-     */
-    @Column({
-        name: 'ancestor_id',
-        nullable: true,
-    })
-    ancestorId?: number;
-
     @Column({
         name: 'parent_id',
         nullable: true,
@@ -76,6 +67,12 @@ export class PostComment {
         default: 0,
     })
     pos!: number;
+
+    @Column({
+        name: 'depth',
+        default: 0,
+    })
+    depth!: number;
 
     parent?: PostComment | null;
 

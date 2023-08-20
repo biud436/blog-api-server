@@ -1545,7 +1545,9 @@
     },
     "/post/{id}/comment": {
       "get": {
-        "tags": [],
+        "tags": [
+          "Post"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -1575,6 +1577,15 @@
         "x-nestia-namespace": "post.comment.getComments",
         "x-nestia-jsDocTags": [
           {
+            "name": "tag",
+            "text": [
+              {
+                "text": "Post",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "param",
             "text": [
               {
@@ -1599,7 +1610,9 @@
     },
     "/posts/{id}/comment": {
       "get": {
-        "tags": [],
+        "tags": [
+          "Post"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -1628,6 +1641,15 @@
         "description": "댓글을 조회합니다.",
         "x-nestia-namespace": "posts.comment.getComments",
         "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "Post",
+                "kind": "text"
+              }
+            ]
+          },
           {
             "name": "param",
             "text": [
@@ -4122,6 +4144,24 @@
             "x-typia-required": true,
             "x-typia-optional": false,
             "type": "string"
+          },
+          "pos": {
+            "title": "위치",
+            "description": "@title 위치",
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "위치",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "number"
           },
           "parentId": {
             "title": "부모 댓글 ID",
