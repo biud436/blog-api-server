@@ -50,24 +50,24 @@ export class CommentService implements OnModuleInit {
             // pos 처리
             if (createCommentDto.pos) {
                 comment.pos = createCommentDto.pos + 1;
-            } else {
-                comment.pos = parentComment.pos + 1;
-
-                const lastPos = await this.commentRepository
-                    .createQueryBuilder('comment')
-                    .select()
-                    .where('comment.parent_id = :parentId', {
-                        parentId: parentComment.id,
-                    })
-                    .andWhere('comment.pos > 0')
-                    .orderBy('comment.pos', 'DESC')
-                    .setQueryRunner(queryRunner)
-                    .getOne();
-
-                if (lastPos) {
-                    comment.pos = lastPos.pos + 1;
-                }
             }
+
+            // 나머지 댓글들 pos + 1
+            await this.commentRepository
+                .createQueryBuilder('comment')
+                .update()
+                .set({
+                    pos: () => 'pos + 1',
+                })
+                .where('comment.parent_id = :parentId', {
+                    parentId: parentComment.id,
+                })
+                .andWhere('comment.pos >= :pos', {
+                    pos: comment.pos,
+                })
+                .setQueryRunner(queryRunner)
+                .useTransaction(true)
+                .execute();
 
             // depth 처리
             if (createCommentDto.depth) {
