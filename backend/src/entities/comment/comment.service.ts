@@ -59,10 +59,10 @@ export class CommentService implements OnModuleInit {
                 .set({
                     pos: () => 'pos + 1',
                 })
-                .where('comment.parent_id = :parentId', {
+                .where('parentId = :parentId', {
                     parentId: parentComment.id,
                 })
-                .andWhere('comment.pos >= :pos', {
+                .andWhere('pos >= :pos', {
                     pos: comment.pos,
                 })
                 .setQueryRunner(queryRunner)
