@@ -13,6 +13,7 @@ import {
     Req,
     Ip,
     ParseBoolPipe,
+    Param,
 } from '@nestjs/common';
 import {
     ApiBearerAuth,
@@ -107,6 +108,7 @@ export class PostsController {
      * 새로운 포스트를 생성합니다 (관리자만 가능)
      *
      * @tag Post
+     * @summary 새로운 포스트를 생성합니다.
      * @param userId JWT에서 추출한 유저 아이디
      * @param createPostDto  생성할 포스트 정보
      * @returns
@@ -213,6 +215,23 @@ export class PostsController {
         @Body() createCommentDto: CreateCommentDto,
     ) {
         return await this.postsService.createComment(createCommentDto, userId);
+    }
+
+    /**
+     * 특정 댓글을 삭제합니다.
+     *
+     * @tag Post
+     * @param id 포스트 ID
+     * @param commentId 댓글 ID
+     */
+    @Delete('/:id/comment/:commentId')
+    @JwtGuard()
+    async deleteComment(
+        @PostId() postId: number,
+        @Param('commentId', ParseIntPipe) commentId: number,
+        @UserId() userId: number,
+    ) {
+        return await this.postsService.deleteComment(postId, commentId, userId);
     }
 
     /**

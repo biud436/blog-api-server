@@ -108,6 +108,31 @@ export class PostsService {
         }
     }
 
+    async deleteComment(postId: number, commentId: number, userId: number) {
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+
+        try {
+            const res = await this.commentService.deleteComment(
+                postId,
+                commentId,
+                userId,
+                queryRunner,
+            );
+
+            await queryRunner.commitTransaction();
+
+            return ResponseUtil.success(RESPONSE_MESSAGE.DELETE_SUCCESS, res);
+        } catch (e: any) {
+            await queryRunner.rollbackTransaction();
+
+            throw ResponseUtil.failureWrap(e);
+        } finally {
+            await queryRunner.release();
+        }
+    }
+
     /**
      * 모든 글을 조회합니다.
      *

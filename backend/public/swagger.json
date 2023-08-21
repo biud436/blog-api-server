@@ -1216,6 +1216,7 @@
             "x-nestia-encrypted": false
           }
         },
+        "summary": "새로운 포스트를 생성합니다.",
         "description": "새로운 포스트를 생성합니다 (관리자만 가능)",
         "x-nestia-namespace": "post.create",
         "x-nestia-jsDocTags": [
@@ -1224,6 +1225,15 @@
             "text": [
               {
                 "text": "Post",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "summary",
+            "text": [
+              {
+                "text": "새로운 포스트를 생성합니다.",
                 "kind": "text"
               }
             ]
@@ -1395,6 +1405,7 @@
             "x-nestia-encrypted": false
           }
         },
+        "summary": "새로운 포스트를 생성합니다.",
         "description": "새로운 포스트를 생성합니다 (관리자만 가능)",
         "x-nestia-namespace": "posts.create",
         "x-nestia-jsDocTags": [
@@ -1403,6 +1414,15 @@
             "text": [
               {
                 "text": "Post",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "summary",
+            "text": [
+              {
+                "text": "새로운 포스트를 생성합니다.",
                 "kind": "text"
               }
             ]
@@ -2264,6 +2284,168 @@
               },
               {
                 "text": "생성할 댓글 정보",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "/post/{id}/comment/{commentId}": {
+      "delete": {
+        "tags": [
+          "Post"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "commentId",
+            "in": "path",
+            "description": "댓글 ID",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "특정 댓글을 삭제합니다",
+        "description": "특정 댓글을 삭제합니다.",
+        "x-nestia-namespace": "post.comment.deleteComment",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "Post",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "id",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "포스트 ID",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "commentId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "댓글 ID",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "/posts/{id}/comment/{commentId}": {
+      "delete": {
+        "tags": [
+          "Post"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "commentId",
+            "in": "path",
+            "description": "댓글 ID",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "특정 댓글을 삭제합니다",
+        "description": "특정 댓글을 삭제합니다.",
+        "x-nestia-namespace": "posts.comment.deleteComment",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "Post",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "id",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "포스트 ID",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "commentId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "댓글 ID",
                 "kind": "text"
               }
             ]
