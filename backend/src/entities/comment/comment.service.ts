@@ -51,74 +51,22 @@ export class CommentService implements OnModuleInit {
             comment.parent = parentComment;
             comment.parentId = parentComment.id;
 
-            const order = 'ASC' as string;
+            const order = 'ASC' as CommentOrder;
 
             if (order === 'DESC') {
-                // pos 처리
-                if (this.isZeroOrMore(createCommentDto.pos)) {
-                    comment.pos = createCommentDto.pos! + 1;
-                }
-
-                // 나머지 댓글들 pos + 1
-                await this.commentRepository
-                    .createQueryBuilder('comment')
-                    .update()
-                    .set({
-                        pos: () => 'pos + 1',
-                    })
-                    .where('parentId = :parentId', {
-                        parentId: parentComment.id,
-                    })
-                    .andWhere('pos >= :pos', {
-                        pos: comment.pos,
-                    })
-                    .setQueryRunner(queryRunner)
-                    .useTransaction(true)
-                    .execute();
+                await this.createNodeWithDESC(
+                    comment,
+                    createCommentDto,
+                    parentComment,
+                    queryRunner,
+                );
             } else {
-                const listItems = await this.commentRepository
-                    .createQueryBuilder('comment')
-                    .select()
-                    .where('comment.parentId = :parentId', {
-                        parentId: parentComment.id,
-                    })
-                    .andWhere('comment.id != :id', {
-                        id: parentComment.id,
-                    })
-                    .addOrderBy('comment.pos', 'DESC')
-                    .setQueryRunner(queryRunner)
-                    .useTransaction(true)
-                    .getOne();
-
-                if (listItems) {
-                    // 마지막 댓글의 위치를 가져옵니다.
-                    const lastPos = listItems.pos;
-
-                    // 마지막 댓글의 바로 다음 위치에 댓글을 생성합니다.
-                    comment.pos = lastPos + 1;
-
-                    // 새로 생성된 댓글의 바로 다음 위치부터 모든 댓글의 위치를 +1 합니다.
-                    await this.commentRepository
-                        .createQueryBuilder('comment')
-                        .update()
-                        .set({
-                            pos: () => 'pos + 1',
-                        })
-                        .where('parentId = :parentId', {
-                            parentId: parentComment.id,
-                        })
-                        .andWhere('pos > :pos', {
-                            pos: comment.pos,
-                        })
-                        .setQueryRunner(queryRunner)
-                        .useTransaction(true)
-                        .execute();
-                } else {
-                    // pos 처리
-                    if (this.isZeroOrMore(createCommentDto.pos)) {
-                        comment.pos = createCommentDto.pos! + 1;
-                    }
-                }
+                await this.createNodeWithASC(
+                    comment,
+                    createCommentDto,
+                    parentComment,
+                    queryRunner,
+                );
             }
 
             // depth 처리
@@ -136,6 +84,87 @@ export class CommentService implements OnModuleInit {
         }
 
         return await queryRunner.manager.save(comment);
+    }
+
+    private async createNodeWithDESC(
+        comment: PostComment,
+        createCommentDto: CreateCommentDto,
+        parentComment: PostComment,
+        queryRunner: QueryRunner,
+    ) {
+        // pos 처리
+        if (this.isZeroOrMore(createCommentDto.pos)) {
+            comment.pos = createCommentDto.pos! + 1;
+        }
+
+        // 나머지 댓글들 pos + 1
+        await this.commentRepository
+            .createQueryBuilder('comment')
+            .update()
+            .set({
+                pos: () => 'pos + 1',
+            })
+            .where('parentId = :parentId', {
+                parentId: parentComment.id,
+            })
+            .andWhere('pos >= :pos', {
+                pos: comment.pos,
+            })
+            .setQueryRunner(queryRunner)
+            .useTransaction(true)
+            .execute();
+    }
+
+    private async createNodeWithASC(
+        comment: PostComment,
+        createCommentDto: CreateCommentDto,
+        parentComment: PostComment,
+        queryRunner: QueryRunner,
+    ) {
+        // 마지막 댓글을 가져옵니다.
+        const listItems = await this.commentRepository
+            .createQueryBuilder('comment')
+            .select()
+            .where('comment.parentId = :parentId', {
+                parentId: parentComment.id,
+            })
+            .andWhere('comment.id != :id', {
+                id: parentComment.id,
+            })
+            .addOrderBy('comment.pos', 'DESC')
+            .setQueryRunner(queryRunner)
+            .useTransaction(true)
+            .getOne();
+
+        if (listItems) {
+            // 마지막 댓글의 위치를 가져옵니다.
+            const lastPos = listItems.pos;
+
+            // 마지막 댓글의 바로 다음 위치에 댓글을 생성합니다.
+            comment.pos = lastPos + 1;
+
+            // 새로 생성된 댓글의 바로 다음 위치부터 모든 댓글의 위치를 +1 합니다.
+            await this.commentRepository
+                .createQueryBuilder('comment')
+                .update()
+                .set({
+                    pos: () => 'pos + 1',
+                })
+                .where('parentId = :parentId', {
+                    parentId: parentComment.id,
+                })
+                .andWhere('pos > :pos', {
+                    pos: comment.pos,
+                })
+                .setQueryRunner(queryRunner)
+                .useTransaction(true)
+                .execute();
+        } else {
+            // pos 처리
+            if (this.isZeroOrMore(createCommentDto.pos)) {
+                comment.pos = createCommentDto.pos! + 1;
+            }
+        }
     }
 
     private isZeroOrMore(value: number | undefined | null) {
