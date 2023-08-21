@@ -1575,6 +1575,15 @@
               "type": "number"
             },
             "required": true
+          },
+          {
+            "name": "expand",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "boolean"
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -1615,7 +1624,7 @@
                 "kind": "space"
               },
               {
-                "text": "댓글 ID",
+                "text": "포스트 ID",
                 "kind": "text"
               }
             ]
@@ -1650,6 +1659,23 @@
               },
               {
                 "text": "페이지 사이즈",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "expand",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "댓글을 펼칠 지 접을 지 여부",
                 "kind": "text"
               }
             ]
@@ -1692,6 +1718,15 @@
               "type": "number"
             },
             "required": true
+          },
+          {
+            "name": "expand",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "boolean"
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -1732,7 +1767,7 @@
                 "kind": "space"
               },
               {
-                "text": "댓글 ID",
+                "text": "포스트 ID",
                 "kind": "text"
               }
             ]
@@ -1772,7 +1807,304 @@
             ]
           },
           {
+            "name": "param",
+            "text": [
+              {
+                "text": "expand",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "댓글을 펼칠 지 접을 지 여부",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "returns"
+          }
+        ]
+      }
+    },
+    "/post/{id}/comment/by-parent": {
+      "get": {
+        "tags": [
+          "Post"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "parentId",
+            "in": "query",
+            "description": "부모 댓글 ID",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "description": "페이지 번호 (1부터 시작)",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "페이지 사이즈",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "접혀있는 댓글을 조회합니다",
+        "description": "접혀있는 댓글을 조회합니다.",
+        "x-nestia-namespace": "post.comment.by-parent.getCommentsByParentId",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "Post",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "id",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "포스트 ID",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "parentId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "부모 댓글 ID",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "pageNumber",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "페이지 번호 (1부터 시작)",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "pageSize",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "페이지 사이즈",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "/posts/{id}/comment/by-parent": {
+      "get": {
+        "tags": [
+          "Post"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "parentId",
+            "in": "query",
+            "description": "부모 댓글 ID",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "description": "페이지 번호 (1부터 시작)",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "페이지 사이즈",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "접혀있는 댓글을 조회합니다",
+        "description": "접혀있는 댓글을 조회합니다.",
+        "x-nestia-namespace": "posts.comment.by-parent.getCommentsByParentId",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "Post",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "id",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "포스트 ID",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "parentId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "부모 댓글 ID",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "pageNumber",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "페이지 번호 (1부터 시작)",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "pageSize",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "페이지 사이즈",
+                "kind": "text"
+              }
+            ]
           }
         ]
       }

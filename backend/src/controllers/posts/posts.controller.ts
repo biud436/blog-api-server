@@ -12,6 +12,7 @@ import {
     UseGuards,
     Req,
     Ip,
+    ParseBoolPipe,
 } from '@nestjs/common';
 import {
     ApiBearerAuth,
@@ -152,9 +153,10 @@ export class PostsController {
      * 댓글을 조회합니다.
      *
      * @tag Post
-     * @param id 댓글 ID
+     * @param id 포스트 ID
      * @param pageNumber 페이지 번호 (1부터 시작)
      * @param pageSize 페이지 사이즈
+     * @param expand 댓글을 펼칠 지 접을 지 여부
      * @returns
      */
     @Get('/:id/comment')
@@ -162,9 +164,36 @@ export class PostsController {
         @PostId() postId: number,
         @PageNumber('pageNumber') pageNumber: number,
         @PageSize() pageSize: number,
+        @Query('expand', new DefaultValuePipe(true), ParseBoolPipe)
+        isExpand: boolean = true,
     ) {
         return await this.postsService.getComments(
             postId,
+            pageNumber,
+            pageSize,
+            isExpand,
+        );
+    }
+
+    /**
+     * 접혀있는 댓글을 조회합니다.
+     *
+     * @tag Post
+     * @param id 포스트 ID
+     * @param parentId 부모 댓글 ID
+     * @param pageNumber 페이지 번호 (1부터 시작)
+     * @param pageSize 페이지 사이즈
+     */
+    @Get('/:id/comment/by-parent')
+    async getCommentsByParentId(
+        @PostId() postId: number,
+        @Query('parentId', ParseIntPipe) parentId: number,
+        @PageNumber('pageNumber') pageNumber: number,
+        @PageSize() pageSize: number,
+    ) {
+        return await this.postsService.getCommentsByParentId(
+            postId,
+            parentId,
             pageNumber,
             pageSize,
         );
