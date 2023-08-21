@@ -18,6 +18,9 @@ export class CommentService implements OnModuleInit {
         // await this.commentRepository.delete({});
     }
 
+    /**
+     * 새로운 댓글을 생성합니다.
+     */
     async createComment(
         createCommentDto: CreateCommentDto,
         userId: number,
@@ -28,7 +31,7 @@ export class CommentService implements OnModuleInit {
 
         let isExistParent = false;
 
-        // 부모 댓글이 있다면,
+        // 부모 댓글이 있을 경우
         if (createCommentDto.parentId) {
             const qb = this.commentRepository.createQueryBuilder('comment');
 
@@ -86,6 +89,14 @@ export class CommentService implements OnModuleInit {
         return await queryRunner.manager.save(comment);
     }
 
+    /**
+     * 모든 댓글을 조회합니다.
+     *
+     * @param postId
+     * @param pageNumber
+     * @param pageSize
+     * @returns
+     */
     async findAll(postId: number, pageNumber: number, pageSize: number) {
         const qb = this.commentRepository.createQueryBuilder('comment');
 
@@ -97,6 +108,59 @@ export class CommentService implements OnModuleInit {
 
         const items = await this.paginationProvider.execute(
             roots,
+            pageNumber,
+            pageSize,
+        );
+
+        return items;
+    }
+
+    /**
+     * 접힌 댓글만 조회합니다.
+     *
+     * @param postId
+     * @param pageNumber
+     * @param pageSize
+     * @returns
+     */
+    async findAllByRoot(postId: number, pageNumber: number, pageSize: number) {
+        const qb = this.commentRepository.createQueryBuilder('comment');
+
+        qb.select()
+            .where('comment.postId = :postId', { postId })
+            .andWhere('comment.depth = :depth', { depth: 0 })
+            .andWhere('comment.pos = :pos', { pos: 0 })
+            .orderBy('comment.parentId', 'ASC')
+            .addOrderBy('comment.pos', 'ASC');
+
+        const items = await this.paginationProvider.execute(
+            qb,
+            pageNumber,
+            pageSize,
+        );
+
+        return items;
+    }
+
+    /**
+     * 특정 댓글의 접힌 댓글을 조회합니다.
+     */
+    async findAllByParentId(
+        postId: number,
+        parentId: number,
+        pageNumber: number,
+        pageSize: number,
+    ) {
+        const qb = this.commentRepository.createQueryBuilder('comment');
+
+        qb.select()
+            .where('comment.postId = :postId', { postId })
+            .andWhere('comment.parentId = :parentId', { parentId })
+            .andWhere('comment.id != :parentId', { parentId })
+            .orderBy('comment.pos', 'ASC');
+
+        const items = await this.paginationProvider.execute(
+            qb,
             pageNumber,
             pageSize,
         );
