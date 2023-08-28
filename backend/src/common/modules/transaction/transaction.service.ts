@@ -30,10 +30,10 @@ export class TransactionService implements OnModuleInit {
     ) {}
 
     async onModuleInit() {
-        await this.registerProviders();
+        await this.registerTransactional();
     }
 
-    async registerProviders() {
+    async registerTransactional() {
         const providers = this.discoveryService.getProviders();
 
         const wrappers = providers.filter(
@@ -57,17 +57,18 @@ export class TransactionService implements OnModuleInit {
 
             if (isTransaction) {
                 for (const method of this.getPrototypeMethods(target)) {
-                    if (
-                        this.isTransactionalZoneMethod(target, method as string)
-                    ) {
+                    const methodName = method as string;
+
+                    // 트랜잭션 메소드인가?
+                    if (this.isTransactionalZoneMethod(target, methodName)) {
                         const transactionRunner = () => {
-                            const originalMethod = target[method as any];
+                            const originalMethod = target[methodName];
                             // 트랜잭션 격리 레벨을 가져옵니다.
                             const transactionIsolationLevel =
                                 Reflect.getMetadata(
                                     TRANSACTION_ISOLATE_LEVEL,
                                     target,
-                                    method as any,
+                                    methodName,
                                 ) || DEFAULT_ISOLATION_LEVEL;
 
                             const entityManager = this.dataSource.manager;
@@ -77,13 +78,15 @@ export class TransactionService implements OnModuleInit {
                                 Reflect.getMetadata(
                                     TRANSACTION_ENTITY_MANAGER,
                                     target,
-                                    method as any,
+                                    methodName,
                                 );
 
+                            // Proxy를 위해 콜백을 생성합니다 (Proxy 객체를 사용하지 않음)
                             const callback = async (...args: any[]) => {
                                 return new Promise((resolve, reject) => {
+                                    // 트랜잭션 엔티티 매니저가 필요한가?
                                     if (transactionalEntityManager) {
-                                        // 트랜잭션 엔티티 매니저를 실행합니다.
+                                        // 트랜잭션 엔티티 매니저(TX)를 실행합니다.
                                         entityManager
                                             .transaction(
                                                 transactionIsolationLevel,
@@ -92,7 +95,7 @@ export class TransactionService implements OnModuleInit {
                                                         Reflect.getMetadata(
                                                             TRANSACTIONAL_PARAMS,
                                                             target,
-                                                            method as any,
+                                                            methodName,
                                                         );
 
                                                     if (
@@ -188,7 +191,7 @@ export class TransactionService implements OnModuleInit {
                                                     Reflect.getMetadata(
                                                         TRANSACTIONAL_PARAMS,
                                                         target,
-                                                        method as any,
+                                                        methodName,
                                                     );
 
                                                 if (
@@ -200,7 +203,7 @@ export class TransactionService implements OnModuleInit {
                                                         Reflect.getMetadata(
                                                             INJECT_QUERYRUNNER_TOKEN,
                                                             target,
-                                                            method as any,
+                                                            methodName,
                                                         ) as number;
 
                                                     params.forEach(
@@ -212,6 +215,7 @@ export class TransactionService implements OnModuleInit {
                                                     );
                                                 }
 
+                                                // 원본 메소드를 실행합니다.
                                                 const result =
                                                     originalMethod.call(
                                                         target,
@@ -249,7 +253,8 @@ export class TransactionService implements OnModuleInit {
                         };
 
                         try {
-                            target[method as any] = transactionRunner();
+                            // 기존 메소드를 트랜잭션 메소드로 대체합니다.
+                            target[methodName] = transactionRunner();
                         } catch (e: any) {
                             throw new InternalServerErrorException(
                                 `트랜잭션 메소드를 실행하는 도중 오류가 발생했습니다: ${e.message}`,
@@ -261,12 +266,25 @@ export class TransactionService implements OnModuleInit {
         }
     }
 
+    /**
+     * 트랜잭션 메소드인가?
+     *
+     * @param target
+     * @param key
+     * @returns
+     */
     isTransactionalZoneMethod(target: object, key: string) {
         return (
             Reflect.getMetadata(TRANSACTIONAL_TOKEN, target, key) !== undefined
         );
     }
 
+    /**
+     * 객체의 메소드를 가져옵니다.
+     *
+     * @param obj
+     * @returns
+     */
     getPrototypeMethods = (obj: any) => {
         const properties = new Set();
         let currentObj = obj;
