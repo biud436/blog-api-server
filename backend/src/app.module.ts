@@ -46,6 +46,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { TaskModule } from './common/domains/task/task.module';
 import { PaginationModule } from './common/modules/pagination/pagination.module';
 import { CommentModule } from './entities/comment/comment.module';
+import { TransactionModule } from './common/modules/transaction/transaction.module';
 
 @Module({
     imports: [
@@ -63,6 +64,7 @@ import { CommentModule } from './entities/comment/comment.module';
             },
             inject: [ConfigService],
         }),
+        TransactionModule,
         CacheModule.registerAsync(redisCacheConfig),
         ConfigModule.forRoot({
             envFilePath: <EnvFileMap>(

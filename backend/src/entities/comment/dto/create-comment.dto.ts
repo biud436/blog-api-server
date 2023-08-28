@@ -5,7 +5,7 @@ import {
     IsString,
     ValidateIf,
 } from 'class-validator';
-import { IsNullable } from 'src/common/decorators/is-nullable.decorator';
+import { IsNullable } from 'src/common/decorators/validation/is-nullable.decorator';
 
 export class CreateCommentDto {
     /**

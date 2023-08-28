@@ -23,6 +23,7 @@ import { MoveCategoryDto } from './dto/move-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Category } from './entities/category.entity';
 import { CategoryRepository } from './entities/category.repository';
+import { TransactionalZone } from 'src/common/decorators/transactional';
 
 @Injectable()
 export class CategoryService {

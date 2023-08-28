@@ -32,15 +32,15 @@ import {
     AdminOnly,
     CustomApiOkResponse,
     JwtGuard,
-} from 'src/common/decorators/custom.decorator';
-import { PageNumber } from 'src/common/decorators/page-number.decorator';
+} from 'src/common/decorators/swagger/custom.decorator';
+import { PageNumber } from 'src/common/decorators/pagination/page-number.decorator';
 import { PostId } from 'src/common/decorators/post-id.decorator';
-import { UserId } from 'src/common/decorators/user-id.decorator';
+import { UserId } from 'src/common/decorators/roles/user-id.decorator';
 import {
     Anonymous,
     AnonymousId,
     IsPrivatePost,
-} from 'src/common/decorators/anonymous.decorator';
+} from 'src/common/decorators/roles/anonymous.decorator';
 import { CategoryService } from 'src/entities/category/category.service';
 import { CreatePostDto } from 'src/entities/post/dto/create-post.dto';
 import { UpdatePostDto } from 'src/entities/post/dto/update-post.dto';
@@ -53,7 +53,7 @@ import { PostSearchProperty } from './types/post-search-type';
 
 import { TypedQuery, TypedRoute } from '@nestia/core';
 import { CreateCommentDto } from 'src/entities/comment/dto/create-comment.dto';
-import { PageSize } from 'src/common/decorators/page-size.decorator';
+import { PageSize } from 'src/common/decorators/pagination/page-size.decorator';
 
 @Controller(['post', 'posts'])
 export class PostsController {

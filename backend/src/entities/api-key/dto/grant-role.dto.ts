@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsString } from 'class-validator';
-import { ScopeRoles } from 'src/common/decorators/x-api-scope.decorator';
+import { ScopeRoles } from 'src/common/decorators/api/x-api-scope.decorator';
 
 export class GrantRoleDto {
     @ApiProperty()

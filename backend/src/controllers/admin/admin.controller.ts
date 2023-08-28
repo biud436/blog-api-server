@@ -14,8 +14,11 @@ import {
 } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
-import { AdminOnly, JwtGuard } from 'src/common/decorators/custom.decorator';
-import { UserId } from 'src/common/decorators/user-id.decorator';
+import {
+    AdminOnly,
+    JwtGuard,
+} from 'src/common/decorators/swagger/custom.decorator';
+import { UserId } from 'src/common/decorators/roles/user-id.decorator';
 import { MoveCategoryDto } from 'src/entities/category/dto/move-category.dto';
 import { CreatePostTempDto } from 'src/entities/post-temp/dto/create-post-temp.dto';
 import { UpdatePostTempDto } from 'src/entities/post-temp/dto/update-post-temp.dto';

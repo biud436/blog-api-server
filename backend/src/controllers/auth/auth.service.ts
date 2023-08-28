@@ -11,7 +11,7 @@ import { CookieOptions, Request, Response } from 'express';
 import { AdminService } from 'src/entities/admin/admin.service';
 import { CreateUserDto } from 'src/entities/user/dto/create-user.dto';
 import { UserService } from 'src/entities/user/user.service';
-import { DataSource } from 'typeorm';
+import { DataSource, QueryRunner } from 'typeorm';
 import { AuthRequest } from './validator/request.dto';
 import { JwtPayload } from './validator/response.dto';
 import * as validator from 'class-validator';
@@ -27,13 +27,19 @@ import { plainToClass } from 'class-transformer';
 import { LoginAuthorizationException } from './validator/error.dto';
 import { ApiKeyService } from 'src/entities/api-key/api-key.service';
 import { User } from 'src/entities/user/entities/user.entity';
-import { Role } from 'src/common/decorators/role.enum';
+import { Role } from 'src/common/decorators/roles/role.enum';
 import { HttpService } from '@nestjs/axios';
 import { GithubUserData } from './validator/github.dto';
 import { LocalDate, LocalDateTime } from '@js-joda/core';
 import { AES256Provider } from 'src/common/modules/aes/aes-256.provider';
 import { ConnectInfoService } from 'src/entities/connect-info/connect-info.service';
 import { GithubUser } from './strategies/github.strategy';
+import {
+    Transactional,
+    TransactionalZone,
+} from 'src/common/decorators/transactional';
+import { InjectQueryRunner } from 'src/common/decorators/transactional/inject-query-runner.decorator';
+import { Query } from 'typeorm/driver/Query';
 
 const CONFIG = {
     KOREAN: {
@@ -92,6 +98,7 @@ export function getCookieSettingWithRefreshToken(
 }
 
 @Injectable()
+@TransactionalZone()
 export class AuthService {
     private logger: Logger = new Logger(AuthService.name);
 
@@ -757,5 +764,13 @@ export class AuthService {
         const data = res.data as any;
 
         return data;
+    }
+
+    @Transactional()
+    async transactionalTest(@InjectQueryRunner() queryRunner?: QueryRunner) {
+        const userRepository = queryRunner?.manager.getRepository(User);
+        const users = await userRepository?.find();
+
+        return users;
     }
 }

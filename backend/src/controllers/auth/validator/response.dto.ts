@@ -1,4 +1,4 @@
-import { Role } from 'src/common/decorators/role.enum';
+import { Role } from 'src/common/decorators/roles/role.enum';
 import { User } from 'src/entities/user/entities/user.entity';
 
 export interface JwtPayload {

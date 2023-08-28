@@ -11,11 +11,11 @@ import {
     AdminOnly,
     CustomApiOkResponse,
     JwtGuard,
-} from 'src/common/decorators/custom.decorator';
+} from 'src/common/decorators/swagger/custom.decorator';
 import { UploadFolder } from 'src/common/decorators/upload-folder';
 import { ApiService } from './api.service';
-import { PageNumber } from 'src/common/decorators/page-number.decorator';
-import { PageSize } from 'src/common/decorators/page-size.decorator';
+import { PageNumber } from 'src/common/decorators/pagination/page-number.decorator';
+import { PageSize } from 'src/common/decorators/pagination/page-size.decorator';
 
 @Controller('api')
 export class ApiController {

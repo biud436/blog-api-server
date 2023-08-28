@@ -18,7 +18,7 @@ import { Admin } from 'src/entities/admin/entities/admin.entity';
 import { ApiKey } from 'src/entities/api-key/entities/api-key.entity';
 import { BlogMetaData } from 'src/entities/blog-meta-data/entities/blog-meta-data.entity';
 import { PostTemp } from 'src/entities/post-temp/entities/post-temp.entity';
-import { Role } from 'src/common/decorators/role.enum';
+import { Role } from 'src/common/decorators/roles/role.enum';
 import { PostComment } from 'src/entities/comment/entities/comment.entity';
 
 @Entity()

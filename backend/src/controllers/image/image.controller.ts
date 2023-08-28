@@ -19,7 +19,7 @@ import {
     AdminOnly,
     CustomApiOkResponse,
     JwtGuard,
-} from 'src/common/decorators/custom.decorator';
+} from 'src/common/decorators/swagger/custom.decorator';
 import { DataSource } from 'typeorm';
 import { ImageService } from './image.service';
 import {
@@ -30,7 +30,7 @@ import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
 import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
 import { IResponsableData } from 'src/common/libs/response/interface/response.interface';
 import { S3ImageUploadDto } from './dto/s3-image-upload.dto';
-import { UserId } from 'src/common/decorators/user-id.decorator';
+import { UserId } from 'src/common/decorators/roles/user-id.decorator';
 import {
     ImageCreateSvgCommand,
     ImageCreateSvgCommandImpl,

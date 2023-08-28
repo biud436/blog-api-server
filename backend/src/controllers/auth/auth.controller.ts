@@ -6,11 +6,15 @@ import {
     Ip,
     Logger,
     Post,
+    Query,
     Req,
     Res,
     UseGuards,
 } from '@nestjs/common';
-import { AdminOnly, JwtGuard } from 'src/common/decorators/custom.decorator';
+import {
+    AdminOnly,
+    JwtGuard,
+} from 'src/common/decorators/swagger/custom.decorator';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { Request, Response } from 'express';
@@ -20,7 +24,7 @@ import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
 import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
 import { VerifyAuthCodeRequestDto } from './dto/verify-auth-code.dto';
 import { AuthRequest } from './validator/request.dto';
-import { UserInfo } from 'src/common/decorators/user.decorator';
+import { UserInfo } from 'src/common/decorators/roles/user.decorator';
 import { User } from 'src/entities/user/entities/user.entity';
 import { SessionAuthGuard } from './guards/session-auth.guard';
 import { Throttle } from '@nestjs/throttler';
@@ -28,6 +32,12 @@ import { LOGIN_INTERVAL } from 'src/common/config/throttle-config';
 import { AuthGuard } from '@nestjs/passport';
 import { GithubUser } from './strategies/github.strategy';
 import { ILoginDto } from './dto/login.dto';
+import {
+    Transactional,
+    TransactionalZone,
+} from 'src/common/decorators/transactional';
+import { InjectQueryRunner } from 'src/common/decorators/transactional/inject-query-runner.decorator';
+import { QueryRunner } from 'typeorm';
 
 @Controller('auth')
 @ApiTags('인증 API')
@@ -238,5 +248,12 @@ export class AuthController {
     ) {
         const user = req.user;
         return await this.authService.loginGithubUser(user as GithubUser, res);
+    }
+
+    @Get('/transactional-test')
+    @JwtGuard()
+    @AdminOnly()
+    async transactionalTest() {
+        return await this.authService.transactionalTest();
     }
 }
