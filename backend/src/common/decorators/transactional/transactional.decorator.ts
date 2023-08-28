@@ -17,6 +17,13 @@ export interface TransactionalOptions {
 export const DEFAULT_ISOLATION_LEVEL =
     TransactionIsolationLevel.REPEATABLE_READ;
 
+/**
+ * Transactional Decorator
+ *
+ * @author 어진석(biud436)
+ * @param option 4가지의 트랜잭션 격리 수준을 지정할 수 있습니다.
+ * @returns
+ */
 export function Transactional(option?: TransactionalOptions): MethodDecorator {
     return function (
         target: object,

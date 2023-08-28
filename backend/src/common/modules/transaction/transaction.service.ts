@@ -20,6 +20,12 @@ import {
 import { INJECT_QUERYRUNNER_TOKEN } from 'src/common/decorators/transactional/inject-query-runner.decorator';
 import { DataSource, EntityManager } from 'typeorm';
 
+/**
+ * @author 어진석(biud436)
+ * @class TransactionService
+ * @description
+ * 트랜잭션 서비스는 트랜잭션을 쉽게 사용할 수 있도록 도와줍니다.
+ */
 @Injectable()
 export class TransactionService implements OnModuleInit {
     private readonly logger: Logger = new Logger(TransactionService.name);
