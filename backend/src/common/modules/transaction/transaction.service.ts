@@ -30,10 +30,10 @@ export class TransactionService implements OnModuleInit {
     ) {}
 
     async onModuleInit() {
-        await this.registerControllers();
+        await this.registerProviders();
     }
 
-    async registerControllers() {
+    async registerProviders() {
         const providers = this.discoveryService.getProviders();
 
         const wrappers = providers.filter(
@@ -42,32 +42,31 @@ export class TransactionService implements OnModuleInit {
         );
 
         for (const wrapper of wrappers) {
-            const controller = wrapper.isDependencyTreeStatic()
+            const targetClass = wrapper.isDependencyTreeStatic()
                 ? (wrapper.instance.constructor as Type<any>)
                 : wrapper.metatype.prototype;
 
             const isTransaction = this.reflector.get<boolean>(
                 TRANSACTIONAL_ZONE_TOKEN,
-                controller,
+                targetClass,
             );
+
+            const target = wrapper.isDependencyTreeStatic()
+                ? wrapper.instance
+                : wrapper.metatype.prototype;
+
             if (isTransaction) {
-                for (const method of this.getPrototypeMethods(
-                    wrapper.instance,
-                )) {
+                for (const method of this.getPrototypeMethods(target)) {
                     if (
-                        this.isTransactionalZoneMethod(
-                            wrapper.instance,
-                            method as string,
-                        )
+                        this.isTransactionalZoneMethod(target, method as string)
                     ) {
                         const transactionRunner = () => {
-                            const originalMethod =
-                                wrapper.instance[method as any];
+                            const originalMethod = target[method as any];
                             // 트랜잭션 격리 레벨을 가져옵니다.
                             const transactionIsolationLevel =
                                 Reflect.getMetadata(
                                     TRANSACTION_ISOLATE_LEVEL,
-                                    wrapper.instance,
+                                    target,
                                     method as any,
                                 ) || DEFAULT_ISOLATION_LEVEL;
 
@@ -77,7 +76,7 @@ export class TransactionService implements OnModuleInit {
                             const transactionalEntityManager =
                                 Reflect.getMetadata(
                                     TRANSACTION_ENTITY_MANAGER,
-                                    wrapper.instance,
+                                    target,
                                     method as any,
                                 );
 
@@ -92,7 +91,7 @@ export class TransactionService implements OnModuleInit {
                                                     const params =
                                                         Reflect.getMetadata(
                                                             TRANSACTIONAL_PARAMS,
-                                                            wrapper.instance,
+                                                            target,
                                                             method as any,
                                                         );
 
@@ -133,7 +132,7 @@ export class TransactionService implements OnModuleInit {
                                                     try {
                                                         const result =
                                                             originalMethod.call(
-                                                                wrapper.instance,
+                                                                target,
                                                                 ...args,
                                                             );
 
@@ -188,7 +187,7 @@ export class TransactionService implements OnModuleInit {
                                                 const params =
                                                     Reflect.getMetadata(
                                                         TRANSACTIONAL_PARAMS,
-                                                        wrapper.instance,
+                                                        target,
                                                         method as any,
                                                     );
 
@@ -200,7 +199,7 @@ export class TransactionService implements OnModuleInit {
                                                     const paramIndex =
                                                         Reflect.getMetadata(
                                                             INJECT_QUERYRUNNER_TOKEN,
-                                                            wrapper.instance,
+                                                            target,
                                                             method as any,
                                                         ) as number;
 
@@ -215,7 +214,7 @@ export class TransactionService implements OnModuleInit {
 
                                                 const result =
                                                     originalMethod.call(
-                                                        wrapper.instance,
+                                                        target,
                                                         ...args,
                                                     );
 
@@ -250,8 +249,7 @@ export class TransactionService implements OnModuleInit {
                         };
 
                         try {
-                            wrapper.instance[method as any] =
-                                transactionRunner();
+                            target[method as any] = transactionRunner();
                         } catch (e: any) {
                             throw new InternalServerErrorException(
                                 `트랜잭션 메소드를 실행하는 도중 오류가 발생했습니다: ${e.message}`,
