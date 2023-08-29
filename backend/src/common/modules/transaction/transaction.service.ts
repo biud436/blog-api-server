@@ -78,17 +78,12 @@ export class TransactionService implements OnModuleInit {
                 ? (wrapper.instance.constructor as Type<any>)
                 : wrapper.metatype.prototype;
 
-            const isTransactionZone = this.reflector.get<boolean>(
-                TRANSACTIONAL_ZONE_TOKEN,
-                targetClass,
-            );
-
             const target = isSingletone
                 ? wrapper.instance
                 : wrapper.metatype.prototype;
 
             // 트랜잭션 존일 경우에만 메소드를 스캔합니다.
-            if (isTransactionZone) {
+            if (this.isTransactionZone(targetClass)) {
                 for (const methodName of this.metadataScanner.getAllMethodNames(
                     target,
                 )) {
@@ -98,6 +93,19 @@ export class TransactionService implements OnModuleInit {
                 }
             }
         }
+    }
+
+    /**
+     * 트랜잭션 존인지 여부를 확인합니다.
+     *
+     * @param targetClass
+     * @returns
+     */
+    private isTransactionZone(targetClass: any) {
+        return this.reflector.get<boolean>(
+            TRANSACTIONAL_ZONE_TOKEN,
+            targetClass,
+        );
     }
 
     /**
