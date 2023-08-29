@@ -11,7 +11,7 @@ import { ApiKey } from './entities/api-key.entity';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { DateTimeUtil } from 'src/common/libs/date/DateTimeUtil';
 import { CryptoUtil } from 'src/common/libs/crypto/CryptoUtil';
-import { Role } from 'src/common/decorators/roles/role.enum';
+import { Role } from 'src/common/decorators/authorization/role.enum';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { LocalDateTime } from '@js-joda/core';
 import { ScopeRoles } from 'src/common/decorators/api/x-api-scope.decorator';

@@ -30,7 +30,7 @@ import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
 import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
 import { IResponsableData } from 'src/common/libs/response/interface/response.interface';
 import { S3ImageUploadDto } from './dto/s3-image-upload.dto';
-import { UserId } from 'src/common/decorators/roles/user-id.decorator';
+import { UserId } from 'src/common/decorators/authorization/user-id.decorator';
 import {
     ImageCreateSvgCommand,
     ImageCreateSvgCommandImpl,

@@ -27,7 +27,7 @@ import { plainToClass } from 'class-transformer';
 import { LoginAuthorizationException } from './validator/error.dto';
 import { ApiKeyService } from 'src/entities/api-key/api-key.service';
 import { User } from 'src/entities/user/entities/user.entity';
-import { Role } from 'src/common/decorators/roles/role.enum';
+import { Role } from 'src/common/decorators/authorization/role.enum';
 import { HttpService } from '@nestjs/axios';
 import { GithubUserData } from './validator/github.dto';
 import { LocalDate, LocalDateTime } from '@js-joda/core';

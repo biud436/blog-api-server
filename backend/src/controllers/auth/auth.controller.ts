@@ -24,7 +24,7 @@ import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
 import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
 import { VerifyAuthCodeRequestDto } from './dto/verify-auth-code.dto';
 import { AuthRequest } from './validator/request.dto';
-import { UserInfo } from 'src/common/decorators/roles/user.decorator';
+import { UserInfo } from 'src/common/decorators/authorization/user.decorator';
 import { User } from 'src/entities/user/entities/user.entity';
 import { SessionAuthGuard } from './guards/session-auth.guard';
 import { Throttle } from '@nestjs/throttler';

@@ -34,13 +34,13 @@ import {
     JwtGuard,
 } from 'src/common/decorators/swagger/custom.decorator';
 import { PageNumber } from 'src/common/decorators/pagination/page-number.decorator';
-import { PostId } from 'src/common/decorators/post-id.decorator';
-import { UserId } from 'src/common/decorators/roles/user-id.decorator';
+import { PostId } from 'src/common/decorators/enhancer/post-id.decorator';
+import { UserId } from 'src/common/decorators/authorization/user-id.decorator';
 import {
     Anonymous,
     AnonymousId,
     IsPrivatePost,
-} from 'src/common/decorators/roles/anonymous.decorator';
+} from 'src/common/decorators/authorization/anonymous.decorator';
 import { CategoryService } from 'src/entities/category/category.service';
 import { CreatePostDto } from 'src/entities/post/dto/create-post.dto';
 import { UpdatePostDto } from 'src/entities/post/dto/update-post.dto';

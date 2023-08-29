@@ -12,7 +12,7 @@ import {
     CustomApiOkResponse,
     JwtGuard,
 } from 'src/common/decorators/swagger/custom.decorator';
-import { UploadFolder } from 'src/common/decorators/upload-folder';
+import { UploadFolder } from 'src/common/decorators/enhancer/upload-folder';
 import { ApiService } from './api.service';
 import { PageNumber } from 'src/common/decorators/pagination/page-number.decorator';
 import { PageSize } from 'src/common/decorators/pagination/page-size.decorator';

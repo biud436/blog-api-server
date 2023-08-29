@@ -14,8 +14,8 @@ import {
     ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/controllers/auth/guards/jwt-auth.guard';
-import { Role } from '../roles/role.enum';
-import { Roles } from '../roles/roles.decorator';
+import { Role } from '../authorization/role.enum';
+import { Roles } from '../authorization/roles.decorator';
 
 //=====================================================================
 // API DOCS

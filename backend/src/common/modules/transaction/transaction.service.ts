@@ -19,6 +19,9 @@ import {
 } from 'src/common/decorators/transactional';
 import { INJECT_QUERYRUNNER_TOKEN } from 'src/common/decorators/transactional/inject-query-runner.decorator';
 import { DataSource, EntityManager } from 'typeorm';
+import { TransactionManagerConsumer } from './tx-manager.consumer';
+import { TransactionQueryRunnerConsumer } from './tx-query-runner.consumer';
+import { IsolationLevel } from 'typeorm/driver/types/IsolationLevel';
 
 /**
  * @author 어진석(biud436)
@@ -29,30 +32,52 @@ import { DataSource, EntityManager } from 'typeorm';
 @Injectable()
 export class TransactionService implements OnModuleInit {
     private readonly logger: Logger = new Logger(TransactionService.name);
+
+    /**
+     * 트랜잭션 매니저 컨슈머
+     */
+    private readonly txManagerConsumer: TransactionManagerConsumer;
+
+    /**
+     * 트랜잭션 쿼리 러너 컨슈머
+     */
+    private readonly txQueryRunnerConsumer: TransactionQueryRunnerConsumer;
+
+    private readonly version = '1.0.0';
+
     constructor(
         private readonly discoveryService: DiscoveryService,
+        private readonly metadataScanner: MetadataScanner,
         private readonly reflector: Reflector,
         @InjectDataSource() private readonly dataSource: DataSource,
-    ) {}
+    ) {
+        this.txManagerConsumer = new TransactionManagerConsumer();
+        this.txQueryRunnerConsumer = new TransactionQueryRunnerConsumer();
+    }
 
-    async onModuleInit() {
+    public async onModuleInit() {
         await this.registerTransactional();
     }
 
-    async registerTransactional() {
+    /**
+     * 트랜잭션 메소드를 등록합니다.
+     */
+    private async registerTransactional() {
         const providers = this.discoveryService.getProviders();
 
-        const wrappers = providers.filter(
-            (wrapper) =>
-                wrapper.instance && Object.getPrototypeOf(wrapper.instance),
-        );
+        const wrappers = providers
+            .filter((wrapper) => wrapper.isDependencyTreeStatic())
+            .filter(
+                (wrapper) =>
+                    wrapper.instance && Object.getPrototypeOf(wrapper.instance),
+            );
 
         for (const wrapper of wrappers) {
             const targetClass = wrapper.isDependencyTreeStatic()
                 ? (wrapper.instance.constructor as Type<any>)
                 : wrapper.metatype.prototype;
 
-            const isTransaction = this.reflector.get<boolean>(
+            const isTransactionZone = this.reflector.get<boolean>(
                 TRANSACTIONAL_ZONE_TOKEN,
                 targetClass,
             );
@@ -61,237 +86,175 @@ export class TransactionService implements OnModuleInit {
                 ? wrapper.instance
                 : wrapper.metatype.prototype;
 
-            if (isTransaction) {
-                for (const method of this.getPrototypeMethods(target)) {
-                    const methodName = method as string;
-
-                    // 트랜잭션 메소드인가?
-                    if (this.isTransactionalZoneMethod(target, methodName)) {
-                        const transactionRunner = () => {
-                            const originalMethod = target[methodName];
-                            // 트랜잭션 격리 레벨을 가져옵니다.
-                            const transactionIsolationLevel =
-                                Reflect.getMetadata(
-                                    TRANSACTION_ISOLATE_LEVEL,
-                                    target,
-                                    methodName,
-                                ) || DEFAULT_ISOLATION_LEVEL;
-
-                            const entityManager = this.dataSource.manager;
-
-                            // 트랜잭션 엔티티 매니저가 필요한가?
-                            const transactionalEntityManager =
-                                Reflect.getMetadata(
-                                    TRANSACTION_ENTITY_MANAGER,
-                                    target,
-                                    methodName,
-                                );
-
-                            // Proxy를 위해 콜백을 생성합니다 (Proxy 객체를 사용하지 않음)
-                            const callback = async (...args: any[]) => {
-                                return new Promise((resolve, reject) => {
-                                    // 트랜잭션 엔티티 매니저가 필요한가?
-                                    if (transactionalEntityManager) {
-                                        // 트랜잭션 엔티티 매니저(TX)를 실행합니다.
-                                        entityManager
-                                            .transaction(
-                                                transactionIsolationLevel,
-                                                async (em) => {
-                                                    const params =
-                                                        Reflect.getMetadata(
-                                                            TRANSACTIONAL_PARAMS,
-                                                            target,
-                                                            methodName,
-                                                        );
-
-                                                    if (
-                                                        Array.isArray(params) &&
-                                                        params.length > 0
-                                                    ) {
-                                                        if (
-                                                            Array.isArray(
-                                                                args,
-                                                            ) &&
-                                                            args.length > 0
-                                                        ) {
-                                                            args = args.map(
-                                                                (
-                                                                    arg,
-                                                                    index,
-                                                                ) => {
-                                                                    const param =
-                                                                        params[
-                                                                            index
-                                                                        ];
-                                                                    if (
-                                                                        param instanceof
-                                                                        EntityManager
-                                                                    ) {
-                                                                        return em;
-                                                                    }
-                                                                    return arg;
-                                                                },
-                                                            );
-                                                        } else {
-                                                            args = [em];
-                                                        }
-                                                    }
-
-                                                    // 트랜잭션을 실행합니다.
-                                                    try {
-                                                        const result =
-                                                            originalMethod.call(
-                                                                target,
-                                                                ...args,
-                                                            );
-
-                                                        // promise인가?
-                                                        if (
-                                                            result instanceof
-                                                            Promise
-                                                        ) {
-                                                            return resolve(
-                                                                await result,
-                                                            );
-                                                        } else {
-                                                            resolve(result);
-                                                        }
-                                                    } catch (err: any) {
-                                                        this.logger.error(
-                                                            `트랜잭션을 실행하는 도중 오류가 발생했습니다: ${err.message}`,
-                                                        );
-
-                                                        const queryRunner =
-                                                            em.queryRunner;
-
-                                                        if (queryRunner) {
-                                                            queryRunner.rollbackTransaction();
-                                                        }
-
-                                                        reject(err);
-                                                    }
-                                                },
-                                            )
-                                            .catch((err) => {
-                                                this.logger.error(
-                                                    `트랜잭션을 실행하는 도중 오류가 발생했습니다1: ${err.message}`,
-                                                );
-                                                reject(err);
-                                            });
-                                    } else {
-                                        const txWrapper = async (
-                                            ...args: any[]
-                                        ) => {
-                                            // 단일 트랜잭션을 실행합니다.
-                                            const queryRunner =
-                                                this.dataSource.createQueryRunner();
-
-                                            await queryRunner.connect();
-                                            await queryRunner.startTransaction(
-                                                transactionIsolationLevel,
-                                            );
-
-                                            try {
-                                                // QueryRunner를 찾아서 대체한다.
-                                                const params =
-                                                    Reflect.getMetadata(
-                                                        TRANSACTIONAL_PARAMS,
-                                                        target,
-                                                        methodName,
-                                                    );
-
-                                                if (
-                                                    Array.isArray(params) &&
-                                                    params.length > 0
-                                                ) {
-                                                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                                                    const paramIndex =
-                                                        Reflect.getMetadata(
-                                                            INJECT_QUERYRUNNER_TOKEN,
-                                                            target,
-                                                            methodName,
-                                                        ) as number;
-
-                                                    params.forEach(
-                                                        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                                                        (param, _index) => {
-                                                            args[paramIndex] =
-                                                                queryRunner;
-                                                        },
-                                                    );
-                                                }
-
-                                                // 원본 메소드를 실행합니다.
-                                                const result =
-                                                    originalMethod.call(
-                                                        target,
-                                                        ...args,
-                                                    );
-
-                                                let ret = null;
-                                                // promise인가?
-                                                if (result instanceof Promise) {
-                                                    ret = await result;
-                                                } else {
-                                                    ret = result;
-                                                }
-
-                                                await queryRunner.commitTransaction();
-
-                                                return ret;
-                                            } catch (e: any) {
-                                                await queryRunner.rollbackTransaction();
-                                                this.logger.error(
-                                                    `트랜잭션을 실행하는 도중 오류가 발생했습니다: ${e.stack}`,
-                                                );
-                                                reject(e);
-                                            } finally {
-                                                await queryRunner.release();
-                                            }
-                                        };
-
-                                        resolve(txWrapper(...args));
-                                    }
-                                });
-                            };
-
-                            return callback;
-                        };
-
-                        try {
-                            // 기존 메소드를 트랜잭션 메소드로 대체합니다.
-                            target[methodName] = transactionRunner();
-                        } catch (e: any) {
-                            throw new InternalServerErrorException(
-                                `트랜잭션 메소드를 실행하는 도중 오류가 발생했습니다: ${e.message}`,
-                            );
+            // 트랜잭션 존일 경우에만 메소드를 스캔합니다.
+            if (isTransactionZone) {
+                // 메타데이터 스캐너에 의존하지 않고 자체적으로 메소드를 스캔합니다.
+                if (this.isNativePrototypeScan()) {
+                    for (const method of this.getPrototypeMethods(target)) {
+                        const methodName = method as string;
+                        if (
+                            this.isTransactionalZoneMethod(target, methodName)
+                        ) {
+                            this.wrap(target, methodName);
                         }
                     }
+                } else {
+                    // 메타데이터 스캐너를 사용하여 메소드를 스캔합니다.
+                    this.metadataScanner.scanFromPrototype(
+                        target,
+                        Object.getPrototypeOf(target),
+                        (methodName) => {
+                            if (
+                                this.isTransactionalZoneMethod(
+                                    target,
+                                    methodName,
+                                )
+                            ) {
+                                this.wrap(target, methodName);
+                            }
+                        },
+                    );
                 }
             }
         }
     }
 
     /**
-     * 트랜잭션 메소드인가?
+     * 메타데이터 스캐너에 의존하지 않고 자체적으로 메소드를 스캔하는 지 여부를 확인합니다.
+     * @returns
+     */
+    private isNativePrototypeScan() {
+        return this.version >= '2.0.0';
+    }
+
+    /**
+     * 트랜잭션 메소드를 래핑합니다.
+     *
+     * @param target
+     * @param methodName
+     */
+    private wrap(target: any, methodName: string) {
+        const wrapTransaction = () => {
+            const originalMethod = target[methodName];
+
+            const transactionIsolationLevel = this.getTransactionIsolationLevel(
+                target,
+                methodName,
+            );
+
+            const entityManager = this.dataSource.manager;
+
+            const transactionalEntityManager = this.getTxManager(
+                target,
+                methodName,
+            );
+
+            // Proxy를 위해 콜백을 생성합니다 (Proxy 객체를 사용하지 않음)
+            const callback = async (...args: any[]) => {
+                return new Promise((resolve, reject) => {
+                    if (transactionalEntityManager) {
+                        this.txManagerConsumer.execute(
+                            entityManager,
+                            transactionIsolationLevel,
+                            target,
+                            methodName,
+                            args,
+                            originalMethod,
+                            resolve,
+                            reject,
+                        );
+                    } else {
+                        this.txQueryRunnerConsumer.execute(
+                            this.dataSource,
+                            transactionIsolationLevel,
+                            target,
+                            methodName,
+                            originalMethod,
+                            reject,
+                            resolve,
+                            args,
+                        );
+                    }
+                });
+            };
+
+            return callback;
+        };
+
+        try {
+            // 기존 메소드를 트랜잭션 메소드로 대체합니다.
+            target[methodName] = wrapTransaction();
+        } catch (e: any) {
+            throw new InternalServerErrorException(
+                `트랜잭션 메소드를 대체하는 도중 오류가 발생했습니다: ${e.message}`,
+            );
+        }
+    }
+
+    /**
+     * 트랜잭션 엔티티 매니저가 필요한 지 여부를 확인합니다.
+     *
+     * @param target
+     * @param methodName
+     * @returns
+     */
+    private getTxManager(target: any, methodName: string): boolean {
+        return Reflect.getMetadata(
+            TRANSACTION_ENTITY_MANAGER,
+            target,
+            methodName,
+        ) as boolean;
+    }
+
+    /**
+     * 트랜잭션 격리 레벨을 가져옵니다.
+     *
+     * @param target
+     * @param methodName
+     * @returns
+     */
+    private getTransactionIsolationLevel(
+        target: any,
+        methodName: string,
+    ): IsolationLevel {
+        return <IsolationLevel>(
+            (Reflect.getMetadata(
+                TRANSACTION_ISOLATE_LEVEL,
+                target,
+                methodName,
+            ) || DEFAULT_ISOLATION_LEVEL)
+        );
+    }
+
+    /**
+     * 트랜잭션 메소드인지 확인합니다.
      *
      * @param target
      * @param key
      * @returns
      */
-    isTransactionalZoneMethod(target: object, key: string) {
+    private isTransactionalZoneMethod(target: object, key: string) {
         return (
             Reflect.getMetadata(TRANSACTIONAL_TOKEN, target, key) !== undefined
         );
     }
 
     /**
-     * 객체의 메소드를 가져옵니다.
+     * 모든 메소드의 이름을 가져옵니다.
+     *
+     * 원래 이 기능으로 트랜잭션 메소드를 찾았으나,
+     * NestJS를 사용하는 사용자들이 this.metadataScanner.scanFromPrototype를 주로 사용하므로,
+     * 조금 더 대중적인 코드로 변경하였습니다.
+     *
+     * 하지만 this.metadataScanner.scanFromPrototype는 deprecated 될 예정이므로,
+     * 추후에는 이 기능을 사용하지 않도록 변경할 예정이며
+     *
+     * 다시 아래와 같은 코드로 변경할 예정입니다.
      *
      * @param obj
      * @returns
      */
-    getPrototypeMethods = (obj: any) => {
+    private getPrototypeMethods = (obj: any) => {
         const properties = new Set();
         let currentObj = obj;
         do {

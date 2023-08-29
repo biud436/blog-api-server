@@ -4,3 +4,4 @@ export * from './user-id.decorator';
 export * from './user-only.decorator';
 export * from './user.decorator';
 export * from './anonymous.decorator';
+export * from './ignore-jwt-guard.decorator';

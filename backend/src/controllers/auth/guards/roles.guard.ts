@@ -8,8 +8,8 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
-import { Role } from 'src/common/decorators/roles/role.enum';
-import { ROLES_KEY } from 'src/common/decorators/roles/roles.decorator';
+import { Role } from 'src/common/decorators/authorization/role.enum';
+import { ROLES_KEY } from 'src/common/decorators/authorization/roles.decorator';
 import { AuthService } from '../auth.service';
 import { Request } from 'express';
 

@@ -11,7 +11,7 @@ import { JwtService } from '@nestjs/jwt';
 import { AuthGuard, AuthModuleOptions } from '@nestjs/passport';
 import { Request } from 'express';
 import { JwtGuard } from 'src/common/decorators/swagger/custom.decorator';
-import { ANONYMOUS_ID } from 'src/common/decorators/roles/anonymous.decorator';
+import { ANONYMOUS_ID } from 'src/common/decorators/authorization/anonymous.decorator';
 
 /**
  * 토큰을 검증하고 디코딩하지만 오류를 발생시키진 않습니다.
