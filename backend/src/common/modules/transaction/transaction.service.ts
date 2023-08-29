@@ -43,8 +43,6 @@ export class TransactionService implements OnModuleInit {
      */
     private readonly txQueryRunnerConsumer: TransactionQueryRunnerConsumer;
 
-    private readonly version = '1.0.0';
-
     constructor(
         private readonly discoveryService: DiscoveryService,
         private readonly metadataScanner: MetadataScanner,
@@ -91,43 +89,30 @@ export class TransactionService implements OnModuleInit {
 
             // 트랜잭션 존일 경우에만 메소드를 스캔합니다.
             if (isTransactionZone) {
-                // 메타데이터 스캐너에 의존하지 않고 자체적으로 메소드를 스캔합니다.
-                if (this.isNativePrototypeScan()) {
-                    for (const method of this.getPrototypeMethods(target)) {
-                        const methodName = method as string;
-                        if (
-                            this.isTransactionalZoneMethod(target, methodName)
-                        ) {
-                            this.wrap(target, methodName);
-                        }
+                for (const methodName of this.metadataScanner.getAllMethodNames(
+                    target,
+                )) {
+                    if (this.isTransactionalZoneMethod(target, methodName)) {
+                        this.wrap(target, methodName);
                     }
-                } else {
-                    // 메타데이터 스캐너를 사용하여 메소드를 스캔합니다.
-                    this.metadataScanner.scanFromPrototype(
-                        target,
-                        Object.getPrototypeOf(target),
-                        (methodName) => {
-                            if (
-                                this.isTransactionalZoneMethod(
-                                    target,
-                                    methodName,
-                                )
-                            ) {
-                                this.wrap(target, methodName);
-                            }
-                        },
-                    );
                 }
+
+                // this.metadataScanner.scanFromPrototype(
+                //     target,
+                //     Object.getPrototypeOf(target),
+                //     (methodName) => {
+                //         if (
+                //             this.isTransactionalZoneMethod(
+                //                 target,
+                //                 methodName,
+                //             )
+                //         ) {
+                //             this.wrap(target, methodName);
+                //         }
+                //     },
+                // );
             }
         }
-    }
-
-    /**
-     * 메타데이터 스캐너에 의존하지 않고 자체적으로 메소드를 스캔하는 지 여부를 확인합니다.
-     * @returns
-     */
-    private isNativePrototypeScan() {
-        return this.version >= '2.0.0';
     }
 
     /**
