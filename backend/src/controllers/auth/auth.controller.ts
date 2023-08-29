@@ -6,7 +6,6 @@ import {
     Ip,
     Logger,
     Post,
-    Query,
     Req,
     Res,
     UseGuards,
@@ -26,16 +25,11 @@ import { VerifyAuthCodeRequestDto } from './dto/verify-auth-code.dto';
 import { AuthRequest } from './validator/request.dto';
 import { UserInfo } from 'src/common/decorators/authorization/user.decorator';
 import { User } from 'src/entities/user/entities/user.entity';
-import { SessionAuthGuard } from './guards/session-auth.guard';
 import { Throttle } from '@nestjs/throttler';
 import { LOGIN_INTERVAL } from 'src/common/config/throttle-config';
 import { AuthGuard } from '@nestjs/passport';
 import { GithubUser } from './strategies/github.strategy';
 import { ILoginDto } from './dto/login.dto';
-import {
-    Transactional,
-    TransactionalZone,
-} from 'src/common/decorators/transactional';
 import { InjectQueryRunner } from 'src/common/decorators/transactional/inject-query-runner.decorator';
 import { QueryRunner } from 'typeorm';
 
@@ -253,7 +247,8 @@ export class AuthController {
     @Get('/transactional-test')
     @JwtGuard()
     @AdminOnly()
-    async transactionalTest() {
+    async transactionalTest(@InjectQueryRunner() queryRunner: QueryRunner) {
+        console.log(await queryRunner.manager.query('SELECT * FROM user'));
         return await this.authService.transactionalTest();
     }
 }
