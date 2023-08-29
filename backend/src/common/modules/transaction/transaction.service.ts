@@ -96,21 +96,6 @@ export class TransactionService implements OnModuleInit {
                         this.wrap(target, methodName);
                     }
                 }
-
-                // this.metadataScanner.scanFromPrototype(
-                //     target,
-                //     Object.getPrototypeOf(target),
-                //     (methodName) => {
-                //         if (
-                //             this.isTransactionalZoneMethod(
-                //                 target,
-                //                 methodName,
-                //             )
-                //         ) {
-                //             this.wrap(target, methodName);
-                //         }
-                //     },
-                // );
             }
         }
     }
