@@ -15,11 +15,11 @@ import {
     TRANSACTIONAL_ZONE_TOKEN,
     TRANSACTION_ENTITY_MANAGER,
     TRANSACTION_ISOLATE_LEVEL,
+    TransactionIsolationLevel,
 } from 'src/common/decorators/transactional';
 import { DataSource } from 'typeorm';
 import { TransactionManagerConsumer } from './tx-manager.consumer';
 import { TransactionQueryRunnerConsumer } from './tx-query-runner.consumer';
-import { IsolationLevel } from 'typeorm/driver/types/IsolationLevel';
 
 /**
  * @author 어진석(biud436)
@@ -197,8 +197,8 @@ export class TransactionService implements OnModuleInit {
     private getTransactionIsolationLevel(
         target: any,
         methodName: string,
-    ): IsolationLevel {
-        return <IsolationLevel>(
+    ): TransactionIsolationLevel {
+        return <TransactionIsolationLevel>(
             (Reflect.getMetadata(
                 TRANSACTION_ISOLATE_LEVEL,
                 target,

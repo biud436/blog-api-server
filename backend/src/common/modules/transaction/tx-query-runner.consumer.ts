@@ -1,8 +1,10 @@
 import { Logger } from '@nestjs/common';
-import { TRANSACTIONAL_PARAMS } from 'src/common/decorators/transactional';
+import {
+    TRANSACTIONAL_PARAMS,
+    TransactionIsolationLevel,
+} from 'src/common/decorators/transactional';
 import { INJECT_QUERYRUNNER_TOKEN } from 'src/common/decorators/transactional/inject-query-runner.decorator';
 import { DataSource } from 'typeorm';
-import { IsolationLevel } from 'typeorm/driver/types/IsolationLevel';
 
 /**
  * @class TransactionQueryRunnerConsumer
@@ -12,7 +14,7 @@ export class TransactionQueryRunnerConsumer {
     private logger: Logger = new Logger(TransactionQueryRunnerConsumer.name);
     public execute(
         dataSource: DataSource,
-        transactionIsolationLevel: IsolationLevel,
+        transactionIsolationLevel: TransactionIsolationLevel,
         target: any,
         methodName: string,
         originalMethod: any,

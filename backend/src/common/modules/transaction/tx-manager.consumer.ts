@@ -1,7 +1,9 @@
 import { Logger } from '@nestjs/common';
-import { TRANSACTIONAL_PARAMS } from 'src/common/decorators/transactional';
+import {
+    TRANSACTIONAL_PARAMS,
+    TransactionIsolationLevel,
+} from 'src/common/decorators/transactional';
 import { EntityManager } from 'typeorm';
-import { IsolationLevel } from 'typeorm/driver/types/IsolationLevel';
 
 /**
  * @class TransactionManagerConsumer
@@ -12,7 +14,7 @@ export class TransactionManagerConsumer {
 
     public execute(
         entityManager: EntityManager,
-        transactionIsolationLevel: IsolationLevel,
+        transactionIsolationLevel: TransactionIsolationLevel,
         target: any,
         methodName: string,
         args: any[],
