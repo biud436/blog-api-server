@@ -211,38 +211,4 @@ export class TransactionService implements OnModuleInit {
             Reflect.getMetadata(TRANSACTIONAL_TOKEN, target, key) !== undefined
         );
     }
-
-    /**
-     * 모든 메소드의 이름을 가져옵니다.
-     *
-     * 원래 이 기능으로 트랜잭션 메소드를 찾았으나,
-     * NestJS를 사용하는 사용자들이 this.metadataScanner.scanFromPrototype를 주로 사용하므로,
-     * 조금 더 대중적인 코드로 변경하였습니다.
-     *
-     * 하지만 this.metadataScanner.scanFromPrototype는 deprecated 될 예정이므로,
-     * 추후에는 이 기능을 사용하지 않도록 변경할 예정이며
-     *
-     * 다시 아래와 같은 코드로 변경할 예정입니다.
-     *
-     * @param obj
-     * @returns
-     */
-    private getPrototypeMethods = (obj: any) => {
-        const properties = new Set();
-        let currentObj = obj;
-        do {
-            Object.getOwnPropertyNames(currentObj).map((item) =>
-                properties.add(item),
-            );
-
-            currentObj = Object.getPrototypeOf(currentObj);
-        } while (
-            Object.getPrototypeOf(currentObj) &&
-            Object.getPrototypeOf(currentObj) !== null
-        );
-
-        return [...properties.keys()].filter(
-            (item) => typeof obj[item as any] === 'function',
-        );
-    };
 }
