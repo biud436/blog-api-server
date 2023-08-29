@@ -38,19 +38,15 @@ export class TransactionQueryRunnerConsumer {
                 );
 
                 if (Array.isArray(params) && params.length > 0) {
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     const paramIndex = Reflect.getMetadata(
                         INJECT_QUERYRUNNER_TOKEN,
                         target,
                         methodName,
                     ) as number;
 
-                    params.forEach(
-                        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                        (param, _index) => {
-                            args[paramIndex] = queryRunner;
-                        },
-                    );
+                    params.forEach((param, _index) => {
+                        args[paramIndex] = queryRunner;
+                    });
                 }
 
                 // 원본 메소드를 실행합니다.
