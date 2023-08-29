@@ -11,14 +11,12 @@ import { Reflector } from '@nestjs/core/services';
 import { InjectDataSource } from '@nestjs/typeorm';
 import {
     DEFAULT_ISOLATION_LEVEL,
-    TRANSACTIONAL_PARAMS,
     TRANSACTIONAL_TOKEN,
     TRANSACTIONAL_ZONE_TOKEN,
     TRANSACTION_ENTITY_MANAGER,
     TRANSACTION_ISOLATE_LEVEL,
 } from 'src/common/decorators/transactional';
-import { INJECT_QUERYRUNNER_TOKEN } from 'src/common/decorators/transactional/inject-query-runner.decorator';
-import { DataSource, EntityManager } from 'typeorm';
+import { DataSource } from 'typeorm';
 import { TransactionManagerConsumer } from './tx-manager.consumer';
 import { TransactionQueryRunnerConsumer } from './tx-query-runner.consumer';
 import { IsolationLevel } from 'typeorm/driver/types/IsolationLevel';
@@ -83,13 +81,15 @@ export class TransactionService implements OnModuleInit {
                 : wrapper.metatype.prototype;
 
             // 트랜잭션 존일 경우에만 메소드를 스캔합니다.
-            if (this.isTransactionZone(targetClass)) {
-                for (const methodName of this.metadataScanner.getAllMethodNames(
-                    target,
-                )) {
-                    if (this.isTransactionalZoneMethod(target, methodName)) {
-                        this.wrap(target, methodName);
-                    }
+            if (!this.isTransactionZone(targetClass)) {
+                continue;
+            }
+
+            for (const methodName of this.metadataScanner.getAllMethodNames(
+                target,
+            )) {
+                if (this.isTransactionalZoneMethod(target, methodName)) {
+                    this.wrap(target, methodName);
                 }
             }
         }
