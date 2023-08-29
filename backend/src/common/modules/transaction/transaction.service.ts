@@ -73,7 +73,10 @@ export class TransactionService implements OnModuleInit {
             );
 
         for (const wrapper of wrappers) {
-            const targetClass = wrapper.isDependencyTreeStatic()
+            // 싱글톤 여부를 확인합니다.
+            const isSingletone = wrapper.isDependencyTreeStatic();
+
+            const targetClass = isSingletone
                 ? (wrapper.instance.constructor as Type<any>)
                 : wrapper.metatype.prototype;
 
@@ -82,7 +85,7 @@ export class TransactionService implements OnModuleInit {
                 targetClass,
             );
 
-            const target = wrapper.isDependencyTreeStatic()
+            const target = isSingletone
                 ? wrapper.instance
                 : wrapper.metatype.prototype;
 
