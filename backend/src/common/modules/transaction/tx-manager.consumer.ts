@@ -15,12 +15,12 @@ export class TransactionManagerConsumer {
     public execute(
         entityManager: EntityManager,
         transactionIsolationLevel: TransactionIsolationLevel,
-        target: any,
+        target: InstanceType<any>,
         methodName: string,
-        args: any[],
-        originalMethod: any,
+        args: unknown[],
+        originalMethod: (...args: unknown[]) => unknown | Promise<unknown>,
         resolve: (value: unknown) => void,
-        reject: (reason?: any) => void,
+        reject: (reason?: unknown) => void,
     ) {
         entityManager
             .transaction(transactionIsolationLevel, async (em) => {

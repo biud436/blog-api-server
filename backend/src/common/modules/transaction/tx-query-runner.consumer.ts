@@ -15,12 +15,12 @@ export class TransactionQueryRunnerConsumer {
     public execute(
         dataSource: DataSource,
         transactionIsolationLevel: TransactionIsolationLevel,
-        target: any,
+        target: InstanceType<any>,
         methodName: string,
-        originalMethod: any,
-        reject: (reason?: any) => void,
+        originalMethod: (...args: unknown[]) => unknown | Promise<unknown>,
+        reject: (reason?: unknown) => void,
         resolve: (value: unknown) => void,
-        args: any[],
+        args: unknown[],
     ) {
         const txWrapper = async (...args: any[]) => {
             // 단일 트랜잭션을 실행합니다.
