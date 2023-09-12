@@ -18,6 +18,7 @@ import {
     Transactional,
     TransactionalZone,
 } from 'src/common/decorators/transactional';
+import { NoPostException, NotPublicPostException } from 'src/common/exceptions';
 
 @Injectable()
 @TransactionalZone()
@@ -134,10 +135,7 @@ export class PostsService {
 
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
         } catch {
-            return ResponseUtil.failure({
-                message: '작성된 포스트가 없습니다',
-                statusCode: 500,
-            });
+            throw new NoPostException();
         }
     }
 
@@ -185,11 +183,7 @@ export class PostsService {
 
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, model);
         } catch (e: any) {
-            throw ResponseUtil.failureWrap({
-                message: '포스트를 찾을 수 없거나 비공개 포스트입니다.',
-                statusCode: 403,
-                name: 'NOT_FOUND',
-            });
+            throw new NotPublicPostException();
         }
     }
 

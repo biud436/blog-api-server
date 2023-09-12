@@ -5,7 +5,8 @@ import {
     Transactional,
     TransactionalZone,
 } from 'src/common/decorators/transactional';
-import { NotFoundPostException } from 'src/common/exceptions/not-found-post-exception';
+import { DeletePostException } from 'src/common/exceptions/delete-post.exception';
+import { NotFoundPostException } from 'src/common/exceptions/not-found-post.exception';
 import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
 import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
 import { PostService } from 'src/entities/post/post.service';
@@ -48,11 +49,7 @@ export class ApiService {
         );
 
         if (result.affected === 0) {
-            throw ResponseUtil.failureWrap({
-                name: 'DeletePostError',
-                message: '포스트를 삭제하는데 실패했습니다.',
-                statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-            });
+            throw new DeletePostException();
         }
 
         return ResponseUtil.success(RESPONSE_MESSAGE.DELETE_SUCCESS, result);
