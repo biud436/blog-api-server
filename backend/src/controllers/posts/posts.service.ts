@@ -13,15 +13,20 @@ import { CreateCommentDto } from 'src/entities/comment/dto/create-comment.dto';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { Paginatable } from 'src/common/config/list-config';
 import { PostComment } from 'src/entities/comment/entities/comment.entity';
+import {
+    InjectQueryRunner,
+    Transactional,
+    TransactionalZone,
+} from 'src/common/decorators/transactional';
 
 @Injectable()
+@TransactionalZone()
 export class PostsService {
     constructor(
         private readonly postService: PostService,
         private readonly redisService: RedisService,
         private readonly categoryService: CategoryService,
         private readonly commentService: CommentService,
-        @InjectDataSource() private readonly dataSource: DataSource,
     ) {}
 
     /**
@@ -35,28 +40,19 @@ export class PostsService {
         return await this.postService.create(createPostDto, queryRunner);
     }
 
-    async createComment(createCommentDto: CreateCommentDto, userId: number) {
-        const queryRunner = this.dataSource.createQueryRunner();
-        await queryRunner.connect();
-        await queryRunner.startTransaction();
+    @Transactional()
+    async createComment(
+        createCommentDto: CreateCommentDto,
+        userId: number,
+        @InjectQueryRunner() queryRunner?: QueryRunner,
+    ) {
+        const res = await this.commentService.createComment(
+            createCommentDto,
+            userId,
+            queryRunner!,
+        );
 
-        try {
-            const res = await this.commentService.createComment(
-                createCommentDto,
-                userId,
-                queryRunner,
-            );
-
-            await queryRunner.commitTransaction();
-
-            return ResponseUtil.success(RESPONSE_MESSAGE.SAVE_SUCCESS, res);
-        } catch (e: any) {
-            await queryRunner.rollbackTransaction();
-
-            throw ResponseUtil.failureWrap(e);
-        } finally {
-            await queryRunner.release();
-        }
+        return ResponseUtil.success(RESPONSE_MESSAGE.SAVE_SUCCESS, res);
     }
 
     async getComments(
@@ -108,29 +104,21 @@ export class PostsService {
         }
     }
 
-    async deleteComment(postId: number, commentId: number, userId: number) {
-        const queryRunner = this.dataSource.createQueryRunner();
-        await queryRunner.connect();
-        await queryRunner.startTransaction();
+    @Transactional()
+    async deleteComment(
+        postId: number,
+        commentId: number,
+        userId: number,
+        @InjectQueryRunner() queryRunner?: QueryRunner,
+    ) {
+        const res = await this.commentService.deleteComment(
+            postId,
+            commentId,
+            userId,
+            queryRunner!,
+        );
 
-        try {
-            const res = await this.commentService.deleteComment(
-                postId,
-                commentId,
-                userId,
-                queryRunner,
-            );
-
-            await queryRunner.commitTransaction();
-
-            return ResponseUtil.success(RESPONSE_MESSAGE.DELETE_SUCCESS, res);
-        } catch (e: any) {
-            await queryRunner.rollbackTransaction();
-
-            throw ResponseUtil.failureWrap(e);
-        } finally {
-            await queryRunner.release();
-        }
+        return ResponseUtil.success(RESPONSE_MESSAGE.DELETE_SUCCESS, res);
     }
 
     /**
