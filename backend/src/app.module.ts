@@ -36,8 +36,6 @@ import { TypeOrmExModule } from './common/modules/typeorm-ex/typeorm-ex.module';
 import { redisCacheConfig } from './common/micro-services/redis/redis.config';
 import { MyBlogConfigModule } from './common/modules/config/my-config.module';
 import { XMulterModule } from './common/modules/x-multer/x-multer.module';
-import { HealthCheckModule } from './controllers/health-check/health-check.module';
-import { HealthCheckConstant } from './controllers/health-check/health-check.constant';
 import { PrivatePostGuard } from './controllers/auth/guards/private-post.guard';
 import { ConnectInfoModule } from './entities/connect-info/connect-info.module';
 import { ThrottlerModule } from '@nestjs/throttler';
@@ -111,14 +109,6 @@ import { TransactionModule } from './common/modules/transaction/transaction.modu
         TypeOrmExModule,
         MyBlogConfigModule.register({
             isGlobal: true,
-        }),
-        HealthCheckModule.register({
-            pingCheck: {
-                url: 'https://google.co.kr',
-            },
-            checkHeap: {
-                heapUsedThreshold: HealthCheckConstant.DEFAULT_HEAP_SIZE,
-            },
         }),
         XMulterModule.forRoot({
             dest: !AppModule.isDelvelopment()

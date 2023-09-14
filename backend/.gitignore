@@ -37,3 +37,10 @@ lerna-debug.log*
 ./upload
 
 .DS_Store
+
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
