@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreatePostTempDto {
     /**
@@ -18,4 +18,11 @@ export class CreatePostTempDto {
         message: '내용을 입력해주세요.',
     })
     content!: string;
+
+    /**
+     * @title 포스트 ID
+     */
+    @IsNumber()
+    @IsOptional()
+    postId?: number | null;
 }

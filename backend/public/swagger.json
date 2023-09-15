@@ -1307,14 +1307,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/IResponsableData"
-                    },
-                    {
-                      "$ref": "#/components/schemas/ResponseUtil.FailureResponse"
-                    }
-                  ]
+                  "$ref": "#/components/schemas/IResponsableData"
                 }
               }
             },
@@ -1496,14 +1489,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/IResponsableData"
-                    },
-                    {
-                      "$ref": "#/components/schemas/ResponseUtil.FailureResponse"
-                    }
-                  ]
+                  "$ref": "#/components/schemas/IResponsableData"
                 }
               }
             },
@@ -2319,6 +2305,13 @@
         "responses": {
           "200": {
             "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
             "x-nestia-encrypted": false
           }
         },
@@ -2400,6 +2393,13 @@
         "responses": {
           "200": {
             "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IResponsableData"
+                }
+              }
+            },
             "x-nestia-encrypted": false
           }
         },
@@ -4178,11 +4178,9 @@
         ]
       }
     },
-    "/health-check": {
+    "/auth/transactional-test": {
       "get": {
-        "tags": [
-          "헬스 체크"
-        ],
+        "tags": [],
         "parameters": [],
         "responses": {
           "200": {
@@ -4190,30 +4188,19 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HealthCheckResult"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
                 }
               }
             },
             "x-nestia-encrypted": false
           }
         },
-        "summary": "헬스 체크를 수행합니다",
-        "description": "헬스 체크를 수행합니다.",
-        "x-nestia-namespace": "health-check.check",
-        "x-nestia-jsDocTags": [
-          {
-            "name": "tag",
-            "text": [
-              {
-                "text": "헬스 체크",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "returns"
-          }
-        ]
+        "description": "",
+        "x-nestia-namespace": "auth.transactional-test.transactionalTest",
+        "x-nestia-jsDocTags": []
       }
     },
     "/rss": {
@@ -4287,31 +4274,26 @@
         "type": "object",
         "properties": {
           "name": {
-            "description": "",
             "x-typia-required": false,
             "x-typia-optional": true,
             "type": "string"
           },
           "result": {
-            "description": "",
             "x-typia-required": true,
             "x-typia-optional": false,
             "type": "string"
           },
           "statusCode": {
-            "description": "",
             "x-typia-required": true,
             "x-typia-optional": false,
             "type": "number"
           },
           "message": {
-            "description": "",
             "x-typia-required": true,
             "x-typia-optional": false,
             "type": "string"
           },
           "data": {
-            "description": "",
             "x-typia-required": true,
             "x-typia-optional": false
           }
@@ -4323,7 +4305,6 @@
           "message",
           "data"
         ],
-        "description": "",
         "x-typia-jsDocTags": []
       },
       "MoveCategoryDto": {
@@ -4458,6 +4439,25 @@
             "x-typia-required": true,
             "x-typia-optional": false,
             "type": "string"
+          },
+          "postId": {
+            "title": "포스트 ID",
+            "description": "@title 포스트 ID",
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "포스트 ID",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "number",
+            "nullable": true
           }
         },
         "nullable": false,
@@ -4465,7 +4465,7 @@
           "title",
           "content"
         ],
-        "description": "@title 내용",
+        "description": "@title 포스트 ID",
         "x-typia-jsDocTags": []
       },
       "UpdatePostTempDto": {
@@ -4506,17 +4506,34 @@
             "x-typia-required": false,
             "x-typia-optional": false,
             "type": "string"
+          },
+          "postId": {
+            "title": "포스트 ID",
+            "description": "@title 포스트 ID",
+            "x-typia-jsDocTags": [
+              {
+                "name": "title",
+                "text": [
+                  {
+                    "text": "포스트 ID",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "number",
+            "nullable": true
           }
         },
         "nullable": false,
-        "description": "",
         "x-typia-jsDocTags": []
       },
       "__object": {
         "type": "object",
         "properties": {
           "isAdmin": {
-            "description": "",
             "x-typia-required": true,
             "x-typia-optional": false,
             "type": "boolean"
@@ -4526,7 +4543,6 @@
         "required": [
           "isAdmin"
         ],
-        "description": "",
         "x-typia-jsDocTags": []
       },
       "CreatePostDto": {
@@ -4830,31 +4846,26 @@
         "type": "object",
         "properties": {
           "message": {
-            "description": "",
             "x-typia-required": true,
             "x-typia-optional": false,
             "type": "string"
           },
           "statusCode": {
-            "description": "",
             "x-typia-required": true,
             "x-typia-optional": false,
             "type": "number"
           },
           "error": {
-            "description": "",
             "x-typia-required": false,
             "x-typia-optional": true,
             "type": "string"
           },
           "name": {
-            "description": "",
             "x-typia-required": false,
             "x-typia-optional": true,
             "type": "string"
           },
           "result": {
-            "description": "",
             "x-typia-required": true,
             "x-typia-optional": false,
             "type": "string"
@@ -4938,7 +4949,6 @@
             "maxLength": 4000
           },
           "authorId": {
-            "description": "",
             "x-typia-required": false,
             "x-typia-optional": true,
             "type": "number"
@@ -5001,7 +5011,6 @@
         "type": "object",
         "properties": {},
         "nullable": false,
-        "description": "",
         "x-typia-jsDocTags": [],
         "x-typia-additionalProperties": {
           "x-typia-required": true,
@@ -5080,7 +5089,6 @@
         "type": "object",
         "properties": {
           "isRenew": {
-            "description": "",
             "x-typia-required": true,
             "x-typia-optional": false,
             "type": "boolean"
@@ -5090,7 +5098,6 @@
         "required": [
           "isRenew"
         ],
-        "description": "",
         "x-typia-jsDocTags": []
       },
       "SendAuthCodeRequestDto": {
@@ -5128,7 +5135,6 @@
         "properties": {
           "user": {
             "$ref": "#/components/schemas/__object.o2",
-            "description": "",
             "x-typia-required": true,
             "x-typia-optional": false
           }
@@ -5137,14 +5143,12 @@
         "required": [
           "user"
         ],
-        "description": "",
         "x-typia-jsDocTags": []
       },
       "__object.o2": {
         "type": "object",
         "properties": {},
         "nullable": false,
-        "description": "",
         "x-typia-jsDocTags": []
       },
       "__object.o3": {
@@ -5152,7 +5156,6 @@
         "properties": {
           "user": {
             "$ref": "#/components/schemas/__object.o4",
-            "description": "",
             "x-typia-required": true,
             "x-typia-optional": false
           }
@@ -5161,14 +5164,12 @@
         "required": [
           "user"
         ],
-        "description": "",
         "x-typia-jsDocTags": []
       },
       "__object.o4": {
         "type": "object",
         "properties": {},
         "nullable": false,
-        "description": "",
         "x-typia-jsDocTags": []
       },
       "VerifyAuthCodeRequestDto": {
@@ -5322,96 +5323,919 @@
         "description": "@title 별명",
         "x-typia-jsDocTags": []
       },
-      "HealthCheckResult": {
+      "User": {
         "type": "object",
         "properties": {
-          "status": {
-            "description": "The overall status of the Health Check",
+          "id": {
             "x-typia-required": true,
             "x-typia-optional": false,
-            "type": "string",
-            "enum": [
-              "error",
-              "ok",
-              "shutting_down"
-            ]
+            "type": "number"
           },
-          "info": {
-            "$ref": "#/components/schemas/HealthIndicatorResult",
-            "description": "The info object contains information of each health indicator\nwhich is of status \"up\"",
+          "username": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "profileId": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "isValid": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "boolean"
+          },
+          "profile": {
+            "$ref": "#/components/schemas/Profile",
+            "x-typia-required": true,
+            "x-typia-optional": false
+          },
+          "posts": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Post",
+              "x-typia-required": true,
+              "x-typia-optional": false
+            }
+          },
+          "admins": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Admin",
+              "x-typia-required": true,
+              "x-typia-optional": false
+            }
+          },
+          "apiKeys": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiKey",
+              "x-typia-required": true,
+              "x-typia-optional": false
+            }
+          },
+          "blogMetaData": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BlogMetaData",
+              "x-typia-required": true,
+              "x-typia-optional": false
+            }
+          },
+          "postTemps": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PostTemp",
+              "x-typia-required": true,
+              "x-typia-optional": false
+            }
+          },
+          "comments": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PostComment",
+              "x-typia-required": true,
+              "x-typia-optional": false
+            }
+          },
+          "password": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "createdAt": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "$ref": "#/components/schemas/Date"
+          },
+          "updatedAt": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "$ref": "#/components/schemas/Date"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "username",
+          "profileId",
+          "isValid",
+          "profile",
+          "posts",
+          "admins",
+          "apiKeys",
+          "blogMetaData",
+          "postTemps",
+          "comments",
+          "password",
+          "createdAt",
+          "updatedAt"
+        ],
+        "x-typia-jsDocTags": []
+      },
+      "Profile": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "email": {
+            "description": "이메일",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "createdAt": {
+            "description": "생성일",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "$ref": "#/components/schemas/Date"
+          },
+          "updatedAt": {
+            "description": "수정일",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "$ref": "#/components/schemas/Date"
+          },
+          "nickname": {
+            "description": "닉네임",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "profileImage": {
+            "description": "깃허브 아바타 이미지",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "email",
+          "createdAt",
+          "updatedAt",
+          "nickname",
+          "profileImage"
+        ],
+        "description": "깃허브 아바타 이미지",
+        "x-typia-jsDocTags": []
+      },
+      "Post": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "authorId": {
+            "description": "작성자",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "categoryId": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "isPrivate": {
+            "description": "비공개 여부",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "boolean"
+          },
+          "title": {
+            "description": "제목",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "content": {
+            "description": "상세 내용",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "previewContent": {
             "x-typia-required": false,
-            "x-typia-optional": true
+            "x-typia-optional": true,
+            "type": "string"
           },
-          "error": {
-            "$ref": "#/components/schemas/HealthIndicatorResult",
-            "description": "The error object contains information of each health indicator\nwhich is of status \"down\"",
+          "uploadDate": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "$ref": "#/components/schemas/Date"
+          },
+          "updatedAt": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "$ref": "#/components/schemas/Date"
+          },
+          "deletedAt": {
             "x-typia-required": false,
-            "x-typia-optional": true
+            "x-typia-optional": true,
+            "$ref": "#/components/schemas/Date"
           },
-          "details": {
-            "$ref": "#/components/schemas/HealthIndicatorResult",
-            "description": "The details object contains information of every health indicator.",
+          "user": {
+            "$ref": "#/components/schemas/User",
+            "x-typia-required": true,
+            "x-typia-optional": false
+          },
+          "category": {
+            "$ref": "#/components/schemas/Category",
+            "x-typia-required": true,
+            "x-typia-optional": false
+          },
+          "comments": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PostComment",
+              "x-typia-required": true,
+              "x-typia-optional": false
+            }
+          },
+          "postTemps": {
+            "description": "임시 포스트",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PostTemp",
+              "description": "임시 포스트",
+              "x-typia-required": true,
+              "x-typia-optional": false
+            }
+          },
+          "images": {
+            "description": "이미지",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Image",
+              "description": "이미지",
+              "x-typia-required": true,
+              "x-typia-optional": false
+            }
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "authorId",
+          "categoryId",
+          "isPrivate",
+          "title",
+          "content",
+          "uploadDate",
+          "updatedAt",
+          "user",
+          "category",
+          "comments",
+          "postTemps",
+          "images"
+        ],
+        "description": "Build Post entity.\n@returns",
+        "x-typia-jsDocTags": []
+      },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "name": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "left": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "right": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "groupId": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "posts": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Post",
+              "x-typia-required": true,
+              "x-typia-optional": false
+            }
+          },
+          "categoryGroup": {
+            "$ref": "#/components/schemas/CategoryGroup",
             "x-typia-required": true,
             "x-typia-optional": false
           }
         },
         "nullable": false,
         "required": [
-          "status",
-          "details"
+          "id",
+          "name",
+          "left",
+          "right",
+          "groupId",
+          "posts",
+          "categoryGroup"
         ],
-        "description": "The details object contains information of every health indicator.",
-        "x-typia-jsDocTags": [
-          {
-            "name": "publicApi"
-          }
-        ]
+        "x-typia-jsDocTags": []
       },
-      "HealthIndicatorResult": {
-        "type": "object",
-        "properties": {},
-        "nullable": false,
-        "description": "Optional settings of the health indicator result",
-        "x-typia-jsDocTags": [],
-        "x-typia-additionalProperties": {
-          "$ref": "#/components/schemas/__type.o1",
-          "x-typia-required": true,
-          "x-typia-optional": false
-        },
-        "additionalProperties": {
-          "$ref": "#/components/schemas/__type.o1",
-          "x-typia-required": true,
-          "x-typia-optional": false
-        }
-      },
-      "__type.o1": {
+      "CategoryGroup": {
         "type": "object",
         "properties": {
-          "status": {
-            "description": "The status if the given health indicator was successful or not",
+          "id": {
             "x-typia-required": true,
             "x-typia-optional": false,
-            "type": "string",
-            "enum": [
-              "up",
-              "down"
-            ]
+            "type": "number"
+          },
+          "name": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "description": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "categories": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Category",
+              "x-typia-required": true,
+              "x-typia-optional": false
+            }
           }
         },
         "nullable": false,
         "required": [
-          "status"
+          "id",
+          "name",
+          "description",
+          "categories"
         ],
-        "description": "Optional settings of the health indicator result",
-        "x-typia-jsDocTags": [],
-        "x-typia-additionalProperties": {
-          "x-typia-required": true,
-          "x-typia-optional": false
+        "x-typia-jsDocTags": []
+      },
+      "PostComment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "postId": {
+            "description": "포스트 ID",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "userId": {
+            "description": "작성자 ID",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "content": {
+            "description": "@example \"안녕하세요\"",
+            "x-typia-jsDocTags": [
+              {
+                "name": "example",
+                "text": [
+                  {
+                    "text": "\"안녕하세요\"",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "post": {
+            "$ref": "#/components/schemas/Post",
+            "x-typia-required": true,
+            "x-typia-optional": false
+          },
+          "user": {
+            "$ref": "#/components/schemas/User",
+            "x-typia-required": true,
+            "x-typia-optional": false
+          },
+          "parentId": {
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "number"
+          },
+          "pos": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "depth": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "parent": {
+            "$ref": "#/components/schemas/PostComment.Nullable",
+            "x-typia-required": false,
+            "x-typia-optional": true
+          },
+          "createdAt": {
+            "description": "작성일",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "$ref": "#/components/schemas/Date"
+          },
+          "updatedAt": {
+            "description": "수정일",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "$ref": "#/components/schemas/Date"
+          },
+          "deletedAt": {
+            "description": "삭제일 (DeleteDateColumn은 사용하지 않음)",
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "$ref": "#/components/schemas/Date"
+          }
         },
-        "additionalProperties": {
-          "x-typia-required": true,
-          "x-typia-optional": false
-        }
+        "nullable": false,
+        "required": [
+          "id",
+          "postId",
+          "userId",
+          "content",
+          "post",
+          "user",
+          "pos",
+          "depth",
+          "createdAt",
+          "updatedAt"
+        ],
+        "description": "삭제일 (DeleteDateColumn은 사용하지 않음)",
+        "x-typia-jsDocTags": [
+          {
+            "name": "class",
+            "text": [
+              {
+                "text": "PostComment",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "description",
+            "text": [
+              {
+                "text": "포스트 댓글\r\nlib.dom.d.ts의 Comment와 이름이 겹치므로 PostComment로 명명",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
+      },
+      "PostComment.Nullable": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "postId": {
+            "description": "포스트 ID",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "userId": {
+            "description": "작성자 ID",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "content": {
+            "description": "@example \"안녕하세요\"",
+            "x-typia-jsDocTags": [
+              {
+                "name": "example",
+                "text": [
+                  {
+                    "text": "\"안녕하세요\"",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "post": {
+            "$ref": "#/components/schemas/Post",
+            "x-typia-required": true,
+            "x-typia-optional": false
+          },
+          "user": {
+            "$ref": "#/components/schemas/User",
+            "x-typia-required": true,
+            "x-typia-optional": false
+          },
+          "parentId": {
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "number"
+          },
+          "pos": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "depth": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "parent": {
+            "$ref": "#/components/schemas/PostComment.Nullable",
+            "x-typia-required": false,
+            "x-typia-optional": true
+          },
+          "createdAt": {
+            "description": "작성일",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "$ref": "#/components/schemas/Date"
+          },
+          "updatedAt": {
+            "description": "수정일",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "$ref": "#/components/schemas/Date"
+          },
+          "deletedAt": {
+            "description": "삭제일 (DeleteDateColumn은 사용하지 않음)",
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "$ref": "#/components/schemas/Date"
+          }
+        },
+        "nullable": true,
+        "required": [
+          "id",
+          "postId",
+          "userId",
+          "content",
+          "post",
+          "user",
+          "pos",
+          "depth",
+          "createdAt",
+          "updatedAt"
+        ],
+        "description": "삭제일 (DeleteDateColumn은 사용하지 않음)",
+        "x-typia-jsDocTags": [
+          {
+            "name": "class",
+            "text": [
+              {
+                "text": "PostComment",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "description",
+            "text": [
+              {
+                "text": "포스트 댓글\r\nlib.dom.d.ts의 Comment와 이름이 겹치므로 PostComment로 명명",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
+      },
+      "PostTemp": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "AUTO_INCREMENT를 이용한 ID 값으로, 블로그에서 임시 저장된 포스트를 조회할 때 사용합니다.\nDB에서 포스트를 조회할 때, PK 값을 이용하는 것이 상당히 효율적이지만 이 값을 노출시키는 것은 보안상의 문제가 있습니다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "title": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "content": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "postId": {
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "number",
+            "nullable": true
+          },
+          "checksum": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "userId": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "post": {
+            "$ref": "#/components/schemas/Post",
+            "description": "포스트와 연관 관계를 형성한다",
+            "x-typia-required": true,
+            "x-typia-optional": false
+          },
+          "user": {
+            "$ref": "#/components/schemas/User",
+            "x-typia-required": true,
+            "x-typia-optional": false
+          },
+          "createdAt": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "$ref": "#/components/schemas/Date"
+          },
+          "updatedAt": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "$ref": "#/components/schemas/Date"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "title",
+          "content",
+          "checksum",
+          "userId",
+          "post",
+          "user",
+          "createdAt",
+          "updatedAt"
+        ],
+        "description": "포스트와 연관 관계를 형성한다",
+        "x-typia-jsDocTags": []
+      },
+      "Image": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "originalname": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "encoding": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "mimetype": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "destination": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "filename": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "path": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "size": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "postId": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "post": {
+            "$ref": "#/components/schemas/Post",
+            "x-typia-required": true,
+            "x-typia-optional": false
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "originalname",
+          "encoding",
+          "mimetype",
+          "destination",
+          "filename",
+          "path",
+          "size",
+          "postId",
+          "post"
+        ],
+        "description": "특수한 용도의 Entity이므로, entities 폴더 밖에 선언하였습니다.\n(추후 AWS S3로 교체)",
+        "x-typia-jsDocTags": []
+      },
+      "Admin": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "userId": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User",
+            "x-typia-required": true,
+            "x-typia-optional": false
+          },
+          "createdAt": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "$ref": "#/components/schemas/Date"
+          },
+          "updatedAt": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "$ref": "#/components/schemas/Date"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "userId",
+          "user",
+          "createdAt",
+          "updatedAt"
+        ],
+        "x-typia-jsDocTags": []
+      },
+      "ApiKey": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "accessKey": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "scope": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "isExpired": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "boolean"
+          },
+          "expiresAt": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "$ref": "#/components/schemas/Date"
+          },
+          "createdAt": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "$ref": "#/components/schemas/Date"
+          },
+          "updatedAt": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "$ref": "#/components/schemas/Date"
+          },
+          "userId": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User",
+            "x-typia-required": true,
+            "x-typia-optional": false
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "accessKey",
+          "scope",
+          "isExpired",
+          "expiresAt",
+          "createdAt",
+          "updatedAt",
+          "userId",
+          "user"
+        ],
+        "x-typia-jsDocTags": []
+      },
+      "BlogMetaData": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "siteName": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "githubUrl": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "userId": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User",
+            "x-typia-required": true,
+            "x-typia-optional": false
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "siteName",
+          "githubUrl",
+          "userId",
+          "user"
+        ],
+        "x-typia-jsDocTags": []
       }
     },
     "securitySchemes": {

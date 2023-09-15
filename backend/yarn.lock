@@ -3152,7 +3152,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestia/core@npm:^1.6.2":
+"@nestia/core@npm:1.6.2":
   version: 1.6.2
   resolution: "@nestia/core@npm:1.6.2"
   dependencies:
@@ -3182,18 +3182,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestia/e2e@npm:^0.2.3":
-  version: 0.2.3
-  resolution: "@nestia/e2e@npm:0.2.3"
+"@nestia/e2e@npm:^0.3.6":
+  version: 0.3.6
+  resolution: "@nestia/e2e@npm:0.3.6"
   dependencies:
     chalk: ^4.1.2
     cli: ^1.0.1
     tstl: ^2.5.13
-  checksum: 0cb5a911ad3e31e2af337c61bff3b515beced3756fb44176cff0f597ae72a89939812ee8bfca5f713ac600b8a125b2b71cf915956aa7ffe38f4c14d484fab9f3
+  checksum: 1dc0d4fb28ce3b6ee2ce2e1f24d96f6ee01ddc4a52a7886fc749c2ff0079006b7a9915e23829d8034a8c01c60b173729a948d7a94422dd0faf7ec668f75f395f
   languageName: node
   linkType: hard
 
-"@nestia/fetcher@npm:^1.4.0":
+"@nestia/fetcher@npm:1.4.0":
   version: 1.4.0
   resolution: "@nestia/fetcher@npm:1.4.0"
   dependencies:
@@ -3206,18 +3206,18 @@ __metadata:
   linkType: hard
 
 "@nestia/fetcher@npm:^1.6.2":
-  version: 1.6.2
-  resolution: "@nestia/fetcher@npm:1.6.2"
+  version: 1.6.7
+  resolution: "@nestia/fetcher@npm:1.6.7"
   dependencies:
     import2: ^1.0.3
     node-fetch: ^2.6.7
   peerDependencies:
     typescript: ">= 4.8.0"
-  checksum: 15f868b94931dd654a8a3c6621e07e70255df56f3308281e54b7225ac78c6474a4bcd150f873a81793f5efb45bbee316e8a8369485f85598f1f04cfc3857e82a
+  checksum: 7e8a320d03cda2d763e4c37bb7ebf0e19be0674792827d21ad9084fa3052533b2bb8e4ed7075540e903e6cc03f09e9084b9b1bd50a6d87a25b4ac61570ba4c1c
   languageName: node
   linkType: hard
 
-"@nestia/sdk@npm:^1.2.6":
+"@nestia/sdk@npm:1.2.6":
   version: 1.2.6
   resolution: "@nestia/sdk@npm:1.2.6"
   dependencies:
@@ -5828,13 +5828,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"big.js@npm:^5.2.2":
-  version: 5.2.2
-  resolution: "big.js@npm:5.2.2"
-  checksum: b89b6e8419b097a8fb4ed2399a1931a68c612bce3cfd5ca8c214b2d017531191070f990598de2fc6f3f993d91c0f08aa82697717f6b3b8732c9731866d233c9e
-  languageName: node
-  linkType: hard
-
 "bignumber.js@npm:9.0.0":
   version: 9.0.0
   resolution: "bignumber.js@npm:9.0.0"
@@ -5899,10 +5892,10 @@ __metadata:
     "@aws-sdk/client-s3": ^3.208.0
     "@aws-sdk/lib-storage": ^3.412.0
     "@js-joda/core": ^5.2.0
-    "@nestia/core": ^1.6.2
-    "@nestia/e2e": ^0.2.3
-    "@nestia/fetcher": ^1.4.0
-    "@nestia/sdk": ^1.2.6
+    "@nestia/core": 1.6.2
+    "@nestia/e2e": ^0.3.6
+    "@nestia/fetcher": 1.4.0
+    "@nestia/sdk": 1.2.6
     "@nestjs/axios": ^3.0.0
     "@nestjs/cache-manager": ^2.1.0
     "@nestjs/cli": ^10.1.10
@@ -6010,7 +6003,7 @@ __metadata:
     typeorm-naming-strategies: ^3.0.0
     typescript: 4.9.5
     typescript-transform-paths: ^3.4.6
-    typia: ^4.1.8
+    typia: ^5.0.4
     uuid: ^8.3.2
     webpack: ^5.88.2
     webpack-node-externals: ^3.0.0
@@ -7208,13 +7201,6 @@ __metadata:
   version: 9.2.2
   resolution: "emoji-regex@npm:9.2.2"
   checksum: 8487182da74aabd810ac6d6f1994111dfc0e331b01271ae01ec1eb0ad7b5ecc2bbbbd2f053c05cb55a1ac30449527d819bbfbf0e3de1023db308cbcb47f86601
-  languageName: node
-  linkType: hard
-
-"emojis-list@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "emojis-list@npm:3.0.0"
-  checksum: ddaaa02542e1e9436c03970eeed445f4ed29a5337dfba0fe0c38dfdd2af5da2429c2a0821304e8a8d1cadf27fdd5b22ff793571fa803ae16852a6975c65e8e70
   languageName: node
   linkType: hard
 
@@ -10191,17 +10177,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"loader-utils@npm:^2.0.0":
-  version: 2.0.4
-  resolution: "loader-utils@npm:2.0.4"
-  dependencies:
-    big.js: ^5.2.2
-    emojis-list: ^3.0.0
-    json5: ^2.1.2
-  checksum: a5281f5fff1eaa310ad5e1164095689443630f3411e927f95031ab4fb83b4a98f388185bb1fe949e8ab8d4247004336a625e9255c22122b815bb9a4c5d8fc3b7
-  languageName: node
-  linkType: hard
-
 "locate-path@npm:^5.0.0":
   version: 5.0.0
   resolution: "locate-path@npm:5.0.0"
@@ -11950,18 +11925,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"raw-loader@npm:^4.0.2":
-  version: 4.0.2
-  resolution: "raw-loader@npm:4.0.2"
-  dependencies:
-    loader-utils: ^2.0.0
-    schema-utils: ^3.0.0
-  peerDependencies:
-    webpack: ^4.0.0 || ^5.0.0
-  checksum: 51cc1b0d0e8c37c4336b5318f3b2c9c51d6998ad6f56ea09612afcfefc9c1f596341309e934a744ae907177f28efc9f1654eacd62151e82853fcc6d37450e795
-  languageName: node
-  linkType: hard
-
 "react-is@npm:^17.0.1":
   version: 17.0.2
   resolution: "react-is@npm:17.0.2"
@@ -12408,7 +12371,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"schema-utils@npm:^3.0.0, schema-utils@npm:^3.1.1, schema-utils@npm:^3.2.0":
+"schema-utils@npm:^3.1.1, schema-utils@npm:^3.2.0":
   version: 3.3.0
   resolution: "schema-utils@npm:3.3.0"
   dependencies:
@@ -13228,15 +13191,15 @@ __metadata:
   linkType: hard
 
 "tgrid@npm:^0.8.7":
-  version: 0.8.7
-  resolution: "tgrid@npm:0.8.7"
+  version: 0.8.8
+  resolution: "tgrid@npm:0.8.8"
   dependencies:
     import2: ^1.0.0
     serialize-error: ^4.1.0
-    tstl: ^2.5.3
-    uuid: ^3.4.0
+    tstl: ^2.5.13
+    uuid: ^9.0.0
     ws: ^7.5.3
-  checksum: 93293620c3c635df677490915b53002beb8d85ad5d11080ffe245ecbedb519e4a975eebac744c16e46551876fe87871ac5202267bde0d55c8d572807899bf549
+  checksum: 1f20c586802eaedd7a7b8bb6fd920b7dc68ca2240e7f67711e8ea8f6800bcb330af08c59c9ddfcb7539c7687ab3456e96d9ea40dd9df3be9be43deaf35c6e8e9
   languageName: node
   linkType: hard
 
@@ -13591,7 +13554,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tstl@npm:^2.5.13, tstl@npm:^2.5.3":
+"tstl@npm:^2.5.13":
   version: 2.5.13
   resolution: "tstl@npm:2.5.13"
   checksum: 6442cf024066c10be8bd21f8578c3edbcba75b6d27a8965bc7f5dcb745a309753dffedbe28019b2cf5b159dd5f10cd9f64a1102fef4ab82917e0cca88a7e0ce2
@@ -13834,8 +13797,8 @@ __metadata:
   linkType: hard
 
 "typia@npm:^3.8.5":
-  version: 3.8.7
-  resolution: "typia@npm:3.8.7"
+  version: 3.8.9
+  resolution: "typia@npm:3.8.9"
   dependencies:
     commander: ^10.0.0
     comment-json: ^4.2.3
@@ -13845,30 +13808,13 @@ __metadata:
     typescript: ">= 4.5.2"
   bin:
     typia: lib/executable/typia.js
-  checksum: 0392dccedf0e37440165ae2be72b95bac058798f96cadfc848f56f535f1070c384995e60a4ba55b4edc9975dacee7234728e4fbda3e7a84955133b5aa10fc796
-  languageName: node
-  linkType: hard
-
-"typia@npm:^4.1.8":
-  version: 4.1.8
-  resolution: "typia@npm:4.1.8"
-  dependencies:
-    commander: ^10.0.0
-    comment-json: ^4.2.3
-    inquirer: ^8.2.5
-    randexp: ^0.5.3
-    raw-loader: ^4.0.2
-  peerDependencies:
-    typescript: ">= 4.7.4"
-  bin:
-    typia: lib/executable/typia.js
-  checksum: b1a083266b9f150f1f16b53dda5eef6cc99ee04810656ac8f86ea5335b3a268bc1ce6e3964f5d9a142ccbff5854fd29b2eeb29b0483e11fa5188a427c6967fd2
+  checksum: ccb626bbd6e29c3700df2b8155b164d5733352636e75c2f2a7a261da20a0b99ba9cb4a36e4716addf8666cff3059eceb8318014b9f02970c43c3faf431df7b9d
   languageName: node
   linkType: hard
 
 "typia@npm:^4.2.1":
-  version: 4.2.1
-  resolution: "typia@npm:4.2.1"
+  version: 4.3.3
+  resolution: "typia@npm:4.3.3"
   dependencies:
     commander: ^10.0.0
     comment-json: ^4.2.3
@@ -13878,7 +13824,23 @@ __metadata:
     typescript: ">= 4.7.4"
   bin:
     typia: lib/executable/typia.js
-  checksum: 435ba7bff08c726cc0a701b82bc2f48c1136aecebbf9af8ab6dd25f95a041c24ea35319071e4e0b15b1759e0405e5b35e10a4f84aee64d9684b18fdb785ebcb5
+  checksum: 6a8f3d3b3e04ae58aa4736cc5be5b25f0e556ce28d4563e8e83aea58ed14f5f30d1911aae7ad1fc919e91b1f4ef3bf7010a7715fb78382fdf0e5783a8eb16a57
+  languageName: node
+  linkType: hard
+
+"typia@npm:^5.0.4":
+  version: 5.0.4
+  resolution: "typia@npm:5.0.4"
+  dependencies:
+    commander: ^10.0.0
+    comment-json: ^4.2.3
+    inquirer: ^8.2.5
+    randexp: ^0.5.3
+  peerDependencies:
+    typescript: ">= 4.8.0"
+  bin:
+    typia: lib/executable/typia.js
+  checksum: 3ec5c6e143bda7d1746335a08eb832bee892294c97d93fdd3b5581ea0328096d05ba905dc8d2415cab0d44f82353cf9be0e7321faf3ba3af1266d183e36893be
   languageName: node
   linkType: hard
 
@@ -14040,21 +14002,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:^3.4.0":
-  version: 3.4.0
-  resolution: "uuid@npm:3.4.0"
-  bin:
-    uuid: ./bin/uuid
-  checksum: 58de2feed61c59060b40f8203c0e4ed7fd6f99d42534a499f1741218a1dd0c129f4aa1de797bcf822c8ea5da7e4137aa3673431a96dae729047f7aca7b27866f
-  languageName: node
-  linkType: hard
-
 "uuid@npm:^8.3.2":
   version: 8.3.2
   resolution: "uuid@npm:8.3.2"
   bin:
     uuid: dist/bin/uuid
   checksum: 5575a8a75c13120e2f10e6ddc801b2c7ed7d8f3c8ac22c7ed0c7b2ba6383ec0abda88c905085d630e251719e0777045ae3236f04c812184b7c765f63a70e58df
+  languageName: node
+  linkType: hard
+
+"uuid@npm:^9.0.0":
+  version: 9.0.1
+  resolution: "uuid@npm:9.0.1"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: 39931f6da74e307f51c0fb463dc2462807531dc80760a9bff1e35af4316131b4fc3203d16da60ae33f07fdca5b56f3f1dd662da0c99fea9aaeab2004780cc5f4
   languageName: node
   linkType: hard
 

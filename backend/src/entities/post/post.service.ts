@@ -18,6 +18,7 @@ import {
     PaginationGetStrategy,
     PaginationStrategy,
 } from 'src/common/modules/pagination/pagination.constant';
+import { PostTempService } from '../post-temp/post-temp.service';
 
 @Injectable()
 export class PostService {
@@ -28,6 +29,7 @@ export class PostService {
         private readonly imageService: ImageService,
         private readonly redisService: RedisService,
         private readonly paginationProvider: PaginationProvider,
+        private readonly postTempService: PostTempService,
     ) {}
 
     /**

@@ -1,9 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import {
-    ClassSerializerInterceptor,
-    Logger,
-    ValidationPipe,
-} from '@nestjs/common';
+import { ClassSerializerInterceptor, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
@@ -11,8 +7,6 @@ import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { ServerLog } from './common/libs/logger/ServerLog';
 import * as path from 'path';
-import * as cookieParser from 'cookie-parser';
-import * as express from 'express';
 import winstonLogger from 'src/common/config/winston-config';
 import session from 'express-session';
 import passport from 'passport';
@@ -85,12 +79,6 @@ export class NestBootstrapApplication extends EventEmitter {
         const factory = new ServerConfigFactory();
 
         factory.ready();
-    }
-
-    private getWorkingDirectory(target?: string): string {
-        const CWD = process.cwd();
-
-        return target ? path.join(CWD, target) : CWD;
     }
 
     private getDefaultViewEngine(): string {

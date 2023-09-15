@@ -16,6 +16,28 @@ export class PostTempService {
         private postTempRepository: Repository<PostTemp>,
     ) {}
 
+    /**
+     * 임시 포스트를 신규 작성한다.
+     *
+     * ? 1. 수정 시, 임시 포스트 생성
+     * 임시 포스트는 항상 신규 작성되지만
+     * 포스트를 수정할 때, 기존의 임시 포스트가 존재한다면 덮어쓰기를 해야 한다.
+     * 따라서 Post와 연관 관계가 형성되어야 한다.
+     * 이때, postId는 null이 될 수도 있다.
+     *
+     * ? 2. 새로 작성 시, 임시 포스트 생성
+     * 새로 작성할 때, 임시 포스트를 생성한다.
+     *
+     * ? 3. 주기적으로 임시 포스트를 업데이트
+     * 임시 포스트는 주기적으로 업데이트되어야 한다.
+     *
+     * ? 4. 임시 포스트 삭제
+     * 임시 포스트는 글이 작성되거나 수정되면 삭제되어야 한다.
+     *
+     * @param userId
+     * @param createPostTempDto
+     * @returns
+     */
     async create(userId: number, createPostTempDto: CreatePostTempDto) {
         const model = await this.postTempRepository.create(createPostTempDto);
         model.userId = userId;
@@ -27,6 +49,21 @@ export class PostTempService {
         );
 
         return await this.postTempRepository.save(savedModel);
+    }
+
+    async needsToUpdate(userId: number, postId: number): Promise<boolean> {
+        const postTemp = await this.postTempRepository.findOneOrFail({
+            where: {
+                id: postId,
+                userId: userId,
+            },
+        });
+
+        const checksum = CRC32.getChecksum(
+            postTemp.createdAt.toString() + postTemp.title,
+        );
+
+        return postTemp.checksum !== checksum;
     }
 
     async findAll(

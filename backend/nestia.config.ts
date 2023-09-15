@@ -33,10 +33,6 @@ const config: INestiaConfig = {
             },
         ],
     },
-    compilerOptions: {
-        skipLibCheck: true,
-        types: ['node', 'jest', 'global.d.ts'],
-    },
 };
 
 export default config;

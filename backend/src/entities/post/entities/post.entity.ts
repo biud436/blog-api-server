@@ -18,6 +18,7 @@ import { decodeHtml } from 'src/common/config/html-escpse';
 import { Image } from 'src/controllers/image/entities/image.entity';
 import removeMarkdown from 'markdown-to-text';
 import { PostComment } from 'src/entities/comment/entities/comment.entity';
+import { PostTemp } from 'src/entities/post-temp/entities/post-temp.entity';
 @Entity()
 export class Post {
     @PrimaryGeneratedColumn()
@@ -110,6 +111,12 @@ export class Post {
 
     @OneToMany(() => PostComment, (comment) => comment.post)
     comments!: PostComment[];
+
+    /**
+     * 임시 포스트
+     */
+    @OneToMany(() => PostTemp, (postTemp) => postTemp.post)
+    postTemps!: PostTemp[];
 
     /**
      * 이미지

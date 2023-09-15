@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateBlogMetaDatumDto } from './dto/create-blog-meta-datum.dto';
-import { UpdateBlogMetaDatumDto } from './dto/update-blog-meta-datum.dto';
 import { BlogMetaData } from './entities/blog-meta-data.entity';
 
 @Injectable()
