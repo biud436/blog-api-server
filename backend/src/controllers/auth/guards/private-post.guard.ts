@@ -10,7 +10,7 @@ import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard, AuthModuleOptions } from '@nestjs/passport';
 import { Request } from 'express';
-import { JwtGuard } from 'src/common/decorators/swagger/custom.decorator';
+import { JwtGuard } from 'src/common/decorators/swagger/api-notebook.decorator';
 import { ANONYMOUS_ID } from 'src/common/decorators/authorization/anonymous.decorator';
 
 /**

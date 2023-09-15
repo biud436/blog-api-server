@@ -9,15 +9,16 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import {
     AdminOnly,
-    CustomApiOkResponse,
+    ApiNotebook,
     JwtGuard,
-} from 'src/common/decorators/swagger/custom.decorator';
+} from 'src/common/decorators/swagger/api-notebook.decorator';
 import { UploadFolder } from 'src/common/decorators/enhancer/upload-folder';
 import { ApiService } from './api.service';
 import { PageNumber } from 'src/common/decorators/pagination/page-number.decorator';
 import { PageSize } from 'src/common/decorators/pagination/page-size.decorator';
 
 @Controller('api')
+@ApiTags('API')
 export class ApiController {
     constructor(private readonly apiService: ApiService) {}
 
@@ -30,6 +31,13 @@ export class ApiController {
     @Get('/check/admin')
     @JwtGuard()
     @AdminOnly()
+    @ApiNotebook({
+        operation: {
+            summary: '관리자 권한 확인',
+            description: '관리자 권한을 확인합니다.',
+        },
+        auth: true,
+    })
     async checkAdmin() {
         return await this.apiService.isAdmin();
     }
@@ -43,6 +51,19 @@ export class ApiController {
     @Delete('/post/:postId')
     @JwtGuard()
     @AdminOnly()
+    @ApiNotebook({
+        operation: {
+            summary: '게시글 삭제',
+            description: '게시글을 삭제합니다.',
+        },
+        params: [
+            {
+                name: 'postId',
+                description: '포스트 아이디',
+            },
+        ],
+        auth: true,
+    })
     async deletePost(@Param('postId', ParseIntPipe) postId: number) {
         return await this.apiService.deletePost(postId);
     }
@@ -58,6 +79,23 @@ export class ApiController {
     @Get('/post')
     @JwtGuard()
     @AdminOnly()
+    @ApiNotebook({
+        operation: {
+            summary: '포스트 목록',
+            description: '포스트 목록을 가져옵니다.',
+        },
+        queries: [
+            {
+                name: 'pageNumber',
+                description: '페이지 번호',
+            },
+            {
+                name: 'pageSize',
+                description: '페이지 사이즈',
+            },
+        ],
+        auth: true,
+    })
     async getPost(
         @PageNumber('pageNumber') pageNumber: number,
         @PageSize() pageSize: number,

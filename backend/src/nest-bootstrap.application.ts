@@ -272,13 +272,13 @@ export class NestBootstrapApplication extends EventEmitter {
         );
 
         // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const docs = require('../public/swagger.json') as OpenAPIObject;
-        if (docs.servers) {
-            docs.info = document.info;
-            docs.servers = document.servers;
-        }
+        // const docs = require('../public/swagger.json') as OpenAPIObject;
+        // if (docs.servers) {
+        //     docs.info = document.info;
+        //     docs.servers = document.servers;
+        // }
 
-        SwaggerModule.setup('docs', this._application!, docs, {
+        SwaggerModule.setup('docs', this._application!, document, {
             explorer: true,
             swaggerOptions: {
                 defaultModelsExpandDepth: -1, // API 문서에서 하단 객체 제거

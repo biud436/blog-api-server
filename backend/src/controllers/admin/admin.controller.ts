@@ -16,8 +16,9 @@ import { InjectDataSource } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
 import {
     AdminOnly,
+    ApiNotebook,
     JwtGuard,
-} from 'src/common/decorators/swagger/custom.decorator';
+} from 'src/common/decorators/swagger/api-notebook.decorator';
 import { UserId } from 'src/common/decorators/authorization/user-id.decorator';
 import { MoveCategoryDto } from 'src/entities/category/dto/move-category.dto';
 import { CreatePostTempDto } from 'src/entities/post-temp/dto/create-post-temp.dto';
@@ -29,8 +30,10 @@ import { AdminService } from './admin.service';
 import { ChangeCategoryDto } from './dto/change-category.dto';
 import { NewCategoryDto } from './dto/new-category.dto';
 import { Request } from 'express';
+import { ApiParam, ApiTags } from '@nestjs/swagger';
 
 @Controller('admin')
+@ApiTags('관리')
 export class AdminController {
     constructor(
         private readonly adminService: AdminService,
@@ -48,6 +51,18 @@ export class AdminController {
     @Patch('/category/:categoryId')
     @AdminOnly()
     @JwtGuard()
+    @ApiNotebook({
+        operation: {
+            summary: '카테고리 이름 변경',
+        },
+        params: [
+            {
+                name: 'categoryId',
+                description: '카테고리 ID',
+            },
+        ],
+        auth: true,
+    })
     async updateCategoryName(
         @Param('categoryId', ParseIntPipe) categoryId: number,
         @Body() updateCategoryNameDto: ChangeCategoryDto,
@@ -79,6 +94,19 @@ export class AdminController {
     @Post('/category/:prevCategoryId/move')
     @AdminOnly()
     @JwtGuard()
+    @ApiNotebook({
+        operation: {
+            summary: '카테고리 이동',
+            description: '카테고리를 이동합니다.',
+        },
+        params: [
+            {
+                name: 'prevCategoryId',
+                description: '이전 카테고리 ID',
+            },
+        ],
+        auth: true,
+    })
     async moveCategory(
         @Param('prevCategoryId', ParseIntPipe) prevCategoryId: number,
         @Body() moveCategoryDto: MoveCategoryDto,
@@ -101,6 +129,19 @@ export class AdminController {
      * @returns
      */
     @Get('/category/:categoryName')
+    @ApiNotebook({
+        operation: {
+            summary: '부모 카테고리 출력',
+            description: '부모 카테고리를 출력합니다.',
+        },
+        params: [
+            {
+                name: 'categoryName',
+                description: '카테고리 명',
+            },
+        ],
+        auth: true,
+    })
     async getAncestors(@Param('categoryName') categoryName: string) {
         try {
             const res = await this.adminService.getAncestors(categoryName);
@@ -120,6 +161,13 @@ export class AdminController {
     @Post('/category')
     @AdminOnly()
     @JwtGuard()
+    @ApiNotebook({
+        operation: {
+            summary: '새로운 카테고리 추가',
+            description: '새로운 카테고리를 추가합니다.',
+        },
+        auth: true,
+    })
     async createCategory(
         @Body()
         createCategoryDto: NewCategoryDto,
@@ -155,6 +203,20 @@ export class AdminController {
      * @returns
      */
     @Get('/category')
+    @ApiNotebook({
+        operation: {
+            summary: '새로운 카테고리 추가',
+            description: '새로운 카테고리를 추가합니다.',
+        },
+        queries: [
+            {
+                name: 'isBeautify',
+                description:
+                    'true면 트리를 JSON으로 보기 좋게 출력하고, false면 flat 모드로 출력합니다.',
+            },
+        ],
+        auth: true,
+    })
     async getDepthList(
         @Req() req: Request,
         @Query('isBeautify', ParseBoolPipe) isBeautify: boolean,
@@ -178,6 +240,13 @@ export class AdminController {
     @Post('/temp/post')
     @AdminOnly()
     @JwtGuard()
+    @ApiNotebook({
+        operation: {
+            summary: '임시 포스트 저장',
+            description: '임시 포스트를 저장합니다.',
+        },
+        auth: true,
+    })
     async saveTempPost(
         @UserId() userId: number,
         @Body() createPostTempDto: CreatePostTempDto,
@@ -206,6 +275,19 @@ export class AdminController {
     @Patch('/temp/post/:postId')
     @AdminOnly()
     @JwtGuard()
+    @ApiNotebook({
+        operation: {
+            summary: '임시 포스트 수정',
+            description: '임시 포스트를 수정합니다.',
+        },
+        params: [
+            {
+                name: 'postId',
+                description: '포스트 번호',
+            },
+        ],
+        auth: true,
+    })
     async updateTempPost(
         @UserId() userId: number,
         @Param('postId', ParseIntPipe) postId: number,
@@ -234,6 +316,12 @@ export class AdminController {
     @Get('/temp/post')
     @AdminOnly()
     @JwtGuard()
+    @ApiNotebook({
+        operation: {
+            description: '특정 유저에 대한 모든 임시 포스트를 조회합니다.',
+        },
+        auth: true,
+    })
     async getTempAllPost(@UserId() userId: number) {
         try {
             const res = await this.adminService.getTempPost(userId);
@@ -255,6 +343,19 @@ export class AdminController {
     @Delete('/temp/post/:postId')
     @AdminOnly()
     @JwtGuard()
+    @ApiNotebook({
+        operation: {
+            description: '임시 포스트를 삭제합니다.',
+            summary: '임시 포스트 삭제',
+        },
+        params: [
+            {
+                name: 'postId',
+                description: '포스트 번호',
+            },
+        ],
+        auth: true,
+    })
     async deleteTempPostById(
         @UserId() userId: number,
         @Param('postId', ParseIntPipe) postId: number,
@@ -282,6 +383,19 @@ export class AdminController {
     @Get('/temp/post/:postId')
     @AdminOnly()
     @JwtGuard()
+    @ApiNotebook({
+        operation: {
+            description: '임시 포스트를 조회합니다.',
+            summary: '임시 포스트 조회',
+        },
+        params: [
+            {
+                name: 'postId',
+                description: '포스트 번호',
+            },
+        ],
+        auth: true,
+    })
     async getTempPostById(
         @UserId() userId: number,
         @Param('postId', ParseIntPipe) postId: number,

@@ -11,6 +11,10 @@ import {
     ApiNotFoundResponse,
     ApiOkResponse,
     ApiOperation,
+    ApiParam,
+    ApiParamOptions,
+    ApiQuery,
+    ApiQueryOptions,
     ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/controllers/auth/guards/jwt-auth.guard';
@@ -27,12 +31,15 @@ type ApiOperationData = {
 };
 type ApiOkResponseDescriptor = {
     operation: ApiOperationData;
-    description: string;
+    description?: string;
     auth?: boolean;
     basicAuth?: boolean;
     requestBody?: any;
     type?: any;
     schema?: any;
+    deprecated?: boolean;
+    params?: ApiParamOptions[];
+    queries?: ApiQueryOptions[];
 };
 
 /**
@@ -41,22 +48,22 @@ type ApiOkResponseDescriptor = {
  * @param option
  * @returns
  */
-export function CustomApiOkResponse(
+export function ApiNotebook(
     option: ApiOkResponseDescriptor,
 ): MethodDecorator & ClassDecorator {
+    if (!option.description) {
+        option.description = option.operation.description;
+    }
+
     const operation = option.operation;
 
-    if (!operation.description) {
-        operation.description = option.description;
-    }
-
-    if (!operation.summary) {
-        operation.summary = option.description;
-    }
-
-    const operationOption = {
+    const operationOption: ApiOperationData = {
         ...operation,
-    } as ApiOperationData;
+        description: operation.description
+            ? operation.description
+            : option.description,
+        summary: operation.summary ? operation.summary : option.description,
+    };
     const { type, schema, ...partial } = option;
 
     if (option.requestBody) {
@@ -64,7 +71,10 @@ export function CustomApiOkResponse(
     }
 
     const decorators = [
-        ApiOperation(operationOption),
+        ApiOperation({
+            ...operationOption,
+            deprecated: option.deprecated,
+        }),
         ApiOkResponse(partial),
         ApiCreatedResponse(<Omit<ApiOkResponseDescriptor, 'type'>>partial),
         ApiBadRequestResponse({
@@ -84,6 +94,18 @@ export function CustomApiOkResponse(
             description: '서버가 응답하지 않습니다.',
         }),
     ];
+
+    if (option.params) {
+        option.params.forEach((param) => {
+            decorators.push(ApiParam(param));
+        });
+    }
+
+    if (option.queries) {
+        option.queries.forEach((query) => {
+            decorators.push(ApiQuery(query));
+        });
+    }
 
     // JWT 인증 여부
     if (option.auth) {

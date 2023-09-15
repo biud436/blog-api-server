@@ -30,9 +30,9 @@ import { SearchOption } from 'src/common/config/list-config';
 import { DocsMapper } from 'src/common/config/swagger-config';
 import {
     AdminOnly,
-    CustomApiOkResponse,
+    ApiNotebook,
     JwtGuard,
-} from 'src/common/decorators/swagger/custom.decorator';
+} from 'src/common/decorators/swagger/api-notebook.decorator';
 import { PageNumber } from 'src/common/decorators/pagination/page-number.decorator';
 import { PostId } from 'src/common/decorators/enhancer/post-id.decorator';
 import { UserId } from 'src/common/decorators/authorization/user-id.decorator';
@@ -50,12 +50,11 @@ import { DataSource } from 'typeorm';
 import { PrivatePostGuard } from '../auth/guards/private-post.guard';
 import { PostsService } from './posts.service';
 import { PostSearchProperty } from './types/post-search-type';
-
-import { TypedQuery, TypedRoute } from '@nestia/core';
 import { CreateCommentDto } from 'src/entities/comment/dto/create-comment.dto';
 import { PageSize } from 'src/common/decorators/pagination/page-size.decorator';
 
 @Controller(['post', 'posts'])
+@ApiTags('Post')
 export class PostsController {
     private logger: Logger = new Logger(PostsController.name);
 
@@ -73,6 +72,18 @@ export class PostsController {
      * @returns
      */
     @Get('/breadcrumbs')
+    @ApiNotebook({
+        operation: {
+            summary: 'Breadcrumbs 정보 조회',
+            description: 'Breadcrumbs 정보를 조회합니다.',
+        },
+        queries: [
+            {
+                name: 'categoryName',
+                description: '카테고리 이름',
+            },
+        ],
+    })
     async getBreadcrumbs(@Query() categoryName: string) {
         try {
             const res = await this.categoryService.getBreadcrumbs(categoryName);
@@ -92,6 +103,12 @@ export class PostsController {
      * @returns
      */
     @Get('/categories')
+    @ApiNotebook({
+        operation: {
+            summary: '카테고리 정보와 포스트 갯수 조회',
+            description: '카테고리 정보와 포스트 갯수를 조회합니다.',
+        },
+    })
     async getPostCountByCategories() {
         try {
             const res = await this.categoryService.getPostCountByCategories();
@@ -116,6 +133,13 @@ export class PostsController {
     @Post()
     @AdminOnly()
     @JwtGuard()
+    @ApiNotebook({
+        operation: {
+            summary: '포스트 생성',
+            description: '포스트를 생성합니다.',
+        },
+        auth: true,
+    })
     async create(
         @UserId() userId: number,
         @Body()
@@ -162,6 +186,18 @@ export class PostsController {
      * @returns
      */
     @Get('/:id/comment')
+    @ApiNotebook({
+        operation: {
+            summary: '댓글 조회',
+            description: '댓글을 조회합니다.',
+        },
+        params: [
+            {
+                name: 'id',
+                description: '포스트 ID',
+            },
+        ],
+    })
     async getComments(
         @PostId() postId: number,
         @PageNumber('pageNumber') pageNumber: number,
@@ -187,6 +223,32 @@ export class PostsController {
      * @param pageSize 페이지 사이즈
      */
     @Get('/:id/comment/by-parent')
+    @ApiNotebook({
+        operation: {
+            summary: '접혀있는 댓글 조회',
+            description: '접혀있는 댓글을 조회합니다.',
+        },
+        params: [
+            {
+                name: 'id',
+                description: '포스트 ID',
+            },
+        ],
+        queries: [
+            {
+                name: 'parentId',
+                description: '부모 댓글 ID',
+            },
+            {
+                name: 'pageNumber',
+                description: '페이지 번호 (1부터 시작)',
+            },
+            {
+                name: 'pageSize',
+                description: '페이지 사이즈',
+            },
+        ],
+    })
     async getCommentsByParentId(
         @PostId() postId: number,
         @Query('parentId', ParseIntPipe) parentId: number,
@@ -210,6 +272,13 @@ export class PostsController {
      */
     @Post('/comment')
     @JwtGuard()
+    @ApiNotebook({
+        operation: {
+            summary: '댓글 생성',
+            description: '댓글을 생성합니다.',
+        },
+        auth: true,
+    })
     async createComment(
         @UserId() userId: number,
         @Body() createCommentDto: CreateCommentDto,
@@ -226,6 +295,23 @@ export class PostsController {
      */
     @Delete('/:id/comment/:commentId')
     @JwtGuard()
+    @ApiNotebook({
+        operation: {
+            summary: '댓글 삭제',
+            description: '댓글을 삭제합니다.',
+        },
+        params: [
+            {
+                name: 'id',
+                description: '포스트 ID',
+            },
+            {
+                name: 'commentId',
+                description: '댓글 ID',
+            },
+        ],
+        auth: true,
+    })
     async deleteComment(
         @PostId() postId: number,
         @Param('commentId', ParseIntPipe) commentId: number,
@@ -243,6 +329,27 @@ export class PostsController {
      * @param searchQuery 검색할 값
      */
     @Get('/search')
+    @ApiNotebook({
+        operation: {
+            summary: '포스트 검색',
+            description: '포스트를 검색합니다.',
+        },
+        queries: [
+            {
+                name: 'pageNumber',
+                description: '페이지 번호 (1부터 시작)',
+            },
+            {
+                name: 'searchProperty',
+                description: '검색할 속성',
+                enum: ['title', 'content'],
+            },
+            {
+                name: 'searchQuery',
+                description: '검색할 값',
+            },
+        ],
+    })
     async searchPost(
         @Query('pageNumber', new DefaultValuePipe(1), ParseIntPipe)
         pageNumber: number,
@@ -277,6 +384,19 @@ export class PostsController {
     @Delete(':id')
     @AdminOnly()
     @JwtGuard()
+    @ApiNotebook({
+        operation: {
+            summary: '포스트 삭제',
+            description: '포스트를 삭제합니다.',
+        },
+        params: [
+            {
+                name: 'id',
+                description: '포스트 ID',
+            },
+        ],
+        auth: true,
+    })
     async deletePost(@PostId() postId: number) {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
@@ -308,6 +428,19 @@ export class PostsController {
     @Patch(':id')
     @AdminOnly()
     @JwtGuard()
+    @ApiNotebook({
+        operation: {
+            summary: '포스트 수정',
+            description: '포스트를 수정합니다.',
+        },
+        params: [
+            {
+                name: 'id',
+                description: '포스트 ID',
+            },
+        ],
+        auth: true,
+    })
     async updatePost(
         @PostId() postId: number,
         @UserId() userId: number,
@@ -347,6 +480,22 @@ export class PostsController {
      * @returns
      */
     @Get('/')
+    @ApiNotebook({
+        operation: {
+            summary: '포스트 조회',
+            description: '포스트를 조회합니다.',
+        },
+        queries: [
+            {
+                name: 'page',
+                description: '페이지 번호 (1부터 시작)',
+            },
+            {
+                name: 'categoryId',
+                description: '카테고리 ID, 생략하면 전체 포스트를 조회합니다.',
+            },
+        ],
+    })
     async findAll(
         @PageNumber('page') page: number,
         @Query('categoryId') categoryId?: number,
@@ -368,6 +517,18 @@ export class PostsController {
     @Get(':id')
     @Anonymous()
     @UseGuards(PrivatePostGuard)
+    @ApiNotebook({
+        operation: {
+            summary: '포스트 조회',
+            description: '포스트를 조회합니다.',
+        },
+        params: [
+            {
+                name: 'id',
+                description: '포스트 ID',
+            },
+        ],
+    })
     async findOne(
         @PostId() postId: number,
         @Ip() ip: string,

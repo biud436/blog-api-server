@@ -5,6 +5,7 @@ export class CreatePostTempDto {
     /**
      * @title 제목
      */
+    @ApiProperty()
     @IsString()
     @IsNotEmpty({
         message: '제목을 입력해주세요.',
@@ -14,6 +15,7 @@ export class CreatePostTempDto {
     /**
      * @title 내용
      */
+    @ApiProperty()
     @IsString({
         message: '내용을 입력해주세요.',
     })
@@ -22,6 +24,7 @@ export class CreatePostTempDto {
     /**
      * @title 포스트 ID
      */
+    @ApiProperty()
     @IsNumber()
     @IsOptional()
     postId?: number | null;

@@ -12,8 +12,9 @@ import {
 } from '@nestjs/common';
 import {
     AdminOnly,
+    ApiNotebook,
     JwtGuard,
-} from 'src/common/decorators/swagger/custom.decorator';
+} from 'src/common/decorators/swagger/api-notebook.decorator';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { Request, Response } from 'express';
@@ -51,6 +52,12 @@ export class AuthController {
      * @param res 응답 객체
      * @returns
      */
+    @ApiNotebook({
+        operation: {
+            summary: '로그인',
+            description: '로그인을 수행합니다.',
+        },
+    })
     @Post('/login')
     @Throttle(...LOGIN_INTERVAL)
     @UseGuards(new LocalAuthGuard())
@@ -78,6 +85,12 @@ export class AuthController {
      * @returns
      */
     @Post('/logout')
+    @ApiNotebook({
+        operation: {
+            summary: '로그아웃',
+            description: '로그아웃을 수행합니다.',
+        },
+    })
     async lgout(
         @Res({
             passthrough: true,
@@ -99,6 +112,12 @@ export class AuthController {
      * @param res
      * @returns
      */
+    @ApiNotebook({
+        operation: {
+            summary: '액세스 토큰 재발급',
+            description: '액세스 토큰을 재발급합니다.',
+        },
+    })
     @Post('/regenerate/access-token')
     async regenerateAccessToken(
         @Req() req: Request,
@@ -117,6 +136,12 @@ export class AuthController {
      * @param data
      * @returns
      */
+    @ApiNotebook({
+        operation: {
+            summary: '인증 코드 전송',
+            description: '인증 코드를 이메일로 전송합니다.',
+        },
+    })
     @Post('send-auth-code')
     async sendAuthCodeByEmail(@Body() data: SendAuthCodeRequestDto) {
         try {
@@ -141,6 +166,13 @@ export class AuthController {
     @Get('/profile')
     @JwtGuard()
     @AdminOnly()
+    @ApiNotebook({
+        operation: {
+            summary: '프로필 조회',
+            description: '프로필을 조회합니다.',
+        },
+        auth: true,
+    })
     async getProfile(
         @UserInfo() payload: { user: { username: string }; role: string },
     ) {
@@ -170,6 +202,12 @@ export class AuthController {
      * @param data
      * @returns
      */
+    @ApiNotebook({
+        operation: {
+            summary: '인증 코드 확인',
+            description: '인증 코드를 확인합니다.',
+        },
+    })
     @Post('/verify-auth-code')
     async verifyAuthCode(@Body() data: VerifyAuthCodeRequestDto) {
         try {
@@ -194,6 +232,12 @@ export class AuthController {
      * @param data
      * @returns
      */
+    @ApiNotebook({
+        operation: {
+            summary: '회원 가입',
+            description: '회원 가입을 처리합니다.',
+        },
+    })
     @Post('/signup')
     async signup(@Body() data: AuthRequest.RequestDto) {
         try {
@@ -217,6 +261,12 @@ export class AuthController {
      * @tag 인증
      * @returns
      */
+    @ApiNotebook({
+        operation: {
+            summary: '깃허브 계정으로 로그인',
+            description: '깃허브 계정으로 로그인을 수행합니다.',
+        },
+    })
     @Get('/github/login')
     @UseGuards(AuthGuard('github'))
     async loginByGithub() {
@@ -231,6 +281,12 @@ export class AuthController {
      * @param res
      * @returns
      */
+    @ApiNotebook({
+        operation: {
+            summary: '깃허브 계정으로 로그인',
+            description: '깃허브 계정으로 로그인을 수행합니다.',
+        },
+    })
     @Get('/github/callback')
     @UseGuards(AuthGuard('github'))
     async loginGithubUser(
@@ -244,9 +300,22 @@ export class AuthController {
         return await this.authService.loginGithubUser(user as GithubUser, res);
     }
 
+    /**
+     * 트랜잭션 테스트를 수행합니다.
+     *
+     * @tag 인증
+     * @returns
+     */
     @Get('/transactional-test')
     @JwtGuard()
     @AdminOnly()
+    @ApiNotebook({
+        operation: {
+            summary: '트랜잭션 테스트',
+            description: '트랜잭션 테스트를 수행합니다.',
+        },
+        auth: true,
+    })
     async transactionalTest(@InjectQueryRunner() queryRunner: QueryRunner) {
         console.log(await queryRunner.manager.query('SELECT * FROM user'));
         return await this.authService.transactionalTest();

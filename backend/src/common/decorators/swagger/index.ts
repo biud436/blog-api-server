@@ -1,1 +1,1 @@
-export * from './custom.decorator';
+export * from './api-notebook.decorator';

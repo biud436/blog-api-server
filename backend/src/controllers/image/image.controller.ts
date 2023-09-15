@@ -17,9 +17,9 @@ import { ApiConsumes, ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger';
 import { InjectDataSource } from '@nestjs/typeorm';
 import {
     AdminOnly,
-    CustomApiOkResponse,
+    ApiNotebook,
     JwtGuard,
-} from 'src/common/decorators/swagger/custom.decorator';
+} from 'src/common/decorators/swagger/api-notebook.decorator';
 import { DataSource } from 'typeorm';
 import { ImageService } from './image.service';
 import {
@@ -39,6 +39,7 @@ import { Image } from './entities/image.entity';
 import { TypedBody, TypedRoute } from '@nestia/core';
 
 @Controller('image')
+@ApiTags('Image')
 export class ImageController {
     private readonly logger = new Logger(ImageController.name);
 
@@ -59,6 +60,13 @@ export class ImageController {
     @AdminOnly()
     @Post('/upload')
     @UseInterceptors(AnyFilesInterceptor())
+    @ApiNotebook({
+        operation: {
+            summary: '이미지 업로드',
+            description: '이미지를 업로드합니다.',
+        },
+        auth: true,
+    })
     async upload(@UploadedFiles() files: any[]) {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
@@ -95,6 +103,13 @@ export class ImageController {
     @AdminOnly()
     @Post('/s3/upload')
     @UseInterceptors(S3FileInterceptor('files')) // Custom Interceptor
+    @ApiNotebook({
+        operation: {
+            summary: '이미지 업로드',
+            description: '이미지를 업로드합니다.',
+        },
+        auth: true,
+    })
     async uploadImageUsingS3(
         @UserId() userId: number,
         @UploadedFiles() files: MulterS3File[],
@@ -127,6 +142,12 @@ export class ImageController {
     @Header('Cache-Control', 'public, max-age=3600')
     @Header('Access-Control-Allow-Origin', '*')
     @Render('svg-profile')
+    @ApiNotebook({
+        operation: {
+            summary: '깃허브 프로필용 이미지 생성',
+            description: '깃허브 프로필용 이미지를 생성합니다.',
+        },
+    })
     async getStatsSvg(
         @Query('text') text: string,
         @Query('username') username: string,

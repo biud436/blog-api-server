@@ -5,6 +5,7 @@ export class S3ImageUploadDto {
     /**
      * @title 포스트 아이디
      */
+    @ApiProperty()
     @IsOptional()
     postId?: number | null;
 }
