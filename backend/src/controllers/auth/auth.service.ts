@@ -769,32 +769,4 @@ export class AuthService {
 
         return data;
     }
-
-    @Commit()
-    async commitTest(txId: string) {
-        this.logger.log(`[${txId}] 커밋되었습니다.`);
-    }
-
-    @Transactional()
-    async transactionalTest(@InjectQueryRunner() queryRunner?: QueryRunner) {
-        const userRepository = queryRunner?.manager.getRepository(User);
-        const users = await userRepository?.find();
-
-        return users;
-    }
-
-    @BeforeTransaction()
-    async beforeTransactionTest(txId: string) {
-        this.logger.log(`[${txId}] 트랜잭션이 시작되기 전입니다.`);
-    }
-
-    @AfterTransaction()
-    async afterTransactionTest(txId: string) {
-        this.logger.log(`[${txId}] 트랜잭션이 종료되었습니다.`);
-    }
-
-    @Rollback()
-    async rollbackTest(txId: string, error: any) {
-        this.logger.log(`[${txId}] 롤백되었습니다:` + error);
-    }
 }

@@ -299,24 +299,4 @@ export class AuthController {
         const user = req.user;
         return await this.authService.loginGithubUser(user as GithubUser, res);
     }
-
-    /**
-     * 트랜잭션 테스트를 수행합니다.
-     *
-     * @tag 인증
-     * @returns
-     */
-    @Get('/transactional-test')
-    @JwtGuard()
-    @AdminOnly()
-    @ApiNotebook({
-        operation: {
-            summary: '트랜잭션 테스트',
-            description: '트랜잭션 테스트를 수행합니다.',
-        },
-        auth: true,
-    })
-    async transactionalTest() {
-        return await this.authService.transactionalTest();
-    }
 }

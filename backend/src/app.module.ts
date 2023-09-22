@@ -45,6 +45,7 @@ import { TaskModule } from './common/domains/task/task.module';
 import { PaginationModule } from './common/modules/pagination/pagination.module';
 import { CommentModule } from './entities/comment/comment.module';
 import { TransactionModule } from './common/modules/transaction/transaction.module';
+import { DataSource } from 'typeorm';
 
 @Module({
     imports: [
@@ -61,6 +62,8 @@ import { TransactionModule } from './common/modules/transaction/transaction.modu
                 return config.production;
             },
             inject: [ConfigService],
+            dataSourceFactory: async (options: any) =>
+                new DataSource(options).initialize(),
         }),
         TransactionModule,
         CacheModule.registerAsync(redisCacheConfig),

@@ -29,38 +29,77 @@ export class TransactionStore {
         public virtualTransactionId: string,
     ) {}
 
+    /**
+     * Checks whether the method is marked with `@BeforeTransaction` decorator.
+     * @returns
+     */
     isBeforeTransactionToken(): boolean {
         return !!this.store[BEFORE_TRANSACTION_TOKEN];
     }
 
+    /**
+     * Checks whether the method is marked with `@AfterTransaction` decorator.
+     * @returns
+     */
     isAfterTransactionToken(): boolean {
         return !!this.store[AFTER_TRANSACTION_TOKEN];
     }
 
+    /**
+     * Checks whether the method is marked with `@Commit` decorator.
+     * @returns
+     */
     isTransactionCommitToken(): boolean {
         return !!this.store[TRANSACTION_COMMIT_TOKEN];
     }
 
+    /**
+     * Checks whether the method is marked with `@Rollback` decorator.
+     * @returns
+     */
     isTransactionRollbackToken(): boolean {
         return !!this.store[TRANSACTION_ROLLBACK_TOKEN];
     }
 
+    /**
+     * Gets the method name marked with `@BeforeTransaction` decorator.
+     * @returns
+     */
     getBeforeTransactionMethodName(): string | undefined {
         return this.store[BEFORE_TRANSACTION_TOKEN];
     }
 
+    /**
+     * Gets the method name marked with `@AfterTransaction` decorator.
+     * @returns
+     */
     getAfterTransactionMethodName(): string | undefined {
         return this.store[AFTER_TRANSACTION_TOKEN];
     }
 
+    /**
+     * Gets the method name marked with `@Commit` decorator.
+     * @returns
+     */
     getTransactionCommitMethodName(): string | undefined {
         return this.store[TRANSACTION_COMMIT_TOKEN];
     }
 
+    /**
+     * Gets the method name marked with `@Rollback` decorator.
+     * @returns
+     */
     getTransactionRollbackMethodName(): string | undefined {
         return this.store[TRANSACTION_ROLLBACK_TOKEN];
     }
 
+    /**
+     * Execute the method marked with transaction decorator.
+     * @param targetInjectable
+     * @param method
+     * @param args
+     * @returns
+     */
     async action(
         targetInjectable: InstanceType<any>,
         method: string,
