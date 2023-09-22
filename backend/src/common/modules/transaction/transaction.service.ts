@@ -1,4 +1,5 @@
 import {
+    Inject,
     Injectable,
     InternalServerErrorException,
     Logger,
@@ -16,47 +17,45 @@ import {
     TRANSACTION_ENTITY_MANAGER,
     TRANSACTION_ISOLATE_LEVEL,
     TransactionIsolationLevel,
+    BEFORE_TRANSACTION_TOKEN,
+    AFTER_TRANSACTION_TOKEN,
+    TRANSACTION_COMMIT_TOKEN,
+    TRANSACTION_ROLLBACK_TOKEN,
 } from 'src/common/decorators/transactional';
 import { DataSource } from 'typeorm';
+import { ITransactionStore } from './interfaces/transaction-store.interface';
+import { TransactionReflectManager } from './transaction-reflect-manager';
+import { TransactionStore } from './transaction-store';
 import { TransactionManagerConsumer } from './tx-manager.consumer';
 import { TransactionQueryRunnerConsumer } from './tx-query-runner.consumer';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * @author 어진석(biud436)
  * @class TransactionService
  * @description
- * 트랜잭션 서비스는 트랜잭션을 쉽게 사용할 수 있도록 도와줍니다.
+ * This class allows you to apply the transaction easily in NestJS.
  */
 @Injectable()
 export class TransactionService implements OnModuleInit {
     private readonly logger: Logger = new Logger(TransactionService.name);
 
-    /**
-     * 트랜잭션 매니저 컨슈머
-     */
-    private readonly txManagerConsumer: TransactionManagerConsumer;
-
-    /**
-     * 트랜잭션 쿼리 러너 컨슈머
-     */
-    private readonly txQueryRunnerConsumer: TransactionQueryRunnerConsumer;
-
     constructor(
         private readonly discoveryService: DiscoveryService,
         private readonly metadataScanner: MetadataScanner,
-        private readonly reflector: Reflector,
+
+        private readonly txManagerConsumer: TransactionManagerConsumer,
+        private readonly txQueryRunnerConsumer: TransactionQueryRunnerConsumer,
+        private readonly reflectManager: TransactionReflectManager,
         @InjectDataSource() private readonly dataSource: DataSource,
-    ) {
-        this.txManagerConsumer = new TransactionManagerConsumer();
-        this.txQueryRunnerConsumer = new TransactionQueryRunnerConsumer();
-    }
+    ) {}
 
     public async onModuleInit() {
         await this.registerTransactional();
     }
 
     /**
-     * 트랜잭션 메소드를 등록합니다.
+     * Finds all providers and then register the transactional method.
      */
     private async registerTransactional() {
         const providers = this.discoveryService.getProviders();
@@ -69,7 +68,7 @@ export class TransactionService implements OnModuleInit {
             );
 
         for (const wrapper of wrappers) {
-            // 싱글톤 여부를 확인합니다.
+            // checks whether the target class is a singleton.
             const isSingletone = wrapper.isDependencyTreeStatic();
 
             const targetClass = isSingletone
@@ -80,41 +79,34 @@ export class TransactionService implements OnModuleInit {
                 ? wrapper.instance
                 : wrapper.metatype.prototype;
 
-            // 트랜잭션 존일 경우에만 메소드를 스캔합니다.
-            if (!this.isTransactionZone(targetClass)) {
+            // if the target class is not marked as transactional zone, then skip it.
+            if (!this.reflectManager.isTransactionZone(targetClass)) {
                 continue;
             }
 
-            for (const methodName of this.metadataScanner.getAllMethodNames(
-                target,
-            )) {
-                if (this.isTransactionalZoneMethod(target, methodName)) {
-                    this.wrap(target, methodName);
+            const store = this.createStore(target);
+            const methods = store.methods;
+
+            for (const methodName of methods) {
+                if (
+                    this.reflectManager.isTransactionalZoneMethod(
+                        target,
+                        methodName,
+                    )
+                ) {
+                    this.wrap(target, methodName, store);
                 }
             }
         }
     }
 
     /**
-     * 트랜잭션 존인지 여부를 확인합니다.
-     *
-     * @param targetClass
-     * @returns
-     */
-    private isTransactionZone(targetClass: any) {
-        return this.reflector.get<boolean>(
-            TRANSACTIONAL_ZONE_TOKEN,
-            targetClass,
-        );
-    }
-
-    /**
-     * 트랜잭션 메소드를 래핑합니다.
+     * Wrap the method to transactional method.
      *
      * @param target
      * @param methodName
      */
-    private wrap(target: any, methodName: string) {
+    private wrap(target: any, methodName: string, store: TransactionStore) {
         const wrapTransaction = () => {
             const originalMethod = target[methodName];
 
@@ -130,8 +122,15 @@ export class TransactionService implements OnModuleInit {
                 methodName,
             );
 
-            // Proxy를 위해 콜백을 생성합니다 (Proxy 객체를 사용하지 않음)
+            // creates a callback function that executes the transaction.
             const callback = async (...args: any[]) => {
+                if (store.isBeforeTransactionToken()) {
+                    await store.action(
+                        target,
+                        store.getBeforeTransactionMethodName()!,
+                    );
+                }
+
                 return new Promise((resolve, reject) => {
                     if (transactionalEntityManager) {
                         this.txManagerConsumer.execute(
@@ -143,6 +142,7 @@ export class TransactionService implements OnModuleInit {
                             originalMethod,
                             resolve,
                             reject,
+                            store,
                         );
                     } else {
                         this.txQueryRunnerConsumer.execute(
@@ -154,6 +154,7 @@ export class TransactionService implements OnModuleInit {
                             reject,
                             resolve,
                             args,
+                            store,
                         );
                     }
                 });
@@ -163,7 +164,7 @@ export class TransactionService implements OnModuleInit {
         };
 
         try {
-            // 기존 메소드를 트랜잭션 메소드로 대체합니다.
+            // replaces the original method to transactional method.
             target[methodName] = wrapTransaction();
         } catch (e: any) {
             throw new InternalServerErrorException(
@@ -173,7 +174,33 @@ export class TransactionService implements OnModuleInit {
     }
 
     /**
-     * 트랜잭션 엔티티 매니저가 필요한 지 여부를 확인합니다.
+     * Creates a store class that manages the transactional method.
+     *
+     * @param target
+     * @returns
+     */
+    private createStore(target: any): TransactionStore {
+        const store: ITransactionStore = {};
+        const methods = this.metadataScanner.getAllMethodNames(target);
+
+        // prettier-ignore
+        for (const method of methods) {
+            if (this.reflectManager.isBeforeTransactionMethod(target, method)) {
+                store[BEFORE_TRANSACTION_TOKEN] = method;
+            } else if (this.reflectManager.isAfterTransactionMethod(target, method)) {
+                store[AFTER_TRANSACTION_TOKEN] = method;
+            } else if (this.reflectManager.isCommitMethod(target, method)) {
+                store[TRANSACTION_COMMIT_TOKEN] = method;
+            } else if (this.reflectManager.isRollbackMethod(target, method)) {
+                store[TRANSACTION_ROLLBACK_TOKEN] = method;
+            }
+        }
+
+        return new TransactionStore(store, methods, uuidv4());
+    }
+
+    /**
+     * Checks whether the transaction entity manager is needed.
      *
      * @param target
      * @param methodName
@@ -188,7 +215,7 @@ export class TransactionService implements OnModuleInit {
     }
 
     /**
-     * 트랜잭션 격리 레벨을 가져옵니다.
+     * Gets the transaction isolation level.
      *
      * @param target
      * @param methodName
@@ -204,19 +231,6 @@ export class TransactionService implements OnModuleInit {
                 target,
                 methodName,
             ) || DEFAULT_ISOLATION_LEVEL)
-        );
-    }
-
-    /**
-     * 트랜잭션 메소드인지 확인합니다.
-     *
-     * @param target
-     * @param key
-     * @returns
-     */
-    private isTransactionalZoneMethod(target: object, key: string) {
-        return (
-            Reflect.getMetadata(TRANSACTIONAL_TOKEN, target, key) !== undefined
         );
     }
 }
