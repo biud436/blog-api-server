@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { CategoryService } from 'src/entities/category/category.service';
 import { CreatePostDto } from 'src/entities/post/dto/create-post.dto';
 import { UpdatePostDto } from 'src/entities/post/dto/update-post.dto';
@@ -15,6 +15,7 @@ import { Paginatable } from 'src/common/config/list-config';
 import { PostComment } from 'src/entities/comment/entities/comment.entity';
 import {
     InjectQueryRunner,
+    Rollback,
     Transactional,
     TransactionalZone,
 } from 'src/common/decorators/transactional';
@@ -23,6 +24,8 @@ import { NoPostException, NotPublicPostException } from 'src/common/exceptions';
 @Injectable()
 @TransactionalZone()
 export class PostsService {
+    private readonly logger: Logger = new Logger(PostsService.name);
+
     constructor(
         private readonly postService: PostService,
         private readonly redisService: RedisService,
@@ -54,6 +57,11 @@ export class PostsService {
         );
 
         return ResponseUtil.success(RESPONSE_MESSAGE.SAVE_SUCCESS, res);
+    }
+
+    @Rollback()
+    async rollback(txId: string, error: any) {
+        this.logger.warn(`[${txId}] Rollback:` + error);
     }
 
     async getComments(

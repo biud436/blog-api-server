@@ -1,14 +1,17 @@
-import { Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import {
     TRANSACTIONAL_PARAMS,
     TransactionIsolationLevel,
 } from 'src/common/decorators/transactional';
 import { EntityManager } from 'typeorm';
+import { TransactionStore } from './transaction-store';
 
 /**
  * @class TransactionManagerConsumer
+ * @author 어진석(biud436)
  * @description This class is a consumer that executes the transaction.
  */
+@Injectable()
 export class TransactionManagerConsumer {
     private logger = new Logger(TransactionManagerConsumer.name);
 
@@ -21,6 +24,7 @@ export class TransactionManagerConsumer {
         originalMethod: (...args: unknown[]) => unknown | Promise<unknown>,
         resolve: (value: unknown) => void,
         reject: (reason?: unknown) => void,
+        store: TransactionStore,
     ) {
         entityManager
             .transaction(transactionIsolationLevel, async (em) => {
@@ -44,11 +48,18 @@ export class TransactionManagerConsumer {
                     }
                 }
 
-                // 트랜잭션을 실행합니다.
+                // execute the original method and then commit the transaction.
                 try {
                     const result = originalMethod.call(target, ...args);
 
-                    // promise인가?
+                    if (store.isTransactionCommitToken()) {
+                        await store.action(
+                            target,
+                            store.getTransactionCommitMethodName()!,
+                        );
+                    }
+
+                    // promise?
                     if (result instanceof Promise) {
                         return resolve(await result);
                     } else {
@@ -62,7 +73,14 @@ export class TransactionManagerConsumer {
                     const queryRunner = em.queryRunner;
 
                     if (queryRunner) {
-                        queryRunner.rollbackTransaction();
+                        await queryRunner.rollbackTransaction();
+                    }
+
+                    if (store.isTransactionRollbackToken()) {
+                        await store.action(
+                            target,
+                            store.getTransactionRollbackMethodName()!,
+                        );
                     }
 
                     reject(err);
@@ -73,6 +91,18 @@ export class TransactionManagerConsumer {
                     `트랜잭션을 실행하는 도중 오류가 발생했습니다1: ${err.message}`,
                 );
                 reject(err);
+            })
+            .finally(() => {
+                // You notice that the below code is executed after the transaction is finished.
+                // but it may not be executed immediately.
+                if (store.isAfterTransactionToken()) {
+                    setTimeout(() => {
+                        store.action(
+                            target,
+                            store.getAfterTransactionMethodName()!,
+                        );
+                    }, 0);
+                }
             });
         return args;
     }

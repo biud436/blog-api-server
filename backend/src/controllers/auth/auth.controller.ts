@@ -316,8 +316,7 @@ export class AuthController {
         },
         auth: true,
     })
-    async transactionalTest(@InjectQueryRunner() queryRunner: QueryRunner) {
-        console.log(await queryRunner.manager.query('SELECT * FROM user'));
+    async transactionalTest() {
         return await this.authService.transactionalTest();
     }
 }
