@@ -19,6 +19,8 @@ export class AdminService implements OnModuleInit {
             console.log('연결 수: ', currentConnections.length);
         }
 
+        console.log('최대 커넥션 갯수:', pool.config.connectionLimit);
+
         // https://github.com/mysqljs/mysql/issues/1771
         // pool?.on('connection', (connection: unknown) => {
         //     console.log(connection);
