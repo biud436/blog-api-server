@@ -10,7 +10,10 @@ import { JwtService, JwtSignOptions, JwtVerifyOptions } from '@nestjs/jwt';
 import { CookieOptions, Request, Response } from 'express';
 import { AdminService } from 'src/entities/admin/admin.service';
 import { CreateUserDto } from 'src/entities/user/dto/create-user.dto';
-import { UserService } from 'src/entities/user/user.service';
+import {
+    UserLoginValidationInfo,
+    UserService,
+} from 'src/entities/user/user.service';
 import { DataSource, QueryRunner } from 'typeorm';
 import { AuthRequest } from './validator/request.dto';
 import { JwtPayload } from './validator/response.dto';
@@ -122,10 +125,16 @@ export class AuthService {
     ) {}
 
     /**
-     * @method login
-     * @description 로그인 처리를 합니다.
+     * Performs the login using LocalStrategy
+     *
+     * @param user LocalStrategy에 의해 검증된 유저 정보
      */
-    async login(user: any) {
+    public async login(
+        user: Omit<
+            User,
+            'password' | 'hashPassword' | 'savePassword' | 'profileId'
+        >,
+    ) {
         try {
             const payload = <JwtPayload>{ user: user, role: 'user' };
             let isAdmin = false;
@@ -169,7 +178,13 @@ export class AuthService {
         }
     }
 
-    async loginGithubUser(githubPayload: GithubUser, res: Response) {
+    /**
+     * Performs the login using Github OAuth2
+     *
+     * @param githubPayload
+     * @param res
+     */
+    public async loginGithubUser(githubPayload: GithubUser, res: Response) {
         try {
             if (!githubPayload) {
                 throw new UnauthorizedException('Github User Not Found');
@@ -244,11 +259,7 @@ export class AuthService {
         }
     }
 
-    async sign(payload: any) {
-        return this.jwtService.sign(payload);
-    }
-
-    async createConnectInfo(ip: string) {
+    public async createConnectInfo(ip: string) {
         await this.connectInfoService.create({
             ip: ip,
             userAgent: 'unknown',
@@ -263,7 +274,7 @@ export class AuthService {
      * @param res
      * @returns
      */
-    async loginUseCookieMiddleware(
+    public async loginUseCookieMiddleware(
         token: {
             accessToken: string;
             refreshToken: string;
@@ -296,12 +307,6 @@ export class AuthService {
 
         return ResponseUtil.success(RESPONSE_MESSAGE.LOGIN_SUCCESS, {});
     }
-
-    /**
-     * @description 로그아웃을 처리합니다.
-     * @param token
-     * @returns
-     */
 
     /**
      * 이메일로 인증 코드 6자리를 전송합니다.
@@ -403,44 +408,6 @@ export class AuthService {
     }
 
     /**
-     * 비밀번호 토큰이 유효한지 확인합니다.
-     *
-     * @param token
-     * @returns
-     */
-
-    /**
-     * 인증 번호 6자리를 발급합니다.
-     * 발급 이후 이메일로 전송합니다.
-     *
-     * @param userEmail 유저 이메일과 인증 코드를 1:1로 대칭시키기 위해 이메일 값을 전송 받습니다.
-     * @returns
-     */
-
-    /**
-     * 인증 여부를 레디스에서 확인합니다
-     * @param data
-     */
-
-    /**
-     * 이메일을 통해 인증 코드를 전송합니다.
-     *
-     * @param data
-     */
-
-    /**
-     * 인증 코드와 함께 이메일을 전송합니다.
-     * @private
-     * @param data
-     */
-
-    /**
-     * 아이디 찾기
-     * @private
-     * @param data
-     */
-
-    /**
      * 토큰을 새로 발급합니다.
      */
     async generateAccessToken(
@@ -451,80 +418,9 @@ export class AuthService {
     }
 
     /**
-     * Generate the access token using refresh token
-     * @param req
-     * @param res
-     * @param options
-     * @returns
-     */
-    async regenerateAccessToken(
-        req: Request,
-        res: Response,
-        options?: JwtSignOptions,
-    ): Promise<{
-        isRenew: boolean;
-    }> {
-        const refreshToken = this.aes256Provider.decrypt(
-            req.cookies.refresh_token,
-        );
-
-        // 토큰이 없다면 오류
-        if (!refreshToken) {
-            throw new UnauthorizedException();
-        }
-
-        // 토큰이 유효한지 확인
-        const validJWT = await this.jwtService.verifyAsync(refreshToken);
-
-        if (!validJWT) {
-            throw new DownStreamInternalServerErrorException(
-                '토큰이 유효하지 않습니다.',
-            );
-        }
-
-        // 유저 값이 할당되었는지 확인
-        const user: any = req.user;
-        if (!user) {
-            throw new DownStreamInternalServerErrorException(
-                '유저 정보가 없습니다.',
-            );
-        }
-
-        // 페이로드 설정
-        const payload = <JwtPayload>{ user, role: 'user' };
-        let isAdmin = false;
-
-        if ('username' in user) {
-            isAdmin = await this.adminService.isAdmin(user.username);
-        }
-
-        if (isAdmin) {
-            payload.role = 'admin';
-        }
-
-        if (!['admin'].includes(payload.role!)) {
-            throw new LoginAuthorizationException();
-        }
-
-        // 액세스 토큰 재생성
-        const accessToken = await this.jwtService.signAsync(payload);
-        const jwtSecretExpirationTime = DateTimeUtil.extractJwtExpirationTime(
-            this.configService.getOrThrow('JWT_SECRET_EXPIRATION_TIME'),
-        );
-
-        const encodedAccessToken = this.aes256Provider.encrypt(accessToken);
-        res.cookie('access_token', encodedAccessToken, <CookieOptions>{
-            ...getCookieSettingWithAccessToken(jwtSecretExpirationTime),
-        });
-
-        return {
-            isRenew: true,
-        };
-    }
-
-    /**
-     * 회원가입을 처리합니다.
+     * 회원가입을 처리합니다 (회원 가입 기능이 없는 블로그이므로 사용하지 않습니다)
      *
+     * @deprecated
      * @param body
      * @returns
      */

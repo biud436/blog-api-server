@@ -2,7 +2,6 @@ import {
     Body,
     Controller,
     Get,
-    HttpStatus,
     Ip,
     Logger,
     Post,
@@ -19,11 +18,7 @@ import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { Request, Response } from 'express';
 import { ApiTags } from '@nestjs/swagger';
-import { SendAuthCodeRequestDto } from './dto/send-auth-code.dto';
 import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
-import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
-import { VerifyAuthCodeRequestDto } from './dto/verify-auth-code.dto';
-import { AuthRequest } from './validator/request.dto';
 import { UserInfo } from 'src/common/decorators/authorization/user.decorator';
 import { User } from 'src/entities/user/entities/user.entity';
 import { Throttle } from '@nestjs/throttler';
@@ -31,14 +26,10 @@ import { LOGIN_INTERVAL } from 'src/common/config/throttle-config';
 import { AuthGuard } from '@nestjs/passport';
 import { GithubUser } from './strategies/github.strategy';
 import { ILoginDto } from './dto/login.dto';
-import { InjectQueryRunner } from 'src/common/decorators/transactional/inject-query-runner.decorator';
-import { QueryRunner } from 'typeorm';
 
 @Controller('auth')
 @ApiTags('인증 API')
 export class AuthController {
-    private logger: Logger = new Logger(AuthController.name);
-
     constructor(private readonly authService: AuthService) {}
 
     /**
@@ -48,7 +39,6 @@ export class AuthController {
      * @assignHeaders authorization
      * @param ip 접속 IP
      * @param user 유저 정보
-     * @param req 요청 객체
      * @param res 응답 객체
      * @returns
      */
@@ -64,12 +54,10 @@ export class AuthController {
     async login(
         @Ip() ip: string,
         @UserInfo() user: User,
-        @Req() req: Request,
         @Res({
             passthrough: true,
         })
         res: Response,
-        @Body() login: ILoginDto,
     ) {
         await this.authService.createConnectInfo(ip);
         const token = await this.authService.login(user);
@@ -101,59 +89,6 @@ export class AuthController {
         res.clearCookie('refresh_token');
 
         return ResponseUtil.LOGIN_OK;
-    }
-
-    /**
-     * 액세스 토큰을 재발급합니다.
-     *
-     * @tag 인증
-     * @deprecated
-     * @param req
-     * @param res
-     * @returns
-     */
-    @ApiNotebook({
-        operation: {
-            summary: '액세스 토큰 재발급',
-            description: '액세스 토큰을 재발급합니다.',
-        },
-    })
-    @Post('/regenerate/access-token')
-    async regenerateAccessToken(
-        @Req() req: Request,
-        @Res({
-            passthrough: true,
-        })
-        res: Response,
-    ) {
-        return this.authService.regenerateAccessToken(req, res);
-    }
-
-    /**
-     * 인증 코드를 이메일로 전송합니다.
-     *
-     * @tag 인증
-     * @param data
-     * @returns
-     */
-    @ApiNotebook({
-        operation: {
-            summary: '인증 코드 전송',
-            description: '인증 코드를 이메일로 전송합니다.',
-        },
-    })
-    @Post('send-auth-code')
-    async sendAuthCodeByEmail(@Body() data: SendAuthCodeRequestDto) {
-        try {
-            const res = await this.authService.sendAuthCodeByEmail(data.email);
-            return ResponseUtil.success(RESPONSE_MESSAGE.SAVE_SUCCESS, res);
-        } catch (e) {
-            throw ResponseUtil.failureWrap({
-                message: '인증 코드가 일치하지 않습니다.',
-                statusCode: HttpStatus.BAD_REQUEST,
-                name: 'INVALID_AUTH_CODE',
-            });
-        }
     }
 
     /**
@@ -192,66 +127,6 @@ export class AuthController {
             return {
                 user: {},
             };
-        }
-    }
-
-    /**
-     * 인증 코드를 확인합니다.
-     *
-     * @tag 인증
-     * @param data
-     * @returns
-     */
-    @ApiNotebook({
-        operation: {
-            summary: '인증 코드 확인',
-            description: '인증 코드를 확인합니다.',
-        },
-    })
-    @Post('/verify-auth-code')
-    async verifyAuthCode(@Body() data: VerifyAuthCodeRequestDto) {
-        try {
-            const res = await this.authService.verifyAuthCode(
-                data.email,
-                data.authCode,
-            );
-            return ResponseUtil.success(RESPONSE_MESSAGE.SAVE_SUCCESS, res);
-        } catch (e: any) {
-            throw ResponseUtil.failureWrap({
-                message: e ? e.message : '인증 코드가 일치하지 않습니다.',
-                statusCode: HttpStatus.BAD_REQUEST,
-                name: 'INVALID_AUTH_CODE',
-            });
-        }
-    }
-
-    /**
-     * 회원 가입을 처리합니다.
-     *
-     * @tag 인증
-     * @param data
-     * @returns
-     */
-    @ApiNotebook({
-        operation: {
-            summary: '회원 가입',
-            description: '회원 가입을 처리합니다.',
-        },
-    })
-    @Post('/signup')
-    async signup(@Body() data: AuthRequest.RequestDto) {
-        try {
-            const res = await this.authService.signUp(data);
-
-            return ResponseUtil.successWrap(RESPONSE_MESSAGE.SUCCESS_SIGNUP, {
-                ...res.user,
-            });
-        } catch (e) {
-            throw ResponseUtil.failureWrap({
-                message: '회원가입에 실패하였습니다',
-                statusCode: HttpStatus.BAD_REQUEST,
-                name: 'SIGNUP_FAILED',
-            });
         }
     }
 
