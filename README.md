@@ -5,7 +5,7 @@
 This project is the blog server that is made with the server framework called nestjs@v10.0.0, it is also included devops file that allows you to set and start the blog server using docker. This will introduce you to the basic elements of blog implementation. Learning something new is always a little daunting at first. but I think that things will start to become familiar in no time.
 
 <p align="center">
-<img src="https://github.com/biud436/blog-api-server/assets/13586185/a706321f-75b2-45e9-aa0c-7b7b0c145f37" />
+<img src="https://github.com/biud436/blog-api-server/assets/13586185/a7b59064-3e50-4951-a07a-452335ead3d5" />
 </p>
 
 # Setting up the server
