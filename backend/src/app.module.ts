@@ -45,7 +45,8 @@ import { TaskModule } from './common/domains/task/task.module';
 import { PaginationModule } from './common/modules/pagination/pagination.module';
 import { CommentModule } from './entities/comment/comment.module';
 import { TransactionModule } from './common/modules/transaction/transaction.module';
-import { DataSource } from 'typeorm';
+import { DataSource, DataSourceOptions } from 'typeorm';
+import { DataSourceProxy } from './common/modules/transaction/data-source-proxy';
 
 @Module({
     imports: [
@@ -62,8 +63,10 @@ import { DataSource } from 'typeorm';
                 return config.production;
             },
             inject: [ConfigService],
-            dataSourceFactory: async (options: any) =>
-                new DataSource(options).initialize(),
+            dataSourceFactory: async (options?: DataSourceOptions) => {
+                const instance = DataSourceProxy.getInstance(options);
+                return instance.create();
+            },
         }),
         TransactionModule,
         CacheModule.registerAsync(redisCacheConfig),

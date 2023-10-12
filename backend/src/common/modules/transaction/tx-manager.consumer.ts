@@ -22,8 +22,8 @@ export class TransactionManagerConsumer {
     constructor(private readonly transactionScanner: TransactionScanner) {}
 
     /**
-     * 트랜잭션을 실행합니다.
-     * 커밋, 롤백 등의 트랜잭션 관련 작업을 ORM에 전적으로 위임합니다.
+     * Executes the transaction.
+     * This would be delegated transaction-related tasks like commits and rollbacks entirely to in this proxy class.
      *
      * @param entityManager 트랜잭션을 관리하는 EntityManager 객체를 지정합니다.
      * @param transactionIsolationLevel 트랜잭션 격리 수준을 지정합니다.
@@ -49,13 +49,13 @@ export class TransactionManagerConsumer {
     ) {
         if (this.transactionScanner.isGlobalLock()) {
             this.logger.warn(
-                '트랜잭션이 중첩되었습니다. 자식 트랜잭션은 설정할 수 없습니다',
+                'The transaction is nested. Please check the transaction decorator! the transactional is not supported nested transaction when injected the Entity Manager Strategy',
             );
             return;
         }
 
         this.logger.warn(
-            '[DEPRECATED] EntityManager 주입 전략은 이제 사용되지 않습니다!',
+            '[DEPRECATED] EntityManager Strategy is now deprecated. Please use the query runner strategy instead.',
         );
 
         const queryRunner = dataSource.createQueryRunner();
@@ -109,7 +109,7 @@ export class TransactionManagerConsumer {
                     }
                 } catch (err: any) {
                     this.logger.error(
-                        `트랜잭션을 실행하는 도중 오류가 발생했습니다: ${err.message}`,
+                        `An error occurred while executing the transaction`,
                     );
 
                     const queryRunner = em.queryRunner;
@@ -130,7 +130,7 @@ export class TransactionManagerConsumer {
             })
             .catch((err) => {
                 this.logger.error(
-                    `트랜잭션을 실행하는 도중 오류가 발생했습니다1: ${err.message}`,
+                    `An error occurred while executing the transaction`,
                 );
                 reject(err);
             })

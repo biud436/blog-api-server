@@ -24,9 +24,8 @@ export class TransactionQueryRunnerConsumer {
     constructor(private readonly transactionScanner: TransactionScanner) {}
 
     /**
-     * 트랜잭션을 실행합니다.
-     * 커밋, 롤백 등의 트랜잭션 관련 작업을 직접 수행합니다.
-     * ORM에 위임하지 않고 직접 커밋과 롤백 등을 관리합니다.
+     * Executes the transaction.
+     * This would be delegated transaction-related tasks like commits and rollbacks entirely to in this proxy class.
      *
      * @param dataSource 새로운 연결을 만들고 트랜잭션을 실행할 데이터소스 객체를 지정합니다.
      * @param transactionIsolationLevel 트랜잭션 격리 수준을 지정합니다.

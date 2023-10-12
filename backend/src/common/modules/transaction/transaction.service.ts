@@ -29,6 +29,8 @@ import { TransactionStore } from './transaction-store';
 import { TransactionManagerConsumer } from './tx-manager.consumer';
 import { TransactionQueryRunnerConsumer } from './tx-query-runner.consumer';
 import { v4 as uuidv4 } from 'uuid';
+import { DataSourceProxy } from './data-source-proxy';
+import { TransactionScanner } from './transaction-scanner';
 
 /**
  * @author 어진석(biud436)
@@ -47,10 +49,15 @@ export class TransactionService implements OnModuleInit {
         private readonly txManagerConsumer: TransactionManagerConsumer,
         private readonly txQueryRunnerConsumer: TransactionQueryRunnerConsumer,
         private readonly reflectManager: TransactionReflectManager,
+        private readonly transactionScanner: TransactionScanner,
         @InjectDataSource() private readonly dataSource: DataSource,
     ) {}
 
     public async onModuleInit() {
+        DataSourceProxy.getInstance().initWithLazyTransactionScanner(
+            this.transactionScanner,
+        );
+
         await this.registerTransactional();
     }
 
