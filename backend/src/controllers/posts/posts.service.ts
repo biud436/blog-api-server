@@ -45,15 +45,10 @@ export class PostsService {
     }
 
     @Transactional()
-    async createComment(
-        createCommentDto: CreateCommentDto,
-        userId: number,
-        @InjectQueryRunner() queryRunner?: QueryRunner,
-    ) {
+    async createComment(createCommentDto: CreateCommentDto, userId: number) {
         const res = await this.commentService.createComment(
             createCommentDto,
             userId,
-            queryRunner!,
         );
 
         return ResponseUtil.success(RESPONSE_MESSAGE.SAVE_SUCCESS, res);
@@ -113,18 +108,20 @@ export class PostsService {
         }
     }
 
+    /**
+     * 댓글 삭제
+     *
+     * @param postId
+     * @param commentId
+     * @param userId
+     * @returns
+     */
     @Transactional()
-    async deleteComment(
-        postId: number,
-        commentId: number,
-        userId: number,
-        @InjectQueryRunner() queryRunner?: QueryRunner,
-    ) {
+    async deleteComment(postId: number, commentId: number, userId: number) {
         const res = await this.commentService.deleteComment(
             postId,
             commentId,
             userId,
-            queryRunner!,
         );
 
         return ResponseUtil.success(RESPONSE_MESSAGE.DELETE_SUCCESS, res);
@@ -222,8 +219,8 @@ export class PostsService {
      * @param queuryRunner
      * @returns
      */
-    async deleteOne(postId: number, queuryRunner: QueryRunner) {
-        return await this.postService.deletePostById(postId, queuryRunner);
+    async deleteOne(postId: number) {
+        return await this.postService.deletePostById(postId);
     }
 
     /**
@@ -253,5 +250,18 @@ export class PostsService {
      */
     async getPostCountByCategories() {
         return this.categoryService.getPostCountByCategories();
+    }
+
+    /**
+     * 포스트를 삭제합니다.
+     *
+     * @param postId 포스트 ID
+     * @returns
+     */
+    @Transactional()
+    async deletePostById(postId: number) {
+        const res = await this.deleteOne(postId);
+
+        return ResponseUtil.success(RESPONSE_MESSAGE.DELETE_SUCCESS, res);
     }
 }

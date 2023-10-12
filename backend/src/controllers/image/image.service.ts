@@ -41,8 +41,8 @@ export class ImageService {
         return this.updatePostIdCommand.execute(postId, imageIds, queuryRunner);
     }
 
-    async deleteByIds(ids: number[], queuryRunner: QueryRunner) {
-        return this.deleteCommand.execute(ids, queuryRunner);
+    async deleteByIds(ids: number[]) {
+        return this.deleteCommand.execute(ids);
     }
 
     async upload(userId: number, files: MulterS3File[], dto: S3ImageUploadDto) {

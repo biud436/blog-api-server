@@ -115,8 +115,6 @@ export class TransactionService implements OnModuleInit {
                 methodName,
             );
 
-            const entityManager = this.dataSource.manager;
-
             const transactionalEntityManager = this.getTxManager(
                 target,
                 methodName,
@@ -134,7 +132,7 @@ export class TransactionService implements OnModuleInit {
                 return new Promise((resolve, reject) => {
                     if (transactionalEntityManager) {
                         this.txManagerConsumer.execute(
-                            entityManager,
+                            this.dataSource,
                             transactionIsolationLevel,
                             target,
                             methodName,

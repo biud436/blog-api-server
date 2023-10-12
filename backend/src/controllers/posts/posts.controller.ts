@@ -398,22 +398,7 @@ export class PostsController {
         auth: true,
     })
     async deletePost(@PostId() postId: number) {
-        const queryRunner = this.dataSource.createQueryRunner();
-        await queryRunner.connect();
-        await queryRunner.startTransaction();
-
-        try {
-            const res = await this.postsService.deleteOne(postId, queryRunner);
-
-            await queryRunner.commitTransaction();
-
-            return ResponseUtil.success(RESPONSE_MESSAGE.DELETE_SUCCESS, res);
-        } catch (e: any) {
-            await queryRunner.rollbackTransaction();
-            return ResponseUtil.failureWrap(e);
-        } finally {
-            await queryRunner.release();
-        }
+        return await this.postsService.deletePostById(postId);
     }
 
     /**

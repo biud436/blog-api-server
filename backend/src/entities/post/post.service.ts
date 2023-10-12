@@ -182,7 +182,7 @@ export class PostService {
     /**
      * 기존 포스트를 삭제합니다.
      */
-    async deletePostById(postId: number, queuryRunner: QueryRunner) {
+    async deletePostById(postId: number) {
         const post = await this.postRepository.findOne({
             where: { id: postId },
             relations: ['images'],
@@ -196,7 +196,7 @@ export class PostService {
         if (post.images && post.images.length > 0) {
             const ids = post.images.map((e) => e.id);
             if (ids && ids.length > 0) {
-                await this.imageService.deleteByIds(ids, queuryRunner);
+                await this.imageService.deleteByIds(ids);
             }
         }
 
@@ -206,7 +206,6 @@ export class PostService {
             .delete()
             .from(Post)
             .where('id = :id', { id: postId })
-            .setQueryRunner(queuryRunner)
             .execute();
 
         return deleteResult;

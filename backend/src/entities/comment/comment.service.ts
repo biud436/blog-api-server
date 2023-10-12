@@ -22,11 +22,7 @@ export class CommentService implements OnModuleInit {
     /**
      * 새로운 댓글을 생성합니다.
      */
-    async createComment(
-        createCommentDto: CreateCommentDto,
-        userId: number,
-        queryRunner: QueryRunner,
-    ) {
+    async createComment(createCommentDto: CreateCommentDto, userId: number) {
         const comment = this.commentRepository.create(createCommentDto);
         comment.userId = userId;
 
@@ -58,14 +54,12 @@ export class CommentService implements OnModuleInit {
                     comment,
                     createCommentDto,
                     parentComment,
-                    queryRunner,
                 );
             } else {
                 await this.createNodeWithASC(
                     comment,
                     createCommentDto,
                     parentComment,
-                    queryRunner,
                 );
             }
 
@@ -77,20 +71,19 @@ export class CommentService implements OnModuleInit {
             isExistParent = true;
         }
 
-        const result = await queryRunner.manager.save(comment);
+        const result = await this.commentRepository.save(comment);
 
         if (!isExistParent) {
             comment.parentId = result.id;
         }
 
-        return await queryRunner.manager.save(comment);
+        return await this.commentRepository.save(comment);
     }
 
     private async createNodeWithDESC(
         comment: PostComment,
         createCommentDto: CreateCommentDto,
         parentComment: PostComment,
-        queryRunner: QueryRunner,
     ) {
         // pos 처리
         if (this.isZeroOrMore(createCommentDto.pos)) {
@@ -110,8 +103,6 @@ export class CommentService implements OnModuleInit {
             .andWhere('pos >= :pos', {
                 pos: comment.pos,
             })
-            .setQueryRunner(queryRunner)
-            .useTransaction(true)
             .execute();
     }
 
@@ -119,7 +110,6 @@ export class CommentService implements OnModuleInit {
         comment: PostComment,
         createCommentDto: CreateCommentDto,
         parentComment: PostComment,
-        queryRunner: QueryRunner,
     ) {
         // 마지막 댓글을 가져옵니다.
         const listItems = await this.commentRepository
@@ -132,8 +122,6 @@ export class CommentService implements OnModuleInit {
                 id: parentComment.id,
             })
             .addOrderBy('comment.pos', 'DESC')
-            .setQueryRunner(queryRunner)
-            .useTransaction(true)
             .getOne();
 
         if (listItems) {
@@ -156,8 +144,6 @@ export class CommentService implements OnModuleInit {
                 .andWhere('pos > :pos', {
                     pos: comment.pos,
                 })
-                .setQueryRunner(queryRunner)
-                .useTransaction(true)
                 .execute();
         } else {
             // pos 처리
@@ -272,22 +258,13 @@ export class CommentService implements OnModuleInit {
      * @param queryRunner
      * @returns
      */
-    private async hasChildren(
-        postId: number,
-        commentId: number,
-        queryRunner: QueryRunner,
-    ) {
-        const qb = this.commentRepository.createQueryBuilder(
-            'comment',
-            queryRunner,
-        );
+    private async hasChildren(postId: number, commentId: number) {
+        const qb = this.commentRepository.createQueryBuilder('comment');
 
         // 기준 댓글 조회
         const targetComment = await qb
             .select()
             .where('comment.id = :commentId', { commentId })
-            .setQueryRunner(queryRunner)
-            .useTransaction(true)
             .getOneOrFail();
 
         const { depth, pos } = targetComment;
@@ -298,8 +275,6 @@ export class CommentService implements OnModuleInit {
             .where('comment.postId = :postId', { postId })
             .andWhere('comment.depth > :depth', { depth })
             .andWhere('comment.pos > :pos', { pos })
-            .setQueryRunner(queryRunner)
-            .useTransaction(true)
             .getMany();
 
         if (children.length > 0) {
@@ -375,15 +350,12 @@ export class CommentService implements OnModuleInit {
         postId: number,
         commentId: number,
         userId: number,
-        queryRunner: QueryRunner,
     ) {
         const qb = this.commentRepository
             .createQueryBuilder('comment')
             .select()
             .where('comment.postId = :postId', { postId })
-            .andWhere('comment.id = :id', { id: commentId })
-            .setQueryRunner(queryRunner)
-            .useTransaction(true);
+            .andWhere('comment.id = :id', { id: commentId });
 
         const comment = await qb.getOneOrFail();
 
@@ -403,29 +375,13 @@ export class CommentService implements OnModuleInit {
      * @param queryRunner
      * @returns
      */
-    async deleteComment(
-        postId: number,
-        commentId: number,
-        userId: number,
-        queryRunner: QueryRunner,
-    ) {
+    async deleteComment(postId: number, commentId: number, userId: number) {
         // 댓글 작성자가 아닐 경우
-        if (
-            !(await this.isCommentAuthor(
-                postId,
-                commentId,
-                userId,
-                queryRunner,
-            ))
-        ) {
+        if (!(await this.isCommentAuthor(postId, commentId, userId))) {
             throw new BadRequestException('댓글 작성자가 아닙니다.');
         }
 
-        const hasChildren = await this.hasChildren(
-            postId,
-            commentId,
-            queryRunner,
-        );
+        const hasChildren = await this.hasChildren(postId, commentId);
 
         // 답글이 달려있을 경우
         if (hasChildren) {
@@ -437,8 +393,6 @@ export class CommentService implements OnModuleInit {
                     deletedAt: new Date(),
                 })
                 .where('id = :id', { id: commentId })
-                .setQueryRunner(queryRunner)
-                .useTransaction(true)
                 .execute();
 
             return updateResult;
@@ -449,8 +403,6 @@ export class CommentService implements OnModuleInit {
             .createQueryBuilder('comment')
             .delete()
             .where('id = :id', { id: commentId })
-            .setQueryRunner(queryRunner)
-            .useTransaction(true)
             .execute();
 
         return deleteResult;

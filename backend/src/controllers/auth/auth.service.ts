@@ -37,14 +37,7 @@ import { LocalDate, LocalDateTime } from '@js-joda/core';
 import { AES256Provider } from 'src/common/modules/aes/aes-256.provider';
 import { ConnectInfoService } from 'src/entities/connect-info/connect-info.service';
 import { GithubUser } from './strategies/github.strategy';
-import {
-    AfterTransaction,
-    BeforeTransaction,
-    Commit,
-    Rollback,
-    Transactional,
-    TransactionalZone,
-} from 'src/common/decorators/transactional';
+import { TransactionalZone } from 'src/common/decorators/transactional';
 import { InjectQueryRunner } from 'src/common/decorators/transactional/inject-query-runner.decorator';
 import { Query } from 'typeorm/driver/Query';
 

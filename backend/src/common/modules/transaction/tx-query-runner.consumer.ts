@@ -1,10 +1,14 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { HttpException, Injectable, Logger } from '@nestjs/common';
 import {
     TRANSACTIONAL_PARAMS,
     TransactionIsolationLevel,
+    TransactionPropagation,
+    TRANSACTION_PROPAGATION,
 } from 'src/common/decorators/transactional';
 import { INJECT_QUERYRUNNER_TOKEN } from 'src/common/decorators/transactional/inject-query-runner.decorator';
-import { DataSource } from 'typeorm';
+import { DataSource, EntityManager, QueryRunner } from 'typeorm';
+import { isPromise } from 'util/types';
+import { TransactionScanner } from './transaction-scanner';
 import { TransactionStore } from './transaction-store';
 
 /**
@@ -15,6 +19,24 @@ import { TransactionStore } from './transaction-store';
 @Injectable()
 export class TransactionQueryRunnerConsumer {
     private logger: Logger = new Logger(TransactionQueryRunnerConsumer.name);
+
+    constructor(private readonly transactionScanner: TransactionScanner) {}
+
+    /**
+     * 트랜잭션을 실행합니다.
+     * 커밋, 롤백 등의 트랜잭션 관련 작업을 직접 수행합니다.
+     * ORM에 위임하지 않고 직접 커밋과 롤백 등을 관리합니다.
+     *
+     * @param dataSource 새로운 연결을 만들고 트랜잭션을 실행할 데이터소스 객체를 지정합니다.
+     * @param transactionIsolationLevel 트랜잭션 격리 수준을 지정합니다.
+     * @param target 트랜잭션 관련 데코레이터를 찾을 클래스를 지정합니다.
+     * @param methodName 트랜잭션 데코레이터를 찾을 메소드 명을 지정합니다.
+     * @param originalMethod 원본 메소드를 지정합니다.
+     * @param reject 비동기 처리 실패시 호출될 함수를 지정합니다.
+     * @param resolve 비동기 처리 성공시 호출될 함수를 지정합니다.
+     * @param args 원본 메소드의 인자를 지정합니다.
+     * @param store 트랜잭션 스토어를 지정합니다.
+     */
     public execute(
         dataSource: DataSource,
         transactionIsolationLevel: TransactionIsolationLevel,
@@ -27,11 +49,44 @@ export class TransactionQueryRunnerConsumer {
         store: TransactionStore,
     ) {
         const txWrapper = async (...args: any[]) => {
-            // 단일 트랜잭션을 실행합니다.
-            const queryRunner = dataSource.createQueryRunner();
+            let queryRunner: QueryRunner | undefined = undefined;
+            let manager: EntityManager | undefined = undefined;
 
-            await queryRunner.connect();
-            await queryRunner.startTransaction(transactionIsolationLevel);
+            // 트랜잭션 전파 속성
+            const propagation = Reflect.getMetadata(
+                TRANSACTION_PROPAGATION,
+                target,
+                methodName,
+            ) as TransactionPropagation;
+
+            // 논리 트랜잭션이 있는지 확인합니다.
+            if (this.transactionScanner.isGlobalLock()) {
+                // 새로운 논리 트랜잭션을 시작합니다.
+                this.transactionScanner.addLogicalTransactionCount();
+
+                queryRunner = this.transactionScanner.getTxQueryRunner();
+                manager = this.transactionScanner.getTxEntityManager();
+            } else {
+                // 새로운 물리 트랜잭션을 생성합니다.
+                queryRunner = dataSource.createQueryRunner();
+                manager = queryRunner.manager;
+
+                await queryRunner.connect();
+                await queryRunner.startTransaction(transactionIsolationLevel);
+
+                await this.transactionScanner.globalLock({
+                    queryRunner,
+                    transactionIsolationLevel,
+                    entityManager: manager,
+                });
+            }
+
+            if (!queryRunner) {
+                throw new HttpException(
+                    '트랜잭션 QueryRunner를 찾을 수 없습니다',
+                    500,
+                );
+            }
 
             try {
                 // QueryRunner를 찾아서 대체한다.
@@ -48,24 +103,37 @@ export class TransactionQueryRunnerConsumer {
                         methodName,
                     ) as number;
 
-                    params.forEach((param, _index) => {
-                        args[paramIndex] = queryRunner;
-                    });
+                    params.forEach(() => (args[paramIndex] = queryRunner));
                 }
 
-                // 원본 메소드를 실행합니다.
+                /**
+                 * 트랜잭션 매니저에서 위 코드를 실행하기 전에 QueryRunner에 대한 복원 지점을 만들어야 합니다.
+                 * 쉽게 말하면 현재 진행되는 물리 트랜잭션을 롤백하고 쿼리가 실행되기 전의 상태까지 재실행해야 합니다.
+                 *
+                 * originalMethod가 실행되는 도중에 논리 트랜잭션이 롤백될 수도 있기 때문입니다.
+                 * 따라서 논리 트랜잭션이 롤백되면 복원 지점으로 QueryRunner를 복구해야 합니다.
+                 */
                 const result = originalMethod.call(target, ...args);
 
                 let ret = null;
                 // promise인가?
-                if (result instanceof Promise) {
+                if (isPromise(result)) {
                     ret = await result;
                 } else {
                     ret = result;
                 }
 
-                await queryRunner.commitTransaction();
+                /**
+                 * 논리 트랜잭션이 모두 커밋되어야 물리 트랜잭션을 커밋할 수 있습니다.
+                 * 따라서 커밋은 물리 트랜잭션이 커밋되어야 하는 상황에서만 커밋됩니다.
+                 */
+                if (
+                    this.transactionScanner.isCommittedAllLogicalTransaction()
+                ) {
+                    await queryRunner.commitTransaction();
+                }
 
+                // 논리 트랜잭션이 커밋되어도, 커밋 이벤트가 발생합니다.
                 if (store.isTransactionCommitToken()) {
                     await store.action(
                         target,
@@ -75,7 +143,15 @@ export class TransactionQueryRunnerConsumer {
 
                 return ret;
             } catch (e: any) {
+                // ? 트랜잭션 롤백 전략
+                // ? 현재의 롤백 전략은 단 하나의 물리 트랜잭션을 롤백합니다.
+                // ? SAVEPOINT를 사용하여 트랜잭션을 롤백하는 방법도 있습니다.
+                // ? 단, 이 방법은 DBMS에 따라 지원하지 않을 수도 있습니다.
+                // ? 또는, 논리 트랜잭션 시작 전에 복원 지점을 설정하는 것입니다.
+                // ? TypeORM은 MySQL, Postgres, Oracle, SqlServer, CockroachDB의 경우, transactionDepth 값을 통해 중첩 트랜지션을 지원합니다.
+                // ? 중첩 트랜지션을 사용하려면 같은 EntityManager를 사용해야 합니다.
                 await queryRunner.rollbackTransaction();
+                this.transactionScanner.resetLogicalTransactionCount();
 
                 if (store.isTransactionRollbackToken()) {
                     await store.action(
@@ -89,7 +165,18 @@ export class TransactionQueryRunnerConsumer {
                 );
                 reject(e);
             } finally {
-                await queryRunner.release();
+                /**
+                 * 논리 트랜잭션이 모두 커밋되어야 QueryRunner를 반환할 수 있습니다.
+                 **/
+                if (
+                    this.transactionScanner.isCommittedAllLogicalTransaction()
+                ) {
+                    await queryRunner.release();
+                    this.transactionScanner.globalUnlock();
+                } else {
+                    // 논리 트랜잭션이 모두 커밋되지 않았다면, 논리 트랜잭션을 하나 제거합니다.
+                    this.transactionScanner.subtractLogicalTransactionCount();
+                }
 
                 if (store.isAfterTransactionToken()) {
                     await store.action(

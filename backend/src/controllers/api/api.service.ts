@@ -39,14 +39,8 @@ export class ApiService {
     }
 
     @Transactional()
-    async deletePost(
-        postId: number,
-        @InjectQueryRunner() queryRunner?: QueryRunner,
-    ) {
-        const result = await this.postsService.deletePostById(
-            postId,
-            queryRunner!,
-        );
+    async deletePost(postId: number) {
+        const result = await this.postsService.deletePostById(postId);
 
         if (result.affected === 0) {
             throw new DeletePostException();

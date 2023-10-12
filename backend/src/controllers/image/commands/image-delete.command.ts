@@ -26,10 +26,7 @@ export class ImageDeleteCommandImpl extends ImageDeleteCommand {
         super();
     }
 
-    async execute(
-        ids: number[],
-        queuryRunner: QueryRunner,
-    ): Promise<DeleteResult> {
+    async execute(ids: number[]): Promise<DeleteResult> {
         const images = await this.findByIdsCommand.execute(ids);
 
         if (!images) {
@@ -40,7 +37,6 @@ export class ImageDeleteCommandImpl extends ImageDeleteCommand {
 
         const qb = this.imageRepository
             .createQueryBuilder('image')
-            .setQueryRunner(queuryRunner)
             .delete()
             .where('image.id IN (:ids)', { ids });
 
