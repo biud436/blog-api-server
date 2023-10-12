@@ -7,6 +7,7 @@ import { DataSource, EntityManager } from 'typeorm';
 import { isPromise } from 'util/types';
 import { TransactionScanner } from './transaction-scanner';
 import { TransactionStore } from './transaction-store';
+import { isArrayOK } from './utils';
 
 /**
  * @class TransactionManagerConsumer
@@ -75,8 +76,8 @@ export class TransactionManagerConsumer {
                     methodName,
                 );
 
-                if (Array.isArray(params) && params.length > 0) {
-                    if (Array.isArray(args) && args.length > 0) {
+                if (isArrayOK(params)) {
+                    if (isArrayOK(args)) {
                         args = args.map((arg, index) => {
                             const param = params[index];
                             if (param instanceof EntityManager) {

@@ -10,6 +10,7 @@ import { DataSource, EntityManager, QueryRunner } from 'typeorm';
 import { isPromise } from 'util/types';
 import { TransactionScanner } from './transaction-scanner';
 import { TransactionStore } from './transaction-store';
+import { isArrayOK } from './utils';
 
 /**
  * @class TransactionQueryRunnerConsumer
@@ -96,7 +97,7 @@ export class TransactionQueryRunnerConsumer {
                     methodName,
                 );
 
-                if (Array.isArray(params) && params.length > 0) {
+                if (isArrayOK(params)) {
                     const paramIndex = Reflect.getMetadata(
                         INJECT_QUERYRUNNER_TOKEN,
                         target,
