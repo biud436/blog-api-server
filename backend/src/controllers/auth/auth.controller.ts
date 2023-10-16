@@ -25,7 +25,6 @@ import { Throttle } from '@nestjs/throttler';
 import { LOGIN_INTERVAL } from 'src/common/config/throttle-config';
 import { AuthGuard } from '@nestjs/passport';
 import { GithubUser } from './strategies/github.strategy';
-import { ILoginDto } from './dto/login.dto';
 
 @Controller('auth')
 @ApiTags('인증 API')

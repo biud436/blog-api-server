@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { TransactionScanner } from './transaction-scanner';
 import { EmptyTransactionScanner } from './transaction-scanner.empty';
+import { throttle } from 'lodash';
 
 /**
  * @class DataSourceProxy
@@ -137,6 +138,12 @@ export class DataSourceProxy {
         });
     }
 
+    private printLog = (msg: string) =>
+        throttle(() => {
+            this.logger.verbose(msg);
+        }, 1000);
+    private queryLog = this.printLog('[접근] 쿼리가 실행되었습니다');
+
     /**
      *
      * @param target
@@ -145,25 +152,7 @@ export class DataSourceProxy {
      * @returns
      */
     private query(target: any, prop: string | symbol, receiver: any) {
-        console.log('[접근] 쿼리가 실행되었습니다');
-
-        return Reflect.get(target, prop, receiver);
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    private getQueryRunner(target: any, prop: string | symbol, receiver: any) {
-        /**
-         * TODO: 다음 코드는 실행되지 않습니다.
-         */
-        if (this.transactionScanner?.isGlobalLock()) {
-            const txQueryRunner = this.transactionScanner?.getTxQueryRunner();
-
-            if (!txQueryRunner) {
-                throw new Error('트랜잭션 QueryRunner를 찾을 수 없습니다');
-            }
-
-            return txQueryRunner;
-        }
+        this.queryLog();
 
         return Reflect.get(target, prop, receiver);
     }
