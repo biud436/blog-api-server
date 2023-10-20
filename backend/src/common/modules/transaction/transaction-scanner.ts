@@ -1,5 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { TransactionIsolationLevel } from 'src/common/decorators/transactional/transactional.decorator';
+import { HttpException, Injectable } from '@nestjs/common';
+import {
+    TransactionalRollbackException,
+    TransactionIsolationLevel,
+    TRANSACTION_LAZY_ROLLBACK,
+} from 'src/common/decorators/transactional/transactional.decorator';
 import { EntityManager, QueryRunner } from 'typeorm';
 
 export interface RawTransactionMetadata {
@@ -186,5 +190,38 @@ export class TransactionScanner {
      */
     isGlobalLock(): boolean {
         return this.mapper.get(TransactionScanner.GLOBAL_LOCK) === true;
+    }
+
+    /**
+     * 트랜잭션 롤백 Exception 여부를 확인합니다.
+     *
+     * @param targetInjectable
+     * @param method
+     * @returns
+     */
+    getTransactionRollbackException(
+        target: any,
+        methodName: string,
+    ): TransactionalRollbackException | null {
+        return Reflect.getMetadata(
+            TRANSACTION_LAZY_ROLLBACK,
+            target,
+            methodName as any,
+        ) as TransactionalRollbackException | null;
+    }
+
+    checkRollbackException(target: any, methodName: string) {
+        const exceptionCallback = this.getTransactionRollbackException(
+            target,
+            methodName,
+        );
+
+        if (exceptionCallback) {
+            const exception = exceptionCallback();
+
+            if (exception instanceof HttpException) {
+                throw exception;
+            }
+        }
     }
 }

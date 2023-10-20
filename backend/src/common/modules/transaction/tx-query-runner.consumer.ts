@@ -160,6 +160,11 @@ export class TransactionQueryRunnerConsumer {
                     );
                 }
 
+                this.transactionScanner.checkRollbackException(
+                    target,
+                    methodName,
+                );
+
                 this.logger.error(
                     `트랜잭션을 실행하는 도중 오류가 발생했습니다: ${e.stack}`,
                 );

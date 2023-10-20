@@ -1,8 +1,11 @@
+import { HttpException } from '@nestjs/common';
+
 export const TRANSACTIONAL_TOKEN = 'TRANSACTIONAL_TOKEN';
 export const TRANSACTION_ISOLATE_LEVEL = 'TRANSACTION_ISOLATE_LEVEL';
 export const TRANSACTION_PROPAGATION = 'TRANSACTION_PROPAGATION';
 export const TRANSACTIONAL_PARAMS = 'TRANSACTIONAL_PARAMS';
 export const TRANSACTION_ENTITY_MANAGER = 'TRANSACTION_ENTITY_MANAGER';
+export const TRANSACTION_LAZY_ROLLBACK = 'TRANSACTION_LAZY_ROLLBACK';
 
 export enum TransactionIsolationLevel {
     READ_UNCOMMITTED = 'READ UNCOMMITTED',
@@ -32,10 +35,13 @@ export enum TransactionPropagation {
     NESTED = 'NESTED',
 }
 
+export type TransactionalRollbackException = () => HttpException;
+
 export interface TransactionalOptions {
     isolationLevel?: TransactionIsolationLevel;
     transactionalEntityManager?: boolean;
     propagation?: TransactionPropagation;
+    rollback?: TransactionalRollbackException;
 }
 export const DEFAULT_ISOLATION_LEVEL =
     TransactionIsolationLevel.REPEATABLE_READ;
@@ -71,6 +77,14 @@ export function Transactional(option?: TransactionalOptions): MethodDecorator {
         Reflect.defineMetadata(
             TRANSACTION_PROPAGATION,
             option?.propagation ?? TransactionPropagation.REQUIRED,
+            target,
+            methodName,
+        );
+
+        // 트랜잭션 롤백 Exception
+        Reflect.defineMetadata(
+            TRANSACTION_LAZY_ROLLBACK,
+            option?.rollback ?? null,
             target,
             methodName,
         );
