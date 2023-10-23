@@ -48,7 +48,13 @@ export class AuthController {
         },
     })
     @Post('/login')
-    @Throttle(...LOGIN_INTERVAL)
+    // 0초에 8번까지만 요청 가능합니다.
+    @Throttle({
+        default: {
+            limit: LOGIN_INTERVAL[0],
+            ttl: LOGIN_INTERVAL[1] * 1000,
+        },
+    })
     @UseGuards(new LocalAuthGuard())
     async login(
         @Ip() ip: string,

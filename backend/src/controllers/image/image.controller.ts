@@ -36,7 +36,6 @@ import {
     ImageCreateSvgCommandImpl,
 } from './commands/image-create-svg.command';
 import { Image } from './entities/image.entity';
-import { TypedBody, TypedRoute } from '@nestia/core';
 
 @Controller('image')
 @ApiTags('Image')

@@ -81,11 +81,12 @@ import { DataSourceProxy } from './common/modules/transaction/data-source-proxy'
             rootPath: join(__dirname, '..', 'public'),
         }),
         ScheduleModule.forRoot(),
-        ThrottlerModule.forRoot({
-            // 60초에 40번까지만 요청 가능
-            ttl: 60,
-            limit: 40,
-        }),
+        ThrottlerModule.forRoot([
+            {
+                ttl: 60 * 1000,
+                limit: 40,
+            },
+        ]),
         HttpModule,
         OrmModule,
         UserModule,
