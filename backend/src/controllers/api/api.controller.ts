@@ -97,7 +97,7 @@ export class ApiController {
         auth: true,
     })
     async getPost(
-        @PageNumber('pageNumber') pageNumber: number,
+        @PageNumber() pageNumber: number,
         @PageSize() pageSize: number,
     ) {
         return await this.apiService.getPost(pageNumber, pageSize);

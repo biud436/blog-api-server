@@ -200,7 +200,7 @@ export class PostsController {
     })
     async getComments(
         @PostId() postId: number,
-        @PageNumber('pageNumber') pageNumber: number,
+        @PageNumber() pageNumber: number,
         @PageSize() pageSize: number,
         @Query('expand', new DefaultValuePipe(true), ParseBoolPipe)
         isExpand: boolean = true,
@@ -252,7 +252,7 @@ export class PostsController {
     async getCommentsByParentId(
         @PostId() postId: number,
         @Query('parentId', ParseIntPipe) parentId: number,
-        @PageNumber('pageNumber') pageNumber: number,
+        @PageNumber() pageNumber: number,
         @PageSize() pageSize: number,
     ) {
         return await this.postsService.getCommentsByParentId(
