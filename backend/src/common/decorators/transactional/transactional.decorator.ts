@@ -35,7 +35,7 @@ export enum TransactionPropagation {
     NESTED = 'NESTED',
 }
 
-export type TransactionalRollbackException = () => HttpException;
+export type TransactionalRollbackException = (error?: any) => HttpException;
 
 export interface TransactionalOptions {
     isolationLevel?: TransactionIsolationLevel;

@@ -210,14 +210,14 @@ export class TransactionScanner {
         ) as TransactionalRollbackException | null;
     }
 
-    checkRollbackException(target: any, methodName: string) {
+    checkRollbackException(target: any, methodName: string, error?: any) {
         const exceptionCallback = this.getTransactionRollbackException(
             target,
             methodName,
         );
 
         if (exceptionCallback) {
-            const exception = exceptionCallback();
+            const exception = exceptionCallback(error);
 
             if (exception instanceof HttpException) {
                 throw exception;
