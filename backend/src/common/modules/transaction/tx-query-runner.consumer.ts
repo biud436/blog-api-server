@@ -163,6 +163,7 @@ export class TransactionQueryRunnerConsumer {
                 this.transactionScanner.checkRollbackException(
                     target,
                     methodName,
+                    e,
                 );
 
                 this.logger.error(
