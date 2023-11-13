@@ -44,12 +44,14 @@ export class CommentService {
             let items: Paginatable<PostComment>;
 
             if (isExpand) {
+                // 댓글을 모두 펼쳐서 조회합니다.
                 items = await this.commentService.findAll(
                     postId,
                     pageNumber,
                     pageSize,
                 );
             } else {
+                // 댓글이 접혀있는 상태로 조회합니다.
                 items = await this.commentService.findAllByRoot(
                     postId,
                     pageNumber,

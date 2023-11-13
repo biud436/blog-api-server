@@ -178,6 +178,7 @@ export class PostCommentService implements OnModuleInit {
 
         const roots = qb
             .select()
+            .leftJoinAndSelect('comment.user', 'user')
             .where('comment.postId = :postId', { postId })
             .orderBy('comment.parentId', 'ASC')
             .addOrderBy('comment.pos', 'ASC');

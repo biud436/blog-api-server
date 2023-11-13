@@ -26,44 +26,6 @@ export class CommentController {
     constructor(private readonly commentService: CommentService) {}
 
     /**
-     * 댓글을 조회합니다.
-     *
-     * @tag Post
-     * @param id 포스트 ID
-     * @param pageNumber 페이지 번호 (1부터 시작)
-     * @param pageSize 페이지 사이즈
-     * @param expand 댓글을 펼칠 지 접을 지 여부
-     * @returns
-     */
-    @Get('/:id')
-    @ApiNotebook({
-        operation: {
-            summary: '댓글 조회',
-            description: '댓글을 조회합니다.',
-        },
-        params: [
-            {
-                name: 'id',
-                description: '포스트 ID',
-            },
-        ],
-    })
-    async getComments(
-        @PostId() postId: number,
-        @PageNumber() pageNumber: number,
-        @PageSize() pageSize: number,
-        @Query('expand', new DefaultValuePipe(true), ParseBoolPipe)
-        isExpand: boolean = true,
-    ) {
-        return await this.commentService.getComments(
-            postId,
-            pageNumber,
-            pageSize,
-            isExpand,
-        );
-    }
-
-    /**
      * 접혀있는 댓글을 조회합니다.
      *
      * @tag Post
@@ -174,6 +136,44 @@ export class CommentController {
         return await this.commentService.createComment(
             createCommentDto,
             userId,
+        );
+    }
+
+    /**
+     * 댓글을 조회합니다.
+     *
+     * @tag Post
+     * @param id 포스트 ID
+     * @param pageNumber 페이지 번호 (1부터 시작)
+     * @param pageSize 페이지 사이즈
+     * @param expand 댓글을 펼칠 지 접을 지 여부
+     * @returns
+     */
+    @Get(':id')
+    @ApiNotebook({
+        operation: {
+            summary: '댓글 조회',
+            description: '댓글을 조회합니다.',
+        },
+        params: [
+            {
+                name: 'id',
+                description: '포스트 ID',
+            },
+        ],
+    })
+    async getComments(
+        @PostId() postId: number,
+        @PageNumber() pageNumber: number,
+        @PageSize() pageSize: number,
+        @Query('expand', new DefaultValuePipe(true), ParseBoolPipe)
+        isExpand: boolean = true,
+    ) {
+        return await this.commentService.getComments(
+            postId,
+            pageNumber,
+            pageSize,
+            isExpand,
         );
     }
 }

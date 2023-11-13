@@ -105,7 +105,7 @@ import { CommentModule } from './controllers/comment/comment.module';
         AdminControllerModule,
         ApiKeyModule,
         CategoryModule,
-
+        CommentModule,
         CategoryGroupModule,
         BlogMetaDataModule,
         PostTempModule,
