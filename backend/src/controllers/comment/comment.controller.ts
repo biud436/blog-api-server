@@ -19,11 +19,11 @@ import {
     JwtGuard,
 } from 'src/common/decorators/swagger/api-notebook.decorator';
 import { CreateCommentDto } from 'src/entities/comment/dto/create-comment.dto';
-import { CommentsService } from './comments.service';
+import { CommentService } from './comment.service';
 
 @Controller('comment')
-export class CommentsController {
-    constructor(private readonly commentService: CommentsService) {}
+export class CommentController {
+    constructor(private readonly commentService: CommentService) {}
 
     /**
      * 새로운 댓글을 작성합니다.

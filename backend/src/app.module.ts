@@ -43,11 +43,11 @@ import { ThrottlerBehindProxyGuard } from './common/guards/throttler-behind-prox
 import { CacheModule } from '@nestjs/cache-manager';
 import { TaskModule } from './common/domains/task/task.module';
 import { PaginationModule } from './common/modules/pagination/pagination.module';
-import { CommentModule } from './entities/comment/comment.module';
+import { PostCommentModule } from './entities/comment/post-comment.module';
 import { TransactionModule } from './common/modules/transaction/transaction.module';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { DataSourceProxy } from './common/modules/transaction/data-source-proxy';
-import { CommentsModule } from './controllers/comment/comments.module';
+import { CommentModule } from './controllers/comment/comment.module';
 
 @Module({
     imports: [
@@ -126,7 +126,7 @@ import { CommentsModule } from './controllers/comment/comments.module';
         ConnectInfoModule,
         TaskModule,
         PaginationModule,
-        CommentModule,
+        PostCommentModule,
     ],
     controllers: [AppController],
     providers: [

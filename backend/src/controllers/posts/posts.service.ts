@@ -8,11 +8,11 @@ import { DataSource, QueryRunner } from 'typeorm';
 import { PostSearchProperty } from './types/post-search-type';
 import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
 import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
-import { CommentService } from 'src/entities/comment/comment.service';
+import { PostCommentService } from 'src/entities/comment/post-comment.service';
 import { CreateCommentDto } from 'src/entities/comment/dto/create-comment.dto';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { Paginatable } from 'src/common/config/list-config';
-import { PostComment } from 'src/entities/comment/entities/comment.entity';
+import { PostComment } from 'src/entities/comment/entities/post-comment.entity';
 import {
     InjectQueryRunner,
     Rollback,
@@ -30,7 +30,7 @@ export class PostsService {
         private readonly postService: PostService,
         private readonly redisService: RedisService,
         private readonly categoryService: CategoryService,
-        private readonly commentService: CommentService,
+        private readonly commentService: PostCommentService,
     ) {}
 
     /**

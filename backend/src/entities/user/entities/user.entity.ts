@@ -19,7 +19,7 @@ import { ApiKey } from 'src/entities/api-key/entities/api-key.entity';
 import { BlogMetaData } from 'src/entities/blog-meta-data/entities/blog-meta-data.entity';
 import { PostTemp } from 'src/entities/post-temp/entities/post-temp.entity';
 import { Role } from 'src/common/decorators/authorization/role.enum';
-import { PostComment } from 'src/entities/comment/entities/comment.entity';
+import { PostComment } from 'src/entities/comment/entities/post-comment.entity';
 
 @Entity()
 export class User {

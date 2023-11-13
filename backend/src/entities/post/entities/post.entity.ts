@@ -17,7 +17,7 @@ import {
 import { decodeHtml } from 'src/common/config/html-escpse';
 import { Image } from 'src/controllers/image/entities/image.entity';
 import removeMarkdown from 'markdown-to-text';
-import { PostComment } from 'src/entities/comment/entities/comment.entity';
+import { PostComment } from 'src/entities/comment/entities/post-comment.entity';
 import { PostTemp } from 'src/entities/post-temp/entities/post-temp.entity';
 @Entity()
 export class Post {

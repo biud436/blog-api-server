@@ -7,16 +7,16 @@ import {
 } from 'src/common/decorators/transactional';
 import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
 import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
-import { CommentService } from 'src/entities/comment/comment.service';
+import { PostCommentService } from 'src/entities/comment/post-comment.service';
 import { CreateCommentDto } from 'src/entities/comment/dto/create-comment.dto';
-import { PostComment } from 'src/entities/comment/entities/comment.entity';
+import { PostComment } from 'src/entities/comment/entities/post-comment.entity';
 
 @Injectable()
 @TransactionalZone()
-export class CommentsService {
-    private readonly logger: Logger = new Logger(CommentsService.name);
+export class CommentService {
+    private readonly logger: Logger = new Logger(CommentService.name);
 
-    constructor(private readonly commentService: CommentService) {}
+    constructor(private readonly commentService: PostCommentService) {}
 
     @Transactional()
     async createComment(createCommentDto: CreateCommentDto, userId: number) {

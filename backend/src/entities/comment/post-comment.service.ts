@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PostComment } from './entities/comment.entity';
+import { PostComment } from './entities/post-comment.entity';
 import { QueryRunner, Repository, TreeRepository } from 'typeorm';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { PaginationProvider } from 'src/common/modules/pagination/pagination-repository';
@@ -8,7 +8,7 @@ import { PaginationProvider } from 'src/common/modules/pagination/pagination-rep
 type CommentOrder = 'ASC' | 'DESC';
 
 @Injectable()
-export class CommentService implements OnModuleInit {
+export class PostCommentService implements OnModuleInit {
     constructor(
         @InjectRepository(PostComment)
         private readonly commentRepository: Repository<PostComment>,
