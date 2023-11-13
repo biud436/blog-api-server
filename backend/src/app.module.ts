@@ -47,6 +47,7 @@ import { CommentModule } from './entities/comment/comment.module';
 import { TransactionModule } from './common/modules/transaction/transaction.module';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { DataSourceProxy } from './common/modules/transaction/data-source-proxy';
+import { CommentsModule } from './controllers/comment/comments.module';
 
 @Module({
     imports: [
