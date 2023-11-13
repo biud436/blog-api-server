@@ -26,32 +26,6 @@ export class CommentController {
     constructor(private readonly commentService: CommentService) {}
 
     /**
-     * 새로운 댓글을 작성합니다.
-     *
-     * @tag Post
-     * @param userId JWT에서 추출한 유저 아이디
-     * @param createCommentDto 생성할 댓글 정보
-     */
-    @Post('/comment')
-    @JwtGuard()
-    @ApiNotebook({
-        operation: {
-            summary: '댓글 생성',
-            description: '댓글을 생성합니다.',
-        },
-        auth: true,
-    })
-    async createComment(
-        @UserId() userId: number,
-        @Body() createCommentDto: CreateCommentDto,
-    ) {
-        return await this.commentService.createComment(
-            createCommentDto,
-            userId,
-        );
-    }
-
-    /**
      * 댓글을 조회합니다.
      *
      * @tag Post
@@ -61,7 +35,7 @@ export class CommentController {
      * @param expand 댓글을 펼칠 지 접을 지 여부
      * @returns
      */
-    @Get('/:id/comment')
+    @Get('/:id')
     @ApiNotebook({
         operation: {
             summary: '댓글 조회',
@@ -98,7 +72,7 @@ export class CommentController {
      * @param pageNumber 페이지 번호 (1부터 시작)
      * @param pageSize 페이지 사이즈
      */
-    @Get('/:id/comment/by-parent')
+    @Get('/:id/by-parent')
     @ApiNotebook({
         operation: {
             summary: '접혀있는 댓글 조회',
@@ -146,7 +120,7 @@ export class CommentController {
      * @param id 포스트 ID
      * @param commentId 댓글 ID
      */
-    @Delete('/:id/comment/:commentId')
+    @Delete('/:id')
     @JwtGuard()
     @ApiNotebook({
         operation: {
@@ -167,12 +141,38 @@ export class CommentController {
     })
     async deleteComment(
         @PostId() postId: number,
-        @Param('commentId', ParseIntPipe) commentId: number,
+        @Query('commentId', ParseIntPipe) commentId: number,
         @UserId() userId: number,
     ) {
         return await this.commentService.deleteComment(
             postId,
             commentId,
+            userId,
+        );
+    }
+
+    /**
+     * 새로운 댓글을 작성합니다.
+     *
+     * @tag Post
+     * @param userId JWT에서 추출한 유저 아이디
+     * @param createCommentDto 생성할 댓글 정보
+     */
+    @Post()
+    @JwtGuard()
+    @ApiNotebook({
+        operation: {
+            summary: '댓글 생성',
+            description: '댓글을 생성합니다.',
+        },
+        auth: true,
+    })
+    async createComment(
+        @UserId() userId: number,
+        @Body() createCommentDto: CreateCommentDto,
+    ) {
+        return await this.commentService.createComment(
+            createCommentDto,
             userId,
         );
     }
