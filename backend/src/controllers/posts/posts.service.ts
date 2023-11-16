@@ -4,18 +4,12 @@ import { CreatePostDto } from 'src/entities/post/dto/create-post.dto';
 import { UpdatePostDto } from 'src/entities/post/dto/update-post.dto';
 import { PostService } from 'src/entities/post/post.service';
 import { RedisService } from 'src/common/micro-services/redis/redis.service';
-import { DataSource, QueryRunner } from 'typeorm';
+import { QueryRunner } from 'typeorm';
 import { PostSearchProperty } from './types/post-search-type';
 import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
 import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
 import { PostCommentService } from 'src/entities/comment/post-comment.service';
-import { CreateCommentDto } from 'src/entities/comment/dto/create-comment.dto';
-import { InjectDataSource } from '@nestjs/typeorm';
-import { Paginatable } from 'src/common/config/list-config';
-import { PostComment } from 'src/entities/comment/entities/post-comment.entity';
 import {
-    InjectQueryRunner,
-    Rollback,
     Transactional,
     TransactionalZone,
 } from 'src/common/decorators/transactional';

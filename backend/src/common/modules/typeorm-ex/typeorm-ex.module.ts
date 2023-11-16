@@ -28,8 +28,14 @@ export class TypeOrmExModule {
                 inject: [getDataSourceToken()],
                 provide: repository,
                 useFactory: (dataSource: DataSource): typeof repository => {
-                    const baseRepository =
-                        dataSource.getRepository<any>(entity);
+                    // TreeRepository를 지원하도록 수정
+                    const metadata = dataSource.getMetadata(entity);
+                    const isTreeEntity = metadata.treeType !== undefined;
+
+                    const baseRepository = isTreeEntity
+                        ? dataSource.getTreeRepository<any>(entity)
+                        : dataSource.getRepository<any>(entity);
+
                     return new repository(
                         baseRepository.target,
                         baseRepository.manager,
