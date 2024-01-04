@@ -24,7 +24,6 @@ export class PostsService {
         private readonly postService: PostService,
         private readonly redisService: RedisService,
         private readonly categoryService: CategoryService,
-        private readonly commentService: PostCommentService,
     ) {}
 
     /**

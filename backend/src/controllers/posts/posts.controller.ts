@@ -10,24 +10,11 @@ import {
     Logger,
     DefaultValuePipe,
     UseGuards,
-    Req,
     Ip,
-    ParseBoolPipe,
-    Param,
 } from '@nestjs/common';
-import {
-    ApiBearerAuth,
-    ApiCreatedResponse,
-    ApiForbiddenResponse,
-    ApiInternalServerErrorResponse,
-    ApiOkResponse,
-    ApiOperation,
-    ApiQuery,
-    ApiTags,
-} from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { SearchOption } from 'src/common/config/list-config';
-import { DocsMapper } from 'src/common/config/swagger-config';
 import {
     AdminOnly,
     ApiNotebook,
@@ -50,8 +37,6 @@ import { DataSource } from 'typeorm';
 import { PrivatePostGuard } from '../auth/guards/private-post.guard';
 import { PostsService } from './posts.service';
 import { PostSearchProperty } from './types/post-search-type';
-import { CreateCommentDto } from 'src/entities/comment/dto/create-comment.dto';
-import { PageSize } from 'src/common/decorators/pagination/page-size.decorator';
 
 @Controller(['post', 'posts'])
 @ApiTags('Post')

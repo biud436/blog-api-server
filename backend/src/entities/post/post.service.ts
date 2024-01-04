@@ -18,7 +18,6 @@ import {
     PaginationGetStrategy,
     PaginationStrategy,
 } from 'src/common/modules/pagination/pagination.constant';
-import { PostTempService } from '../post-temp/post-temp.service';
 
 @Injectable()
 export class PostService {

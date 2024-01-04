@@ -5,7 +5,6 @@ import {
     Body,
     Patch,
     Param,
-    Delete,
     Query,
     ParseBoolPipe,
     ParseIntPipe,
@@ -19,10 +18,7 @@ import {
     ApiNotebook,
     JwtGuard,
 } from 'src/common/decorators/swagger/api-notebook.decorator';
-import { UserId } from 'src/common/decorators/authorization/user-id.decorator';
 import { MoveCategoryDto } from 'src/entities/category/dto/move-category.dto';
-import { CreatePostTempDto } from 'src/entities/post-temp/dto/create-post-temp.dto';
-import { UpdatePostTempDto } from 'src/entities/post-temp/dto/update-post-temp.dto';
 import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
 import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
 import { DataSource } from 'typeorm';
@@ -30,7 +26,7 @@ import { AdminService } from './admin.service';
 import { ChangeCategoryDto } from './dto/change-category.dto';
 import { NewCategoryDto } from './dto/new-category.dto';
 import { Request } from 'express';
-import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('admin')
 @ApiTags('관리')
@@ -226,185 +222,6 @@ export class AdminController {
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
         } catch (e: any) {
             throw ResponseUtil.failureWrap(e);
-        }
-    }
-
-    /**
-     * 임시 포스트를 저장합니다.
-     *
-     * @tag 관리
-     * @param userId 유저 ID
-     * @param createPostTempDto 임시 포스트 정보
-     * @returns
-     */
-    @Post('/temp/post')
-    @AdminOnly()
-    @JwtGuard()
-    @ApiNotebook({
-        operation: {
-            summary: '임시 포스트 저장',
-            description: '임시 포스트를 저장합니다.',
-        },
-        auth: true,
-    })
-    async saveTempPost(
-        @UserId() userId: number,
-        @Body() createPostTempDto: CreatePostTempDto,
-    ) {
-        try {
-            const res = await this.adminService.saveTempPost(
-                userId,
-                createPostTempDto,
-            );
-
-            return ResponseUtil.success(RESPONSE_MESSAGE.SAVE_SUCCESS, res);
-        } catch (e: any) {
-            throw ResponseUtil.failureWrap(e);
-        }
-    }
-
-    /**
-     * 임시 포스트를 수정합니다.
-     *
-     * @tag 관리
-     * @param userId 유저 ID
-     * @param postId 포스트 번호
-     * @param updatePostTempDto 임시 포스트 정보
-     * @returns
-     */
-    @Patch('/temp/post/:postId')
-    @AdminOnly()
-    @JwtGuard()
-    @ApiNotebook({
-        operation: {
-            summary: '임시 포스트 수정',
-            description: '임시 포스트를 수정합니다.',
-        },
-        params: [
-            {
-                name: 'postId',
-                description: '포스트 번호',
-            },
-        ],
-        auth: true,
-    })
-    async updateTempPost(
-        @UserId() userId: number,
-        @Param('postId', ParseIntPipe) postId: number,
-        @Body() updatePostTempDto: UpdatePostTempDto,
-    ) {
-        try {
-            const res = await this.adminService.updateTempPost(
-                userId,
-                postId,
-                updatePostTempDto,
-            );
-
-            return ResponseUtil.success(RESPONSE_MESSAGE.UPDATE_SUCCESS, res);
-        } catch (e: any) {
-            throw ResponseUtil.failureWrap(e);
-        }
-    }
-
-    /**
-     * 특정 유저에 대한 모든 임시 포스트를 조회합니다.
-     *
-     * @tag 관리
-     * @param userId 유저 ID
-     * @returns
-     */
-    @Get('/temp/post')
-    @AdminOnly()
-    @JwtGuard()
-    @ApiNotebook({
-        operation: {
-            description: '특정 유저에 대한 모든 임시 포스트를 조회합니다.',
-        },
-        auth: true,
-    })
-    async getTempAllPost(@UserId() userId: number) {
-        try {
-            const res = await this.adminService.getTempPost(userId);
-
-            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
-        } catch (e: any) {
-            throw ResponseUtil.FAILED_TEMP_POST;
-        }
-    }
-
-    /**
-     * 임시 포스트를 삭제합니다.
-     *
-     * @tag 관리
-     * @param userId 유저 ID
-     * @param postId 포스트 번호
-     * @returns
-     */
-    @Delete('/temp/post/:postId')
-    @AdminOnly()
-    @JwtGuard()
-    @ApiNotebook({
-        operation: {
-            description: '임시 포스트를 삭제합니다.',
-            summary: '임시 포스트 삭제',
-        },
-        params: [
-            {
-                name: 'postId',
-                description: '포스트 번호',
-            },
-        ],
-        auth: true,
-    })
-    async deleteTempPostById(
-        @UserId() userId: number,
-        @Param('postId', ParseIntPipe) postId: number,
-    ) {
-        try {
-            const res = await this.adminService.deleteTempPostById(
-                userId,
-                postId,
-            );
-
-            return ResponseUtil.success(RESPONSE_MESSAGE.DELETE_SUCCESS, res);
-        } catch {
-            throw ResponseUtil.failure(RESPONSE_MESSAGE.NOT_FOUND_RESULT);
-        }
-    }
-
-    /**
-     * 임시 포스트를 조회합니다.
-     *
-     * @tag 관리
-     * @param userId 유저 ID
-     * @param postId 포스트 번호
-     * @returns
-     */
-    @Get('/temp/post/:postId')
-    @AdminOnly()
-    @JwtGuard()
-    @ApiNotebook({
-        operation: {
-            description: '임시 포스트를 조회합니다.',
-            summary: '임시 포스트 조회',
-        },
-        params: [
-            {
-                name: 'postId',
-                description: '포스트 번호',
-            },
-        ],
-        auth: true,
-    })
-    async getTempPostById(
-        @UserId() userId: number,
-        @Param('postId', ParseIntPipe) postId: number,
-    ) {
-        try {
-            const res = await this.adminService.getTempPostById(userId, postId);
-            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
-        } catch {
-            throw ResponseUtil.failure(RESPONSE_MESSAGE.NOT_FOUND_RESULT);
         }
     }
 }

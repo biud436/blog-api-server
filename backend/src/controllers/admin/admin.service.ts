@@ -1,10 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CategoryService } from 'src/entities/category/category.service';
-import { CategoryDepthVO } from 'src/entities/category/dto/category-depth.vo';
 import { MoveCategoryDto } from 'src/entities/category/dto/move-category.dto';
-import { CreatePostTempDto } from 'src/entities/post-temp/dto/create-post-temp.dto';
-import { UpdatePostTempDto } from 'src/entities/post-temp/dto/update-post-temp.dto';
-import { PostTempService } from 'src/entities/post-temp/post-temp.service';
 import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
 import { IResponsableData } from 'src/common/libs/response/interface/response.interface';
 import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
@@ -13,10 +9,7 @@ import { ChangeCategoryDto } from './dto/change-category.dto';
 
 @Injectable()
 export class AdminService {
-    constructor(
-        private readonly categoryService: CategoryService,
-        private readonly postTempService: PostTempService,
-    ) {}
+    constructor(private readonly categoryService: CategoryService) {}
 
     /**
      * Adds a new category to category table.
@@ -101,63 +94,5 @@ export class AdminService {
      */
     async changeCategoryName(categoryId: number, dto: ChangeCategoryDto) {
         return this.categoryService.changeCategoryName(categoryId, dto);
-    }
-
-    /**
-     * Obtain a specific temporary post by ID.
-     *
-     * @param userId
-     * @param postId
-     * @returns
-     */
-    async getTempPostById(userId: number, postId: number) {
-        return this.postTempService.findOne(userId, postId);
-    }
-
-    /**
-     * Obtain a list of temporary posts.
-     *
-     * @param userId
-     * @returns
-     */
-    async getTempPost(userId: number) {
-        return this.postTempService.findAll(userId);
-    }
-
-    /**
-     * Create a new temporary post.
-     *
-     * @param userId
-     * @param data
-     * @returns
-     */
-    async saveTempPost(userId: number, data: CreatePostTempDto) {
-        return this.postTempService.create(userId, data);
-    }
-
-    /**
-     * Update the temporary post.
-     *
-     * @param userId
-     * @param postId
-     * @param data
-     * @returns
-     */
-    async updateTempPost(
-        userId: number,
-        postId: number,
-        data: UpdatePostTempDto,
-    ) {
-        return this.postTempService.updateById(data, userId, postId);
-    }
-
-    /**
-     * Delete the temporary post by ID.
-     * @param userId
-     * @param postId
-     * @returns
-     */
-    async deleteTempPostById(userId: number, postId: number) {
-        return this.postTempService.deleteById(userId, postId);
     }
 }

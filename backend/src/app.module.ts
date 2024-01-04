@@ -30,7 +30,6 @@ import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { CategoryGroupModule } from './entities/category-group/category-group.module';
 import { BlogMetaDataModule } from './entities/blog-meta-data/blog-meta-data.module';
-import { PostTempModule } from './entities/post-temp/post-temp.module';
 import { RssModule } from './controllers/rss/rss.module';
 import { TypeOrmExModule } from './common/modules/typeorm-ex/typeorm-ex.module';
 import { redisCacheConfig } from './common/micro-services/redis/redis.config';
@@ -108,7 +107,6 @@ import { CommentModule } from './controllers/comment/comment.module';
         CommentModule,
         CategoryGroupModule,
         BlogMetaDataModule,
-        PostTempModule,
         RssModule.register({
             title: '어진석의 블로그',
             description: '어진석의 블로그입니다.',

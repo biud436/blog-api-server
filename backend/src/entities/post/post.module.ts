@@ -7,7 +7,6 @@ import { ImageModule } from 'src/controllers/image/image.module';
 import { CategoryModule } from '../category/category.module';
 import { PostSubscriber } from './post.subscriber';
 import { PaginationModule } from 'src/common/modules/pagination/pagination.module';
-import { PostTempModule } from '../post-temp/post-temp.module';
 
 @Module({
     imports: [
@@ -16,7 +15,6 @@ import { PostTempModule } from '../post-temp/post-temp.module';
         MicroServicesModule,
         CategoryModule,
         PaginationModule,
-        PostTempModule,
     ],
     providers: [PostService, PostSubscriber],
     exports: [PostService],

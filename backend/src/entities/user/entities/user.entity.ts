@@ -17,7 +17,6 @@ import { Post } from 'src/entities/post/entities/post.entity';
 import { Admin } from 'src/entities/admin/entities/admin.entity';
 import { ApiKey } from 'src/entities/api-key/entities/api-key.entity';
 import { BlogMetaData } from 'src/entities/blog-meta-data/entities/blog-meta-data.entity';
-import { PostTemp } from 'src/entities/post-temp/entities/post-temp.entity';
 import { Role } from 'src/common/decorators/authorization/role.enum';
 import { PostComment } from 'src/entities/comment/entities/post-comment.entity';
 
@@ -65,9 +64,6 @@ export class User {
 
     @OneToMany(() => BlogMetaData, (blogMetaData) => blogMetaData.user)
     blogMetaData!: BlogMetaData[];
-
-    @OneToMany(() => PostTemp, (postTemp) => postTemp.user)
-    postTemps!: PostTemp[];
 
     @OneToMany(() => PostComment, (postComment) => postComment.user)
     comments!: PostComment[];
