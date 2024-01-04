@@ -3,7 +3,7 @@
   "css.customData": [".vscode/css_custom_data.json"],
   "[handlebars]": { "editor.formatOnSave": false },
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
   "eslint.nodePath": "./backend/.yarn/sdks",
   "prettier.prettierPath": "./backend/.yarn/sdks/prettier/index.js",
