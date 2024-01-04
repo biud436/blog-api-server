@@ -40,13 +40,8 @@ export class CategoryService {
      * @param rootNodeName 루트 카테고리 명 (생략 가능)
      * @returns
      */
-    async addCategory(
-        queryRunner: QueryRunner,
-        categoryName: string,
-        rootNodeName?: string,
-    ) {
+    async addCategory(categoryName: string, rootNodeName?: string) {
         return await this.categoryRepository.addCategory(
-            queryRunner,
             categoryName,
             rootNodeName,
         );
@@ -252,8 +247,8 @@ export class CategoryService {
      * @param queryRunner
      * @returns
      */
-    private async deleteNode(categoryId: number, queryRunner: QueryRunner) {
-        return this.categoryRepository.deleteNode(categoryId, queryRunner);
+    private async deleteNode(categoryId: number) {
+        return this.categoryRepository.deleteNode(categoryId);
     }
 
     /**
@@ -276,10 +271,10 @@ export class CategoryService {
     }: MoveCategoryDto) {
         let isSuccess = false;
 
-        const queryRunner = this.dataSource.createQueryRunner();
+        // const queryRunner = this.dataSource.createQueryRunner();
 
-        await queryRunner.connect();
-        await queryRunner.startTransaction();
+        // await queryRunner.connect();
+        // await queryRunner.startTransaction();
 
         try {
             let qb: SelectQueryBuilder<Category>;
@@ -287,11 +282,10 @@ export class CategoryService {
 
             // 이동할 위치에 부모 카테고리가 있는지 검증합니다.
             qb = this.categoryRepository.createQueryBuilder('node');
-            qb.select()
-                .where('node.id = :id', {
-                    id: newCategoryParentId,
-                })
-                .setQueryRunner(queryRunner);
+            qb.select().where('node.id = :id', {
+                id: newCategoryParentId,
+            });
+            // .setQueryRunner(queryRunner);
 
             const parentCategory = await qb.getOne(); // << 수동으로 오류 처리를 위해 getOne()을 사용합니다.
             if (!parentCategory) {
@@ -314,7 +308,6 @@ export class CategoryService {
             // 2. 새로운 위치의 부모 노드의 ID 하위에 새로운 노드를 추가한다.
             const tempNewNodeName = `temp_${currentCategory.name}`;
             const newNodeInsertResult = (await this.addCategory(
-                queryRunner,
                 tempNewNodeName,
                 parentCategory.name,
             )) as InsertResult;
@@ -333,7 +326,7 @@ export class CategoryService {
                 .createQueryBuilder('node')
                 .select()
                 .where('node.id = :id', { id: newNodeId })
-                .setQueryRunner(queryRunner)
+                // .setQueryRunner(queryRunner)
                 .getOne();
 
             if (!newNode) {
@@ -362,7 +355,7 @@ export class CategoryService {
                 })
                 .where(`${tableAlias}.CTGR_SQ = :id`, { id: newNode.id })
                 .useTransaction(true)
-                .setQueryRunner(queryRunner)
+                // .setQueryRunner(queryRunner)
                 .execute();
 
             if (!updateResult.affected) {
@@ -383,7 +376,7 @@ export class CategoryService {
                     id: currentCategory.id,
                 })
                 .useTransaction(true)
-                .setQueryRunner(queryRunner)
+                // .setQueryRunner(queryRunner)
                 .execute();
 
             if (!updateResult.affected) {
@@ -393,7 +386,7 @@ export class CategoryService {
             }
 
             // 6. 새로운 노드를 삭제한다.
-            updateResult = await this.deleteNode(newNode.id, queryRunner);
+            updateResult = await this.deleteNode(newNode.id);
 
             if (!updateResult.affected) {
                 throw new BadRequestException(
@@ -401,17 +394,11 @@ export class CategoryService {
                 );
             }
 
-            // 7. 트리 구조를 유지한 상태로 위치 변경이 완료된다.
-            await queryRunner.commitTransaction();
-
             isSuccess = true;
         } catch (err) {
             console.error(err);
-            await queryRunner.rollbackTransaction();
 
             isSuccess = false;
-        } finally {
-            await queryRunner.release();
         }
 
         return {

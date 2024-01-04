@@ -1,4 +1,8 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+    BadRequestException,
+    Injectable,
+    InternalServerErrorException,
+} from '@nestjs/common';
 import { CategoryService } from 'src/entities/category/category.service';
 import { MoveCategoryDto } from 'src/entities/category/dto/move-category.dto';
 import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
@@ -6,8 +10,13 @@ import { IResponsableData } from 'src/common/libs/response/interface/response.in
 import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
 import { DeleteQueryBuilder, QueryRunner } from 'typeorm';
 import { ChangeCategoryDto } from './dto/change-category.dto';
+import {
+    Transactional,
+    TransactionalZone,
+} from 'src/common/decorators/transactional';
 
 @Injectable()
+@TransactionalZone()
 export class AdminService {
     constructor(private readonly categoryService: CategoryService) {}
 
@@ -19,13 +28,9 @@ export class AdminService {
      * @param rootNodeName
      * @returns
      */
-    async addCategory(
-        queryRunner: QueryRunner,
-        categoryName: string,
-        rootNodeName?: string,
-    ) {
-        return this.categoryService.addCategory(
-            queryRunner,
+    @Transactional()
+    async addCategory(categoryName: string, rootNodeName?: string) {
+        return await this.categoryService.addCategory(
             categoryName,
             rootNodeName,
         );
@@ -37,6 +42,7 @@ export class AdminService {
      * @param moveCategoryDto
      * @returns
      */
+    @Transactional()
     async moveCategory(
         moveCategoryDto: MoveCategoryDto,
     ): Promise<IResponsableData | ResponseUtil.FailureResponse | any> {
@@ -63,16 +69,30 @@ export class AdminService {
      * @returns
      */
     async getAncestors(categoryName: string) {
-        const nodeList = await this.categoryService.getCategoryList();
-        const targetNode = nodeList.find((node) => node.name === categoryName);
-
-        if (!targetNode) {
-            throw new InternalServerErrorException(
-                `Can't find the category named ${categoryName}`,
+        try {
+            const nodeList = await this.categoryService.getCategoryList();
+            const targetNode = nodeList.find(
+                (node) => node.name === categoryName,
             );
-        }
 
-        return this.categoryService.getAncestors(nodeList, targetNode);
+            if (!targetNode) {
+                throw new InternalServerErrorException(
+                    `Can't find the category named ${categoryName}`,
+                );
+            }
+
+            const res = await this.categoryService.getAncestors(
+                nodeList,
+                targetNode,
+            );
+
+            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
+        } catch (e: any) {
+            throw new BadRequestException({
+                name: 'GetAncestorsError',
+                message: '상위 카테고리를 조회하는데 실패했습니다.',
+            });
+        }
     }
 
     /**
@@ -82,7 +102,16 @@ export class AdminService {
      * @returns
      */
     async getTreeChildren(isBeautify = true) {
-        return await this.categoryService.getTreeChildren(isBeautify);
+        try {
+            const res = await this.categoryService.getTreeChildren(isBeautify);
+
+            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
+        } catch (e: any) {
+            throw new BadRequestException({
+                name: 'GetTreeChildrenError',
+                message: '트리 구조를 조회하는데 실패했습니다.',
+            });
+        }
     }
 
     /**
@@ -93,6 +122,18 @@ export class AdminService {
      * @returns
      */
     async changeCategoryName(categoryId: number, dto: ChangeCategoryDto) {
-        return this.categoryService.changeCategoryName(categoryId, dto);
+        try {
+            const res = await this.categoryService.changeCategoryName(
+                categoryId,
+                dto,
+            );
+
+            return ResponseUtil.success(RESPONSE_MESSAGE.UPDATE_SUCCESS, res);
+        } catch (e: any) {
+            throw new BadRequestException({
+                name: 'ChangeCategoryNameError',
+                message: '카테고리 이름 변경에 실패했습니다.',
+            });
+        }
     }
 }

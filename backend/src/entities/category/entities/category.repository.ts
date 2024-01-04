@@ -7,11 +7,7 @@ import { Category } from './category.entity';
 
 @CustomRepository(Category)
 export class CategoryRepository extends Repository<Category> {
-    async addCategory(
-        queryRunner: QueryRunner,
-        categoryName: string,
-        rootNodeName?: string,
-    ) {
+    async addCategory(categoryName: string, rootNodeName?: string) {
         const root = await this.findOne({
             where: {
                 left: 1,
@@ -27,7 +23,7 @@ export class CategoryRepository extends Repository<Category> {
                 right: 2,
             });
 
-            return await queryRunner.manager.save(rootNode);
+            return await this.save(rootNode);
         }
 
         // 루트 노드와의 거리를 계산합니다.
@@ -39,8 +35,6 @@ export class CategoryRepository extends Repository<Category> {
             .select('A.left', 'left')
             .addSelect('A.left + (A.right - (A.left + 1) )', 'dist')
             .where('A.name = :name', { name: rootNodeName })
-            .setQueryRunner(queryRunner)
-            .useTransaction(true)
             .getRawOne();
 
         const { dist } = nodeDistance;
@@ -50,8 +44,6 @@ export class CategoryRepository extends Repository<Category> {
             .update(Category)
             .set({ right: () => `RGT_NO + 2` })
             .where('RGT_NO > :right', { right: dist })
-            .useTransaction(true)
-            .setQueryRunner(queryRunner)
             .execute();
 
         // 왼쪽을 +2
@@ -59,8 +51,6 @@ export class CategoryRepository extends Repository<Category> {
             .update(Category)
             .set({ left: () => `LFT_NO + 2` })
             .where('LFT_NO > :left', { left: dist })
-            .useTransaction(true)
-            .setQueryRunner(queryRunner)
             .execute();
 
         // 새로운 위치에 노드를 삽입합니다.
@@ -72,8 +62,6 @@ export class CategoryRepository extends Repository<Category> {
                 left: dist + 1,
                 right: dist + 2,
             })
-            .useTransaction(true)
-            .setQueryRunner(queryRunner)
             .execute();
 
         return newNode;
@@ -238,7 +226,7 @@ export class CategoryRepository extends Repository<Category> {
         return result;
     }
 
-    async deleteNode(categoryId: number, queryRunner: QueryRunner) {
+    async deleteNode(categoryId: number) {
         const positionNode:
             | (Pick<Category, 'left' | 'right' | 'groupId'> & {
                   width: number;
@@ -249,7 +237,6 @@ export class CategoryRepository extends Repository<Category> {
             .addSelect('node.right - node.left + 1', 'width')
             .addSelect('node.groupId', 'groupId')
             .where('node.id = :id', { id: categoryId })
-            .setQueryRunner(queryRunner)
             .getRawOne();
 
         if (!positionNode) {
@@ -258,7 +245,7 @@ export class CategoryRepository extends Repository<Category> {
             );
         }
 
-        await queryRunner.manager.delete(Category, {
+        await this.delete({
             left: Between(positionNode.left, positionNode.right),
             groupId: positionNode.groupId,
         });
@@ -279,8 +266,6 @@ export class CategoryRepository extends Repository<Category> {
             .andWhere(`${tableAlias}.CTGR_GRP_SQ = :groupId`, {
                 groupId: positionNode.groupId,
             })
-            .useTransaction(true)
-            .setQueryRunner(queryRunner)
             .execute();
 
         if (!updateResult) {
@@ -300,8 +285,6 @@ export class CategoryRepository extends Repository<Category> {
             .andWhere(`${tableAlias}.CTGR_GRP_SQ = :groupId`, {
                 groupId: positionNode.groupId,
             })
-            .useTransaction(true)
-            .setQueryRunner(queryRunner)
             .execute();
 
         if (!updateResult) {

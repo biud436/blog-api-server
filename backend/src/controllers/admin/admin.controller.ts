@@ -8,10 +8,8 @@ import {
     Query,
     ParseBoolPipe,
     ParseIntPipe,
-    HttpStatus,
     Req,
 } from '@nestjs/common';
-import { InjectDataSource } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
 import {
     AdminOnly,
@@ -19,9 +17,6 @@ import {
     JwtGuard,
 } from 'src/common/decorators/swagger/api-notebook.decorator';
 import { MoveCategoryDto } from 'src/entities/category/dto/move-category.dto';
-import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
-import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
-import { DataSource } from 'typeorm';
 import { AdminService } from './admin.service';
 import { ChangeCategoryDto } from './dto/change-category.dto';
 import { NewCategoryDto } from './dto/new-category.dto';
@@ -31,10 +26,7 @@ import { ApiTags } from '@nestjs/swagger';
 @Controller('admin')
 @ApiTags('관리')
 export class AdminController {
-    constructor(
-        private readonly adminService: AdminService,
-        @InjectDataSource() private readonly dataSource: DataSource,
-    ) {}
+    constructor(private readonly adminService: AdminService) {}
 
     /**
      * 카테고리 명을 변경합니다.
@@ -63,20 +55,10 @@ export class AdminController {
         @Param('categoryId', ParseIntPipe) categoryId: number,
         @Body() updateCategoryNameDto: ChangeCategoryDto,
     ) {
-        try {
-            const res = await this.adminService.changeCategoryName(
-                categoryId,
-                updateCategoryNameDto, /////////////////////////////
-            );
-
-            return ResponseUtil.success(RESPONSE_MESSAGE.UPDATE_SUCCESS, res);
-        } catch (e: any) {
-            throw ResponseUtil.failureWrap({
-                name: 'UpdateCategoryNameError',
-                message: '카테고리 이름 변경에 실패했습니다.',
-                statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-            });
-        }
+        return await this.adminService.changeCategoryName(
+            categoryId,
+            updateCategoryNameDto,
+        );
     }
 
     /**
@@ -92,7 +74,6 @@ export class AdminController {
     @JwtGuard()
     @ApiNotebook({
         operation: {
-            summary: '카테고리 이동',
             description: '카테고리를 이동합니다.',
         },
         params: [
@@ -107,14 +88,13 @@ export class AdminController {
         @Param('prevCategoryId', ParseIntPipe) prevCategoryId: number,
         @Body() moveCategoryDto: MoveCategoryDto,
     ) {
+        // Composite DTO
         moveCategoryDto = plainToClass(MoveCategoryDto, {
             ...moveCategoryDto,
             prevCategoryId,
         });
 
-        // In this code, I've used the queryRunner to make a transaction.
-        // so it may be received an error when rollback the atomic query.
-        return this.adminService.moveCategory(moveCategoryDto);
+        return await this.adminService.moveCategory(moveCategoryDto);
     }
 
     /**
@@ -127,7 +107,6 @@ export class AdminController {
     @Get('/category/:categoryName')
     @ApiNotebook({
         operation: {
-            summary: '부모 카테고리 출력',
             description: '부모 카테고리를 출력합니다.',
         },
         params: [
@@ -139,12 +118,7 @@ export class AdminController {
         auth: true,
     })
     async getAncestors(@Param('categoryName') categoryName: string) {
-        try {
-            const res = await this.adminService.getAncestors(categoryName);
-            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
-        } catch (e: any) {
-            throw ResponseUtil.failureWrap(e);
-        }
+        return await this.adminService.getAncestors(categoryName);
     }
 
     /**
@@ -159,7 +133,6 @@ export class AdminController {
     @JwtGuard()
     @ApiNotebook({
         operation: {
-            summary: '새로운 카테고리 추가',
             description: '새로운 카테고리를 추가합니다.',
         },
         auth: true,
@@ -168,26 +141,10 @@ export class AdminController {
         @Body()
         createCategoryDto: NewCategoryDto,
     ) {
-        const queryRunner = this.dataSource.createQueryRunner();
-        await queryRunner.connect();
-        await queryRunner.startTransaction();
-
-        try {
-            const res = await this.adminService.addCategory(
-                queryRunner,
-                createCategoryDto.categoryName,
-                createCategoryDto.rootNodeName,
-            );
-
-            await queryRunner.commitTransaction();
-
-            return ResponseUtil.success(RESPONSE_MESSAGE.SAVE_SUCCESS, res);
-        } catch (e) {
-            await queryRunner.rollbackTransaction();
-            throw e;
-        } finally {
-            await queryRunner.release();
-        }
+        return await this.adminService.addCategory(
+            createCategoryDto.categoryName,
+            createCategoryDto.rootNodeName,
+        );
     }
 
     /**
@@ -201,7 +158,6 @@ export class AdminController {
     @Get('/category')
     @ApiNotebook({
         operation: {
-            summary: '새로운 카테고리 추가',
             description: '새로운 카테고리를 추가합니다.',
         },
         queries: [
@@ -217,11 +173,6 @@ export class AdminController {
         @Req() req: Request,
         @Query('isBeautify', ParseBoolPipe) isBeautify: boolean,
     ) {
-        try {
-            const res = await this.adminService.getTreeChildren(isBeautify);
-            return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, res);
-        } catch (e: any) {
-            throw ResponseUtil.failureWrap(e);
-        }
+        return await this.adminService.getTreeChildren(isBeautify);
     }
 }
