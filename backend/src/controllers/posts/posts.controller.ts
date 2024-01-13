@@ -37,6 +37,7 @@ import { DataSource } from 'typeorm';
 import { PrivatePostGuard } from '../auth/guards/private-post.guard';
 import { PostsService } from './posts.service';
 import { PostSearchProperty } from './types/post-search-type';
+import { ROUTE_ARGS_METADATA } from '@nestjs/common/constants';
 
 @Controller(['post', 'posts'])
 @ApiTags('Post')
@@ -48,6 +49,28 @@ export class PostsController {
         private readonly categoryService: CategoryService,
         @InjectDataSource() private readonly dataSource: DataSource,
     ) {}
+
+    onModuleInit() {
+        console.log(
+            Reflect.getMetadata(
+                ROUTE_ARGS_METADATA,
+                PostsController,
+                'findAll',
+            ),
+        );
+        console.log(
+            Reflect.getMetadata(ROUTE_ARGS_METADATA, PostsController, 'create'),
+        );
+
+        // createParamDecorator로 만든 쿼리 매개변수는 factory가 설정됨
+        const metadata = Reflect.getMetadata(
+            ROUTE_ARGS_METADATA,
+            PostsController,
+            'create',
+        );
+
+        console.log(metadata);
+    }
 
     /**
      * breadcrumbs 정보를 조회합니다.
@@ -318,6 +341,7 @@ export class PostsController {
             {
                 name: 'categoryId',
                 description: '카테고리 ID, 생략하면 전체 포스트를 조회합니다.',
+                required: false,
             },
         ],
     })
