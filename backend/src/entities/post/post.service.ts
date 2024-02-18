@@ -134,7 +134,7 @@ export class PostService {
             .execute();
 
         if (updateResult.affected === 0) {
-            throw new BadRequestException('수정할 포스트가 없습니다.');
+            throw new BadRequestException('There is no post to update.');
         }
 
         const model = await this.findOne(postId);
@@ -149,7 +149,9 @@ export class PostService {
             resultImageIds = imageIds.map((e) => +e!).filter((e) => !isNaN(e));
         }
 
-        if (resultImageIds.length > 0) {
+        const isValidImageIds = resultImageIds.length > 0;
+
+        if (isValidImageIds) {
             const images = await this.imageService.findByIds(resultImageIds);
             model.images = images;
         }

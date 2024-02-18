@@ -37,7 +37,6 @@ import { DataSource } from 'typeorm';
 import { PrivatePostGuard } from '../auth/guards/private-post.guard';
 import { PostsService } from './posts.service';
 import { PostSearchProperty } from './types/post-search-type';
-import { ROUTE_ARGS_METADATA } from '@nestjs/common/constants';
 
 @Controller(['post', 'posts'])
 @ApiTags('Post')
@@ -49,28 +48,6 @@ export class PostsController {
         private readonly categoryService: CategoryService,
         @InjectDataSource() private readonly dataSource: DataSource,
     ) {}
-
-    onModuleInit() {
-        console.log(
-            Reflect.getMetadata(
-                ROUTE_ARGS_METADATA,
-                PostsController,
-                'findAll',
-            ),
-        );
-        console.log(
-            Reflect.getMetadata(ROUTE_ARGS_METADATA, PostsController, 'create'),
-        );
-
-        // createParamDecorator로 만든 쿼리 매개변수는 factory가 설정됨
-        const metadata = Reflect.getMetadata(
-            ROUTE_ARGS_METADATA,
-            PostsController,
-            'create',
-        );
-
-        console.log(metadata);
-    }
 
     /**
      * breadcrumbs 정보를 조회합니다.
@@ -294,6 +271,9 @@ export class PostsController {
         @UserId() userId: number,
         @Body() updatePostDto: UpdatePostDto,
     ) {
+        /**
+         * TODO: `@Transactional` 데코레이터를 사용하도록 리팩토링이 필요합니다.
+         */
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
