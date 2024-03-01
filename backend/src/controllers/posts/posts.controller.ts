@@ -130,6 +130,7 @@ export class PostsController {
         @Body()
         createPostDto: CreatePostDto,
     ) {
+        // TODO: 추후에 이 부분을 @Transactional 데코레이터로 리팩토링합니다.
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
