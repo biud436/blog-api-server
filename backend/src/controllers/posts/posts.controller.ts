@@ -272,32 +272,11 @@ export class PostsController {
         @UserId() userId: number,
         @Body() updatePostDto: UpdatePostDto,
     ) {
-        /**
-         * TODO: `@Transactional` 데코레이터를 사용하도록 리팩토링이 필요합니다.
-         */
-        const queryRunner = this.dataSource.createQueryRunner();
-        await queryRunner.connect();
-        await queryRunner.startTransaction();
-
-        delete updatePostDto.authorId;
-        updatePostDto.authorId = userId;
-
-        try {
-            const res = await this.postsService.updateOne(
-                postId,
-                updatePostDto,
-                queryRunner,
-            );
-
-            await queryRunner.commitTransaction();
-
-            return ResponseUtil.success(RESPONSE_MESSAGE.UPDATE_SUCCESS, res);
-        } catch (e: any) {
-            await queryRunner.rollbackTransaction();
-            return ResponseUtil.failureWrap(e);
-        } finally {
-            await queryRunner.release();
-        }
+        return await this.postsService.updatePost(
+            postId,
+            userId,
+            updatePostDto,
+        );
     }
 
     /**

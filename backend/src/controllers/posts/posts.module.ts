@@ -8,6 +8,7 @@ import { UserModule } from 'src/entities/user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from '../auth/auth.module';
 import { PostCommentModule } from 'src/entities/comment/post-comment.module';
+import { CategoryCommand } from './commands/category.command';
 
 @Module({
     imports: [
@@ -20,7 +21,7 @@ import { PostCommentModule } from 'src/entities/comment/post-comment.module';
         PostCommentModule,
     ],
     controllers: [PostsController],
-    providers: [PostsService],
+    providers: [PostsService, CategoryCommand],
     exports: [PostsService],
 })
 export class PostsModule {}

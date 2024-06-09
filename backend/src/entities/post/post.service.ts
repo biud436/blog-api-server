@@ -110,11 +110,7 @@ export class PostService {
      * @param queuryRunner
      * @returns
      */
-    async updatePost(
-        postId: number,
-        updatePostDto: UpdatePostDto,
-        queuryRunner: QueryRunner,
-    ) {
+    async updatePost(postId: number, updatePostDto: UpdatePostDto) {
         if (updatePostDto.title) {
             updatePostDto.title = encodeHtml(updatePostDto.title);
         }
@@ -156,7 +152,7 @@ export class PostService {
             model.images = images;
         }
 
-        let post = await queuryRunner.manager.save(model);
+        let post = await this.postRepository.save(model);
         if (post.images?.length > 0) {
             const len = post.images.length;
             post.images = post.images.map((e) => {
@@ -174,7 +170,7 @@ export class PostService {
                 );
             }
 
-            post = await queuryRunner.manager.save(post);
+            post = await this.postRepository.save(post);
         }
 
         return post;

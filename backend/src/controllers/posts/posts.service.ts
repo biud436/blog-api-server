@@ -14,16 +14,14 @@ import {
     TransactionalZone,
 } from 'src/common/decorators/transactional';
 import { NoPostException, NotPublicPostException } from 'src/common/exceptions';
+import { CategoryCommand } from './commands/category.command';
 
 @Injectable()
 @TransactionalZone()
 export class PostsService {
-    private readonly logger: Logger = new Logger(PostsService.name);
-
     constructor(
         private readonly postService: PostService,
         private readonly redisService: RedisService,
-        private readonly categoryService: CategoryService,
     ) {}
 
     /**
@@ -103,26 +101,6 @@ export class PostsService {
     }
 
     /**
-     * 포스트 수정
-     *
-     * @param postId
-     * @param updatePostDto
-     * @param queryRunner
-     * @returns
-     */
-    async updateOne(
-        postId: number,
-        updatePostDto: UpdatePostDto,
-        queryRunner: QueryRunner,
-    ) {
-        return await this.postService.updatePost(
-            postId,
-            updatePostDto,
-            queryRunner,
-        );
-    }
-
-    /**
      * 포스트 삭제
      *
      * @param postId
@@ -154,15 +132,6 @@ export class PostsService {
     }
 
     /**
-     * 카테고리 별 포스트 갯수 조회
-     *
-     * @returns
-     */
-    async getPostCountByCategories() {
-        return this.categoryService.getPostCountByCategories();
-    }
-
-    /**
      * 포스트를 삭제합니다.
      *
      * @param postId 포스트 ID
@@ -173,5 +142,16 @@ export class PostsService {
         const res = await this.deleteOne(postId);
 
         return ResponseUtil.success(RESPONSE_MESSAGE.DELETE_SUCCESS, res);
+    }
+
+    @Transactional()
+    async updatePost(
+        postId: number,
+        userId: number,
+        updatePostDto: UpdatePostDto,
+    ) {
+        updatePostDto.authorId = userId;
+        const res = await this.postService.updatePost(postId, updatePostDto);
+        return ResponseUtil.success(RESPONSE_MESSAGE.UPDATE_SUCCESS, res);
     }
 }
