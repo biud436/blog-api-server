@@ -9,7 +9,7 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-RUN yarn install --immutable
+RUN yarn install
 RUN yarn build
 
 FROM node:22.10.0-alpine
