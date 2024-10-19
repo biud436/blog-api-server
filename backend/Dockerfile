@@ -1,4 +1,4 @@
-FROM node:16.18-alpine as builder
+FROM node:22.10.0-alpine as builder
 ENV NODE_ENV production
 
 RUN apk --no-cache add --virtual .builds-deps build-base python3
@@ -12,7 +12,7 @@ COPY . .
 RUN yarn install --immutable
 RUN yarn build
 
-FROM node:16.18-alpine
+FROM node:22.10.0-alpine
 
 WORKDIR /app
 
