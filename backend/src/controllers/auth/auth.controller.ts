@@ -78,6 +78,8 @@ export class AuthController {
      * @returns
      */
     @Post('/logout')
+    @JwtGuard()
+    @AdminOnly()
     @ApiNotebook({
         operation: {
             summary: '로그아웃',
