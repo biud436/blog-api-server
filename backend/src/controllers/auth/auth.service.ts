@@ -40,6 +40,8 @@ import {
     getCookieSettingWithRefreshToken,
 } from './utils/cookie-utils';
 import { EmailAddress, EMAIL_KEYS } from './libs/email';
+import { ProfileUser } from './types/profile-user.type';
+import { ProfileUserDto } from './dto/profile-user.dto';
 
 @Injectable()
 @TransactionalZone()
@@ -476,7 +478,7 @@ export class AuthService {
         return model;
     }
 
-    async getProfile(payload: { user: { username: string }; role: string }) {
+    async getProfile(payload: ProfileUser) {
         try {
             const { user } = payload;
 
@@ -504,12 +506,22 @@ export class AuthService {
                 scope = Role.Admin;
             }
 
-            return {
+            const res = {
                 ...plainToClass(User, profileUser),
                 scope: [scope],
             };
+
+            return ProfileUserDto.of(
+                res.id,
+                res.username,
+                res.scope as string[],
+            );
         } catch (e: any) {
-            throw new UnauthorizedException(e.message);
+            this.logger.error(e.message);
+
+            return {
+                user: {},
+            };
         }
     }
 

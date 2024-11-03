@@ -25,6 +25,7 @@ import { Throttle } from '@nestjs/throttler';
 import { LOGIN_INTERVAL } from 'src/common/config/throttle-config';
 import { AuthGuard } from '@nestjs/passport';
 import { GithubUser } from './strategies/github.strategy';
+import { ProfileUser } from './types/profile-user.type';
 
 @Controller('auth')
 @ApiTags('인증 API')
@@ -115,26 +116,8 @@ export class AuthController {
         },
         auth: true,
     })
-    async getProfile(
-        @UserInfo() payload: { user: { username: string }; role: string },
-    ) {
-        try {
-            const { id, username, scope } = await this.authService.getProfile(
-                payload,
-            );
-
-            return {
-                user: {
-                    id,
-                    username,
-                    scope,
-                },
-            };
-        } catch (e) {
-            return {
-                user: {},
-            };
-        }
+    async getProfile(@UserInfo() payload: ProfileUser) {
+        return await this.authService.getProfile(payload);
     }
 
     /**
