@@ -483,7 +483,10 @@ export class AuthService {
             const { user } = payload;
 
             if (!user) {
-                throw new UnauthorizedException('유저 데이터가 없습니다 [1]');
+                throw new UnauthorizedException({
+                    name: 'NOT_FOUND_USER',
+                    message: '유저 데이터가 없습니다 [1]',
+                });
             }
 
             const profileUser = await this.userService.findProfileByUsername(
@@ -491,7 +494,10 @@ export class AuthService {
             );
 
             if (!profileUser) {
-                throw new UnauthorizedException('유저 데이터가 없습니다 [2]');
+                throw new UnauthorizedException({
+                    name: 'NOT_FOUND_USER',
+                    message: '유저 데이터가 없습니다 [2]',
+                });
             }
 
             let isAdmin = false;
