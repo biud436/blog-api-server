@@ -10,11 +10,8 @@ import { JwtService, JwtSignOptions, JwtVerifyOptions } from '@nestjs/jwt';
 import { CookieOptions, Request, Response } from 'express';
 import { AdminService } from 'src/entities/admin/admin.service';
 import { CreateUserDto } from 'src/entities/user/dto/create-user.dto';
-import {
-    UserLoginValidationInfo,
-    UserService,
-} from 'src/entities/user/user.service';
-import { DataSource, QueryRunner } from 'typeorm';
+import { UserService } from 'src/entities/user/user.service';
+import { DataSource } from 'typeorm';
 import { AuthRequest } from './validator/request.dto';
 import { JwtPayload } from './validator/response.dto';
 import * as validator from 'class-validator';
@@ -33,69 +30,16 @@ import { User } from 'src/entities/user/entities/user.entity';
 import { Role } from 'src/common/decorators/authorization/role.enum';
 import { HttpService } from '@nestjs/axios';
 import { GithubUserData } from './validator/github.dto';
-import { LocalDate, LocalDateTime } from '@js-joda/core';
 import { AES256Provider } from 'src/common/modules/aes/aes-256.provider';
 import { ConnectInfoService } from 'src/entities/connect-info/connect-info.service';
 import { GithubUser } from './strategies/github.strategy';
 import { TransactionalZone } from 'src/common/decorators/transactional';
-import { InjectQueryRunner } from 'src/common/decorators/transactional/inject-query-runner.decorator';
-import { Query } from 'typeorm/driver/Query';
-
-const CONFIG = {
-    KOREAN: {
-        NOTIFY_ERROR_PASSWORD:
-            '비밀번호는 8자리 이상, 하나 이상의 소문자, 그리고 숫자와 특수문자가 있어야 합니다.',
-        NOTIFY_ERROR_EMAIL: '이메일 형식이 올바르지 않습니다.',
-        NOTIFY_ERROR_ALREADY_EXIST_EMAIL: '이미 존재하는 이메일입니다.',
-        NOTIFY_ERROR_SAVE_PROFILE:
-            '프로필 정보를 저장하는 도중에 오류가 발생하였습니다.',
-        NOTIFY_FAILED_SIGNUP: '회원 가입에 실패하였습니다.',
-        NOTIFY_ERROR_AUTH_CODE: '인증 코드가 잘못되었거나 만료되었습니다.',
-        AUTH_CODE_EMAIL_TITLE: '인증 코드를 보내드립니다.',
-        AUTH_CODE_EMAIl_CONTENT: '인증 코드는 {0}입니다.',
-    },
-};
-
-export type AvailableEmailList =
-    | `${string}@gmail.com`
-    | `${string}@hanmail.net`
-    | `${string}@naver.com`
-    | `${string}@nate.com`
-    | `${string}@daum.net`
-    | `${string}@kakao.com`;
-
-export type EmailAddress = `${AvailableEmailList}`;
-
-export const EMAIL_KEYS = [
-    'daum.net',
-    'gmail.com',
-    'hanmail.net',
-    'kakao.com',
-    'nate.com',
-    'naver.com',
-];
-
-export function getCookieSettingWithAccessToken(
-    jwtSecretExpirationTime: LocalDateTime | LocalDate,
-) {
-    return {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production' ? true : false,
-        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
-        expires: DateTimeUtil.toDate(jwtSecretExpirationTime),
-    };
-}
-
-export function getCookieSettingWithRefreshToken(
-    jwtRefreshTokenExpirationTime: LocalDateTime | LocalDate,
-) {
-    return {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production' ? true : false,
-        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
-        expires: DateTimeUtil.toDate(jwtRefreshTokenExpirationTime),
-    };
-}
+import { I18nConfig } from './libs/i18n';
+import {
+    getCookieSettingWithAccessToken,
+    getCookieSettingWithRefreshToken,
+} from './utils/cookie-utils';
+import { EmailAddress, EMAIL_KEYS } from './libs/email';
 
 @Injectable()
 @TransactionalZone()
@@ -440,14 +384,14 @@ export class AuthService {
                 )
             ) {
                 throw new DownStreamInternalServerErrorException(
-                    CONFIG.KOREAN.NOTIFY_ERROR_PASSWORD,
+                    I18nConfig.KOREAN.NOTIFY_ERROR_PASSWORD,
                 );
             }
 
             // 이메일 주소에 대한 유효성을 검증합니다.
             if (!validator.isEmail(body.email)) {
                 throw new DownStreamInternalServerErrorException(
-                    CONFIG.KOREAN.NOTIFY_ERROR_EMAIL,
+                    I18nConfig.KOREAN.NOTIFY_ERROR_EMAIL,
                 );
             }
 
@@ -457,7 +401,7 @@ export class AuthService {
             );
             if (isValidEmail) {
                 throw new DownStreamInternalServerErrorException(
-                    CONFIG.KOREAN.NOTIFY_ERROR_ALREADY_EXIST_EMAIL,
+                    I18nConfig.KOREAN.NOTIFY_ERROR_ALREADY_EXIST_EMAIL,
                 );
             }
 
@@ -475,7 +419,7 @@ export class AuthService {
 
             if (!profileModel) {
                 throw new DownStreamInternalServerErrorException(
-                    CONFIG.KOREAN.NOTIFY_ERROR_SAVE_PROFILE,
+                    I18nConfig.KOREAN.NOTIFY_ERROR_SAVE_PROFILE,
                 );
             }
 
@@ -488,7 +432,7 @@ export class AuthService {
 
             if (!userModel) {
                 throw new DownStreamInternalServerErrorException(
-                    CONFIG.KOREAN.NOTIFY_FAILED_SIGNUP,
+                    I18nConfig.KOREAN.NOTIFY_FAILED_SIGNUP,
                 );
             }
 
@@ -497,7 +441,7 @@ export class AuthService {
 
             if (authValue !== 'true') {
                 throw new DownStreamInternalServerErrorException(
-                    CONFIG.KOREAN.NOTIFY_ERROR_AUTH_CODE,
+                    I18nConfig.KOREAN.NOTIFY_ERROR_AUTH_CODE,
                 );
             }
 
@@ -516,7 +460,7 @@ export class AuthService {
             const deletedOK = await this.redisService.del(KEY);
 
             throw new InternalServerErrorException({
-                message: e.message ?? CONFIG.KOREAN.NOTIFY_FAILED_SIGNUP,
+                message: e.message ?? I18nConfig.KOREAN.NOTIFY_FAILED_SIGNUP,
             });
         } finally {
             // 레디스에 저장된 키를 제거합니다.
