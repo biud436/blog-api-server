@@ -18,6 +18,8 @@ export function createMockQueryBuilder() {
         update: jest.fn().mockReturnThis(),
         set: jest.fn().mockReturnThis(),
         getMany: jest.fn<() => any>().mockResolvedValue([]),
+        getOneOrFail: jest.fn<() => any>().mockResolvedValue({}),
+        leftJoinAndSelect: jest.fn().mockReturnThis(),
     };
 }
 
