@@ -13,14 +13,12 @@ import {
     DefaultValuePipe,
 } from '@nestjs/common';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
-import { ApiConsumes, ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger';
-import { InjectDataSource } from '@nestjs/typeorm';
+import { ApiTags } from '@nestjs/swagger';
 import {
     AdminOnly,
     ApiNotebook,
     JwtGuard,
 } from 'src/common/decorators/swagger/api-notebook.decorator';
-import { DataSource } from 'typeorm';
 import { ImageService } from './image.service';
 import {
     MulterS3File,
@@ -28,14 +26,11 @@ import {
 } from '../../common/interceptors/s3.upload.interceptor';
 import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
 import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
-import { IResponsableData } from 'src/common/libs/response/interface/response.interface';
 import { S3ImageUploadDto } from './dto/s3-image-upload.dto';
 import { UserId } from 'src/common/decorators/authorization/user-id.decorator';
-import {
-    ImageCreateSvgCommand,
-    ImageCreateSvgCommandImpl,
-} from './commands/image-create-svg.command';
+import { ImageCreateSvgCommandImpl } from './commands/image-create-svg.command';
 import { Image } from './entities/image.entity';
+import { Transactional } from 'typeorm-transactional';
 
 @Controller('image')
 @ApiTags('Image')
@@ -45,7 +40,6 @@ export class ImageController {
     constructor(
         private readonly imageService: ImageService,
         private readonly createSvgCommand: ImageCreateSvgCommandImpl,
-        @InjectDataSource() private readonly dataSource: DataSource,
     ) {}
 
     /**
@@ -66,27 +60,19 @@ export class ImageController {
         },
         auth: true,
     })
+    @Transactional()
     async upload(@UploadedFiles() files: any[]) {
-        const queryRunner = this.dataSource.createQueryRunner();
-        await queryRunner.connect();
-        await queryRunner.startTransaction();
-
         try {
             const pendingList: Promise<Image>[] = [];
 
             for (const file of files) {
-                const result = this.imageService.create(file, queryRunner);
+                const result = this.imageService.create(file);
                 pendingList.push(result);
             }
 
             await Promise.allSettled(pendingList);
-
-            await queryRunner.commitTransaction();
         } catch (e) {
             this.logger.error(e);
-            await queryRunner.rollbackTransaction();
-        } finally {
-            await queryRunner.release();
         }
     }
 

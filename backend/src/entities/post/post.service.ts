@@ -37,7 +37,7 @@ export class PostService {
      * @param queuryRunner
      * @returns
      */
-    async create(createPostDto: CreatePostDto, queuryRunner: QueryRunner) {
+    async create(createPostDto: CreatePostDto) {
         if (createPostDto.title) {
             createPostDto.title = encodeHtml(createPostDto.title);
         }
@@ -77,7 +77,7 @@ export class PostService {
             model.images = images;
         }
 
-        let post = await queuryRunner.manager.save(model);
+        let post = await this.postRepository.save(model);
 
         if (post.images?.length > 0) {
             const len = post.images.length;
@@ -96,7 +96,7 @@ export class PostService {
                 );
             }
 
-            post = await queuryRunner.manager.save(post);
+            post = await this.postRepository.save(post);
         }
 
         return post;

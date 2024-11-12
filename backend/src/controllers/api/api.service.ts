@@ -1,19 +1,12 @@
-import { HttpStatus, Injectable, Logger } from '@nestjs/common';
-import { InjectDataSource } from '@nestjs/typeorm';
-import {
-    InjectQueryRunner,
-    Transactional,
-    TransactionalZone,
-} from 'src/common/decorators/transactional';
+import { Injectable } from '@nestjs/common';
 import { DeletePostException } from 'src/common/exceptions/delete-post.exception';
 import { NotFoundPostException } from 'src/common/exceptions/not-found-post.exception';
 import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
 import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
 import { PostService } from 'src/entities/post/post.service';
-import { DataSource, QueryRunner } from 'typeorm';
+import { Transactional } from 'typeorm-transactional';
 
 @Injectable()
-@TransactionalZone()
 export class ApiService {
     constructor(private readonly postsService: PostService) {}
 

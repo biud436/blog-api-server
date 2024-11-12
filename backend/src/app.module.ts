@@ -44,9 +44,9 @@ import { TaskModule } from './common/domains/task/task.module';
 import { PaginationModule } from './common/modules/pagination/pagination.module';
 import { PostCommentModule } from './entities/comment/post-comment.module';
 import { TransactionModule } from './common/modules/transaction/transaction.module';
-import { DataSource, DataSourceOptions } from 'typeorm';
-import { DataSourceProxy } from './common/modules/transaction/data-source-proxy';
+import { DataSource } from 'typeorm';
 import { CommentModule } from './controllers/comment/comment.module';
+import { addTransactionalDataSource } from 'typeorm-transactional';
 
 @Module({
     imports: [
@@ -63,9 +63,16 @@ import { CommentModule } from './controllers/comment/comment.module';
                 return config.production;
             },
             inject: [ConfigService],
-            dataSourceFactory: async (options?: DataSourceOptions) => {
-                const instance = DataSourceProxy.getInstance(options);
-                return instance.create();
+            // dataSourceFactory: async (options?: DataSourceOptions) => {
+            //     const instance = DataSourceProxy.getInstance(options);
+            //     return instance.create();
+            // },
+            async dataSourceFactory(options) {
+                if (!options) {
+                    throw new Error('Invalid options passed');
+                }
+
+                return addTransactionalDataSource(new DataSource(options));
             },
         }),
         TransactionModule,

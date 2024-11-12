@@ -1,18 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Paginatable } from 'src/common/config/list-config';
-import {
-    Rollback,
-    Transactional,
-    TransactionalZone,
-} from 'src/common/decorators/transactional';
 import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
 import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
 import { PostCommentService } from 'src/entities/comment/post-comment.service';
 import { CreateCommentDto } from 'src/entities/comment/dto/create-comment.dto';
 import { PostComment } from 'src/entities/comment/entities/post-comment.entity';
+import { Transactional } from 'typeorm-transactional';
 
 @Injectable()
-@TransactionalZone()
 export class CommentService {
     private readonly logger: Logger = new Logger(CommentService.name);
 
@@ -26,11 +21,6 @@ export class CommentService {
         );
 
         return ResponseUtil.success(RESPONSE_MESSAGE.SAVE_SUCCESS, res);
-    }
-
-    @Rollback()
-    async rollback(txId: string, error: any) {
-        this.logger.warn(`[${txId}] Rollback:` + error);
     }
 
     @Transactional()

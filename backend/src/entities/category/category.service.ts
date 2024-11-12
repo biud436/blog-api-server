@@ -27,10 +27,7 @@ import { TransactionalZone } from 'src/common/decorators/transactional';
 
 @Injectable()
 export class CategoryService {
-    constructor(
-        private readonly categoryRepository: CategoryRepository,
-        @InjectDataSource() private readonly dataSource: DataSource,
-    ) {}
+    constructor(private readonly categoryRepository: CategoryRepository) {}
 
     /**
      * 새로운 카테고리를 추가합니다.

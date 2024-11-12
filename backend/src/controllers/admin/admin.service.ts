@@ -8,15 +8,10 @@ import { MoveCategoryDto } from 'src/entities/category/dto/move-category.dto';
 import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
 import { IResponsableData } from 'src/common/libs/response/interface/response.interface';
 import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
-import { DeleteQueryBuilder, QueryRunner } from 'typeorm';
 import { ChangeCategoryDto } from './dto/change-category.dto';
-import {
-    Transactional,
-    TransactionalZone,
-} from 'src/common/decorators/transactional';
+import { Transactional } from 'typeorm-transactional';
 
 @Injectable()
-@TransactionalZone()
 export class AdminService {
     constructor(private readonly categoryService: CategoryService) {}
 

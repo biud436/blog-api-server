@@ -1,4 +1,5 @@
-import { HttpException, InternalServerErrorException } from '@nestjs/common';
+import { HttpException } from '@nestjs/common';
+import { describe, it } from '@jest/globals';
 
 class RaiseConditionError extends HttpException {
     constructor() {

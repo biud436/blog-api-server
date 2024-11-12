@@ -1,6 +1,8 @@
 import 'reflect-metadata';
 import * as AWS from 'aws-sdk';
 import { Container, Service } from 'typedi';
+import { describe, it, expect } from '@jest/globals';
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const dotenv = require('dotenv');
 
@@ -16,7 +18,7 @@ class ConfigService {
     }
 
     get(key: KeyMapOfConfigService): string {
-        return process.env[key];
+        return process.env[key] as string;
     }
 }
 

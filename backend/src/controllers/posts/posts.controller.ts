@@ -46,7 +46,6 @@ export class PostsController {
     constructor(
         private readonly postsService: PostsService,
         private readonly categoryService: CategoryService,
-        @InjectDataSource() private readonly dataSource: DataSource,
     ) {}
 
     /**
@@ -130,34 +129,21 @@ export class PostsController {
         @Body()
         createPostDto: CreatePostDto,
     ) {
-        // TODO: 추후에 이 부분을 @Transactional 데코레이터로 리팩토링합니다.
-        const queryRunner = this.dataSource.createQueryRunner();
-        await queryRunner.connect();
-        await queryRunner.startTransaction();
-
         delete createPostDto.authorId;
         createPostDto.authorId = userId;
 
         try {
-            const data = await this.postsService.create(
-                createPostDto,
-                queryRunner,
-            );
-
-            await queryRunner.commitTransaction();
+            const data = await this.postsService.create(createPostDto);
 
             return ResponseUtil.success(RESPONSE_MESSAGE.READ_SUCCESS, data);
         } catch (e) {
             this.logger.debug(e);
 
-            await queryRunner.rollbackTransaction();
             throw ResponseUtil.failureWrap({
                 statusCode: 500,
                 message: '포스트를 작성할 수 없습니다.',
                 name: 'INTERNAL_SERVER_ERROR',
             });
-        } finally {
-            await queryRunner.release();
         }
     }
 

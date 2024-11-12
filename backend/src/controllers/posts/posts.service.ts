@@ -1,5 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { CategoryService } from 'src/entities/category/category.service';
+import { Injectable } from '@nestjs/common';
 import { CreatePostDto } from 'src/entities/post/dto/create-post.dto';
 import { UpdatePostDto } from 'src/entities/post/dto/update-post.dto';
 import { PostService } from 'src/entities/post/post.service';
@@ -8,16 +7,10 @@ import { QueryRunner } from 'typeorm';
 import { PostSearchProperty } from './types/post-search-type';
 import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
 import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
-import { PostCommentService } from 'src/entities/comment/post-comment.service';
-import {
-    Transactional,
-    TransactionalZone,
-} from 'src/common/decorators/transactional';
 import { NoPostException, NotPublicPostException } from 'src/common/exceptions';
-import { CategoryCommand } from './commands/category.command';
+import { Transactional } from 'typeorm-transactional';
 
 @Injectable()
-@TransactionalZone()
 export class PostsService {
     constructor(
         private readonly postService: PostService,
@@ -31,8 +24,9 @@ export class PostsService {
      * @param queryRunner
      * @returns
      */
-    async create(createPostDto: CreatePostDto, queryRunner: QueryRunner) {
-        return await this.postService.create(createPostDto, queryRunner);
+    @Transactional()
+    async create(createPostDto: CreatePostDto) {
+        return await this.postService.create(createPostDto);
     }
 
     /**

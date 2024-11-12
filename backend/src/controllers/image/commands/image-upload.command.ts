@@ -9,6 +9,7 @@ import {
     ImageCreateCommand,
     ImageCreateCommandImpl,
 } from './image-create.command';
+import { Transactional } from 'typeorm-transactional';
 
 export abstract class ImageUploadCommand {
     abstract execute(
@@ -23,7 +24,6 @@ export class ImageUploadCommandImpl extends ImageUploadCommand {
     private readonly logger = new Logger(ImageUploadCommand.name);
 
     constructor(
-        @InjectDataSource() private readonly dataSource: DataSource,
         private readonly redisService: RedisService,
         private readonly createCommand: ImageCreateCommandImpl,
     ) {
@@ -82,24 +82,18 @@ export class ImageUploadCommandImpl extends ImageUploadCommand {
         );
     }
 
+    @Transactional()
     async execute(
         userId: number,
         files: MulterS3File[],
         { postId }: S3ImageUploadDto,
     ) {
-        const queryRunner = this.dataSource.createQueryRunner();
-        await queryRunner.connect();
-        await queryRunner.startTransaction();
-
         try {
             for (const file of files) {
                 const key = this.extractFilenameFromKey(file.key);
                 const dto = this.getValidDto(postId, key, file);
 
-                const result = await this.createCommand.execute(
-                    dto,
-                    queryRunner,
-                );
+                const result = await this.createCommand.execute(dto);
                 if (result) {
                     this.logger.log(
                         `-- ${file.originalname} has completed uploading.`,
@@ -109,14 +103,9 @@ export class ImageUploadCommandImpl extends ImageUploadCommand {
                 await this.saveTemporarilyImageIds(userId, result.id);
             }
 
-            await queryRunner.commitTransaction();
-
             return files[0];
         } catch (e) {
             this.logger.error(e);
-            await queryRunner.rollbackTransaction();
-        } finally {
-            await queryRunner.release();
         }
     }
 }

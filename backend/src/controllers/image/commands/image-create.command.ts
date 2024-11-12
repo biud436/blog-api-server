@@ -20,17 +20,10 @@ export class ImageCreateCommandImpl extends ImageCreateCommand {
         super();
     }
 
-    async execute(
-        createImageDto: CreateImageDto,
-        queryRunner?: QueryRunner,
-    ): Promise<Image> {
+    async execute(createImageDto: CreateImageDto): Promise<Image> {
         const model = this.imageRepository.create(
             createImageDto as DeepPartial<Image>,
         );
-
-        if (queryRunner) {
-            return queryRunner.manager.save(model);
-        }
 
         return this.imageRepository.save(model);
     }

@@ -44,7 +44,6 @@ import { ProfileUser } from './types/profile-user.type';
 import { ProfileUserDto } from './dto/profile-user.dto';
 
 @Injectable()
-@TransactionalZone()
 export class AuthService {
     private logger: Logger = new Logger(AuthService.name);
 

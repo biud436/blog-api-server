@@ -21,8 +21,8 @@ export class ImageService {
         private readonly deleteCommand: ImageDeleteCommandImpl,
     ) {}
 
-    async create(createImageDto: CreateImageDto, queryRunner?: QueryRunner) {
-        return this.createCommand.execute(createImageDto, queryRunner);
+    async create(createImageDto: CreateImageDto) {
+        return this.createCommand.execute(createImageDto);
     }
 
     async getTempImageFileName(filename: string, username: string) {

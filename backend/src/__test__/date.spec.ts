@@ -1,3 +1,5 @@
+import { describe, it, expect } from '@jest/globals';
+
 describe('날짜 변환 테스트', () => {
     it('정수 타입으로 변환', () => {
         expect((220509224700 / 100_0000_0000) % 100 >> 0).toBe(22);
@@ -76,7 +78,7 @@ describe('날짜 변환 테스트', () => {
 
         for (let i = 0; i < 6; i++) {
             const value = (target / max) % 100 >> 0;
-            const key = Object.keys(validator)[i];
+            const key = Object.keys(validator)[i] as keyof typeof validator;
             const limit = validator[key];
             const n = limit.max + 1;
             const retValue = ((value % n) + n) % n;
@@ -106,7 +108,7 @@ describe('날짜 변환 테스트', () => {
 
         for (let i = 0; i < 6; i++) {
             const value = (target / max) % 100 >> 0;
-            const key = Object.keys(validator)[i];
+            const key = Object.keys(validator)[i] as keyof typeof validator;
             const limit = validator[key];
             const n = limit.max + 1;
             const retValue = ((value % n) + n) % n;

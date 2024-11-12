@@ -53,7 +53,9 @@ export const DEFAULT_ISOLATION_LEVEL =
  * @param option 4가지의 트랜잭션 격리 수준을 지정할 수 있습니다.
  * @returns
  */
-export function Transactional(option?: TransactionalOptions): MethodDecorator {
+export function TransactionalMethod(
+    option?: TransactionalOptions,
+): MethodDecorator {
     return function (
         target: object,
         propertyKey: string | symbol,

@@ -1,15 +1,13 @@
-import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import { User } from './entities/user.entity';
 import { Profile } from '../profile/entities/profile.entity';
-import { Brackets, IsNull, Not, QueryRunner, Repository } from 'typeorm';
+import { QueryRunner, Repository } from 'typeorm';
 import { plainToClass } from 'class-transformer';
 import { Paginatable } from 'src/common/config/list-config';
 import { PaginationProvider } from 'src/common/modules/pagination/pagination-repository';
-
-type SafedUser = Omit<User, 'password' | 'hashPassword' | 'savePassword'>;
 
 export type UserLoginValidationInfo = {
     isValidUser: boolean;
