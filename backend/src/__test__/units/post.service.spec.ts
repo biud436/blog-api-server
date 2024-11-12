@@ -29,6 +29,7 @@ import {
     S3DeleteBucketCommand,
     S3DeleteBucketCommandImpl,
 } from 'src/common/micro-services/s3/s3.delete-bucket.command';
+import 'reflect-metadata';
 
 describe('PostSevice Unit Test', () => {
     // Services
@@ -84,6 +85,19 @@ describe('PostSevice Unit Test', () => {
 
     // DI Container 생성
     beforeEach(async () => {
+        /**
+         * 실제 환경에서는 여러 모듈의 프로바이더에서 DI 대상을 가져오지만,
+         * 테스트 환경에서는 기작성된 모듈을 불러오는 것보다,
+         * 테스트 모듈의 프로바이더 설정을 직접 해주는 것이 속편하다.
+         *
+         * 상당한 보일러 플레이트가 발생하므로 자동화할 필요성이 있다.
+         *
+         * 테스트 환경에서는 아래와 같이,
+         * design:paramtypes를 이용하여 생성자에 주입될 매개변수의 타입을 가져와 자동화할 수도 있다.
+         * 하지만 모든 경우에 대해 자동화할 수는 없다.
+         */
+        const types = Reflect.getMetadata('design:paramtypes', PostService);
+
         const module: TestingModule = await Test.createTestingModule({
             providers: [
                 PostService,
