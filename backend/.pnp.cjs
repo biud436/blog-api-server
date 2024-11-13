@@ -32,6 +32,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@aws-sdk/client-s3", "npm:3.689.0"],\
             ["@aws-sdk/client-ses", "npm:3.687.0"],\
             ["@aws-sdk/lib-storage", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:3.689.0"],\
+            ["@golevelup/ts-jest", "npm:0.6.1"],\
             ["@jest/globals", "npm:29.7.0"],\
             ["@johanblumenberg/ts-mockito", "npm:1.0.45"],\
             ["@js-joda/core", "npm:5.3.1"],\
@@ -3776,6 +3777,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["js-yaml", "npm:3.14.1"],\
             ["minimatch", "npm:3.1.2"],\
             ["strip-json-comments", "npm:3.1.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@golevelup/ts-jest", [\
+        ["npm:0.6.1", {\
+          "packageLocation": "./.yarn/cache/@golevelup-ts-jest-npm-0.6.1-54783b241f-d59f07ae8b.zip/node_modules/@golevelup/ts-jest/",\
+          "packageDependencies": [\
+            ["@golevelup/ts-jest", "npm:0.6.1"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -8253,6 +8263,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@aws-sdk/client-s3", "npm:3.689.0"],\
             ["@aws-sdk/client-ses", "npm:3.687.0"],\
             ["@aws-sdk/lib-storage", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:3.689.0"],\
+            ["@golevelup/ts-jest", "npm:0.6.1"],\
             ["@jest/globals", "npm:29.7.0"],\
             ["@johanblumenberg/ts-mockito", "npm:1.0.45"],\
             ["@js-joda/core", "npm:5.3.1"],\

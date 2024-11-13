@@ -108,6 +108,7 @@
         "yaml": "^2.3.1"
     },
     "devDependencies": {
+        "@golevelup/ts-jest": "^0.6.1",
         "@jest/globals": "^29.7.0",
         "@johanblumenberg/ts-mockito": "^1.0.45",
         "@nestjs/cli": "^10.1.18",

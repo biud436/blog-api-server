@@ -2882,6 +2882,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@golevelup/ts-jest@npm:^0.6.1":
+  version: 0.6.1
+  resolution: "@golevelup/ts-jest@npm:0.6.1"
+  checksum: d59f07ae8b02fdfe1dafcf6b70b6340c3e6889a22bc06204c8373af20fb11d2a6fd5025f27da01473b72bbc4506a3e4d764f0f132326125882ee86298404cf22
+  languageName: node
+  linkType: hard
+
 "@hapi/hoek@npm:^9.0.0":
   version: 9.3.0
   resolution: "@hapi/hoek@npm:9.3.0"
@@ -6392,6 +6399,7 @@ __metadata:
     "@aws-sdk/client-s3": ^3.689.0
     "@aws-sdk/client-ses": ^3.687.0
     "@aws-sdk/lib-storage": ^3.689.0
+    "@golevelup/ts-jest": ^0.6.1
     "@jest/globals": ^29.7.0
     "@johanblumenberg/ts-mockito": ^1.0.45
     "@js-joda/core": ^5.2.0
