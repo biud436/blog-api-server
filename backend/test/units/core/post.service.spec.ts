@@ -6,7 +6,7 @@ import { Repository } from 'typeorm';
 import {
     createMockQueryBuilder,
     createMockQueryBuilderValue,
-} from '../utils/mock-query-builder';
+} from '../../utils/mock-query-builder';
 import { instance, mock, when } from '@johanblumenberg/ts-mockito';
 import { Image } from 'src/controllers/image/entities/image.entity';
 import { User } from 'src/entities/user/entities/user.entity';

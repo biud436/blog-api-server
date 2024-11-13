@@ -1,4 +1,4 @@
-import { DateTimeUtil } from '../common/libs/date/DateTimeUtil';
+import { DateTimeUtil } from '../../../src/common/libs/date/DateTimeUtil';
 import { describe, it, expect } from '@jest/globals';
 
 describe('시간 테스트', () => {
