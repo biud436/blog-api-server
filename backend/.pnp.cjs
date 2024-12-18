@@ -40,7 +40,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@nestjs/cache-manager", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:2.3.0"],\
             ["@nestjs/cli", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:10.3.2"],\
             ["@nestjs/common", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:10.4.15"],\
-            ["@nestjs/config", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:3.1.1"],\
+            ["@nestjs/config", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:3.3.0"],\
             ["@nestjs/core", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:10.2.7"],\
             ["@nestjs/jwt", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:10.1.1"],\
             ["@nestjs/mapped-types", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:2.0.2"],\
@@ -4722,31 +4722,30 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@nestjs/config", [\
-        ["npm:3.1.1", {\
-          "packageLocation": "./.yarn/cache/@nestjs-config-npm-3.1.1-2dc25e7349-95446dd126.zip/node_modules/@nestjs/config/",\
+        ["npm:3.3.0", {\
+          "packageLocation": "./.yarn/cache/@nestjs-config-npm-3.3.0-541058c6e4-2f14926946.zip/node_modules/@nestjs/config/",\
           "packageDependencies": [\
-            ["@nestjs/config", "npm:3.1.1"]\
+            ["@nestjs/config", "npm:3.3.0"]\
           ],\
           "linkType": "SOFT"\
         }],\
-        ["virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:3.1.1", {\
-          "packageLocation": "./.yarn/__virtual__/@nestjs-config-virtual-f549b8e8ad/0/cache/@nestjs-config-npm-3.1.1-2dc25e7349-95446dd126.zip/node_modules/@nestjs/config/",\
+        ["virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:3.3.0", {\
+          "packageLocation": "./.yarn/__virtual__/@nestjs-config-virtual-5703d61848/0/cache/@nestjs-config-npm-3.3.0-541058c6e4-2f14926946.zip/node_modules/@nestjs/config/",\
           "packageDependencies": [\
-            ["@nestjs/config", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:3.1.1"],\
+            ["@nestjs/config", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:3.3.0"],\
             ["@nestjs/common", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:10.4.15"],\
             ["@types/nestjs__common", null],\
-            ["@types/reflect-metadata", null],\
-            ["dotenv", "npm:16.3.1"],\
+            ["@types/rxjs", null],\
+            ["dotenv", "npm:16.4.5"],\
             ["dotenv-expand", "npm:10.0.0"],\
             ["lodash", "npm:4.17.21"],\
-            ["reflect-metadata", "npm:0.1.13"],\
-            ["uuid", "npm:9.0.0"]\
+            ["rxjs", "npm:7.5.5"]\
           ],\
           "packagePeers": [\
             "@nestjs/common",\
             "@types/nestjs__common",\
-            "@types/reflect-metadata",\
-            "reflect-metadata"\
+            "@types/rxjs",\
+            "rxjs"\
           ],\
           "linkType": "HARD"\
         }]\
@@ -8773,7 +8772,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@nestjs/cache-manager", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:2.3.0"],\
             ["@nestjs/cli", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:10.3.2"],\
             ["@nestjs/common", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:10.4.15"],\
-            ["@nestjs/config", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:3.1.1"],\
+            ["@nestjs/config", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:3.3.0"],\
             ["@nestjs/core", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:10.2.7"],\
             ["@nestjs/jwt", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:10.1.1"],\
             ["@nestjs/mapped-types", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:2.0.2"],\
@@ -10318,10 +10317,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "HARD"\
         }],\
-        ["npm:16.3.1", {\
-          "packageLocation": "./.yarn/cache/dotenv-npm-16.3.1-e6d380a398-15d75e7279.zip/node_modules/dotenv/",\
+        ["npm:16.4.5", {\
+          "packageLocation": "./.yarn/cache/dotenv-npm-16.4.5-bcb20eb95d-301a12c3d4.zip/node_modules/dotenv/",\
           "packageDependencies": [\
-            ["dotenv", "npm:16.3.1"]\
+            ["dotenv", "npm:16.4.5"]\
           ],\
           "linkType": "HARD"\
         }]\

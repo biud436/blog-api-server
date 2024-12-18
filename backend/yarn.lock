@@ -3700,18 +3700,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/config@npm:^3.1.1":
-  version: 3.1.1
-  resolution: "@nestjs/config@npm:3.1.1"
+"@nestjs/config@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "@nestjs/config@npm:3.3.0"
   dependencies:
-    dotenv: "npm:16.3.1"
-    dotenv-expand: "npm:10.0.0"
-    lodash: "npm:4.17.21"
-    uuid: "npm:9.0.0"
+    dotenv: 16.4.5
+    dotenv-expand: 10.0.0
+    lodash: 4.17.21
   peerDependencies:
     "@nestjs/common": ^8.0.0 || ^9.0.0 || ^10.0.0
-    reflect-metadata: ^0.1.13
-  checksum: 95446dd12678581582c15a1c7cc4d7b560466b646085cec2aab442e977def6699526f300c18f0bbbd795d7e7675b505ace382a453b3babc650d14d0c5af9502f
+    rxjs: ^7.1.0
+  checksum: 2f1492694662ddbdca8bafeb8fb864f636a7aff477051707abc6e96f2cc5648ef3fbdeb6d4e8fc8b936725ac072accb212595b6395f640123813f9394e3aea95
   languageName: node
   linkType: hard
 
@@ -6890,7 +6889,7 @@ __metadata:
     "@nestjs/cache-manager": ^2.3.0
     "@nestjs/cli": 10.3.2
     "@nestjs/common": ^10.4.15
-    "@nestjs/config": ^3.1.1
+    "@nestjs/config": ^3.3.0
     "@nestjs/core": ^10.2.7
     "@nestjs/jwt": ^10.1.1
     "@nestjs/mapped-types": ^2.0.2
@@ -8240,10 +8239,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:16.3.1":
-  version: 16.3.1
-  resolution: "dotenv@npm:16.3.1"
-  checksum: 15d75e7279018f4bafd0ee9706593dd14455ddb71b3bcba9c52574460b7ccaf67d5cf8b2c08a5af1a9da6db36c956a04a1192b101ee102a3e0cf8817bbcf3dfd
+"dotenv@npm:16.4.5":
+  version: 16.4.5
+  resolution: "dotenv@npm:16.4.5"
+  checksum: 301a12c3d44fd49888b74eb9ccf9f07a1f5df43f489e7fcb89647a2edcd84c42d6bc349dc8df099cd18f07c35c7b04685c1a4f3e6a6a9e6b30f8d48c15b7f49c
   languageName: node
   linkType: hard
 
