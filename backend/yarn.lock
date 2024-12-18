@@ -3754,7 +3754,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/mapped-types@npm:2.0.2, @nestjs/mapped-types@npm:^2.0.2":
+"@nestjs/mapped-types@npm:2.0.2":
   version: 2.0.2
   resolution: "@nestjs/mapped-types@npm:2.0.2"
   peerDependencies:
@@ -3768,6 +3768,23 @@ __metadata:
     class-validator:
       optional: true
   checksum: 1fb0dca3838d0dc23107233e95a711e251bfbef9017589d3764c955a1cf190c8372179cee70e3674807896f53a98ab2ba80cd769b4f072fadefb708be1cc911b
+  languageName: node
+  linkType: hard
+
+"@nestjs/mapped-types@npm:^2.0.6":
+  version: 2.0.6
+  resolution: "@nestjs/mapped-types@npm:2.0.6"
+  peerDependencies:
+    "@nestjs/common": ^8.0.0 || ^9.0.0 || ^10.0.0
+    class-transformer: ^0.4.0 || ^0.5.0
+    class-validator: ^0.13.0 || ^0.14.0
+    reflect-metadata: ^0.1.12 || ^0.2.0
+  peerDependenciesMeta:
+    class-transformer:
+      optional: true
+    class-validator:
+      optional: true
+  checksum: dea0e728ba881ba3e454d3d2edb049b39da8dfd681869ed577d4feda249ba1b8fd82337dad4f54a72095d3341bad0a404e81d93570d03210def1a3631681ea32
   languageName: node
   linkType: hard
 
@@ -6901,7 +6918,7 @@ __metadata:
     "@nestjs/config": ^3.3.0
     "@nestjs/core": ^10.4.15
     "@nestjs/jwt": ^10.2.0
-    "@nestjs/mapped-types": ^2.0.2
+    "@nestjs/mapped-types": ^2.0.6
     "@nestjs/passport": ^10.0.2
     "@nestjs/platform-express": ^10.2.7
     "@nestjs/schedule": ^4.0.0
