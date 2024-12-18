@@ -13,7 +13,7 @@
         }
     },
     "compilerOptions": {
-        "webpack": true,
+        "type": "webpack",
         "deleteOutDir": true
     }
 }
