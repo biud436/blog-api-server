@@ -36,7 +36,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@jest/globals", "npm:29.7.0"],\
             ["@johanblumenberg/ts-mockito", "npm:1.0.45"],\
             ["@js-joda/core", "npm:5.3.1"],\
-            ["@nestjs/axios", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:3.0.0"],\
+            ["@nestjs/axios", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:3.1.3"],\
             ["@nestjs/cache-manager", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:2.3.0"],\
             ["@nestjs/cli", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:10.1.18"],\
             ["@nestjs/common", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:10.2.7"],\
@@ -82,7 +82,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/webpack-node-externals", "npm:3.0.0"],\
             ["@typescript-eslint/eslint-plugin", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:6.4.0"],\
             ["@typescript-eslint/parser", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:6.4.0"],\
-            ["axios", "npm:1.6.4"],\
+            ["axios", "npm:1.7.9"],\
             ["bcrypt", "npm:5.1.0"],\
             ["cache-manager", "npm:5.2.0"],\
             ["cache-manager-redis-store", "npm:3.0.1"],\
@@ -4410,34 +4410,30 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@nestjs/axios", [\
-        ["npm:3.0.0", {\
-          "packageLocation": "./.yarn/cache/@nestjs-axios-npm-3.0.0-a8fe50b1d1-0483ef5a10.zip/node_modules/@nestjs/axios/",\
+        ["npm:3.1.3", {\
+          "packageLocation": "./.yarn/cache/@nestjs-axios-npm-3.1.3-9401e51a20-e949f664ce.zip/node_modules/@nestjs/axios/",\
           "packageDependencies": [\
-            ["@nestjs/axios", "npm:3.0.0"]\
+            ["@nestjs/axios", "npm:3.1.3"]\
           ],\
           "linkType": "SOFT"\
         }],\
-        ["virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:3.0.0", {\
-          "packageLocation": "./.yarn/__virtual__/@nestjs-axios-virtual-1c51dd4a94/0/cache/@nestjs-axios-npm-3.0.0-a8fe50b1d1-0483ef5a10.zip/node_modules/@nestjs/axios/",\
+        ["virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:3.1.3", {\
+          "packageLocation": "./.yarn/__virtual__/@nestjs-axios-virtual-265c8aa65d/0/cache/@nestjs-axios-npm-3.1.3-9401e51a20-e949f664ce.zip/node_modules/@nestjs/axios/",\
           "packageDependencies": [\
-            ["@nestjs/axios", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:3.0.0"],\
+            ["@nestjs/axios", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:3.1.3"],\
             ["@nestjs/common", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:10.2.7"],\
             ["@types/axios", null],\
             ["@types/nestjs__common", null],\
-            ["@types/reflect-metadata", null],\
             ["@types/rxjs", null],\
-            ["axios", "npm:1.6.4"],\
-            ["reflect-metadata", "npm:0.1.13"],\
+            ["axios", "npm:1.7.9"],\
             ["rxjs", "npm:7.5.5"]\
           ],\
           "packagePeers": [\
             "@nestjs/common",\
             "@types/axios",\
             "@types/nestjs__common",\
-            "@types/reflect-metadata",\
             "@types/rxjs",\
             "axios",\
-            "reflect-metadata",\
             "rxjs"\
           ],\
           "linkType": "HARD"\
@@ -7968,11 +7964,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["axios", [\
-        ["npm:1.6.4", {\
-          "packageLocation": "./.yarn/cache/axios-npm-1.6.4-27c7f05730-48d8af8488.zip/node_modules/axios/",\
+        ["npm:1.7.9", {\
+          "packageLocation": "./.yarn/cache/axios-npm-1.7.9-3c98466f87-cb8ce29181.zip/node_modules/axios/",\
           "packageDependencies": [\
-            ["axios", "npm:1.6.4"],\
-            ["follow-redirects", "virtual:27c7f05730106654135928f3127b1630b42850fc1970cfbbd4f84a3e27fac87c73bfdd899eb2d41f55c61fe416a3330b56ed1e56aec4be1e3b4a2982f32f3909#npm:1.15.4"],\
+            ["axios", "npm:1.7.9"],\
+            ["follow-redirects", "virtual:3c98466f874305529f1a16589101c28705aa489e7ec8ffcbfb5cc062090761c951973322264d8039ff40de705a591171bac1067843c49b197410972b4a9ed9f4#npm:1.15.9"],\
             ["form-data", "npm:4.0.0"],\
             ["proxy-from-env", "npm:1.1.0"]\
           ],\
@@ -8267,7 +8263,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@jest/globals", "npm:29.7.0"],\
             ["@johanblumenberg/ts-mockito", "npm:1.0.45"],\
             ["@js-joda/core", "npm:5.3.1"],\
-            ["@nestjs/axios", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:3.0.0"],\
+            ["@nestjs/axios", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:3.1.3"],\
             ["@nestjs/cache-manager", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:2.3.0"],\
             ["@nestjs/cli", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:10.1.18"],\
             ["@nestjs/common", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:10.2.7"],\
@@ -8313,7 +8309,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/webpack-node-externals", "npm:3.0.0"],\
             ["@typescript-eslint/eslint-plugin", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:6.4.0"],\
             ["@typescript-eslint/parser", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:6.4.0"],\
-            ["axios", "npm:1.6.4"],\
+            ["axios", "npm:1.7.9"],\
             ["bcrypt", "npm:5.1.0"],\
             ["cache-manager", "npm:5.2.0"],\
             ["cache-manager-redis-store", "npm:3.0.1"],\
@@ -10811,17 +10807,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["follow-redirects", [\
-        ["npm:1.15.4", {\
-          "packageLocation": "./.yarn/cache/follow-redirects-npm-1.15.4-3384d6a415-e178d1deff.zip/node_modules/follow-redirects/",\
+        ["npm:1.15.9", {\
+          "packageLocation": "./.yarn/cache/follow-redirects-npm-1.15.9-539785d34c-859e2bacc7.zip/node_modules/follow-redirects/",\
           "packageDependencies": [\
-            ["follow-redirects", "npm:1.15.4"]\
+            ["follow-redirects", "npm:1.15.9"]\
           ],\
           "linkType": "SOFT"\
         }],\
-        ["virtual:27c7f05730106654135928f3127b1630b42850fc1970cfbbd4f84a3e27fac87c73bfdd899eb2d41f55c61fe416a3330b56ed1e56aec4be1e3b4a2982f32f3909#npm:1.15.4", {\
-          "packageLocation": "./.yarn/__virtual__/follow-redirects-virtual-8db6281d15/0/cache/follow-redirects-npm-1.15.4-3384d6a415-e178d1deff.zip/node_modules/follow-redirects/",\
+        ["virtual:3c98466f874305529f1a16589101c28705aa489e7ec8ffcbfb5cc062090761c951973322264d8039ff40de705a591171bac1067843c49b197410972b4a9ed9f4#npm:1.15.9", {\
+          "packageLocation": "./.yarn/__virtual__/follow-redirects-virtual-e8bf3836d7/0/cache/follow-redirects-npm-1.15.9-539785d34c-859e2bacc7.zip/node_modules/follow-redirects/",\
           "packageDependencies": [\
-            ["follow-redirects", "virtual:27c7f05730106654135928f3127b1630b42850fc1970cfbbd4f84a3e27fac87c73bfdd899eb2d41f55c61fe416a3330b56ed1e56aec4be1e3b4a2982f32f3909#npm:1.15.4"],\
+            ["follow-redirects", "virtual:3c98466f874305529f1a16589101c28705aa489e7ec8ffcbfb5cc062090761c951973322264d8039ff40de705a591171bac1067843c49b197410972b4a9ed9f4#npm:1.15.9"],\
             ["@types/debug", null],\
             ["debug", null]\
           ],\

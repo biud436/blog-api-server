@@ -3454,15 +3454,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/axios@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "@nestjs/axios@npm:3.0.0"
+"@nestjs/axios@npm:^3.1.3":
+  version: 3.1.3
+  resolution: "@nestjs/axios@npm:3.1.3"
   peerDependencies:
     "@nestjs/common": ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0
     axios: ^1.3.1
-    reflect-metadata: ^0.1.12
     rxjs: ^6.0.0 || ^7.0.0
-  checksum: 0483ef5a10ed920eb84756472de59b5bd83d09f152de9b769f68a57bd9c2c922961545c50001ac3ea45584cf991aee355b8fef4fe249b849fded4f1df92244f6
+  checksum: e949f664cec5a874b3fd11a193f00b8ddca12fc4b80e23b4e764594a0dccc167db833c1bb2b6cc8e5536bc3bc655bff0196d3efcad5a14a1bd5638a048a80b26
   languageName: node
   linkType: hard
 
@@ -6207,14 +6206,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.6.4":
-  version: 1.6.4
-  resolution: "axios@npm:1.6.4"
+"axios@npm:^1.7.9":
+  version: 1.7.9
+  resolution: "axios@npm:1.7.9"
   dependencies:
-    follow-redirects: "npm:^1.15.4"
-    form-data: "npm:^4.0.0"
-    proxy-from-env: "npm:^1.1.0"
-  checksum: 48d8af8488ac7402fae312437c0189b3b609a472fca2f7fc796129c804d98520589b6317096eba8509711d49f855a3f620b6a24ff23acd73ac26433d0383b8f9
+    follow-redirects: ^1.15.6
+    form-data: ^4.0.0
+    proxy-from-env: ^1.1.0
+  checksum: cb8ce291818effda09240cb60f114d5625909b345e10f389a945320e06acf0bc949d0f8422d25720f5dd421362abee302c99f5e97edec4c156c8939814b23d19
   languageName: node
   linkType: hard
 
@@ -6403,7 +6402,7 @@ __metadata:
     "@jest/globals": ^29.7.0
     "@johanblumenberg/ts-mockito": ^1.0.45
     "@js-joda/core": ^5.2.0
-    "@nestjs/axios": ^3.0.0
+    "@nestjs/axios": ^3.1.3
     "@nestjs/cache-manager": ^2.3.0
     "@nestjs/cli": ^10.1.18
     "@nestjs/common": ^10.2.7
@@ -6449,7 +6448,7 @@ __metadata:
     "@types/webpack-node-externals": ^3
     "@typescript-eslint/eslint-plugin": ^6.4.0
     "@typescript-eslint/parser": ^6.4.0
-    axios: ^1.6.4
+    axios: ^1.7.9
     bcrypt: ^5.1.0
     cache-manager: ^5.2.0
     cache-manager-redis-store: ^3.0.1
@@ -8641,13 +8640,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.15.4":
-  version: 1.15.4
-  resolution: "follow-redirects@npm:1.15.4"
+"follow-redirects@npm:^1.15.6":
+  version: 1.15.9
+  resolution: "follow-redirects@npm:1.15.9"
   peerDependenciesMeta:
     debug:
       optional: true
-  checksum: e178d1deff8b23d5d24ec3f7a94cde6e47d74d0dc649c35fc9857041267c12ec5d44650a0c5597ef83056ada9ea6ca0c30e7c4f97dbf07d035086be9e6a5b7b6
+  checksum: 859e2bacc7a54506f2bf9aacb10d165df78c8c1b0ceb8023f966621b233717dab56e8d08baadc3ad3b9db58af290413d585c999694b7c146aaf2616340c3d2a6
   languageName: node
   linkType: hard
 
