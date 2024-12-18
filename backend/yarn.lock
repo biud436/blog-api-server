@@ -3907,11 +3907,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/testing@npm:^10.4.7":
-  version: 10.4.7
-  resolution: "@nestjs/testing@npm:10.4.7"
+"@nestjs/testing@npm:^10.4.15":
+  version: 10.4.15
+  resolution: "@nestjs/testing@npm:10.4.15"
   dependencies:
-    tslib: "npm:2.7.0"
+    tslib: 2.8.1
   peerDependencies:
     "@nestjs/common": ^10.0.0
     "@nestjs/core": ^10.0.0
@@ -3922,7 +3922,7 @@ __metadata:
       optional: true
     "@nestjs/platform-express":
       optional: true
-  checksum: 9091bc519b5f387a9ce45a697d3f839ceb75134e9258d85e9fc97a1e26beaf07329df157fdd48d8f7e1f37a3f9f2a9686d56f1211295c4061e791d06401d32b2
+  checksum: 9a8cce54eb7a1fac16200c7022368c9e4d3101b3b12678d03727e45abccab7687f7200aedcce338a95d061f2cc4a557a1706f8fce27e82f34252008bce630ad8
   languageName: node
   linkType: hard
 
@@ -6925,7 +6925,7 @@ __metadata:
     "@nestjs/schematics": ^10.2.3
     "@nestjs/serve-static": ^4.0.2
     "@nestjs/swagger": ^7.1.13
-    "@nestjs/testing": ^10.4.7
+    "@nestjs/testing": ^10.4.15
     "@nestjs/throttler": ^5.0.0
     "@nestjs/typeorm": ^10.0.0
     "@swc/cli": ^0.5.2
@@ -14887,13 +14887,6 @@ __metadata:
     minimist: "npm:^1.2.6"
     strip-bom: "npm:^3.0.0"
   checksum: 28c5f7bbbcabc9dabd4117e8fdc61483f6872a1c6b02a4b1c4d68c5b79d06896c3cc9547610c4c3ba64658531caa2de13ead1ea1bf321c7b53e969c4752b98c7
-  languageName: node
-  linkType: hard
-
-"tslib@npm:2.7.0":
-  version: 2.7.0
-  resolution: "tslib@npm:2.7.0"
-  checksum: 1606d5c89f88d466889def78653f3aab0f88692e80bb2066d090ca6112ae250ec1cfa9dbfaab0d17b60da15a4186e8ec4d893801c67896b277c17374e36e1d28
   languageName: node
   linkType: hard
 

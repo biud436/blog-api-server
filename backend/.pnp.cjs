@@ -50,7 +50,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@nestjs/schematics", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:10.2.3"],\
             ["@nestjs/serve-static", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:4.0.2"],\
             ["@nestjs/swagger", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:7.1.13"],\
-            ["@nestjs/testing", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:10.4.7"],\
+            ["@nestjs/testing", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:10.4.15"],\
             ["@nestjs/throttler", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:5.0.0"],\
             ["@nestjs/typeorm", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:10.0.0"],\
             ["@swc/cli", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:0.5.2"],\
@@ -5113,17 +5113,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@nestjs/testing", [\
-        ["npm:10.4.7", {\
-          "packageLocation": "./.yarn/cache/@nestjs-testing-npm-10.4.7-297e7eab77-9091bc519b.zip/node_modules/@nestjs/testing/",\
+        ["npm:10.4.15", {\
+          "packageLocation": "./.yarn/cache/@nestjs-testing-npm-10.4.15-d591a1705a-9a8cce54eb.zip/node_modules/@nestjs/testing/",\
           "packageDependencies": [\
-            ["@nestjs/testing", "npm:10.4.7"]\
+            ["@nestjs/testing", "npm:10.4.15"]\
           ],\
           "linkType": "SOFT"\
         }],\
-        ["virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:10.4.7", {\
-          "packageLocation": "./.yarn/__virtual__/@nestjs-testing-virtual-35d59638d2/0/cache/@nestjs-testing-npm-10.4.7-297e7eab77-9091bc519b.zip/node_modules/@nestjs/testing/",\
+        ["virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:10.4.15", {\
+          "packageLocation": "./.yarn/__virtual__/@nestjs-testing-virtual-80b337b971/0/cache/@nestjs-testing-npm-10.4.15-d591a1705a-9a8cce54eb.zip/node_modules/@nestjs/testing/",\
           "packageDependencies": [\
-            ["@nestjs/testing", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:10.4.7"],\
+            ["@nestjs/testing", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:10.4.15"],\
             ["@nestjs/common", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:10.4.15"],\
             ["@nestjs/core", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:10.4.15"],\
             ["@nestjs/microservices", null],\
@@ -5132,7 +5132,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/nestjs__core", null],\
             ["@types/nestjs__microservices", null],\
             ["@types/nestjs__platform-express", null],\
-            ["tslib", "npm:2.7.0"]\
+            ["tslib", "npm:2.8.1"]\
           ],\
           "packagePeers": [\
             "@nestjs/common",\
@@ -8819,7 +8819,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@nestjs/schematics", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:10.2.3"],\
             ["@nestjs/serve-static", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:4.0.2"],\
             ["@nestjs/swagger", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:7.1.13"],\
-            ["@nestjs/testing", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:10.4.7"],\
+            ["@nestjs/testing", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:10.4.15"],\
             ["@nestjs/throttler", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:5.0.0"],\
             ["@nestjs/typeorm", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:10.0.0"],\
             ["@swc/cli", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:0.5.2"],\
@@ -17796,13 +17796,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/tslib-npm-2.6.1-de28eba753-b0d176d176.zip/node_modules/tslib/",\
           "packageDependencies": [\
             ["tslib", "npm:2.6.1"]\
-          ],\
-          "linkType": "HARD"\
-        }],\
-        ["npm:2.7.0", {\
-          "packageLocation": "./.yarn/cache/tslib-npm-2.7.0-21668f5c21-1606d5c89f.zip/node_modules/tslib/",\
-          "packageDependencies": [\
-            ["tslib", "npm:2.7.0"]\
           ],\
           "linkType": "HARD"\
         }],\
