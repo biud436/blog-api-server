@@ -3788,13 +3788,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/passport@npm:^10.0.2":
-  version: 10.0.2
-  resolution: "@nestjs/passport@npm:10.0.2"
+"@nestjs/passport@npm:^10.0.3":
+  version: 10.0.3
+  resolution: "@nestjs/passport@npm:10.0.3"
   peerDependencies:
     "@nestjs/common": ^8.0.0 || ^9.0.0 || ^10.0.0
-    passport: ^0.4.0 || ^0.5.0 || ^0.6.0
-  checksum: d9d0c2206cc7fc1c88da2e165d901099c971be57732d7b4f28d169ae9e4637a423d992c63660026e16cb2c43d709369496c11c4b760ba98d82ce422a672a6ee9
+    passport: ^0.4.0 || ^0.5.0 || ^0.6.0 || ^0.7.0
+  checksum: b57168096c0b52cf8826fb12578b83cfa947c6575138450f8b5a78b3f6909219eb174008c515650cb0ec8c01cace80487298a0cbeb9ceeaaa1c85d3fb4db2875
   languageName: node
   linkType: hard
 
@@ -6919,7 +6919,7 @@ __metadata:
     "@nestjs/core": ^10.4.15
     "@nestjs/jwt": ^10.2.0
     "@nestjs/mapped-types": ^2.0.6
-    "@nestjs/passport": ^10.0.2
+    "@nestjs/passport": ^10.0.3
     "@nestjs/platform-express": ^10.2.7
     "@nestjs/schedule": ^4.0.0
     "@nestjs/schematics": ^10.0.2
