@@ -29,7 +29,7 @@
         "@aws-sdk/lib-storage": "^3.689.0",
         "@js-joda/core": "^5.2.0",
         "@nestjs/axios": "^3.0.0",
-        "@nestjs/cache-manager": "^2.2.2",
+        "@nestjs/cache-manager": "^2.3.0",
         "@nestjs/common": "^10.2.7",
         "@nestjs/config": "^3.1.1",
         "@nestjs/core": "^10.2.7",

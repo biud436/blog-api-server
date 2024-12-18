@@ -3466,15 +3466,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/cache-manager@npm:^2.2.2":
-  version: 2.2.2
-  resolution: "@nestjs/cache-manager@npm:2.2.2"
+"@nestjs/cache-manager@npm:^2.3.0":
+  version: 2.3.0
+  resolution: "@nestjs/cache-manager@npm:2.3.0"
   peerDependencies:
     "@nestjs/common": ^9.0.0 || ^10.0.0
     "@nestjs/core": ^9.0.0 || ^10.0.0
     cache-manager: <=5
     rxjs: ^7.0.0
-  checksum: 776105fae1fd446fdb66068c3d968f92615bb994a52ae6a6fcd9753eb9e68426b64a835230ef338093a989fc745335a294e81924d67f909e7bf533efdd2b2a08
+  checksum: 689bf07a40bfab8755e08a70a71269dc93b8d12ca73cb96edc52dcbdb31c9b0525846dc1f6fe941a2e87fe0f6483b20c5755249734416b1c30a51ffafe5c4775
   languageName: node
   linkType: hard
 
@@ -6404,7 +6404,7 @@ __metadata:
     "@johanblumenberg/ts-mockito": ^1.0.45
     "@js-joda/core": ^5.2.0
     "@nestjs/axios": ^3.0.0
-    "@nestjs/cache-manager": ^2.2.2
+    "@nestjs/cache-manager": ^2.3.0
     "@nestjs/cli": ^10.1.18
     "@nestjs/common": ^10.2.7
     "@nestjs/config": ^3.1.1
