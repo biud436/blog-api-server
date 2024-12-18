@@ -118,11 +118,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["nest-winston", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:1.6.2"],\
             ["nodemailer", "npm:6.7.3"],\
             ["otplib", "npm:12.0.1"],\
-            ["passport", "npm:0.6.0"],\
+            ["passport", "npm:0.7.0"],\
             ["passport-github2", "npm:0.1.12"],\
             ["passport-headerapikey", "npm:1.2.2"],\
             ["passport-http", "npm:0.3.0"],\
-            ["passport-jwt", "npm:4.0.0"],\
+            ["passport-jwt", "npm:4.0.1"],\
             ["passport-local", "npm:1.0.0"],\
             ["prettier", "npm:3.3.3"],\
             ["redis", "npm:4.0.4"],\
@@ -4871,7 +4871,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@nestjs/common", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:10.4.15"],\
             ["@types/nestjs__common", null],\
             ["@types/passport", "npm:1.0.12"],\
-            ["passport", "npm:0.6.0"]\
+            ["passport", "npm:0.7.0"]\
           ],\
           "packagePeers": [\
             "@nestjs/common",\
@@ -8858,11 +8858,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["nest-winston", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:1.6.2"],\
             ["nodemailer", "npm:6.7.3"],\
             ["otplib", "npm:12.0.1"],\
-            ["passport", "npm:0.6.0"],\
+            ["passport", "npm:0.7.0"],\
             ["passport-github2", "npm:0.1.12"],\
             ["passport-headerapikey", "npm:1.2.2"],\
             ["passport-http", "npm:0.3.0"],\
-            ["passport-jwt", "npm:4.0.0"],\
+            ["passport-jwt", "npm:4.0.1"],\
             ["passport-local", "npm:1.0.0"],\
             ["prettier", "npm:3.3.3"],\
             ["redis", "npm:4.0.4"],\
@@ -13661,23 +13661,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["jsonwebtoken", [\
-        ["npm:8.5.1", {\
-          "packageLocation": "./.yarn/cache/jsonwebtoken-npm-8.5.1-c007670b76-93c9e3f23c.zip/node_modules/jsonwebtoken/",\
-          "packageDependencies": [\
-            ["jsonwebtoken", "npm:8.5.1"],\
-            ["jws", "npm:3.2.2"],\
-            ["lodash.includes", "npm:4.3.0"],\
-            ["lodash.isboolean", "npm:3.0.3"],\
-            ["lodash.isinteger", "npm:4.0.4"],\
-            ["lodash.isnumber", "npm:3.0.3"],\
-            ["lodash.isplainobject", "npm:4.0.6"],\
-            ["lodash.isstring", "npm:4.0.1"],\
-            ["lodash.once", "npm:4.1.1"],\
-            ["ms", "npm:2.1.3"],\
-            ["semver", "npm:5.7.1"]\
-          ],\
-          "linkType": "HARD"\
-        }],\
         ["npm:9.0.2", {\
           "packageLocation": "./.yarn/cache/jsonwebtoken-npm-9.0.2-42c6b14d02-fc739a6a8b.zip/node_modules/jsonwebtoken/",\
           "packageDependencies": [\
@@ -15157,10 +15140,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["passport", [\
-        ["npm:0.6.0", {\
-          "packageLocation": "./.yarn/cache/passport-npm-0.6.0-0a57682d5b-ef932ad671.zip/node_modules/passport/",\
+        ["npm:0.7.0", {\
+          "packageLocation": "./.yarn/cache/passport-npm-0.7.0-df02531736-5080b46df2.zip/node_modules/passport/",\
           "packageDependencies": [\
-            ["passport", "npm:0.6.0"],\
+            ["passport", "npm:0.7.0"],\
             ["passport-strategy", "npm:1.0.0"],\
             ["pause", "npm:0.0.1"],\
             ["utils-merge", "npm:1.0.1"]\
@@ -15200,11 +15183,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["passport-jwt", [\
-        ["npm:4.0.0", {\
-          "packageLocation": "./.yarn/cache/passport-jwt-npm-4.0.0-1bcfa2e3a3-d0499ebb81.zip/node_modules/passport-jwt/",\
+        ["npm:4.0.1", {\
+          "packageLocation": "./.yarn/cache/passport-jwt-npm-4.0.1-2841eea09e-0669d5bf8f.zip/node_modules/passport-jwt/",\
           "packageDependencies": [\
-            ["passport-jwt", "npm:4.0.0"],\
-            ["jsonwebtoken", "npm:8.5.1"],\
+            ["passport-jwt", "npm:4.0.1"],\
+            ["jsonwebtoken", "npm:9.0.2"],\
             ["passport-strategy", "npm:1.0.0"]\
           ],\
           "linkType": "HARD"\
@@ -16153,13 +16136,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["semver", [\
-        ["npm:5.7.1", {\
-          "packageLocation": "./.yarn/cache/semver-npm-5.7.1-40bcea106b-57fd0acfd0.zip/node_modules/semver/",\
-          "packageDependencies": [\
-            ["semver", "npm:5.7.1"]\
-          ],\
-          "linkType": "HARD"\
-        }],\
         ["npm:5.7.2", {\
           "packageLocation": "./.yarn/cache/semver-npm-5.7.2-938ee91eaa-fb4ab5e0dd.zip/node_modules/semver/",\
           "packageDependencies": [\
