@@ -32,7 +32,7 @@ jobs:
           file: ./backend/Dockerfile
           push: true
           cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-to: type=gha,mode=max,key=cache-${{ github.run_id }}
           tags: ghcr.io/${{ github.repository_owner }}/blog-api-server:latest
 
       - name: Configure AWS credential
