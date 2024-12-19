@@ -111,7 +111,7 @@
         "@golevelup/ts-jest": "^0.6.1",
         "@jest/globals": "^29.7.0",
         "@johanblumenberg/ts-mockito": "^1.0.45",
-        "@nestjs/cli": "^10.4.9",
+        "@nestjs/cli": "10.3.2",
         "@nestjs/schematics": "^10.2.3",
         "@nestjs/testing": "^10.4.15",
         "@types/cookie-parser": "^1.4.8",
@@ -176,5 +176,5 @@
             "test/(.*)": "<rootDir>/test/$1"
         }
     },
-    "packageManager": "yarn@4.5.3"
+    "packageManager": "yarn@3.6.3"
 }
