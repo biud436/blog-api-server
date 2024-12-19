@@ -1,4 +1,4 @@
-FROM node:22.10.0-alpine as builder
+FROM node:22.12.0-alpine as builder
 ENV NODE_ENV production
 
 RUN apk --no-cache add --virtual .builds-deps build-base python3
@@ -12,7 +12,7 @@ COPY . .
 RUN yarn install
 RUN yarn build
 
-FROM node:22.10.0-alpine
+FROM node:22.12.0-alpine
 
 WORKDIR /app
 
