@@ -71,7 +71,7 @@
         "hbs": "^4.2.0",
         "helmet": "^5.1.0",
         "inquirer": "^8.2.0",
-        "joi": "^17.7.0",
+        "joi": "^17.13.3",
         "jsonwebtoken": "^9.0.2",
         "lodash": "^4.17.21",
         "markdown-to-text": "^0.1.1",

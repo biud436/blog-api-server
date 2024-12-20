@@ -13,7 +13,7 @@ export class LoginMiddleware implements NestMiddleware {
 
         const accessToken = req.cookies['access_token'];
         if (!accessToken) {
-            res.redirect('/login', 302);
+            res.redirect('/login');
             return;
         }
 
