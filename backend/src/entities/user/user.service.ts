@@ -18,8 +18,6 @@ export type UserLoginValidationInfo = {
     >;
 };
 
-type Optional<T> = { [P in keyof T]?: T[P] };
-
 @Injectable()
 export class UserService {
     constructor(
@@ -82,17 +80,6 @@ export class UserService {
             .andWhere('user.isValid = :isValid', { isValid: true })
             .andWhere('admins.id IS NOT NULL')
             .getOne();
-
-        return item;
-
-        // const item = await this.userRepository.findOne({
-        //     relations: ['profile', 'admins'],
-        //     where: {
-        //         username,
-        //         isValid: true,
-        //         admins: Not(IsNull()),
-        //     },
-        // });
 
         return item;
     }

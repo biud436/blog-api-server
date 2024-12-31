@@ -1,11 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
-import {
-    DataSource,
-    EntitySubscriberInterface,
-    EventSubscriber,
-    InsertEvent,
-} from 'typeorm';
+import { DataSource, EntitySubscriberInterface } from 'typeorm';
 import { User } from './entities/user.entity';
 
 @Injectable()
