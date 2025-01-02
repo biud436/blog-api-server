@@ -281,6 +281,62 @@ export class PostService {
         );
 
         if (!items) {
+            throw new BadRequestException({
+                name: 'NoPostException',
+                message: '포스트가 존재하지 않습니다.',
+            });
+        }
+
+        items.entities = items.entities.map((e) => {
+            e.content = e.isPrivate
+                ? '비공개 글입니다'
+                : e.content.slice(0, 30);
+            return plainToClass(Post, e);
+        });
+
+        return items;
+    }
+
+    /**
+     * 포스트 검색
+     *
+     * @param pageNumber 페이지 번호
+     * @param searchProperty 검색 타입
+     * @param searchQuery 검색 쿼리
+     * @returns
+     */
+    async searchPost(
+        pageNumber: number,
+        searchProperty: PostSearchProperty,
+        searchQuery: string,
+    ) {
+        const IS_PRIVATE = 0;
+
+        const qb = this.postRepository
+            .createQueryBuilder('post')
+            .select()
+            .leftJoinAndSelect('post.user', 'user')
+            .leftJoinAndSelect('post.category', 'category')
+            .leftJoinAndSelect('user.profile', 'profile')
+            .where('post.deletedAt IS NULL');
+
+        if (searchProperty === 'title') {
+            qb.andWhere('post.title LIKE :searchQuery', {
+                searchQuery: `%${searchQuery}%`,
+            });
+        } else if (searchProperty === 'content') {
+            qb.andWhere('post.content LIKE :searchQuery', {
+                searchQuery: `${searchQuery}%`,
+            });
+        }
+
+        qb.andWhere('post.isPrivate = :isPrivate', { isPrivate: IS_PRIVATE });
+
+        qb.orderBy('post.uploadDate', 'DESC');
+
+        const items = await this.paginationProvider.execute(qb, pageNumber);
+
+        if (!items) {
             throw new BadRequestException('포스트가 존재하지 않습니다.');
         }
 
@@ -361,58 +417,5 @@ export class PostService {
             PaginationGetStrategy.GET_MANY,
             PaginationStrategy.SKIP,
         );
-    }
-
-    /**
-     * 포스트 검색
-     *
-     * @param pageNumber 페이지 번호
-     * @param searchProperty 검색 타입
-     * @param searchQuery 검색 쿼리
-     * @returns
-     */
-    async searchPost(
-        pageNumber: number,
-        searchProperty: PostSearchProperty,
-        searchQuery: string,
-    ) {
-        const IS_PRIVATE = 0;
-
-        const qb = this.postRepository
-            .createQueryBuilder('post')
-            .select()
-            .leftJoinAndSelect('post.user', 'user')
-            .leftJoinAndSelect('post.category', 'category')
-            .leftJoinAndSelect('user.profile', 'profile')
-            .where('post.deletedAt IS NULL');
-
-        if (searchProperty === 'title') {
-            qb.andWhere('post.title LIKE :searchQuery', {
-                searchQuery: `%${searchQuery}%`,
-            });
-        } else if (searchProperty === 'content') {
-            qb.andWhere('post.content LIKE :searchQuery', {
-                searchQuery: `${searchQuery}%`,
-            });
-        }
-
-        qb.andWhere('post.isPrivate = :isPrivate', { isPrivate: IS_PRIVATE });
-
-        qb.orderBy('post.uploadDate', 'DESC');
-
-        const items = await this.paginationProvider.execute(qb, pageNumber);
-
-        if (!items) {
-            throw new BadRequestException('포스트가 존재하지 않습니다.');
-        }
-
-        items.entities = items.entities.map((e) => {
-            e.content = e.isPrivate
-                ? '비공개 글입니다'
-                : e.content.slice(0, 30);
-            return plainToClass(Post, e);
-        });
-
-        return items;
     }
 }

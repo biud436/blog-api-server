@@ -118,11 +118,13 @@ export class PostsService {
         searchProperty: PostSearchProperty,
         searchQuery: string,
     ) {
-        return this.postService.searchPost(
+        const items = await this.postService.searchPost(
             pageNumber,
             searchProperty,
             searchQuery,
         );
+
+        return items;
     }
 
     /**
