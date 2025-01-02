@@ -255,9 +255,8 @@ export class PostService {
             .where('post.deletedAt IS NULL');
 
         if (categoryId) {
-            const descendants = await this.categoryService.selectDescendants(
-                categoryId,
-            );
+            const descendants =
+                await this.categoryService.selectDescendants(categoryId);
 
             const ids = descendants.map((e) => e.id);
 
@@ -313,9 +312,8 @@ export class PostService {
             .where('post.deletedAt IS NULL');
 
         if (categoryId) {
-            const descendants = await this.categoryService.selectDescendants(
-                categoryId,
-            );
+            const descendants =
+                await this.categoryService.selectDescendants(categoryId);
 
             const ids = descendants.map((e) => e.id);
 
@@ -408,7 +406,12 @@ export class PostService {
             throw new BadRequestException('포스트가 존재하지 않습니다.');
         }
 
-        items.entities = items.entities.map((e) => plainToClass(Post, e));
+        items.entities = items.entities.map((e) => {
+            e.content = e.isPrivate
+                ? '비공개 글입니다'
+                : e.content.slice(0, 30);
+            return plainToClass(Post, e);
+        });
 
         return items;
     }

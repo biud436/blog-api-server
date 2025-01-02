@@ -106,9 +106,6 @@ export const SearchOption: { handleQuery: (query: string) => never | string } =
          * @returns
          */
         handleQuery: (query: string) => {
-            if (!validator.isString(query) || query.length === 0) {
-                throw new BadRequestException('검색어를 입력하세요.');
-            }
             if (query.split('').find((e) => ['%', '_'].includes(e))) {
                 throw new BadRequestException(
                     '검색어에 특수문자를 사용할 수 없습니다.',
