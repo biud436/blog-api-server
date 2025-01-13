@@ -113,7 +113,7 @@ const RAW_RUNTIME_STATE =
           ["moment", "npm:2.30.1"],\
           ["multer", "npm:1.4.5-lts.1"],\
           ["multer-s3", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:3.0.1"],\
-          ["mysql2", "npm:3.11.5"],\
+          ["mysql2", "npm:3.12.0"],\
           ["nest-winston", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:1.6.2"],\
           ["nodemailer", "npm:6.7.3"],\
           ["otplib", "npm:12.0.1"],\
@@ -8878,7 +8878,7 @@ const RAW_RUNTIME_STATE =
           ["moment", "npm:2.30.1"],\
           ["multer", "npm:1.4.5-lts.1"],\
           ["multer-s3", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:3.0.1"],\
-          ["mysql2", "npm:3.11.5"],\
+          ["mysql2", "npm:3.12.0"],\
           ["nest-winston", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:1.6.2"],\
           ["nodemailer", "npm:6.7.3"],\
           ["otplib", "npm:12.0.1"],\
@@ -14606,10 +14606,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["mysql2", [\
-      ["npm:3.11.5", {\
-        "packageLocation": "./.yarn/cache/mysql2-npm-3.11.5-79aa44e37b-912dc364f6.zip/node_modules/mysql2/",\
+      ["npm:3.12.0", {\
+        "packageLocation": "./.yarn/cache/mysql2-npm-3.12.0-e0c022a055-55faaa32ab.zip/node_modules/mysql2/",\
         "packageDependencies": [\
-          ["mysql2", "npm:3.11.5"],\
+          ["mysql2", "npm:3.12.0"],\
           ["aws-ssl-profiles", "npm:1.1.2"],\
           ["denque", "npm:2.1.0"],\
           ["generate-function", "npm:2.3.1"],\
@@ -17738,7 +17738,7 @@ const RAW_RUNTIME_STATE =
           ["mkdirp", "npm:2.1.6"],\
           ["mongodb", null],\
           ["mssql", null],\
-          ["mysql2", "npm:3.11.5"],\
+          ["mysql2", "npm:3.12.0"],\
           ["oracledb", null],\
           ["pg", null],\
           ["pg-native", null],\
