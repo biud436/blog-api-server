@@ -80,11 +80,11 @@ export class TransactionService implements OnModuleInit {
 
             const targetClass = isSingletone
                 ? (wrapper.instance.constructor as Type<any>)
-                : wrapper.metatype.prototype;
+                : wrapper.metatype?.prototype;
 
             const target = isSingletone
                 ? wrapper.instance
-                : wrapper.metatype.prototype;
+                : wrapper.metatype?.prototype;
 
             // if the target class is not marked as transactional zone, then skip it.
             if (!this.reflectManager.isTransactionZone(targetClass)) {
