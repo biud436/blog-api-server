@@ -91,7 +91,7 @@
         "passport-jwt": "^4.0.1",
         "passport-local": "^1.0.0",
         "redis": "^4",
-        "reflect-metadata": "^0.1.13",
+        "reflect-metadata": "^0.2.2",
         "rimraf": "^3.0.2",
         "rss": "^1.2.2",
         "rxjs": "^7.5.4",

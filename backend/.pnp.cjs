@@ -127,7 +127,7 @@ const RAW_RUNTIME_STATE =
           ["passport-local", "npm:1.0.0"],\
           ["prettier", "npm:3.3.3"],\
           ["redis", "npm:4.0.4"],\
-          ["reflect-metadata", "npm:0.1.13"],\
+          ["reflect-metadata", "npm:0.2.2"],\
           ["rimraf", "npm:3.0.2"],\
           ["rss", "npm:1.2.2"],\
           ["rxjs", "npm:7.5.5"],\
@@ -5015,7 +5015,7 @@ const RAW_RUNTIME_STATE =
           ["class-transformer", "npm:0.5.1"],\
           ["class-validator", "npm:0.13.2"],\
           ["iterare", "npm:1.2.1"],\
-          ["reflect-metadata", "npm:0.1.13"],\
+          ["reflect-metadata", "npm:0.2.2"],\
           ["rxjs", "npm:7.5.5"],\
           ["tslib", "npm:2.8.1"],\
           ["uid", "npm:2.0.2"]\
@@ -5088,7 +5088,7 @@ const RAW_RUNTIME_STATE =
           ["fast-safe-stringify", "npm:2.1.1"],\
           ["iterare", "npm:1.2.1"],\
           ["path-to-regexp", "npm:8.2.0"],\
-          ["reflect-metadata", "npm:0.1.13"],\
+          ["reflect-metadata", "npm:0.2.2"],\
           ["rxjs", "npm:7.5.5"],\
           ["tslib", "npm:2.8.1"],\
           ["uid", "npm:2.0.2"]\
@@ -5153,7 +5153,7 @@ const RAW_RUNTIME_STATE =
           ["@types/reflect-metadata", null],\
           ["class-transformer", "npm:0.5.1"],\
           ["class-validator", "npm:0.13.2"],\
-          ["reflect-metadata", "npm:0.1.13"]\
+          ["reflect-metadata", "npm:0.2.2"]\
         ],\
         "packagePeers": [\
           "@nestjs/common",\
@@ -5364,7 +5364,7 @@ const RAW_RUNTIME_STATE =
           ["js-yaml", "npm:4.1.0"],\
           ["lodash", "npm:4.17.21"],\
           ["path-to-regexp", "npm:8.2.0"],\
-          ["reflect-metadata", "npm:0.1.13"],\
+          ["reflect-metadata", "npm:0.2.2"],\
           ["swagger-ui-dist", "npm:5.18.2"]\
         ],\
         "packagePeers": [\
@@ -5436,7 +5436,7 @@ const RAW_RUNTIME_STATE =
           ["@types/nestjs__common", null],\
           ["@types/nestjs__core", null],\
           ["@types/reflect-metadata", null],\
-          ["reflect-metadata", "npm:0.1.13"]\
+          ["reflect-metadata", "npm:0.2.2"]\
         ],\
         "packagePeers": [\
           "@nestjs/common",\
@@ -5468,7 +5468,7 @@ const RAW_RUNTIME_STATE =
           ["@types/reflect-metadata", null],\
           ["@types/rxjs", null],\
           ["@types/typeorm", null],\
-          ["reflect-metadata", "npm:0.1.13"],\
+          ["reflect-metadata", "npm:0.2.2"],\
           ["rxjs", "npm:7.5.5"],\
           ["typeorm", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:0.3.20"]\
         ],\
@@ -9357,7 +9357,7 @@ const RAW_RUNTIME_STATE =
           ["passport-local", "npm:1.0.0"],\
           ["prettier", "npm:3.3.3"],\
           ["redis", "npm:4.0.4"],\
-          ["reflect-metadata", "npm:0.1.13"],\
+          ["reflect-metadata", "npm:0.2.2"],\
           ["rimraf", "npm:3.0.2"],\
           ["rss", "npm:1.2.2"],\
           ["rxjs", "npm:7.5.5"],\
@@ -16349,13 +16349,6 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["reflect-metadata", [\
-      ["npm:0.1.13", {\
-        "packageLocation": "./.yarn/cache/reflect-metadata-npm-0.1.13-c525998e20-732570da35.zip/node_modules/reflect-metadata/",\
-        "packageDependencies": [\
-          ["reflect-metadata", "npm:0.1.13"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
       ["npm:0.2.2", {\
         "packageLocation": "./.yarn/cache/reflect-metadata-npm-0.2.2-5e0bfac201-1c93f9ac79.zip/node_modules/reflect-metadata/",\
         "packageDependencies": [\
@@ -18348,7 +18341,7 @@ const RAW_RUNTIME_STATE =
           ["@types/reflect-metadata", null],\
           ["@types/typeorm", null],\
           ["cls-hooked", "npm:4.2.2"],\
-          ["reflect-metadata", "npm:0.1.13"],\
+          ["reflect-metadata", "npm:0.2.2"],\
           ["semver", "npm:7.6.3"],\
           ["typeorm", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:0.3.20"]\
         ],\
