@@ -102,7 +102,7 @@ const RAW_RUNTIME_STATE =
           ["express-basic-auth", "npm:1.2.1"],\
           ["express-mysql-session", "npm:2.1.8"],\
           ["express-session", "npm:1.17.3"],\
-          ["handlebars", "npm:4.7.7"],\
+          ["handlebars", "npm:4.7.8"],\
           ["hbs", "npm:4.2.0"],\
           ["helmet", "npm:5.1.0"],\
           ["inquirer", "npm:8.2.2"],\
@@ -9332,7 +9332,7 @@ const RAW_RUNTIME_STATE =
           ["express-basic-auth", "npm:1.2.1"],\
           ["express-mysql-session", "npm:2.1.8"],\
           ["express-session", "npm:1.17.3"],\
-          ["handlebars", "npm:4.7.7"],\
+          ["handlebars", "npm:4.7.8"],\
           ["hbs", "npm:4.2.0"],\
           ["helmet", "npm:5.1.0"],\
           ["inquirer", "npm:8.2.2"],\
@@ -12561,6 +12561,18 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/handlebars-npm-4.7.7-a9ccfabf80-617b1e689b.zip/node_modules/handlebars/",\
         "packageDependencies": [\
           ["handlebars", "npm:4.7.7"],\
+          ["minimist", "npm:1.2.6"],\
+          ["neo-async", "npm:2.6.2"],\
+          ["source-map", "npm:0.6.1"],\
+          ["uglify-js", "npm:3.15.3"],\
+          ["wordwrap", "npm:1.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:4.7.8", {\
+        "packageLocation": "./.yarn/cache/handlebars-npm-4.7.8-25244c2c82-bd528f4dd1.zip/node_modules/handlebars/",\
+        "packageDependencies": [\
+          ["handlebars", "npm:4.7.8"],\
           ["minimist", "npm:1.2.6"],\
           ["neo-async", "npm:2.6.2"],\
           ["source-map", "npm:0.6.1"],\
