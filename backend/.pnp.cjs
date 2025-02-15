@@ -83,7 +83,7 @@ const RAW_RUNTIME_STATE =
           ["@typescript-eslint/eslint-plugin", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:6.4.0"],\
           ["@typescript-eslint/parser", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:6.4.0"],\
           ["axios", "npm:1.7.9"],\
-          ["bcrypt", "npm:5.1.0"],\
+          ["bcrypt", "npm:5.1.1"],\
           ["cache-manager", "npm:6.3.2"],\
           ["cache-manager-redis-store", "npm:3.0.1"],\
           ["chalk", "npm:4.1.2"],\
@@ -9189,10 +9189,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["bcrypt", [\
-      ["npm:5.1.0", {\
-        "packageLocation": "./.yarn/unplugged/bcrypt-npm-5.1.0-2a4230b3eb/node_modules/bcrypt/",\
+      ["npm:5.1.1", {\
+        "packageLocation": "./.yarn/unplugged/bcrypt-npm-5.1.1-434d47322a/node_modules/bcrypt/",\
         "packageDependencies": [\
-          ["bcrypt", "npm:5.1.0"],\
+          ["bcrypt", "npm:5.1.1"],\
           ["@mapbox/node-pre-gyp", "npm:1.0.11"],\
           ["node-addon-api", "npm:5.1.0"]\
         ],\
@@ -9313,7 +9313,7 @@ const RAW_RUNTIME_STATE =
           ["@typescript-eslint/eslint-plugin", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:6.4.0"],\
           ["@typescript-eslint/parser", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:6.4.0"],\
           ["axios", "npm:1.7.9"],\
-          ["bcrypt", "npm:5.1.0"],\
+          ["bcrypt", "npm:5.1.1"],\
           ["cache-manager", "npm:6.3.2"],\
           ["cache-manager-redis-store", "npm:3.0.1"],\
           ["chalk", "npm:4.1.2"],\

@@ -52,7 +52,7 @@
         "@types/passport-local": "^1.0.34",
         "@types/rss": "^0.0.30",
         "axios": "^1.7.9",
-        "bcrypt": "^5.1.0",
+        "bcrypt": "^5.1.1",
         "cache-manager": "^6.3.2",
         "cache-manager-redis-store": "^3.0.1",
         "chalk": "^4",
