@@ -4,9 +4,9 @@ import { Request } from 'express';
 
 @Injectable()
 export class SessionAuthGuard extends AuthGuard('session') {
-    async canActivate(context: ExecutionContext) {
-        const request = context.switchToHttp().getRequest() as Request;
+  async canActivate(context: ExecutionContext) {
+    const request = context.switchToHttp().getRequest() as Request;
 
-        return request.isAuthenticated();
-    }
+    return request.isAuthenticated();
+  }
 }

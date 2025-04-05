@@ -6,8 +6,8 @@ import { PostCommentModule } from 'src/entities/comment/post-comment.module';
 import { UserModule } from 'src/entities/user/user.module';
 
 @Module({
-    imports: [AuthModule, UserModule, PostCommentModule],
-    controllers: [CommentController],
-    providers: [CommentService],
+  imports: [AuthModule, UserModule, PostCommentModule],
+  controllers: [CommentController],
+  providers: [CommentService],
 })
 export class CommentModule {}

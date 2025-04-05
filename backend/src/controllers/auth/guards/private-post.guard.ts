@@ -1,9 +1,9 @@
 import {
-    CanActivate,
-    ExecutionContext,
-    Inject,
-    Injectable,
-    Optional,
+  CanActivate,
+  ExecutionContext,
+  Inject,
+  Injectable,
+  Optional,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
@@ -18,52 +18,50 @@ import { ANONYMOUS_ID } from 'src/common/decorators/authorization/anonymous.deco
  */
 @Injectable()
 export class PrivatePostGuard implements CanActivate {
-    constructor(
-        private reflector: Reflector,
-        private readonly jwtService: JwtService,
-    ) {}
+  constructor(
+    private reflector: Reflector,
+    private readonly jwtService: JwtService,
+  ) {}
 
-    async canActivate(context: ExecutionContext) {
-        const requiredRoles = this.reflector.get<boolean>(
-            ANONYMOUS_ID,
-            context.getHandler(),
-        );
+  async canActivate(context: ExecutionContext) {
+    const requiredRoles = this.reflector.get<boolean>(
+      ANONYMOUS_ID,
+      context.getHandler(),
+    );
 
-        if (!requiredRoles) {
-            return true;
-        }
-
-        const request = this.getRequest<Request>(context);
-
-        let user: Express.Request['user'] = undefined;
-
-        try {
-            const token = this.getToken(request);
-            user = this.jwtService.verify(token) ?? null;
-        } catch (e: any) {
-            // empty
-        }
-
-        request.user = user;
-
-        return true;
+    if (!requiredRoles) {
+      return true;
     }
 
-    protected getRequest<T>(context: ExecutionContext): T {
-        const request = context.switchToHttp().getRequest();
-        return request;
+    const request = this.getRequest<Request>(context);
+
+    let user: Express.Request['user'] = undefined;
+
+    try {
+      const token = this.getToken(request);
+      user = this.jwtService.verify(token) ?? null;
+    } catch (e: any) {
+      // empty
     }
 
-    protected getToken(request: {
-        cookies: { [key: string]: string };
-    }): string {
-        const token = request.cookies['access_token'] ?? '';
+    request.user = user;
 
-        if (token === '') {
-            // empty
-            // console.warn('Token is empty. This user is anonymous.');
-        }
+    return true;
+  }
 
-        return token;
+  protected getRequest<T>(context: ExecutionContext): T {
+    const request = context.switchToHttp().getRequest();
+    return request;
+  }
+
+  protected getToken(request: { cookies: { [key: string]: string } }): string {
+    const token = request.cookies['access_token'] ?? '';
+
+    if (token === '') {
+      // empty
+      // console.warn('Token is empty. This user is anonymous.');
     }
+
+    return token;
+  }
 }

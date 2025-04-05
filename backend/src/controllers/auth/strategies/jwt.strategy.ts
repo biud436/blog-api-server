@@ -5,21 +5,21 @@ import { Strategy, ExtractJwt } from 'passport-jwt';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-    constructor(readonly configService: ConfigService) {
-        super({
-            jwtFromRequest: ExtractJwt.fromExtractors([
-                (req) => {
-                    const encodedToken = req?.cookies?.access_token;
+  constructor(readonly configService: ConfigService) {
+    super({
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (req) => {
+          const encodedToken = req?.cookies?.access_token;
 
-                    return encodedToken;
-                },
-            ]),
-            ignoreExpiration: false,
-            secretOrKey: configService.getOrThrow('JWT_SECRET'),
-        });
-    }
+          return encodedToken;
+        },
+      ]),
+      ignoreExpiration: false,
+      secretOrKey: configService.getOrThrow('JWT_SECRET'),
+    });
+  }
 
-    async validate(payload: any) {
-        return { user: payload.user, role: payload.role };
-    }
+  async validate(payload: any) {
+    return { user: payload.user, role: payload.role };
+  }
 }

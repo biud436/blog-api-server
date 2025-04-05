@@ -21,46 +21,46 @@ import { AesModule } from 'src/common/modules/aes/aes.module';
 import { ConnectInfoModule } from 'src/entities/connect-info/connect-info.module';
 
 @Module({
-    imports: [
-        UserModule,
-        ConfigModule,
-        AdminModule,
-        ProfileModule,
-        MicroServicesModule,
-        MailModule,
-        HttpModule,
-        ApiKeyModule,
-        PostsModule,
-        AesModule,
-        ConnectInfoModule,
-        PassportModule.register({ defaultStrategy: 'jwt', session: true }),
-        JwtModule.registerAsync({
-            imports: [ConfigModule],
-            inject: [ConfigService],
-            useFactory: async (configService: ConfigService) => ({
-                secret: configService.get('JWT_SECRET'),
-                signOptions: {
-                    expiresIn: configService.get('JWT_SECRET_EXPIRATION_TIME'),
-                    algorithm: 'HS384',
-                },
-            }),
-        }),
-    ],
-    controllers: [AuthController],
-    providers: [AuthService, ...AuthModule.strategies],
-    exports: [AuthService, JwtModule],
+  imports: [
+    UserModule,
+    ConfigModule,
+    AdminModule,
+    ProfileModule,
+    MicroServicesModule,
+    MailModule,
+    HttpModule,
+    ApiKeyModule,
+    PostsModule,
+    AesModule,
+    ConnectInfoModule,
+    PassportModule.register({ defaultStrategy: 'jwt', session: true }),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get('JWT_SECRET'),
+        signOptions: {
+          expiresIn: configService.get('JWT_SECRET_EXPIRATION_TIME'),
+          algorithm: 'HS384',
+        },
+      }),
+    }),
+  ],
+  controllers: [AuthController],
+  providers: [AuthService, ...AuthModule.strategies],
+  exports: [AuthService, JwtModule],
 })
 export class AuthModule {
-    /**
-     * 인증 전략을 정의합니다.
-     */
-    static get strategies() {
-        return [
-            BasicStrategy,
-            LocalStrategy,
-            JwtStrategy,
-            GithubStrategy,
-            SessionSerializer,
-        ];
-    }
+  /**
+   * 인증 전략을 정의합니다.
+   */
+  static get strategies() {
+    return [
+      BasicStrategy,
+      LocalStrategy,
+      JwtStrategy,
+      GithubStrategy,
+      SessionSerializer,
+    ];
+  }
 }

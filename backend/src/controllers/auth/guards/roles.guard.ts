@@ -1,10 +1,10 @@
 import {
-    CanActivate,
-    ExecutionContext,
-    forwardRef,
-    Inject,
-    Injectable,
-    Logger,
+  CanActivate,
+  ExecutionContext,
+  forwardRef,
+  Inject,
+  Injectable,
+  Logger,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
@@ -15,40 +15,40 @@ import { Request } from 'express';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-    private logger: Logger = new Logger(RolesGuard.name);
+  private logger: Logger = new Logger(RolesGuard.name);
 
-    constructor(
-        private reflector: Reflector,
-        @Inject(forwardRef(() => AuthService)) private authService: AuthService,
-    ) {}
+  constructor(
+    private reflector: Reflector,
+    @Inject(forwardRef(() => AuthService)) private authService: AuthService,
+  ) {}
 
-    async canActivate(context: ExecutionContext): Promise<boolean> {
-        const requiredRoles = this.reflector.getAllAndOverride<Role[]>(
-            ROLES_KEY,
-            [context.getHandler(), context.getClass()],
-        );
-        if (!requiredRoles) {
-            return true;
-        }
-        const req = context.switchToHttp().getRequest() as Request;
-
-        // 토큰을 추출합니다.
-        const token = req?.cookies?.access_token;
-        // 특정 API를 제외합니다.
-        const isIgnoreJwt = Reflect.getOwnMetadata(
-            'ignoreJwt',
-            context.getHandler(),
-        );
-
-        if (isIgnoreJwt) {
-            return true;
-        }
-
-        const decoded = await this.authService.vertifyAsync(token);
-        if (!decoded) {
-            return false;
-        }
-
-        return requiredRoles.some((role) => decoded.role?.includes(role));
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const requiredRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    if (!requiredRoles) {
+      return true;
     }
+    const req = context.switchToHttp().getRequest() as Request;
+
+    // 토큰을 추출합니다.
+    const token = req?.cookies?.access_token;
+    // 특정 API를 제외합니다.
+    const isIgnoreJwt = Reflect.getOwnMetadata(
+      'ignoreJwt',
+      context.getHandler(),
+    );
+
+    if (isIgnoreJwt) {
+      return true;
+    }
+
+    const decoded = await this.authService.vertifyAsync(token);
+    if (!decoded) {
+      return false;
+    }
+
+    return requiredRoles.some((role) => decoded.role?.includes(role));
+  }
 }
