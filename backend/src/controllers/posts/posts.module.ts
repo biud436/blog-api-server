@@ -11,17 +11,17 @@ import { PostCommentModule } from 'src/entities/comment/post-comment.module';
 import { CategoryCommand } from './commands/category.command';
 
 @Module({
-    imports: [
-        PostModule,
-        CategoryModule,
-        MicroServicesModule,
-        UserModule,
-        forwardRef(() => AuthModule),
-        ConfigModule,
-        PostCommentModule,
-    ],
-    controllers: [PostsController],
-    providers: [PostsService, CategoryCommand],
-    exports: [PostsService],
+  imports: [
+    PostModule,
+    CategoryModule,
+    MicroServicesModule,
+    UserModule,
+    forwardRef(() => AuthModule),
+    ConfigModule,
+    PostCommentModule,
+  ],
+  controllers: [PostsController],
+  providers: [PostsService, CategoryCommand],
+  exports: [PostsService],
 })
 export class PostsModule {}

@@ -12,40 +12,40 @@ import { ImageDeleteCommandImpl } from './commands/image-delete.command';
 
 @Injectable()
 export class ImageService {
-    constructor(
-        private readonly createCommand: ImageCreateCommandImpl,
-        private readonly tempFileGetterCommand: ImageTempFileGetterCommandImpl,
-        private readonly findByIdsCommand: ImageFindByIdCommandImpl,
-        private readonly updatePostIdCommand: ImageUpdatePostIdCommandImpl,
-        private readonly uploadCommand: ImageUploadCommandImpl,
-        private readonly deleteCommand: ImageDeleteCommandImpl,
-    ) {}
+  constructor(
+    private readonly createCommand: ImageCreateCommandImpl,
+    private readonly tempFileGetterCommand: ImageTempFileGetterCommandImpl,
+    private readonly findByIdsCommand: ImageFindByIdCommandImpl,
+    private readonly updatePostIdCommand: ImageUpdatePostIdCommandImpl,
+    private readonly uploadCommand: ImageUploadCommandImpl,
+    private readonly deleteCommand: ImageDeleteCommandImpl,
+  ) {}
 
-    async create(createImageDto: CreateImageDto) {
-        return this.createCommand.execute(createImageDto);
-    }
+  async create(createImageDto: CreateImageDto) {
+    return this.createCommand.execute(createImageDto);
+  }
 
-    async getTempImageFileName(filename: string, username: string) {
-        return this.tempFileGetterCommand.execute(filename, username);
-    }
+  async getTempImageFileName(filename: string, username: string) {
+    return this.tempFileGetterCommand.execute(filename, username);
+  }
 
-    async findByIds(ids: number[]) {
-        return this.findByIdsCommand.execute(ids);
-    }
+  async findByIds(ids: number[]) {
+    return this.findByIdsCommand.execute(ids);
+  }
 
-    async updatePostId(
-        postId: number,
-        imageIds: number[],
-        queuryRunner: QueryRunner,
-    ) {
-        return this.updatePostIdCommand.execute(postId, imageIds, queuryRunner);
-    }
+  async updatePostId(
+    postId: number,
+    imageIds: number[],
+    queuryRunner: QueryRunner,
+  ) {
+    return this.updatePostIdCommand.execute(postId, imageIds, queuryRunner);
+  }
 
-    async deleteByIds(ids: number[]) {
-        return this.deleteCommand.execute(ids);
-    }
+  async deleteByIds(ids: number[]) {
+    return this.deleteCommand.execute(ids);
+  }
 
-    async upload(userId: number, files: MulterS3File[], dto: S3ImageUploadDto) {
-        return this.uploadCommand.execute(userId, files, dto);
-    }
+  async upload(userId: number, files: MulterS3File[], dto: S3ImageUploadDto) {
+    return this.uploadCommand.execute(userId, files, dto);
+  }
 }

@@ -10,37 +10,37 @@ export type RSSFeed = any;
 
 @Injectable()
 export class RssService {
-    constructor(
-        private readonly postService: PostService,
-        @Inject(RSS_MODULE_OPTIONS) private readonly options: RssModuleOptions,
-    ) {}
+  constructor(
+    private readonly postService: PostService,
+    @Inject(RSS_MODULE_OPTIONS) private readonly options: RssModuleOptions,
+  ) {}
 
-    async getFeeds(): Promise<string> {
-        const feed = this.createFeed(this.options);
+  async getFeeds(): Promise<string> {
+    const feed = this.createFeed(this.options);
 
-        const { entities: posts } = await this.postService.getFeed(1);
+    const { entities: posts } = await this.postService.getFeed(1);
 
-        for (const post of posts) {
-            feed.item(this.createFeedItem(post));
-        }
-
-        return feed.xml();
+    for (const post of posts) {
+      feed.item(this.createFeedItem(post));
     }
 
-    private createFeed(options: RssModuleOptions): RSS {
-        return new RSS({
-            ...options,
-        });
-    }
+    return feed.xml();
+  }
 
-    private createFeedItem(post: Post): FeedItem {
-        const { postUrl, author } = this.options;
-        return FeedItem.of({
-            title: post.title,
-            description: post.previewContent ?? '',
-            url: `${postUrl}/${post.id}`,
-            date: post.uploadDate.toUTCString().replace('GMT', '+0000'),
-            author,
-        });
-    }
+  private createFeed(options: RssModuleOptions): RSS {
+    return new RSS({
+      ...options,
+    });
+  }
+
+  private createFeedItem(post: Post): FeedItem {
+    const { postUrl, author } = this.options;
+    return FeedItem.of({
+      title: post.title,
+      description: post.previewContent ?? '',
+      url: `${postUrl}/${post.id}`,
+      date: post.uploadDate.toUTCString().replace('GMT', '+0000'),
+      author,
+    });
+  }
 }

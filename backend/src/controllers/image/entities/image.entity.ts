@@ -1,11 +1,11 @@
 import { Exclude } from 'class-transformer';
 import { Post } from 'src/entities/post/entities/post.entity';
 import {
-    Column,
-    Entity,
-    JoinColumn,
-    ManyToOne,
-    PrimaryGeneratedColumn,
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 /**
@@ -14,59 +14,59 @@ import {
  */
 @Entity()
 export class Image {
-    @PrimaryGeneratedColumn()
-    id!: number;
+  @PrimaryGeneratedColumn()
+  id!: number;
 
-    @Column({
-        nullable: false,
-    })
-    originalname!: string;
+  @Column({
+    nullable: false,
+  })
+  originalname!: string;
 
-    @Column({
-        nullable: false,
-    })
-    @Exclude()
-    encoding!: string;
+  @Column({
+    nullable: false,
+  })
+  @Exclude()
+  encoding!: string;
 
-    @Column({
-        nullable: false,
-    })
-    mimetype!: string;
+  @Column({
+    nullable: false,
+  })
+  mimetype!: string;
 
-    @Column({
-        nullable: false,
-    })
-    @Exclude()
-    destination!: string;
+  @Column({
+    nullable: false,
+  })
+  @Exclude()
+  destination!: string;
 
-    @Column({
-        length: 256,
-        nullable: false,
-    })
-    @Exclude()
-    filename!: string;
+  @Column({
+    length: 256,
+    nullable: false,
+  })
+  @Exclude()
+  filename!: string;
 
-    @Column({
-        length: 256,
-        nullable: false,
-    })
-    path!: string;
+  @Column({
+    length: 256,
+    nullable: false,
+  })
+  path!: string;
 
-    @Column({
-        nullable: false,
-    })
-    size!: number;
+  @Column({
+    nullable: false,
+  })
+  size!: number;
 
-    @Column({
-        nullable: true,
-        name: 'post_id',
-    })
-    postId!: number;
+  @Column({
+    nullable: true,
+    name: 'post_id',
+  })
+  postId!: number;
 
-    @ManyToOne(() => Post, (post) => post.images, {
-        createForeignKeyConstraints: false,
-        nullable: true,
-    })
-    @JoinColumn({ name: 'post_id', referencedColumnName: 'id' })
-    post!: Post;
+  @ManyToOne(() => Post, (post) => post.images, {
+    createForeignKeyConstraints: false,
+    nullable: true,
+  })
+  @JoinColumn({ name: 'post_id', referencedColumnName: 'id' })
+  post!: Post;
 }
