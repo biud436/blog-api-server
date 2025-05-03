@@ -32,7 +32,7 @@ export class RssService {
   private createFeed(options: RssModuleOptions): RSS {
     return new RSS({
       ...options,
-      language: 'ko',
+      language: 'ko-KR',
     });
   }
 
@@ -52,6 +52,9 @@ export class RssService {
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&apos;');
+
+    // UTF-8로 인코딩
+    safeDescription = encodeURIComponent(safeDescription);
 
     return FeedItem.of({
       title: post.title,

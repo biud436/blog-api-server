@@ -15,7 +15,8 @@ export class RssController {
    * @tag RSS
    */
   @Get()
-  @Header('Content-Type', 'application/rss+xml; charset=utf-8')
+  @Header('Content-Type', 'application/xml; charset=utf-8')
+  // @Header('Content-Type', 'application/rss+xml; charset=utf-8')
   @CacheTTL(10)
   @ApiNotebook({
     operation: {
