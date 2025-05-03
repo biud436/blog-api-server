@@ -24,20 +24,38 @@ export class RssService {
       feed.item(this.createFeedItem(post));
     }
 
-    return feed.xml();
+    return feed.xml({
+      indent: true,
+    });
   }
 
   private createFeed(options: RssModuleOptions): RSS {
     return new RSS({
       ...options,
+      language: 'ko',
     });
   }
 
   private createFeedItem(post: Post): FeedItem {
     const { postUrl, author } = this.options;
+
+    // 더 철저한 특수 문자 이스케이핑 처리
+    let safeDescription = post.previewContent ?? '';
+
+    // CDATA 종료 태그 처리
+    safeDescription = safeDescription.replace(/\]\]>/g, ']]&gt;');
+
+    // XML 특수 문자 처리
+    safeDescription = safeDescription
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&apos;');
+
     return FeedItem.of({
       title: post.title,
-      description: post.previewContent ?? '',
+      description: safeDescription,
       url: `${postUrl}/${post.id}`,
       date: post.uploadDate.toUTCString().replace('GMT', '+0000'),
       author,
