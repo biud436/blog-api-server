@@ -3,7 +3,7 @@ import { Feed } from 'feed'; // feed 라이브러리 임포트
 import { RSS_MODULE_OPTIONS } from './rss.constant';
 import { RssModuleOptions } from './interfaces/rss-option.interface';
 import { PostService } from 'src/entities/post/post.service';
-import { Post } from 'src/entities/post/entities/post.entity';
+import iconv from 'iconv-lite';
 
 @Injectable()
 export class RssService {
@@ -40,6 +40,12 @@ export class RssService {
       // HTML 태그 제거 및 특수 문자 처리
       let safeDescription = post.previewContent ?? '';
       safeDescription = safeDescription.replace(/<[^>]*>/g, '');
+
+      const buffer = iconv.encode(safeDescription, 'utf8');
+      safeDescription = iconv.decode(buffer, 'utf8');
+
+      // 문제가 있는 특수 문자 제거
+      safeDescription = safeDescription.replace(/[\uD800-\uDFFF]/g, '');
 
       // 설명 길이 제한 (선택 사항)
       safeDescription = safeDescription.substring(0, 200);

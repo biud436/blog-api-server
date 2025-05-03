@@ -106,6 +106,7 @@ const RAW_RUNTIME_STATE =
           ["handlebars", "npm:4.7.8"],\
           ["hbs", "npm:4.2.0"],\
           ["helmet", "npm:5.1.0"],\
+          ["iconv-lite", "npm:0.6.3"],\
           ["inquirer", "npm:8.2.2"],\
           ["jest", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:27.0.6"],\
           ["joi", "npm:17.13.3"],\
@@ -9337,6 +9338,7 @@ const RAW_RUNTIME_STATE =
           ["handlebars", "npm:4.7.8"],\
           ["hbs", "npm:4.2.0"],\
           ["helmet", "npm:5.1.0"],\
+          ["iconv-lite", "npm:0.6.3"],\
           ["inquirer", "npm:8.2.2"],\
           ["jest", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:27.0.6"],\
           ["joi", "npm:17.13.3"],\
