@@ -3,20 +3,20 @@ import { ApiExcludeEndpoint } from '@nestjs/swagger';
 
 @Controller()
 export class AppController {
-    @Get('/')
-    @ApiExcludeEndpoint()
-    index() {
-        return { message: 'Hello world!' };
-    }
+  @Get('/')
+  @ApiExcludeEndpoint()
+  index() {
+    return { message: 'Hello world!' };
+  }
 
-    /**
-     * @internal
-     * @returns
-     */
-    @Render('login')
-    @Get('/login')
-    @ApiExcludeEndpoint()
-    login() {
-        return { message: 'Hello world!' };
-    }
+  /**
+   * @internal
+   * @returns
+   */
+  @Render('login')
+  @Get('/login')
+  @ApiExcludeEndpoint()
+  login() {
+    return { message: 'Hello world!' };
+  }
 }

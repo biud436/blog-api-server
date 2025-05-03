@@ -49,113 +49,107 @@ import { CommentModule } from './controllers/comment/comment.module';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 
 @Module({
-    imports: [
-        TypeOrmModule.forRootAsync({
-            imports: [ConfigModule],
-            useFactory: async (
-                configService: ConfigService,
-            ): Promise<TypeOrmModuleOptions> => {
-                const config = dbconnect(configService);
-                if (AppModule.isDelvelopment()) {
-                    return config.dev;
-                }
+  imports: [
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (
+        configService: ConfigService,
+      ): Promise<TypeOrmModuleOptions> => {
+        const config = dbconnect(configService);
+        if (AppModule.isDelvelopment()) {
+          return config.dev;
+        }
 
-                return config.production;
-            },
-            inject: [ConfigService],
-            // dataSourceFactory: async (options?: DataSourceOptions) => {
-            //     const instance = DataSourceProxy.getInstance(options);
-            //     return instance.create();
-            // },
-            async dataSourceFactory(options) {
-                if (!options) {
-                    throw new Error('Invalid options passed');
-                }
+        return config.production;
+      },
+      inject: [ConfigService],
+      async dataSourceFactory(options) {
+        if (!options) {
+          throw new Error('Invalid options passed');
+        }
 
-                return addTransactionalDataSource(new DataSource(options));
-            },
-        }),
-        TransactionModule,
-        CacheModule.registerAsync(redisCacheConfig),
-        ConfigModule.forRoot({
-            envFilePath: <EnvFileMap>(
-                (AppModule.isDelvelopment() ? '.development.env' : '.env')
-            ),
-            isGlobal: true,
-            cache: true,
-        }),
-        ServeStaticModule.forRoot({
-            rootPath: join(__dirname, '..', 'public'),
-        }),
-        ScheduleModule.forRoot(),
-        ThrottlerModule.forRoot([
-            {
-                ttl: 60 * 1000,
-                limit: 40,
-            },
-        ]),
-        HttpModule,
-        OrmModule,
-        UserModule,
-        ProfileModule,
-        AuthModule,
-        PostModule,
-        AdminModule,
-        PostsModule,
-        MailModule,
-        MicroServicesModule,
-        ImageModule,
-        AesModule,
-        PostViewCountModule,
-        ApiModule,
-        AdminControllerModule,
-        ApiKeyModule,
-        CategoryModule,
-        CommentModule,
-        CategoryGroupModule,
-        BlogMetaDataModule,
-        RssModule.register({
-            title: '어진석의 블로그',
-            description: '어진석의 블로그입니다.',
-            author: '어진석',
-        }),
-        TypeOrmExModule,
-        MyBlogConfigModule.register({
-            isGlobal: true,
-        }),
-        XMulterModule.forRoot({
-            dest: !AppModule.isDelvelopment()
-                ? '/usr/src/app/upload/'
-                : './upload',
-        }),
-        ConnectInfoModule,
-        TaskModule,
-        PaginationModule,
-        PostCommentModule,
-    ],
-    controllers: [AppController],
-    providers: [
-        {
-            provide: APP_GUARD,
-            useClass: RolesGuard,
-        },
-        {
-            provide: APP_GUARD,
-            useClass: PrivatePostGuard,
-        },
-        {
-            provide: APP_GUARD,
-            useClass: ThrottlerBehindProxyGuard,
-        },
-        {
-            provide: APP_FILTER,
-            useClass: AllExceptionFilter,
-        },
-    ],
-    exports: [ThrottlerModule, CacheModule],
+        return addTransactionalDataSource(new DataSource(options));
+      },
+    }),
+    TransactionModule,
+    CacheModule.registerAsync(redisCacheConfig),
+    ConfigModule.forRoot({
+      envFilePath: <EnvFileMap>(
+        (AppModule.isDelvelopment() ? '.development.env' : '.env')
+      ),
+      isGlobal: true,
+      cache: true,
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+    }),
+    ScheduleModule.forRoot(),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60 * 1000,
+        limit: 40,
+      },
+    ]),
+    HttpModule,
+    OrmModule,
+    UserModule,
+    ProfileModule,
+    AuthModule,
+    PostModule,
+    AdminModule,
+    PostsModule,
+    MailModule,
+    MicroServicesModule,
+    ImageModule,
+    AesModule,
+    PostViewCountModule,
+    ApiModule,
+    AdminControllerModule,
+    ApiKeyModule,
+    CategoryModule,
+    CommentModule,
+    CategoryGroupModule,
+    BlogMetaDataModule,
+    RssModule.register({
+      title: '어진석의 블로그',
+      description: '어진석의 블로그입니다.',
+      author: '어진석',
+    }),
+    TypeOrmExModule,
+    MyBlogConfigModule.register({
+      isGlobal: true,
+    }),
+    XMulterModule.forRoot({
+      dest: !AppModule.isDelvelopment() ? '/usr/src/app/upload/' : './upload',
+    }),
+    ConnectInfoModule,
+    TaskModule,
+    PaginationModule,
+    PostCommentModule,
+  ],
+  controllers: [AppController],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: PrivatePostGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerBehindProxyGuard,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionFilter,
+    },
+  ],
+  exports: [ThrottlerModule, CacheModule],
 })
 export class AppModule {
-    public static isDelvelopment(): boolean {
-        return process.env.NODE_ENV !== 'production';
-    }
+  public static isDelvelopment(): boolean {
+    return process.env.NODE_ENV !== 'production';
+  }
 }
