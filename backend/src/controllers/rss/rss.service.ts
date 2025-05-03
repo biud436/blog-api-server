@@ -1,12 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import RSS from 'rss';
+import { Feed } from 'feed'; // feed 라이브러리 임포트
 import { RSS_MODULE_OPTIONS } from './rss.constant';
 import { RssModuleOptions } from './interfaces/rss-option.interface';
 import { PostService } from 'src/entities/post/post.service';
 import { Post } from 'src/entities/post/entities/post.entity';
-import { FeedItem } from './rss-feed-item';
-
-export type RSSFeed = any;
 
 @Injectable()
 export class RssService {
@@ -16,52 +13,56 @@ export class RssService {
   ) {}
 
   async getFeeds(): Promise<string> {
-    const feed = this.createFeed(this.options);
+    const { title, description, site_url, postUrl, author } = this.options;
+
+    // Feed 인스턴스 생성
+    const feed = new Feed({
+      title: title,
+      description: description,
+      id: site_url,
+      link: site_url,
+      language: 'ko',
+      favicon: `${site_url}/favicon.ico`,
+      copyright: `All rights reserved ${new Date().getFullYear()}`,
+      updated: new Date(),
+      feedLinks: {
+        rss: `${site_url}/rss`,
+      },
+      author: {
+        name: author,
+        link: site_url,
+      },
+    });
 
     const { entities: posts } = await this.postService.getFeed(1);
 
     for (const post of posts) {
-      feed.item(this.createFeedItem(post));
+      // HTML 태그 제거 및 특수 문자 처리
+      let safeDescription = post.previewContent ?? '';
+      safeDescription = safeDescription.replace(/<[^>]*>/g, '');
+
+      // 설명 길이 제한 (선택 사항)
+      safeDescription = safeDescription.substring(0, 200);
+      if ((post.previewContent?.length || 0) > 200) {
+        safeDescription += '...';
+      }
+
+      feed.addItem({
+        title: post.title,
+        id: `${postUrl}/${post.id}`,
+        link: `${postUrl}/${post.id}`,
+        description: safeDescription,
+        date: post.uploadDate,
+        author: [
+          {
+            name: author,
+            link: site_url,
+          },
+        ],
+      });
     }
 
-    return feed.xml({
-      indent: true,
-    });
-  }
-
-  private createFeed(options: RssModuleOptions): RSS {
-    return new RSS({
-      ...options,
-      language: 'ko-KR',
-    });
-  }
-
-  private createFeedItem(post: Post): FeedItem {
-    const { postUrl, author } = this.options;
-
-    // 더 철저한 특수 문자 이스케이핑 처리
-    let safeDescription = post.previewContent ?? '';
-
-    // CDATA 종료 태그 처리
-    safeDescription = safeDescription.replace(/\]\]>/g, ']]&gt;');
-
-    // XML 특수 문자 처리
-    safeDescription = safeDescription
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&apos;');
-
-    // UTF-8로 인코딩
-    safeDescription = encodeURIComponent(safeDescription);
-
-    return FeedItem.of({
-      title: post.title,
-      description: safeDescription,
-      url: `${postUrl}/${post.id}`,
-      date: post.uploadDate.toUTCString().replace('GMT', '+0000'),
-      author,
-    });
+    // RSS 2.0 형식으로 반환
+    return feed.rss2();
   }
 }

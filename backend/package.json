@@ -68,6 +68,7 @@
         "express-basic-auth": "^1.2.1",
         "express-mysql-session": "^2.1.8",
         "express-session": "^1.17.3",
+        "feed": "^4.2.2",
         "handlebars": "^4.7.8",
         "hbs": "^4.2.0",
         "helmet": "^5.1.0",
