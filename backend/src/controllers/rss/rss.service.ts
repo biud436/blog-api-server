@@ -61,7 +61,7 @@ export class RssService {
         date: post.uploadDate,
         author: [
           {
-            name: author,
+            name: author ?? post.user?.profile?.nickname ?? 'Unknown',
             link: site_url,
           },
         ],
