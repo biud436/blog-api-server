@@ -129,7 +129,7 @@ export class RssService {
       feed.item({
         title: post.title,
         description: safeDescription,
-        url: `${postUrl}/${post.id}`, // RSS 라이브러리에서는 'url'이 사용됨
+        url: `${postUrl}/${post.id}`,
         guid: `${postUrl}/${post.id}`,
         date: post.uploadDate,
         author: post.user?.profile?.nickname ?? 'Unknown',
