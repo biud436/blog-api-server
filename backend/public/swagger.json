@@ -18,9 +18,7 @@
   "paths": {
     "/admin/category/{categoryId}": {
       "patch": {
-        "tags": [
-          "관리"
-        ],
+        "tags": ["관리"],
         "parameters": [
           {
             "name": "categoryId",
@@ -112,9 +110,7 @@
     },
     "/admin/category/{prevCategoryId}/move": {
       "post": {
-        "tags": [
-          "관리"
-        ],
+        "tags": ["관리"],
         "parameters": [
           {
             "name": "prevCategoryId",
@@ -199,9 +195,7 @@
     },
     "/admin/category/{categoryName}": {
       "get": {
-        "tags": [
-          "관리"
-        ],
+        "tags": ["관리"],
         "parameters": [
           {
             "name": "categoryName",
@@ -264,9 +258,7 @@
     },
     "/admin/category": {
       "post": {
-        "tags": [
-          "관리"
-        ],
+        "tags": ["관리"],
         "parameters": [],
         "requestBody": {
           "description": "카테고리 DTO",
@@ -329,9 +321,7 @@
         ]
       },
       "get": {
-        "tags": [
-          "관리"
-        ],
+        "tags": ["관리"],
         "parameters": [
           {
             "name": "isBeautify",
@@ -403,9 +393,7 @@
     },
     "/admin/temp/post": {
       "post": {
-        "tags": [
-          "관리"
-        ],
+        "tags": ["관리"],
         "parameters": [],
         "requestBody": {
           "description": "임시 포스트 정보",
@@ -485,9 +473,7 @@
         ]
       },
       "get": {
-        "tags": [
-          "관리"
-        ],
+        "tags": ["관리"],
         "parameters": [],
         "responses": {
           "200": {
@@ -540,9 +526,7 @@
     },
     "/admin/temp/post/{postId}": {
       "patch": {
-        "tags": [
-          "관리"
-        ],
+        "tags": ["관리"],
         "parameters": [
           {
             "name": "postId",
@@ -649,9 +633,7 @@
         ]
       },
       "delete": {
-        "tags": [
-          "관리"
-        ],
+        "tags": ["관리"],
         "parameters": [
           {
             "name": "postId",
@@ -729,9 +711,7 @@
         ]
       },
       "get": {
-        "tags": [
-          "관리"
-        ],
+        "tags": ["관리"],
         "parameters": [
           {
             "name": "postId",
@@ -811,9 +791,7 @@
     },
     "/api/check/admin": {
       "get": {
-        "tags": [
-          "API"
-        ],
+        "tags": ["API"],
         "parameters": [],
         "responses": {
           "200": {
@@ -849,9 +827,7 @@
     },
     "/api/post/{postId}": {
       "delete": {
-        "tags": [
-          "API"
-        ],
+        "tags": ["API"],
         "parameters": [
           {
             "name": "postId",
@@ -906,9 +882,7 @@
     },
     "/api/post": {
       "get": {
-        "tags": [
-          "API"
-        ],
+        "tags": ["API"],
         "parameters": [
           {
             "name": "pageNumber",
@@ -981,9 +955,7 @@
     },
     "/post/breadcrumbs": {
       "get": {
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "parameters": [
           {
             "name": "categoryName",
@@ -1046,9 +1018,7 @@
     },
     "/posts/breadcrumbs": {
       "get": {
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "parameters": [
           {
             "name": "categoryName",
@@ -1111,9 +1081,7 @@
     },
     "/post/categories": {
       "get": {
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "parameters": [],
         "responses": {
           "200": {
@@ -1149,9 +1117,7 @@
     },
     "/posts/categories": {
       "get": {
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "parameters": [],
         "responses": {
           "200": {
@@ -1187,9 +1153,7 @@
     },
     "/post": {
       "post": {
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "parameters": [],
         "requestBody": {
           "description": "생성할 포스트 정보",
@@ -1278,9 +1242,7 @@
         ]
       },
       "get": {
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "parameters": [
           {
             "name": "page",
@@ -1369,9 +1331,7 @@
     },
     "/posts": {
       "post": {
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "parameters": [],
         "requestBody": {
           "description": "생성할 포스트 정보",
@@ -1460,9 +1420,7 @@
         ]
       },
       "get": {
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "parameters": [
           {
             "name": "page",
@@ -1551,9 +1509,7 @@
     },
     "/post/{id}/comment": {
       "get": {
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "parameters": [
           {
             "name": "id",
@@ -1694,9 +1650,7 @@
     },
     "/posts/{id}/comment": {
       "get": {
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "parameters": [
           {
             "name": "id",
@@ -1837,9 +1791,7 @@
     },
     "/post/{id}/comment/by-parent": {
       "get": {
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "parameters": [
           {
             "name": "id",
@@ -1977,9 +1929,7 @@
     },
     "/posts/{id}/comment/by-parent": {
       "get": {
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "parameters": [
           {
             "name": "id",
@@ -2117,9 +2067,7 @@
     },
     "/post/comment": {
       "post": {
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "parameters": [],
         "requestBody": {
           "description": "생성할 댓글 정보",
@@ -2198,9 +2146,7 @@
     },
     "/posts/comment": {
       "post": {
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "parameters": [],
         "requestBody": {
           "description": "생성할 댓글 정보",
@@ -2279,9 +2225,7 @@
     },
     "/post/{id}/comment/{commentId}": {
       "delete": {
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "parameters": [
           {
             "name": "id",
@@ -2367,9 +2311,7 @@
     },
     "/posts/{id}/comment/{commentId}": {
       "delete": {
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "parameters": [
           {
             "name": "id",
@@ -2455,9 +2397,7 @@
     },
     "/post/search": {
       "get": {
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "parameters": [
           {
             "name": "pageNumber",
@@ -2474,10 +2414,7 @@
             "description": "검색할 속성 title, content",
             "schema": {
               "type": "string",
-              "enum": [
-                "title",
-                "content"
-              ]
+              "enum": ["title", "content"]
             },
             "required": true
           },
@@ -2573,9 +2510,7 @@
     },
     "/posts/search": {
       "get": {
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "parameters": [
           {
             "name": "pageNumber",
@@ -2592,10 +2527,7 @@
             "description": "검색할 속성 title, content",
             "schema": {
               "type": "string",
-              "enum": [
-                "title",
-                "content"
-              ]
+              "enum": ["title", "content"]
             },
             "required": true
           },
@@ -2691,9 +2623,7 @@
     },
     "/post/{id}": {
       "delete": {
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "parameters": [
           {
             "name": "id",
@@ -2753,9 +2683,7 @@
         ]
       },
       "patch": {
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "parameters": [
           {
             "name": "id",
@@ -2869,9 +2797,7 @@
         ]
       },
       "get": {
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "parameters": [
           {
             "name": "id",
@@ -2985,9 +2911,7 @@
     },
     "/posts/{id}": {
       "delete": {
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "parameters": [
           {
             "name": "id",
@@ -3047,9 +2971,7 @@
         ]
       },
       "patch": {
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "parameters": [
           {
             "name": "id",
@@ -3163,9 +3085,7 @@
         ]
       },
       "get": {
-        "tags": [
-          "Post"
-        ],
+        "tags": ["Post"],
         "parameters": [
           {
             "name": "id",
@@ -3279,9 +3199,7 @@
     },
     "/image/s3/upload": {
       "post": {
-        "tags": [
-          "Image"
-        ],
+        "tags": ["Image"],
         "parameters": [],
         "requestBody": {
           "description": "",
@@ -3353,9 +3271,7 @@
     },
     "/image/stats": {
       "get": {
-        "tags": [
-          "Image"
-        ],
+        "tags": ["Image"],
         "parameters": [
           {
             "name": "text",
@@ -3491,9 +3407,7 @@
     },
     "/image/shake-profile": {
       "get": {
-        "tags": [
-          "Image"
-        ],
+        "tags": ["Image"],
         "parameters": [
           {
             "name": "text",
@@ -3629,9 +3543,7 @@
     },
     "/auth/login": {
       "post": {
-        "tags": [
-          "인증"
-        ],
+        "tags": ["인증"],
         "parameters": [],
         "requestBody": {
           "description": "",
@@ -3756,9 +3668,7 @@
     },
     "/auth/logout": {
       "post": {
-        "tags": [
-          "인증"
-        ],
+        "tags": ["인증"],
         "parameters": [],
         "responses": {
           "201": {
@@ -3803,9 +3713,7 @@
     },
     "/auth/regenerate/access-token": {
       "post": {
-        "tags": [
-          "인증"
-        ],
+        "tags": ["인증"],
         "parameters": [],
         "responses": {
           "201": {
@@ -3862,9 +3770,7 @@
     },
     "/auth/send-auth-code": {
       "post": {
-        "tags": [
-          "인증"
-        ],
+        "tags": ["인증"],
         "parameters": [],
         "requestBody": {
           "description": "",
@@ -3921,9 +3827,7 @@
     },
     "/auth/profile": {
       "get": {
-        "tags": [
-          "인증"
-        ],
+        "tags": ["인증"],
         "parameters": [],
         "responses": {
           "200": {
@@ -3975,9 +3879,7 @@
     },
     "/auth/verify-auth-code": {
       "post": {
-        "tags": [
-          "인증"
-        ],
+        "tags": ["인증"],
         "parameters": [],
         "requestBody": {
           "description": "",
@@ -4034,9 +3936,7 @@
     },
     "/auth/signup": {
       "post": {
-        "tags": [
-          "인증"
-        ],
+        "tags": ["인증"],
         "parameters": [],
         "requestBody": {
           "description": "",
@@ -4093,9 +3993,7 @@
     },
     "/auth/github/login": {
       "get": {
-        "tags": [
-          "인증"
-        ],
+        "tags": ["인증"],
         "parameters": [],
         "responses": {
           "200": {
@@ -4131,9 +4029,7 @@
     },
     "/auth/github/callback": {
       "get": {
-        "tags": [
-          "인증"
-        ],
+        "tags": ["인증"],
         "parameters": [],
         "responses": {
           "200": {
@@ -4205,9 +4101,7 @@
     },
     "/rss": {
       "get": {
-        "tags": [
-          "RSS"
-        ],
+        "tags": ["RSS"],
         "parameters": [],
         "responses": {
           "200": {
@@ -4264,9 +4158,7 @@
           }
         },
         "nullable": false,
-        "required": [
-          "categoryName"
-        ],
+        "required": ["categoryName"],
         "description": "@title 카테고리 이름",
         "x-typia-jsDocTags": []
       },
@@ -4299,12 +4191,7 @@
           }
         },
         "nullable": false,
-        "required": [
-          "result",
-          "statusCode",
-          "message",
-          "data"
-        ],
+        "required": ["result", "statusCode", "message", "data"],
         "x-typia-jsDocTags": []
       },
       "MoveCategoryDto": {
@@ -4348,9 +4235,7 @@
           }
         },
         "nullable": false,
-        "required": [
-          "newCategoryParentId"
-        ],
+        "required": ["newCategoryParentId"],
         "description": "@title 이동할 곳의 부모 카테고리의 ID (PK)",
         "x-typia-jsDocTags": []
       },
@@ -4395,9 +4280,7 @@
           }
         },
         "nullable": false,
-        "required": [
-          "categoryName"
-        ],
+        "required": ["categoryName"],
         "description": "@title 부모 카테고리 이름",
         "x-typia-jsDocTags": []
       },
@@ -4461,10 +4344,7 @@
           }
         },
         "nullable": false,
-        "required": [
-          "title",
-          "content"
-        ],
+        "required": ["title", "content"],
         "description": "@title 포스트 ID",
         "x-typia-jsDocTags": []
       },
@@ -4540,9 +4420,7 @@
           }
         },
         "nullable": false,
-        "required": [
-          "isAdmin"
-        ],
+        "required": ["isAdmin"],
         "x-typia-jsDocTags": []
       },
       "CreatePostDto": {
@@ -4728,10 +4606,7 @@
           }
         },
         "nullable": false,
-        "required": [
-          "title",
-          "content"
-        ],
+        "required": ["title", "content"],
         "description": "@title 비공개 글 작성 여부\n@default false",
         "x-typia-jsDocTags": []
       },
@@ -4835,10 +4710,7 @@
           }
         },
         "nullable": false,
-        "required": [
-          "postId",
-          "content"
-        ],
+        "required": ["postId", "content"],
         "description": "부모 댓글이 없다면, 조상 댓글 ID와 같은 값을 가짐\n@title 부모 댓글 ID",
         "x-typia-jsDocTags": []
       },
@@ -4872,11 +4744,7 @@
           }
         },
         "nullable": false,
-        "required": [
-          "message",
-          "statusCode",
-          "result"
-        ],
+        "required": ["message", "statusCode", "result"],
         "x-typia-jsDocTags": []
       },
       "UpdatePostDto": {
@@ -4902,7 +4770,7 @@
           },
           "content": {
             "title": "글 내용",
-            "description": "@title 글 내용\n@minLength 1\n@maxLength 4000",
+            "description": "@title 글 내용\n@minLength 1\n@maxLength 10000",
             "x-typia-metaTags": [
               {
                 "kind": "minLength",
@@ -4910,7 +4778,7 @@
               },
               {
                 "kind": "maxLength",
-                "value": 4000
+                "value": 10000
               }
             ],
             "x-typia-jsDocTags": [
@@ -4936,7 +4804,7 @@
                 "name": "maxLength",
                 "text": [
                   {
-                    "text": "4000",
+                    "text": "10000",
                     "kind": "text"
                   }
                 ]
@@ -4946,7 +4814,7 @@
             "x-typia-optional": false,
             "type": "string",
             "minLength": 1,
-            "maxLength": 4000
+            "maxLength": 10000
           },
           "authorId": {
             "x-typia-required": false,
@@ -4973,10 +4841,7 @@
           }
         },
         "nullable": false,
-        "required": [
-          "title",
-          "content"
-        ],
+        "required": ["title", "content"],
         "description": "@title 대분류 (FK)",
         "x-typia-jsDocTags": []
       },
@@ -5078,10 +4943,7 @@
           }
         },
         "nullable": false,
-        "required": [
-          "username",
-          "password"
-        ],
+        "required": ["username", "password"],
         "description": "@title 비밀번호\n@pattern ^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$",
         "x-typia-jsDocTags": []
       },
@@ -5095,9 +4957,7 @@
           }
         },
         "nullable": false,
-        "required": [
-          "isRenew"
-        ],
+        "required": ["isRenew"],
         "x-typia-jsDocTags": []
       },
       "SendAuthCodeRequestDto": {
@@ -5124,9 +4984,7 @@
           }
         },
         "nullable": false,
-        "required": [
-          "email"
-        ],
+        "required": ["email"],
         "description": "@title 이메일",
         "x-typia-jsDocTags": []
       },
@@ -5140,9 +4998,7 @@
           }
         },
         "nullable": false,
-        "required": [
-          "user"
-        ],
+        "required": ["user"],
         "x-typia-jsDocTags": []
       },
       "__object.o2": {
@@ -5161,9 +5017,7 @@
           }
         },
         "nullable": false,
-        "required": [
-          "user"
-        ],
+        "required": ["user"],
         "x-typia-jsDocTags": []
       },
       "__object.o4": {
@@ -5214,10 +5068,7 @@
           }
         },
         "nullable": false,
-        "required": [
-          "email",
-          "authCode"
-        ],
+        "required": ["email", "authCode"],
         "description": "@title 인증 코드",
         "x-typia-jsDocTags": []
       },
@@ -5314,12 +5165,7 @@
           }
         },
         "nullable": false,
-        "required": [
-          "username",
-          "password",
-          "email",
-          "nickname"
-        ],
+        "required": ["username", "password", "email", "nickname"],
         "description": "@title 별명",
         "x-typia-jsDocTags": []
       },
@@ -5704,12 +5550,7 @@
           }
         },
         "nullable": false,
-        "required": [
-          "id",
-          "name",
-          "description",
-          "categories"
-        ],
+        "required": ["id", "name", "description", "categories"],
         "x-typia-jsDocTags": []
       },
       "PostComment": {
@@ -6126,13 +5967,7 @@
           }
         },
         "nullable": false,
-        "required": [
-          "id",
-          "userId",
-          "user",
-          "createdAt",
-          "updatedAt"
-        ],
+        "required": ["id", "userId", "user", "createdAt", "updatedAt"],
         "x-typia-jsDocTags": []
       },
       "ApiKey": {
@@ -6228,13 +6063,7 @@
           }
         },
         "nullable": false,
-        "required": [
-          "id",
-          "siteName",
-          "githubUrl",
-          "userId",
-          "user"
-        ],
+        "required": ["id", "siteName", "githubUrl", "userId", "user"],
         "x-typia-jsDocTags": []
       }
     },
