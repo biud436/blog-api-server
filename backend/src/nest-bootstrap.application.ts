@@ -48,8 +48,6 @@ export class NestBootstrapApplication extends EventEmitter {
     super();
 
     ServerConfigFactory.EVENT.on('load', (config: ServerConfig) => {
-      SlackLog.info(config.server.whitelist?.join('\n'));
-
       this.config = config;
     });
 
@@ -268,13 +266,6 @@ export class NestBootstrapApplication extends EventEmitter {
   private initWithApiDocs(): NestBootstrapApplication {
     const config = this.getSwaggerConfigBuilder();
     const document = SwaggerModule.createDocument(this._application!, config);
-
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    // const docs = require('../public/swagger.json') as OpenAPIObject;
-    // if (docs.servers) {
-    //     docs.info = document.info;
-    //     docs.servers = document.servers;
-    // }
 
     SwaggerModule.setup('docs', this._application!, document, {
       explorer: true,
