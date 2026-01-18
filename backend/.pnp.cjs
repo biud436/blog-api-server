@@ -109,7 +109,7 @@ const RAW_RUNTIME_STATE =
           ["iconv-lite", "npm:0.6.3"],\
           ["inquirer", "npm:8.2.2"],\
           ["jest", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:27.0.6"],\
-          ["joi", "npm:18.0.1"],\
+          ["joi", "npm:18.0.2"],\
           ["jsonwebtoken", "npm:9.0.2"],\
           ["keyv", "npm:5.2.3"],\
           ["lodash", "npm:4.17.21"],\
@@ -9385,7 +9385,7 @@ const RAW_RUNTIME_STATE =
           ["iconv-lite", "npm:0.6.3"],\
           ["inquirer", "npm:8.2.2"],\
           ["jest", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:27.0.6"],\
-          ["joi", "npm:18.0.1"],\
+          ["joi", "npm:18.0.2"],\
           ["jsonwebtoken", "npm:9.0.2"],\
           ["keyv", "npm:5.2.3"],\
           ["lodash", "npm:4.17.21"],\
@@ -14209,10 +14209,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["joi", [\
-      ["npm:18.0.1", {\
-        "packageLocation": "./.yarn/cache/joi-npm-18.0.1-f286682573-d8e391c0e9.zip/node_modules/joi/",\
+      ["npm:18.0.2", {\
+        "packageLocation": "./.yarn/cache/joi-npm-18.0.2-79a3fbcace-0cf4980caf.zip/node_modules/joi/",\
         "packageDependencies": [\
-          ["joi", "npm:18.0.1"],\
+          ["joi", "npm:18.0.2"],\
           ["@hapi/address", "npm:5.1.1"],\
           ["@hapi/formula", "npm:3.0.2"],\
           ["@hapi/hoek", "npm:11.0.7"],\
