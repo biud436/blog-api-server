@@ -47,30 +47,11 @@ import { TransactionModule } from './common/modules/transaction/transaction.modu
 import { DataSource } from 'typeorm';
 import { CommentModule } from './controllers/comment/comment.module';
 import { addTransactionalDataSource } from 'typeorm-transactional';
+import { DatabaseModule } from './common/modules/database/database.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: async (
-        configService: ConfigService,
-      ): Promise<TypeOrmModuleOptions> => {
-        const config = dbconnect(configService);
-        if (AppModule.isDelvelopment()) {
-          return config.dev;
-        }
-
-        return config.production;
-      },
-      inject: [ConfigService],
-      async dataSourceFactory(options) {
-        if (!options) {
-          throw new Error('Invalid options passed');
-        }
-
-        return addTransactionalDataSource(new DataSource(options));
-      },
-    }),
+    DatabaseModule,
     TransactionModule,
     CacheModule.registerAsync(redisCacheConfig),
     ConfigModule.forRoot({
