@@ -13,7 +13,6 @@ import {
   Ip,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { InjectDataSource } from '@nestjs/typeorm';
 import { SearchOption } from 'src/common/config/list-config';
 import {
   AdminOnly,
@@ -33,7 +32,6 @@ import { CreatePostDto } from 'src/entities/post/dto/create-post.dto';
 import { UpdatePostDto } from 'src/entities/post/dto/update-post.dto';
 import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
 import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
-import { DataSource } from 'typeorm';
 import { PrivatePostGuard } from '../auth/guards/private-post.guard';
 import { PostsService } from './posts.service';
 import { PostSearchProperty } from './types/post-search-type';

@@ -6,11 +6,11 @@ import { TypeOrmExModule } from 'src/common/modules/typeorm-ex/typeorm-ex.module
 import { CategoryRepository } from './entities/category.repository';
 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([Category]),
-        TypeOrmExModule.forCustomRepository([CategoryRepository]),
-    ],
-    providers: [CategoryService],
-    exports: [CategoryService],
+  imports: [
+    TypeOrmModule.forFeature([Category]),
+    TypeOrmExModule.forCustomRepository([CategoryRepository]),
+  ],
+  providers: [CategoryService],
+  exports: [CategoryService],
 })
 export class CategoryModule {}

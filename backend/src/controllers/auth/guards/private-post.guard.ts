@@ -1,16 +1,7 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Inject,
-  Injectable,
-  Optional,
-} from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
-import { AuthGuard, AuthModuleOptions } from '@nestjs/passport';
 import { Request } from 'express';
-import { JwtGuard } from 'src/common/decorators/swagger/api-notebook.decorator';
 import { ANONYMOUS_ID } from 'src/common/decorators/authorization/anonymous.decorator';
 
 /**

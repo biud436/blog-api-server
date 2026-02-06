@@ -5,8 +5,8 @@ import { PostComment } from './entities/post-comment.entity';
 import { PaginationModule } from 'src/common/modules/pagination/pagination.module';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([PostComment]), PaginationModule],
-    providers: [PostCommentService],
-    exports: [PostCommentService],
+  imports: [TypeOrmModule.forFeature([PostComment]), PaginationModule],
+  providers: [PostCommentService],
+  exports: [PostCommentService],
 })
 export class PostCommentModule {}

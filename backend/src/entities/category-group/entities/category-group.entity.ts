@@ -3,19 +3,19 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class CategoryGroup {
-    @PrimaryGeneratedColumn()
-    id!: number;
+  @PrimaryGeneratedColumn()
+  id!: number;
 
-    @Column({
-        name: 'CTGR_GRP_NM',
-    })
-    name!: string;
+  @Column({
+    name: 'CTGR_GRP_NM',
+  })
+  name!: string;
 
-    @Column({
-        name: 'CTGR_GRP_DESC',
-    })
-    description!: string;
+  @Column({
+    name: 'CTGR_GRP_DESC',
+  })
+  description!: string;
 
-    @OneToMany(() => Category, (category) => category.categoryGroup)
-    categories!: Category[];
+  @OneToMany(() => Category, (category) => category.categoryGroup)
+  categories!: Category[];
 }

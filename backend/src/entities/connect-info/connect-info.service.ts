@@ -8,48 +8,48 @@ import { PaginationProvider } from 'src/common/modules/pagination/pagination-rep
 
 @Injectable()
 export class ConnectInfoService {
-    constructor(
-        @InjectRepository(ConnectInfo)
-        private readonly connectInfoRepository: Repository<ConnectInfo>,
-        private readonly paginationProvider: PaginationProvider,
-    ) {}
+  constructor(
+    @InjectRepository(ConnectInfo)
+    private readonly connectInfoRepository: Repository<ConnectInfo>,
+    private readonly paginationProvider: PaginationProvider,
+  ) {}
 
-    protected isDevelopment(): boolean {
-        return process.env.NODE_ENV !== 'production';
+  protected isDevelopment(): boolean {
+    return process.env.NODE_ENV !== 'production';
+  }
+
+  async create(
+    createConnectInfoDto: CreateConnectInfoDto,
+  ): Promise<ConnectInfo | void> {
+    if (this.isDevelopment()) {
+      return;
     }
 
-    async create(
-        createConnectInfoDto: CreateConnectInfoDto,
-    ): Promise<ConnectInfo | void> {
-        if (this.isDevelopment()) {
-            return;
-        }
+    const item = this.connectInfoRepository.create(createConnectInfoDto);
 
-        const item = this.connectInfoRepository.create(createConnectInfoDto);
+    return await this.connectInfoRepository.save(item);
+  }
 
-        return await this.connectInfoRepository.save(item);
-    }
+  /**
+   * 연결 정보를 페이지네이션하여 반환한다.
+   *
+   * @param pageNumber
+   * @returns
+   */
+  async findAll(
+    pageNumber: number,
+  ): Promise<Paginatable<ConnectInfo> | undefined> {
+    const qb = this.connectInfoRepository
+      .createQueryBuilder('connectInfo')
+      .select()
+      .orderBy('connectInfo.id', 'DESC');
 
-    /**
-     * 연결 정보를 페이지네이션하여 반환한다.
-     *
-     * @param pageNumber
-     * @returns
-     */
-    async findAll(
-        pageNumber: number,
-    ): Promise<Paginatable<ConnectInfo> | undefined> {
-        const qb = this.connectInfoRepository
-            .createQueryBuilder('connectInfo')
-            .select()
-            .orderBy('connectInfo.id', 'DESC');
+    return await this.paginationProvider
+      .setPagination(qb, pageNumber)
+      .getManyWithPagination(qb, pageNumber);
+  }
 
-        return await this.paginationProvider
-            .setPagination(qb, pageNumber)
-            .getManyWithPagination(qb, pageNumber);
-    }
-
-    async delete(id: number): Promise<DeleteResult> {
-        return await this.connectInfoRepository.delete(id);
-    }
+  async delete(id: number): Promise<DeleteResult> {
+    return await this.connectInfoRepository.delete(id);
+  }
 }

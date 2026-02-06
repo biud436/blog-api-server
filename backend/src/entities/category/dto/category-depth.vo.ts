@@ -1,16 +1,16 @@
 export class CategoryDepthVO {
-    left!: number;
-    right!: number;
-    name!: string;
-    depth!: number;
+  left!: number;
+  right!: number;
+  name!: string;
+  depth!: number;
 
-    children: CategoryDepthVO[] = [];
+  children: CategoryDepthVO[] = [];
 
-    public addChild(child: CategoryDepthVO) {
-        if (!this.children) {
-            this.children = [];
-        }
-
-        this.children.push(child);
+  public addChild(child: CategoryDepthVO) {
+    if (!this.children) {
+      this.children = [];
     }
+
+    this.children.push(child);
+  }
 }

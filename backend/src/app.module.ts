@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { HttpModule } from '@nestjs/axios';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { PostModule } from './entities/post/post.module';
 import { UserModule } from './entities/user/user.module';
@@ -19,8 +19,6 @@ import { OrmModule } from './common/modules/orm/orm.module';
 import { ImageModule } from './controllers/image/image.module';
 import { AesModule } from './common/modules/aes/aes.module';
 import { PostViewCountModule } from './entities/post-view-count/post-view-count.module';
-import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import dbconnect from './common/config/config';
 import { ApiModule } from './controllers/api/api.module';
 import { AdminModule as AdminControllerModule } from './controllers/admin/admin.module';
 import { ApiKeyModule } from './entities/api-key/api-key.module';

@@ -5,8 +5,8 @@ import { ProfileService } from './profile.service';
 import { PaginationModule } from 'src/common/modules/pagination/pagination.module';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Profile]), PaginationModule],
-    providers: [ProfileService],
-    exports: [ProfileService],
+  imports: [TypeOrmModule.forFeature([Profile]), PaginationModule],
+  providers: [ProfileService],
+  exports: [ProfileService],
 })
 export class ProfileModule {}

@@ -8,32 +8,30 @@ import { PaginationProvider } from 'src/common/modules/pagination/pagination-rep
 
 @Injectable()
 export class ProfileService {
-    constructor(
-        @InjectRepository(Profile)
-        private readonly profileRepository: Repository<Profile>,
-        private readonly paginationProvider: PaginationProvider,
-    ) {}
+  constructor(
+    @InjectRepository(Profile)
+    private readonly profileRepository: Repository<Profile>,
+    private readonly paginationProvider: PaginationProvider,
+  ) {}
 
-    async isValidEmail(email: string): Promise<boolean> {
-        const qb = this.profileRepository
-            .createQueryBuilder('profile')
-            .where('profile.email = :email', { email });
+  async isValidEmail(email: string): Promise<boolean> {
+    const qb = this.profileRepository
+      .createQueryBuilder('profile')
+      .where('profile.email = :email', { email });
 
-        this.paginationProvider.setPagination(qb, 1);
+    this.paginationProvider.setPagination(qb, 1);
 
-        const entity = await qb.getCount();
+    const entity = await qb.getCount();
 
-        return entity > 0;
-    }
+    return entity > 0;
+  }
 
-    async addProfile(
-        createProfileDto: CreateProfileDto,
-        queryRunner: QueryRunner,
-    ): Promise<any> {
-        const profileModel = await this.profileRepository.create(
-            createProfileDto,
-        );
+  async addProfile(
+    createProfileDto: CreateProfileDto,
+    queryRunner: QueryRunner,
+  ): Promise<any> {
+    const profileModel = await this.profileRepository.create(createProfileDto);
 
-        return await queryRunner.manager.save(profileModel);
-    }
+    return await queryRunner.manager.save(profileModel);
+  }
 }

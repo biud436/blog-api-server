@@ -9,14 +9,14 @@ import { PostSubscriber } from './post.subscriber';
 import { PaginationModule } from 'src/common/modules/pagination/pagination.module';
 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([Post]),
-        forwardRef(() => ImageModule),
-        MicroServicesModule,
-        CategoryModule,
-        PaginationModule,
-    ],
-    providers: [PostService, PostSubscriber],
-    exports: [PostService],
+  imports: [
+    TypeOrmModule.forFeature([Post]),
+    forwardRef(() => ImageModule),
+    MicroServicesModule,
+    CategoryModule,
+    PaginationModule,
+  ],
+  providers: [PostService, PostSubscriber],
+  exports: [PostService],
 })
 export class PostModule {}

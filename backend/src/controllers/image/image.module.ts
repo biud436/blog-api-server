@@ -33,34 +33,6 @@ import { ImageCreateSvgCommandImpl } from './commands/image-create-svg.command';
     ImageDeleteCommandImpl,
     ImageCreateCommandImpl,
     ImageService,
-    // {
-    //     provide: ImageCreateCommand,
-    //     useClass: ImageCreateCommandImpl,
-    // },
-    // {
-    //     provide: ImageTempFileGetterCommand,
-    //     useClass: ImageTempFileGetterCommandImpl,
-    // },
-    // {
-    //     provide: ImageFindByIdCommand,
-    //     useClass: ImageFindByIdCommandImpl,
-    // },
-    // {
-    //     provide: ImageUpdatePostIdCommand,
-    //     useClass: ImageUpdatePostIdCommandImpl,
-    // },
-    // {
-    //     provide: ImageUploadCommand,
-    //     useClass: ImageUploadCommandImpl,
-    // },
-    // {
-    //     provide: ImageDeleteCommand,
-    //     useClass: ImageDeleteCommandImpl,
-    // },
-    // {
-    //     provide: ImageCreateSvgCommand,
-    //     useClass: ImageCreateSvgCommandImpl,
-    // },
   ],
   exports: [ImageService],
 })

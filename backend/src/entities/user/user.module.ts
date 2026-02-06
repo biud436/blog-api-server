@@ -7,8 +7,8 @@ import { UserSubscriber } from './user.subscriber';
 import { PaginationModule } from 'src/common/modules/pagination/pagination.module';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([User]), PaginationModule],
-    providers: [UserService, UserSubscriber],
-    exports: [UserService],
+  imports: [TypeOrmModule.forFeature([User]), PaginationModule],
+  providers: [UserService, UserSubscriber],
+  exports: [UserService],
 })
 export class UserModule {}

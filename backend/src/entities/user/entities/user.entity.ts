@@ -3,15 +3,15 @@ import { Profile } from '../../profile/entities/profile.entity';
 import * as bcrypt from 'bcrypt';
 import { Exclude, Expose } from 'class-transformer';
 import {
-    BeforeInsert,
-    Column,
-    CreateDateColumn,
-    Entity,
-    JoinColumn,
-    OneToMany,
-    OneToOne,
-    PrimaryGeneratedColumn,
-    Unique,
+  BeforeInsert,
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
 import { Post } from 'src/entities/post/entities/post.entity';
 import { Admin } from 'src/entities/admin/entities/admin.entity';
@@ -22,89 +22,89 @@ import { PostComment } from 'src/entities/comment/entities/post-comment.entity';
 
 @Entity()
 export class User {
-    @PrimaryGeneratedColumn()
-    id!: number;
+  @PrimaryGeneratedColumn()
+  id!: number;
 
-    @Column({
-        nullable: false,
-        unique: true,
-    })
-    username!: string;
+  @Column({
+    nullable: false,
+    unique: true,
+  })
+  username!: string;
 
-    @Column({
-        nullable: false,
-    })
-    @Exclude()
-    profileId!: number;
+  @Column({
+    nullable: false,
+  })
+  @Exclude()
+  profileId!: number;
 
-    @Column({
-        default: true,
-        nullable: false,
-    })
-    @Exclude()
-    isValid!: boolean;
+  @Column({
+    default: true,
+    nullable: false,
+  })
+  @Exclude()
+  isValid!: boolean;
 
-    @OneToOne(() => Profile, {
-        onUpdate: 'RESTRICT',
-        onDelete: 'RESTRICT',
-    })
-    @JoinColumn({
-        name: 'profile_id',
-    })
-    profile!: Profile;
+  @OneToOne(() => Profile, {
+    onUpdate: 'RESTRICT',
+    onDelete: 'RESTRICT',
+  })
+  @JoinColumn({
+    name: 'profile_id',
+  })
+  profile!: Profile;
 
-    @OneToMany(() => Post, (post) => post.user)
-    posts!: Post[];
+  @OneToMany(() => Post, (post) => post.user)
+  posts!: Post[];
 
-    @OneToMany(() => Admin, (admin) => admin.user)
-    admins!: Admin[];
+  @OneToMany(() => Admin, (admin) => admin.user)
+  admins!: Admin[];
 
-    @OneToMany(() => ApiKey, (apiKey) => apiKey.user)
-    apiKeys!: ApiKey[];
+  @OneToMany(() => ApiKey, (apiKey) => apiKey.user)
+  apiKeys!: ApiKey[];
 
-    @OneToMany(() => BlogMetaData, (blogMetaData) => blogMetaData.user)
-    blogMetaData!: BlogMetaData[];
+  @OneToMany(() => BlogMetaData, (blogMetaData) => blogMetaData.user)
+  blogMetaData!: BlogMetaData[];
 
-    @OneToMany(() => PostComment, (postComment) => postComment.user)
-    comments!: PostComment[];
+  @OneToMany(() => PostComment, (postComment) => postComment.user)
+  comments!: PostComment[];
 
-    @Column({
-        nullable: false,
-    })
-    @Exclude()
-    password!: string;
+  @Column({
+    nullable: false,
+  })
+  @Exclude()
+  password!: string;
 
-    @Expose({
-        name: 'role',
-    })
-    get role() {
-        const adminRoles = this.admins ?? [];
+  @Expose({
+    name: 'role',
+  })
+  get role() {
+    const adminRoles = this.admins ?? [];
 
-        if (adminRoles.length > 0) {
-            return Role.Admin;
-        }
-
-        return Role.User;
+    if (adminRoles.length > 0) {
+      return Role.Admin;
     }
 
-    async hashPassword(password: string) {
-        this.password = await bcrypt.hash(password, 10);
-    }
+    return Role.User;
+  }
 
-    @BeforeInsert()
-    async savePassword() {
-        await this.hashPassword(this.password);
-    }
+  async hashPassword(password: string) {
+    this.password = await bcrypt.hash(password, 10);
+  }
 
-    @CreateDateColumn({
-        default: () => 'CURRENT_TIMESTAMP',
-    })
-    @Exclude()
-    createdAt!: Date;
+  @BeforeInsert()
+  async savePassword() {
+    await this.hashPassword(this.password);
+  }
 
-    @CreateDateColumn({
-        default: () => 'CURRENT_TIMESTAMP',
-    })
-    @Exclude()
-    updatedAt!: Date;
+  @CreateDateColumn({
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  @Exclude()
+  createdAt!: Date;
+
+  @CreateDateColumn({
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  @Exclude()
+  updatedAt!: Date;
 }

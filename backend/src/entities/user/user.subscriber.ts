@@ -5,11 +5,11 @@ import { User } from './entities/user.entity';
 
 @Injectable()
 export class UserSubscriber implements EntitySubscriberInterface<User> {
-    constructor(@InjectDataSource() private readonly dataSource: DataSource) {
-        this.dataSource.subscribers.push(this);
-    }
+  constructor(@InjectDataSource() private readonly dataSource: DataSource) {
+    this.dataSource.subscribers.push(this);
+  }
 
-    listenTo() {
-        return User;
-    }
+  listenTo() {
+    return User;
+  }
 }

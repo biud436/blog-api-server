@@ -10,126 +10,126 @@ import { Paginatable } from 'src/common/config/list-config';
 import { PaginationProvider } from 'src/common/modules/pagination/pagination-repository';
 
 export type UserLoginValidationInfo = {
-    isValidUser: boolean;
-    isCorrectPassword: boolean;
-    userInfo: Omit<
-        User,
-        'password' | 'hashPassword' | 'savePassword' | 'profileId'
-    >;
+  isValidUser: boolean;
+  isCorrectPassword: boolean;
+  userInfo: Omit<
+    User,
+    'password' | 'hashPassword' | 'savePassword' | 'profileId'
+  >;
 };
 
 @Injectable()
 export class UserService {
-    constructor(
-        @InjectRepository(User)
-        private readonly userRepository: Repository<User>,
-        private readonly paginationProvider: PaginationProvider,
-    ) {}
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+    private readonly paginationProvider: PaginationProvider,
+  ) {}
 
-    async create(
-        createUserDto: CreateUserDto,
-        profile: Profile,
-        queryRunner: QueryRunner,
-    ): Promise<User> {
-        const model = await this.userRepository.create(createUserDto);
-        model.profile = profile;
+  async create(
+    createUserDto: CreateUserDto,
+    profile: Profile,
+    queryRunner: QueryRunner,
+  ): Promise<User> {
+    const model = await this.userRepository.create(createUserDto);
+    model.profile = profile;
 
-        return await queryRunner.manager.save(model);
+    return await queryRunner.manager.save(model);
+  }
+
+  async validateUser(
+    username: string,
+    password_: string,
+  ): Promise<UserLoginValidationInfo> {
+    const user = await this.userRepository.findOne({
+      where: { username, isValid: true },
+    });
+    const isValidUser = true;
+    const isCorrectPassword = false;
+    const result = <UserLoginValidationInfo>{
+      isValidUser,
+      isCorrectPassword,
+    };
+
+    if (!user) {
+      result.isValidUser = false;
+      return result;
     }
 
-    async validateUser(
-        username: string,
-        password_: string,
-    ): Promise<UserLoginValidationInfo> {
-        const user = await this.userRepository.findOne({
-            where: { username, isValid: true },
-        });
-        const isValidUser = true;
-        const isCorrectPassword = false;
-        const result = <UserLoginValidationInfo>{
-            isValidUser,
-            isCorrectPassword,
-        };
+    const isValidPassword = bcrypt.compareSync(password_, user.password);
+    const safedData = plainToClass(User, user);
 
-        if (!user) {
-            result.isValidUser = false;
-            return result;
-        }
+    result.userInfo = safedData;
 
-        const isValidPassword = bcrypt.compareSync(password_, user.password);
-        const safedData = plainToClass(User, user);
-
-        result.userInfo = safedData;
-
-        if (isValidPassword) {
-            result.isCorrectPassword = true;
-        }
-
-        return result;
+    if (isValidPassword) {
+      result.isCorrectPassword = true;
     }
 
-    async findProfileByUsername(username: string): Promise<User | null> {
-        const item = await this.userRepository
-            .createQueryBuilder('user')
-            .select()
-            .innerJoinAndSelect('user.profile', 'profile')
-            .innerJoinAndSelect('user.admins', 'admins')
-            .where('user.username = :username', {
-                username,
-            })
-            .andWhere('user.isValid = :isValid', { isValid: true })
-            .andWhere('admins.id IS NOT NULL')
-            .getOne();
+    return result;
+  }
 
-        return item;
-    }
+  async findProfileByUsername(username: string): Promise<User | null> {
+    const item = await this.userRepository
+      .createQueryBuilder('user')
+      .select()
+      .innerJoinAndSelect('user.profile', 'profile')
+      .innerJoinAndSelect('user.admins', 'admins')
+      .where('user.username = :username', {
+        username,
+      })
+      .andWhere('user.isValid = :isValid', { isValid: true })
+      .andWhere('admins.id IS NOT NULL')
+      .getOne();
 
-    async getUserId(username: string): Promise<User> {
-        const qb = this.userRepository
-            .createQueryBuilder('user')
-            .select('user.id')
-            .innerJoinAndSelect('user.profile', 'profile')
-            .innerJoinAndSelect('user.admins', 'admins')
-            .where('user.username = :username', {
-                username,
-            })
-            .andWhere('user.isValid = :isValid', { isValid: true })
-            .andWhere('admins.id IS NOT NULL')
-            .getOneOrFail();
+    return item;
+  }
 
-        return await qb;
-    }
+  async getUserId(username: string): Promise<User> {
+    const qb = this.userRepository
+      .createQueryBuilder('user')
+      .select('user.id')
+      .innerJoinAndSelect('user.profile', 'profile')
+      .innerJoinAndSelect('user.admins', 'admins')
+      .where('user.username = :username', {
+        username,
+      })
+      .andWhere('user.isValid = :isValid', { isValid: true })
+      .andWhere('admins.id IS NOT NULL')
+      .getOneOrFail();
 
-    async getUserIdWithoutFail(username: string): Promise<User | null> {
-        const qb = this.userRepository
-            .createQueryBuilder('user')
-            .select('user.id')
-            .innerJoinAndSelect('user.profile', 'profile')
-            .innerJoinAndSelect('user.admins', 'admins')
-            .where('user.username = :username', {
-                username,
-            })
-            .andWhere('admins.id IS NOT NULL')
-            .getOne();
+    return await qb;
+  }
 
-        return await qb;
-    }
+  async getUserIdWithoutFail(username: string): Promise<User | null> {
+    const qb = this.userRepository
+      .createQueryBuilder('user')
+      .select('user.id')
+      .innerJoinAndSelect('user.profile', 'profile')
+      .innerJoinAndSelect('user.admins', 'admins')
+      .where('user.username = :username', {
+        username,
+      })
+      .andWhere('admins.id IS NOT NULL')
+      .getOne();
 
-    async getUserList(
-        pageNumber: number,
-    ): Promise<Paginatable<User> | undefined> {
-        const qb = this.userRepository
-            .createQueryBuilder('user')
-            .select()
-            .innerJoinAndSelect('user.profile', 'profile')
-            .innerJoinAndSelect('user.admins', 'admins')
-            .where('admins.id IS NOT NULL')
-            .andWhere('user.isValid = :isValid', { isValid: true });
+    return await qb;
+  }
 
-        const items = await this.paginationProvider
-            .setPaginationWithJoin(qb, pageNumber)
-            .getManyWithPagination(qb, pageNumber);
+  async getUserList(
+    pageNumber: number,
+  ): Promise<Paginatable<User> | undefined> {
+    const qb = this.userRepository
+      .createQueryBuilder('user')
+      .select()
+      .innerJoinAndSelect('user.profile', 'profile')
+      .innerJoinAndSelect('user.admins', 'admins')
+      .where('admins.id IS NOT NULL')
+      .andWhere('user.isValid = :isValid', { isValid: true });
 
-        return items;
-    }
+    const items = await this.paginationProvider
+      .setPaginationWithJoin(qb, pageNumber)
+      .getManyWithPagination(qb, pageNumber);
+
+    return items;
+  }
 }

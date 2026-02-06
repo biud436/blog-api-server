@@ -1,45 +1,45 @@
 import { Expose } from 'class-transformer';
 import {
-    Column,
-    CreateDateColumn,
-    Entity,
-    PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity()
 export class ConnectInfo {
-    @PrimaryGeneratedColumn()
-    id!: number;
+  @PrimaryGeneratedColumn()
+  id!: number;
 
-    @Column()
-    ip!: string;
+  @Column()
+  ip!: string;
 
-    @Column()
-    userAgent!: string;
+  @Column()
+  userAgent!: string;
 
-    @CreateDateColumn()
-    createdAt!: Date;
+  @CreateDateColumn()
+  createdAt!: Date;
 
-    @Expose()
-    get browsers(): string[] {
-        const result: string[] = [];
+  @Expose()
+  get browsers(): string[] {
+    const result: string[] = [];
 
-        if (this.userAgent.includes('Chrome')) {
-            result.push('Chrome');
-        } else if (this.userAgent.includes('Firefox')) {
-            result.push('Firefox');
-        } else if (this.userAgent.includes('Safari')) {
-            result.push('Safari');
-        } else if (this.userAgent.includes('Edge')) {
-            result.push('Edge');
-        } else if (this.userAgent.includes('Opera')) {
-            result.push('Opera');
-        } else if (this.userAgent.includes('MSIE')) {
-            result.push('Internet Explorer');
-        } else {
-            result.push('Non_Browser');
-        }
-
-        return result;
+    if (this.userAgent.includes('Chrome')) {
+      result.push('Chrome');
+    } else if (this.userAgent.includes('Firefox')) {
+      result.push('Firefox');
+    } else if (this.userAgent.includes('Safari')) {
+      result.push('Safari');
+    } else if (this.userAgent.includes('Edge')) {
+      result.push('Edge');
+    } else if (this.userAgent.includes('Opera')) {
+      result.push('Opera');
+    } else if (this.userAgent.includes('MSIE')) {
+      result.push('Internet Explorer');
+    } else {
+      result.push('Non_Browser');
     }
+
+    return result;
+  }
 }
