@@ -53,6 +53,7 @@ const RAW_RUNTIME_STATE =
           ["@nestjs/testing", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:11.0.5"],\
           ["@nestjs/throttler", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:6.4.0"],\
           ["@nestjs/typeorm", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:11.0.0"],\
+          ["@stingerloom/orm", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:0.22.0"],\
           ["@swc/cli", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:0.5.2"],\
           ["@swc/core", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:1.10.1"],\
           ["@types/bcrypt", "npm:5.0.0"],\
@@ -6698,6 +6699,61 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@stingerloom/orm", [\
+      ["npm:0.22.0", {\
+        "packageLocation": "./.yarn/cache/@stingerloom-orm-npm-0.22.0-16203d21ab-c24307158e.zip/node_modules/@stingerloom/orm/",\
+        "packageDependencies": [\
+          ["@stingerloom/orm", "npm:0.22.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:0.22.0", {\
+        "packageLocation": "./.yarn/__virtual__/@stingerloom-orm-virtual-dd0a651b63/0/cache/@stingerloom-orm-npm-0.22.0-16203d21ab-c24307158e.zip/node_modules/@stingerloom/orm/",\
+        "packageDependencies": [\
+          ["@stingerloom/orm", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:0.22.0"],\
+          ["@mrleebo/prisma-ast", null],\
+          ["@nestjs/common", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:11.0.5"],\
+          ["@nestjs/core", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:11.0.5"],\
+          ["@types/better-sqlite3", null],\
+          ["@types/class-transformer", null],\
+          ["@types/fast-glob", null],\
+          ["@types/mrleebo__prisma-ast", null],\
+          ["@types/mysql2", null],\
+          ["@types/nestjs__common", null],\
+          ["@types/nestjs__core", null],\
+          ["@types/pg", null],\
+          ["@types/reflect-metadata", null],\
+          ["better-sqlite3", null],\
+          ["class-transformer", "npm:0.5.1"],\
+          ["fast-glob", null],\
+          ["mysql2", "npm:3.12.0"],\
+          ["pg", null],\
+          ["reflect-metadata", "npm:0.2.2"],\
+          ["sql-template-tag", "npm:4.1.0"]\
+        ],\
+        "packagePeers": [\
+          "@mrleebo/prisma-ast",\
+          "@nestjs/common",\
+          "@nestjs/core",\
+          "@types/better-sqlite3",\
+          "@types/class-transformer",\
+          "@types/fast-glob",\
+          "@types/mrleebo__prisma-ast",\
+          "@types/mysql2",\
+          "@types/nestjs__common",\
+          "@types/nestjs__core",\
+          "@types/pg",\
+          "@types/reflect-metadata",\
+          "better-sqlite3",\
+          "class-transformer",\
+          "fast-glob",\
+          "mysql2",\
+          "pg",\
+          "reflect-metadata"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@swc/cli", [\
       ["npm:0.5.2", {\
         "packageLocation": "./.yarn/cache/@swc-cli-npm-0.5.2-a197e0cb99-f5cefcd1c7.zip/node_modules/@swc/cli/",\
@@ -9274,6 +9330,7 @@ const RAW_RUNTIME_STATE =
           ["@nestjs/testing", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:11.0.5"],\
           ["@nestjs/throttler", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:6.4.0"],\
           ["@nestjs/typeorm", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:11.0.0"],\
+          ["@stingerloom/orm", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:0.22.0"],\
           ["@swc/cli", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:0.5.2"],\
           ["@swc/core", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:1.10.1"],\
           ["@types/bcrypt", "npm:5.0.0"],\
@@ -17286,6 +17343,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/sql-highlight-npm-6.1.0-0e3983ca8c-6cd92e7ca3.zip/node_modules/sql-highlight/",\
         "packageDependencies": [\
           ["sql-highlight", "npm:6.1.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["sql-template-tag", [\
+      ["npm:4.1.0", {\
+        "packageLocation": "./.yarn/cache/sql-template-tag-npm-4.1.0-c652ecf373-1db8e29025.zip/node_modules/sql-template-tag/",\
+        "packageDependencies": [\
+          ["sql-template-tag", "npm:4.1.0"]\
         ],\
         "linkType": "HARD"\
       }]\
