@@ -7,8 +7,8 @@ import {
   RelationColumn,
   UpdateTimestamp,
 } from "@stingerloom/orm";
-import { Post } from "./post.entity";
-import { User } from "./user.entity";
+import { Post } from "../post/post.entity";
+import { User } from "../user/user.entity";
 
 @Entity({ name: "post_comment" })
 export class PostComment {

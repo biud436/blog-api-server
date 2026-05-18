@@ -4,9 +4,9 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   UpdateTimestamp,
-} from "@stingerloom/orm";
+} from '@stingerloom/orm';
 
-@Entity({ name: "post_view_count" })
+@Entity({ name: 'post_view_count' })
 export class PostViewCount {
   @PrimaryGeneratedColumn()
   id!: number;
@@ -17,6 +17,6 @@ export class PostViewCount {
   @UpdateTimestamp()
   updatedAt!: Date;
 
-  @Column({ type: "int", default: 0 })
+  @Column({ type: 'int', default: 0 })
   count!: number;
 }

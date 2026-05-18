@@ -1,31 +1,31 @@
 import { Module } from "@nestjs/common";
-import { StingerloomOrmModule } from "@stingerloom/orm/nestjs";
-import { Admin } from "./admin/admin.entity";
-import { ApiKey } from "./api-key.entity";
-import { BlogMetaData } from "./blog-meta-data.entity";
-import { CategoryGroup } from "./category-group.entity";
-import { Category } from "./category.entity";
-import { ConnectInfo } from "./connect-info.entity";
-import { Image } from "./image.entity";
-import { PostComment } from "./post-comment.entity";
-import { PostViewCount } from "./post-view-count.entity";
-import { Post } from "./post.entity";
-import { Profile } from "./profile.entity";
-import { User } from "./user.entity";
+import { AdminModule } from "./admin/admin.module";
+import { ApiKeyModule } from "./api-key/api-key.module";
+import { BlogMetaDataModule } from "./blog-meta-data/blog-meta-data.module";
+import { CategoryModule } from "./category/category.module";
+import { CategoryGroupModule } from "./category-group/category-group.module";
+import { ConnectInfoModule } from "./connect-info/connect-info.module";
+import { ImageModule } from "./image/image.module";
+import { PostModule } from "./post/post.module";
+import { PostCommentModule } from "./post-comment/post-comment.module";
+import { PostViewCountModule } from "./post-view-count/post-view-count.module";
+import { ProfileModule } from "./profile/profile.module";
+import { UserModule } from "./user/user.module";
 
 @Module({
-  imports: [StingerloomOrmModule.forFeature([
-    ApiKey,
-    BlogMetaData,
-    CategoryGroup,
-    Category,
-    ConnectInfo,
-    Image,
-    Post,
-    PostComment,
-    PostViewCount,
-    User,
-    Profile,
-  ])],
+  imports: [
+    AdminModule,
+    ApiKeyModule,
+    BlogMetaDataModule,
+    CategoryModule,
+    CategoryGroupModule,
+    ConnectInfoModule,
+    ImageModule,
+    PostModule,
+    PostCommentModule,
+    PostViewCountModule,
+    ProfileModule,
+    UserModule,
+  ],
 })
 export class DomainModule {}

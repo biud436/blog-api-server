@@ -5,16 +5,16 @@ import {
   PrimaryGeneratedColumn,
   UniqueIndex,
   UpdateTimestamp,
-} from "@stingerloom/orm";
+} from '@stingerloom/orm';
 
-@Entity({ name: "profile" })
-@UniqueIndex(["email"])
-@UniqueIndex(["nickname"])
+@Entity({ name: 'profile' })
+@UniqueIndex(['email'])
+@UniqueIndex(['nickname'])
 export class Profile {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ type: "varchar", length: 100 })
+  @Column({ type: 'varchar', length: 100 })
   email!: string;
 
   @CreateTimestamp()
@@ -23,9 +23,9 @@ export class Profile {
   @UpdateTimestamp()
   updatedAt!: Date;
 
-  @Column({ type: "varchar", length: 255 })
+  @Column({ type: 'varchar', length: 255 })
   nickname!: string;
 
-  @Column({ type: "varchar", length: 255, nullable: true })
+  @Column({ type: 'varchar', length: 255, nullable: true })
   profileImage!: string;
 }
