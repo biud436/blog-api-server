@@ -8,7 +8,7 @@
     "source.fixAll.eslint": "explicit"
   },
   "eslint.nodePath": "./backend/.yarn/sdks",
-  "prettier.prettierPath": "./backend/.yarn/sdks/prettier/index.js",
+  "prettier.prettierPath": "./backend/.yarn/sdks/prettier/index.cjs",
   "typescript.tsdk": "./backend/.yarn/sdks/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "search.exclude": {
