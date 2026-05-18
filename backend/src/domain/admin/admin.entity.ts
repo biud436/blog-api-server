@@ -7,7 +7,7 @@ import {
   RelationColumn,
   UpdateTimestamp,
 } from "@stingerloom/orm";
-import { User } from "./user.entity";
+import { User } from "../user.entity";
 
 @Entity({ name: "admin" })
 export class Admin {

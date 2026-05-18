@@ -2,6 +2,8 @@
   "discord.enabled": true,
   "css.customData": [".vscode/css_custom_data.json"],
   "[handlebars]": { "editor.formatOnSave": false },
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },

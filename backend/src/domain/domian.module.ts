@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { StingerloomOrmModule } from "@stingerloom/orm/nestjs";
-import { Admin } from "./admin.entity";
+import { Admin } from "./admin/admin.entity";
 import { ApiKey } from "./api-key.entity";
 import { BlogMetaData } from "./blog-meta-data.entity";
 import { CategoryGroup } from "./category-group.entity";
@@ -15,7 +15,6 @@ import { User } from "./user.entity";
 
 @Module({
   imports: [StingerloomOrmModule.forFeature([
-    Admin,
     ApiKey,
     BlogMetaData,
     CategoryGroup,

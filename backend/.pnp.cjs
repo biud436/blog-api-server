@@ -127,7 +127,7 @@ const RAW_RUNTIME_STATE =
           ["passport-http", "npm:0.3.0"],\
           ["passport-jwt", "npm:4.0.1"],\
           ["passport-local", "npm:1.0.0"],\
-          ["prettier", "npm:3.3.3"],\
+          ["prettier", "npm:3.8.3"],\
           ["redis", "npm:4.0.4"],\
           ["reflect-metadata", "npm:0.2.2"],\
           ["rimraf", "npm:3.0.2"],\
@@ -9404,7 +9404,7 @@ const RAW_RUNTIME_STATE =
           ["passport-http", "npm:0.3.0"],\
           ["passport-jwt", "npm:4.0.1"],\
           ["passport-local", "npm:1.0.0"],\
-          ["prettier", "npm:3.3.3"],\
+          ["prettier", "npm:3.8.3"],\
           ["redis", "npm:4.0.4"],\
           ["reflect-metadata", "npm:0.2.2"],\
           ["rimraf", "npm:3.0.2"],\
@@ -11437,7 +11437,7 @@ const RAW_RUNTIME_STATE =
           ["@types/prettier", null],\
           ["eslint", "npm:7.32.0"],\
           ["eslint-config-prettier", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:8.8.0"],\
-          ["prettier", "npm:3.3.3"],\
+          ["prettier", "npm:3.8.3"],\
           ["prettier-linter-helpers", "npm:1.0.0"]\
         ],\
         "packagePeers": [\
@@ -16168,10 +16168,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["prettier", [\
-      ["npm:3.3.3", {\
-        "packageLocation": "./.yarn/unplugged/prettier-npm-3.3.3-e811f023f3/node_modules/prettier/",\
+      ["npm:3.8.3", {\
+        "packageLocation": "./.yarn/unplugged/prettier-npm-3.8.3-ecd857a540/node_modules/prettier/",\
         "packageDependencies": [\
-          ["prettier", "npm:3.3.3"]\
+          ["prettier", "npm:3.8.3"]\
         ],\
         "linkType": "HARD"\
       }]\

@@ -8,7 +8,7 @@ import {
   RelationColumn,
   UniqueIndex,
 } from "@stingerloom/orm";
-import { Admin } from "./admin.entity";
+import { Admin } from "./admin/admin.entity";
 import { ApiKey } from "./api-key.entity";
 import { BlogMetaData } from "./blog-meta-data.entity";
 import { Post } from "./post.entity";
