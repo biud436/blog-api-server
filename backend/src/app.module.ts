@@ -46,10 +46,12 @@ import { DataSource } from 'typeorm';
 import { CommentModule } from './controllers/comment/comment.module';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 import { DatabaseModule } from './common/modules/database/database.module';
+import { StingerloomDatabaseModule } from './common/modules/stingerloom-database/stingerloom-database.module';
 
 @Module({
   imports: [
     DatabaseModule,
+    StingerloomDatabaseModule,
     TransactionModule,
     CacheModule.registerAsync(redisCacheConfig),
     ConfigModule.forRoot({
