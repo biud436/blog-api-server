@@ -47,6 +47,14 @@ import { CommentModule } from './controllers/comment/comment.module';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 import { DatabaseModule } from './common/modules/database/database.module';
 import { StingerloomDatabaseModule } from './common/modules/stingerloom-database/stingerloom-database.module';
+import { CategoryGroupModule as DomainCategoryGroupModule } from './domain/category-group/category-group.module';
+import { PostViewCountModule as DomainPostViewCountModule } from './domain/post-view-count/post-view-count.module';
+import { ConnectInfoModule as DomainConnectInfoModule } from './domain/connect-info/connect-info.module';
+import { ProfileModule as DomainProfileModule } from './domain/profile/profile.module';
+import { BlogMetaDataModule as DomainBlogMetaDataModule } from './domain/blog-meta-data/blog-meta-data.module';
+import { AdminModule as DomainAdminModule } from './domain/admin/admin.module';
+import { ImageModule as DomainImageModule } from './domain/image/image.module';
+import { ApiKeyModule as DomainApiKeyModule } from './domain/api-key/api-key.module';
 
 @Module({
   imports: [
@@ -107,6 +115,14 @@ import { StingerloomDatabaseModule } from './common/modules/stingerloom-database
     TaskModule,
     PaginationModule,
     PostCommentModule,
+    DomainCategoryGroupModule,
+    DomainPostViewCountModule,
+    DomainConnectInfoModule,
+    DomainProfileModule,
+    DomainBlogMetaDataModule,
+    DomainAdminModule,
+    DomainImageModule,
+    DomainApiKeyModule,
   ],
   controllers: [AppController],
   providers: [

@@ -33,9 +33,17 @@
   - `addProfile` 은 `QueryRunner` 를 받음 → 트랜잭션 경계는 호출부(`auth.service`)와
     함께 검토. Phase 1 에서는 단순 `repo.save` 로 시작하고 트랜잭션은 Phase 2 패턴 확정 후 반영.
 
-## 완료 조건
+## 진행 방식 변경 (2026-05-28)
 
-- [ ] 4개 엔티티의 소비자가 모두 `domain/*` 서비스를 사용.
-- [ ] `app.module.ts` 에서 해당 모듈 import 가 `domain/*` 로 교체됨.
-- [ ] `tsc --noEmit` + `nest build` 녹색.
-- [ ] 관련 통합 테스트 녹색 (있다면).
+사용자 결정: **교체가 아니라 공존**. 기존 `entities/*` TypeORM 서비스/모듈은
+그대로 두고, `domain/*` 측에 동등한 로직의 서비스를 새로 작성해 둘 다 동시에
+부팅되어 살아 있도록 한다. 소비자 import 갈아끼우기는 별개 단계로 미룬다.
+
+## 완료 조건 (공존 모드)
+
+- [x] 4개 엔티티의 `domain/*` 측 서비스 + 모듈 작성 (CategoryGroup 은 entities 측에도
+      서비스가 없어 forFeature 만 유지).
+- [x] `app.module.ts` 에 `domain/*` 4개 모듈을 alias import 로 추가 (기존 entities
+      모듈도 그대로 유지).
+- [x] `tsc --noEmit` + `nest build` 녹색.
+- [ ] 관련 통합 테스트 녹색 (있다면) — 추후 동등성 검증 단계에서 다룸.

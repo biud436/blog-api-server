@@ -50,11 +50,25 @@
   stingerloom 은 `repo.findWithPage` 내장. Phase 1(ConnectInfo)에서 어댑터 방향 결정.
 - 신규 `domain/*` 엔티티에는 `@Exclude()` 가 없어, 과거 Deserializer 이슈는 해당 없음.
 
+## 진행 방식 (2026-05-28 정정)
+
+원래 README 는 "기존 → 신규로 import 교체" 모델이었지만, 사용자 결정으로
+**공존 + 동등 구현** 모델로 변경한다:
+
+- 기존 `entities/*` TypeORM 서비스/모듈은 그대로 둔다.
+- `domain/*` 측에 같은 로직의 stingerloom 서비스를 새로 작성한다.
+- 양쪽 모듈을 모두 `AppModule.imports` 에 등록해 둘 다 부팅된다.
+- 소비자(컨트롤러/도메인 서비스) 의 import 갈아끼우기 + entities/* 삭제는
+  Phase 5 (정리) 단계에서 일괄.
+
+따라서 각 Phase 완료 조건은 "domain/* 서비스/모듈 작성 + AppModule 등록 +
+빌드 녹색" 으로 단순화한다.
+
 ## 진행 상황
 
 - [x] Phase 0 — stingerloom 연결 부트스트랩
-- [ ] Phase 1 — leaf 엔티티
-- [ ] Phase 2 — 단일 관계 엔티티
+- [x] Phase 1 — leaf 엔티티 (domain 측 서비스/모듈 작성, AppModule 등록)
+- [x] Phase 2 — 단일 관계 엔티티 (트랜잭션 패턴 = `@Transactional()` 데코레이터 확정)
 - [ ] Phase 3 — 핵심 집합체
 - [ ] Phase 4 — Category
 - [ ] Phase 5 — TypeORM 제거 / 정리
