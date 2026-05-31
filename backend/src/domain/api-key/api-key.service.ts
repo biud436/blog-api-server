@@ -14,8 +14,6 @@ import { ScopeRoles } from 'src/common/decorators/api/x-api-scope.decorator';
 import { CreateApiKeyDto } from '../../entities/api-key/dto/create-api-key.dto';
 import { UpdateApiKeyDto } from '../../entities/api-key/dto/update-api-key.dto';
 import { GrantRoleDto } from '../../entities/api-key/dto/grant-role.dto';
-import { User } from '../user/user.entity';
-import { Profile } from '../profile/profile.entity';
 import { ApiKey } from './api-key.entity';
 
 const EXPIRES_D_DAY = 30;
@@ -51,18 +49,12 @@ export class ApiKeyService {
 
   async findOneByApiKey(apiKey: string): Promise<ApiKey> {
     const key = qAlias(ApiKey, 'apiKey');
-    const user = qAlias(User, 'user');
-    const profile = qAlias(Profile, 'profile');
 
     try {
       return await this.apiKeyRepository
         .createQueryBuilder('apiKey')
-        .leftJoinAndSelect(User, 'user', (j) =>
-          j.on(key.col('userId'), '=', user.col('id')),
-        )
-        .leftJoinAndSelect(Profile, 'profile', (j) =>
-          j.on(user.col('profileId'), '=', profile.col('id')),
-        )
+        .leftJoinRelationAndSelect('apiKey.user', 'user')
+        .leftJoinRelationAndSelect('user.profile', 'profile')
         .where(key.accessKey.eq(apiKey))
         .andWhere(key.isExpired.eq(false))
         .orderBy({ id: 'DESC' })
@@ -74,17 +66,11 @@ export class ApiKeyService {
 
   async findOneById(id: number): Promise<ApiKey> {
     const key = qAlias(ApiKey, 'apiKey');
-    const user = qAlias(User, 'user');
-    const profile = qAlias(Profile, 'profile');
 
     return await this.apiKeyRepository
       .createQueryBuilder('apiKey')
-      .leftJoinAndSelect(User, 'user', (j) =>
-        j.on(key.col('userId'), '=', user.col('id')),
-      )
-      .leftJoinAndSelect(Profile, 'profile', (j) =>
-        j.on(user.col('profileId'), '=', profile.col('id')),
-      )
+      .leftJoinRelationAndSelect('apiKey.user', 'user')
+      .leftJoinRelationAndSelect('user.profile', 'profile')
       .where(key.id.eq(id))
       .andWhere(key.isExpired.eq(false))
       .orderBy({ id: 'DESC' })
