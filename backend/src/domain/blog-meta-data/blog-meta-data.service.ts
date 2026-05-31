@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BaseRepository } from '@stingerloom/orm';
+import { BaseRepository, qAlias } from '@stingerloom/orm';
 import { InjectRepository } from '@stingerloom/orm/nestjs';
 import { User } from '../user/user.entity';
 import { BlogMetaData } from './blog-meta-data.entity';
@@ -18,12 +18,15 @@ export class BlogMetaDataService {
   }
 
   async findOneByUsername(username: string): Promise<BlogMetaData> {
+    const blogMetaData = qAlias(BlogMetaData, 'blogMetaData');
+    const user = qAlias(User, 'user');
+
     return await this.blogMetaDataRepository
       .createQueryBuilder('blogMetaData')
       .leftJoinAndSelect(User, 'user', (j) =>
-        j.on('blogMetaData.user_id', '=', 'user.id'),
+        j.on(blogMetaData.col('userId'), '=', user.col('id')),
       )
-      .where('user.username', username)
+      .where(user.username.eq(username))
       .getOneOrFail();
   }
 }

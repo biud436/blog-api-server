@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BaseRepository } from '@stingerloom/orm';
+import { BaseRepository, qAlias } from '@stingerloom/orm';
 import { InjectRepository } from '@stingerloom/orm/nestjs';
 import { User } from '../user/user.entity';
 import { Admin } from './admin.entity';
@@ -12,12 +12,15 @@ export class AdminService {
   ) {}
 
   async isAdmin(username: string): Promise<boolean> {
+    const admin = qAlias(Admin, 'admin');
+    const user = qAlias(User, 'user');
+
     const count = await this.adminRepository
       .createQueryBuilder('admin')
       .innerJoin(User, 'user', (j) =>
-        j.on('admin.user_id', '=', 'user.id'),
+        j.on(admin.col('userId'), '=', user.col('id')),
       )
-      .where('user.username', username)
+      .where(user.username.eq(username))
       .getCount();
 
     return count > 0;

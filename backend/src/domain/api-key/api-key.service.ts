@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { LocalDateTime } from '@js-joda/core';
-import { BaseRepository, Transactional, sql } from '@stingerloom/orm';
+import { BaseRepository, Transactional, qAlias, sql } from '@stingerloom/orm';
 import { InjectRepository } from '@stingerloom/orm/nestjs';
 import { CryptoUtil } from 'src/common/libs/crypto/CryptoUtil';
 import { DateTimeUtil } from 'src/common/libs/date/DateTimeUtil';
@@ -50,17 +50,21 @@ export class ApiKeyService {
   }
 
   async findOneByApiKey(apiKey: string): Promise<ApiKey> {
+    const key = qAlias(ApiKey, 'apiKey');
+    const user = qAlias(User, 'user');
+    const profile = qAlias(Profile, 'profile');
+
     try {
       return await this.apiKeyRepository
         .createQueryBuilder('apiKey')
         .leftJoinAndSelect(User, 'user', (j) =>
-          j.on('apiKey.user_id', '=', 'user.id'),
+          j.on(key.col('userId'), '=', user.col('id')),
         )
         .leftJoinAndSelect(Profile, 'profile', (j) =>
-          j.on('user.profile_id', '=', 'profile.id'),
+          j.on(user.col('profileId'), '=', profile.col('id')),
         )
-        .where('apiKey.access_key', apiKey)
-        .andWhere('apiKey.is_expired', false)
+        .where(key.accessKey.eq(apiKey))
+        .andWhere(key.isExpired.eq(false))
         .orderBy({ id: 'DESC' })
         .getOneOrFail();
     } catch {
@@ -69,16 +73,20 @@ export class ApiKeyService {
   }
 
   async findOneById(id: number): Promise<ApiKey> {
+    const key = qAlias(ApiKey, 'apiKey');
+    const user = qAlias(User, 'user');
+    const profile = qAlias(Profile, 'profile');
+
     return await this.apiKeyRepository
       .createQueryBuilder('apiKey')
       .leftJoinAndSelect(User, 'user', (j) =>
-        j.on('apiKey.user_id', '=', 'user.id'),
+        j.on(key.col('userId'), '=', user.col('id')),
       )
       .leftJoinAndSelect(Profile, 'profile', (j) =>
-        j.on('user.profile_id', '=', 'profile.id'),
+        j.on(user.col('profileId'), '=', profile.col('id')),
       )
-      .where('apiKey.id', id)
-      .andWhere('apiKey.is_expired', false)
+      .where(key.id.eq(id))
+      .andWhere(key.isExpired.eq(false))
       .orderBy({ id: 'DESC' })
       .getOneOrFail();
   }
