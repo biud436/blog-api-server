@@ -55,6 +55,7 @@ import { BlogMetaDataModule as DomainBlogMetaDataModule } from './domain/blog-me
 import { AdminModule as DomainAdminModule } from './domain/admin/admin.module';
 import { ImageModule as DomainImageModule } from './domain/image/image.module';
 import { ApiKeyModule as DomainApiKeyModule } from './domain/api-key/api-key.module';
+import { UserModule as DomainUserModule } from './domain/user/user.module';
 
 @Module({
   imports: [
@@ -123,6 +124,7 @@ import { ApiKeyModule as DomainApiKeyModule } from './domain/api-key/api-key.mod
     DomainAdminModule,
     DomainImageModule,
     DomainApiKeyModule,
+    DomainUserModule,
   ],
   controllers: [AppController],
   providers: [
