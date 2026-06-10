@@ -70,7 +70,7 @@
 - [x] Phase 1 — leaf 엔티티 (domain 측 서비스/모듈 작성, AppModule 등록)
 - [x] Phase 2 — 단일 관계 엔티티 (트랜잭션 패턴 = `@Transactional()` 데코레이터 확정)
 - [x] Phase 3 — 핵심 집합체 (User 2026-05-31, PostComment/Post + subscriber 2026-06-10)
-- [ ] Phase 4 — Category
+- [x] Phase 4 — Category (2026-06-10, 커스텀 리포지토리 → 서비스 흡수 + em.query raw SQL)
 - [ ] Phase 5 — TypeORM 제거 / 정리
 
 ### 의존성 업그레이드 (2026-06-10)

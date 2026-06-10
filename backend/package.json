@@ -175,6 +175,8 @@
             "<rootDir>/test/"
         ],
         "moduleNameMapper": {
+            "^@stingerloom/orm/nestjs$": "@stingerloom/orm/dist/integration/nestjs/index.js",
+            "^@stingerloom/orm$": "@stingerloom/orm/dist/index.js",
             "^@app/libs/env(|/.*)$": "<rootDir>/libs/env/src/$1",
             "src/(.*)": "<rootDir>/src/$1",
             "test/(.*)": "<rootDir>/test/$1"

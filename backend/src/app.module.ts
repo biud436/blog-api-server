@@ -58,6 +58,7 @@ import { ApiKeyModule as DomainApiKeyModule } from './domain/api-key/api-key.mod
 import { UserModule as DomainUserModule } from './domain/user/user.module';
 import { PostCommentModule as DomainPostCommentModule } from './domain/post-comment/post-comment.module';
 import { PostModule as DomainPostModule } from './domain/post/post.module';
+import { CategoryModule as DomainCategoryModule } from './domain/category/category.module';
 
 @Module({
   imports: [
@@ -129,6 +130,7 @@ import { PostModule as DomainPostModule } from './domain/post/post.module';
     DomainUserModule,
     DomainPostCommentModule,
     DomainPostModule,
+    DomainCategoryModule,
   ],
   controllers: [AppController],
   providers: [
