@@ -69,12 +69,16 @@ export class CategoryService {
     });
 
     // 루트가 없으면 새로운 노드로 저장합니다.
+    // groupId 명시: stingerloom save 는 미지정 컬럼을 NULL 로 INSERT 하므로
+    // DB 기본값(1)에 기대지 못한다 (런타임 검증에서 확인).
     if (!root && !rootNodeName) {
-      return await this.categoryRepository.save({
+      const saved = await this.categoryRepository.save({
         name: categoryName,
         left: 1,
         right: 2,
+        groupId: 1,
       });
+      return await this.refetchSaved(saved);
     }
 
     // 부모 노드와의 거리를 계산합니다. (dist = right - 1)
@@ -108,11 +112,25 @@ export class CategoryService {
       .execute();
 
     // 새로운 위치에 노드를 삽입합니다.
-    return await this.categoryRepository.save({
+    const saved = await this.categoryRepository.save({
       name: categoryName,
       left: dist + 1,
       right: dist + 2,
+      groupId: 1,
     });
+    return await this.refetchSaved(saved);
+  }
+
+  /**
+   * save() 의 RETURNING 하이드레이션이 커스텀 컬럼명(CTGR_SQ 등)을
+   * 프로퍼티로 매핑하지 못하고 raw 컬럼 키를 그대로 돌려주므로
+   * (PlainObjectDeserializer 가 단순 Object.assign — 업스트림 이슈),
+   * find 경로로 재조회해 올바르게 매핑된 엔티티를 반환한다.
+   */
+  private async refetchSaved(saved: Partial<Category>): Promise<Category> {
+    const id =
+      saved.id ?? (saved as unknown as Record<string, number>)['CTGR_SQ'];
+    return await this.categoryRepository.findOneOrFail({ where: { id } });
   }
 
   async getCategoryList(): Promise<Category[]> {

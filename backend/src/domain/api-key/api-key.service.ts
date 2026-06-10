@@ -34,9 +34,12 @@ export class ApiKeyService {
   }
 
   async create(createApiKeyDto: CreateApiKeyDto): Promise<ApiKey> {
-    return await this.apiKeyRepository.save(
-      createApiKeyDto as unknown as Partial<ApiKey>,
-    );
+    const partial = createApiKeyDto as unknown as Partial<ApiKey>;
+    return await this.apiKeyRepository.save({
+      ...partial,
+      // stingerloom save 는 미지정 컬럼을 NULL 로 INSERT 하므로 기본값 명시
+      scope: partial.scope ?? 'read:write:update:delete',
+    });
   }
 
   async getUserId(apiKey: string): Promise<number> {
@@ -51,14 +54,19 @@ export class ApiKeyService {
     const key = qAlias(ApiKey, 'apiKey');
 
     try {
-      return await this.apiKeyRepository
+      const found = await this.apiKeyRepository
         .createQueryBuilder('apiKey')
-        .leftJoinRelationAndSelect('apiKey.user', 'user')
-        .leftJoinRelationAndSelect('user.profile', 'profile')
         .where(key.accessKey.eq(apiKey))
         .andWhere(key.isExpired.eq(false))
         .orderBy({ id: 'DESC' })
         .getOneOrFail();
+
+      // 관계 하이드레이션은 find(relations) 2단계 — QB 의 joinAndSelect 는
+      // 중복 컬럼명이 루트 엔티티를 덮어쓰는 업스트림 이슈가 있다.
+      return await this.apiKeyRepository.findOneOrFail({
+        where: { id: found.id },
+        relations: ['user', 'user.profile'],
+      });
     } catch {
       throw new UnauthorizedException('API key is invalid or expired');
     }
@@ -67,14 +75,17 @@ export class ApiKeyService {
   async findOneById(id: number): Promise<ApiKey> {
     const key = qAlias(ApiKey, 'apiKey');
 
-    return await this.apiKeyRepository
+    const found = await this.apiKeyRepository
       .createQueryBuilder('apiKey')
-      .leftJoinRelationAndSelect('apiKey.user', 'user')
-      .leftJoinRelationAndSelect('user.profile', 'profile')
       .where(key.id.eq(id))
       .andWhere(key.isExpired.eq(false))
       .orderBy({ id: 'DESC' })
       .getOneOrFail();
+
+    return await this.apiKeyRepository.findOneOrFail({
+      where: { id: found.id },
+      relations: ['user', 'user.profile'],
+    });
   }
 
   async issueApiKey(id: number): Promise<ApiKey> {

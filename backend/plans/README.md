@@ -73,6 +73,31 @@
 - [x] Phase 4 — Category (2026-06-10, 커스텀 리포지토리 → 서비스 흡수 + em.query raw SQL)
 - [ ] Phase 5 — TypeORM 제거 / 정리
 
+### 런타임 검증 (2026-06-10)
+
+`scripts/verify-stingerloom-runtime.ts` — 격리 스크래치 DB(생성→synchronize→
+검증→드롭)에서 Phase 3/4 의 위험 경로를 실제 MariaDB 로 실행하는 스크립트.
+**20/20 통과** (Category 트리 불변식·moveCategory 롤백 경계·raw SQL,
+PostComment pos/depth 시프트·soft/hard delete, PostSubscriber afterLoad).
+전체 앱 부팅(`DB_HOST=127.0.0.1 DB_NAME=<scratch> node dist/src/main.js`)도
+TypeORM + stingerloom 동시 기동으로 "successfully started" 확인.
+
+이 과정에서 잡은 **stingerloom 0.23.0 런타임 함정 3종** (컴파일로는 안 잡힘):
+
+1. **save() 가 미지정 컬럼을 NULL 로 INSERT** — 모든 메타데이터 컬럼이 INSERT
+   에 포함되어 DB 기본값/`@Column({default})` 이 적용되지 않는다.
+   → 도메인 서비스의 save 에 기본값 명시 (groupId/pos/depth/isValid/isPrivate/scope).
+2. **save() RETURNING 하이드레이션이 raw 컬럼 키 반환** — PlainObjectDeserializer
+   가 단순 Object.assign 이라 CTGR_SQ/post_id 같은 컬럼명이 프로퍼티로 매핑
+   안 됨. → save 반환값을 소비하는 곳은 PK 만 읽고 find 경로로 재조회.
+3. **`*JoinAndSelect` + getMany/getOne 이 루트 엔티티를 오염** — 조인 컬럼이
+   AS 별칭 없이 SELECT 되어 중복 컬럼명(id 등)이 루트 값을 덮어쓰고, 관계
+   중첩 하이드레이션도 안 됨. → 조인은 WHERE 필터 용도(plain join)로만 쓰고,
+   하이드레이션은 `find({relations})` 2단계로 (중첩 `'user.profile'` 지원).
+
+추가: User 도메인 엔티티의 updatedAt 이 `@CreateTimestamp` 중복으로 생성돼
+있던 것을 `@UpdateTimestamp` 로 수정 (introspection 생성 잔재).
+
 ### 의존성 업그레이드 (2026-06-10)
 
 - `@stingerloom/orm` 0.22.0 → **0.23.0** (breaking change 없음).

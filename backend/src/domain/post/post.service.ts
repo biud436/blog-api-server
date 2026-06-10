@@ -18,7 +18,6 @@ import { UpdatePostDto } from '../../entities/post/dto/update-post.dto';
 import { Category } from '../category/category.entity';
 import { Image } from '../image/image.entity';
 import { ImageService } from '../image/image.service';
-import { User } from '../user/user.entity';
 import { Post } from './post.entity';
 
 @Injectable()
@@ -70,21 +69,26 @@ export class PostService {
       content: createPostDto.content,
       categoryId: createPostDto.categoryId,
       authorId: createPostDto.authorId,
-      isPrivate: createPostDto.isPrivate,
+      // stingerloom save 는 미지정 컬럼을 NULL 로 INSERT 하므로 기본값 명시
+      isPrivate: createPostDto.isPrivate ?? false,
       uploadDate: now,
     };
 
-    const post = await this.postRepository.save(model);
+    // save() 의 RETURNING 하이드레이션은 snake_case 컬럼 키를 그대로
+    // 돌려주므로(업스트림 이슈) PK 만 읽고 find 경로로 재조회한다.
+    const saved = await this.postRepository.save(model);
+    const postId = (saved as Partial<Post>).id!;
 
     const resultImageIds = await this.getTemporarilyImageIds(
       createPostDto.authorId,
     );
 
+    let images: Image[] = [];
     if (resultImageIds.length > 0) {
-      const images = await this.imageService.findByIds(resultImageIds);
+      images = await this.imageService.findByIds(resultImageIds);
 
       await this.imageService.updatePostId(
-        post.id,
+        postId,
         images.map((e) => e.id),
       );
 
@@ -94,9 +98,12 @@ export class PostService {
           image.id + '',
         );
       }
-
-      post.images = images.map((e) => ({ ...e, postId: post.id }));
     }
+
+    const post = await this.postRepository.findOneOrFail({
+      where: { id: postId },
+    });
+    post.images = images.map((e) => ({ ...e, postId }));
 
     return post;
   }
@@ -206,26 +213,22 @@ export class PostService {
     isPrivate?: boolean,
     anonymousId?: number,
   ): Promise<Post> {
-    const p = qAlias(Post, 'post');
-    const u = qAlias(User, 'user');
-
-    const qb = this.postRepository
-      .createQueryBuilder('post')
-      .leftJoinRelationAndSelect('post.user', 'user')
-      .leftJoinRelationAndSelect('post.category', 'category')
-      .leftJoinRelationAndSelect('user.profile', 'profile')
-      .where(p.id.eq(postId));
-
+    // 원본의 `user.id = :anonymousId` 는 JOIN ON author_id = user.id 와
+    // 결합돼 author_id 필터와 동치다. deletedAt IS NULL 은 @DeletedAt 자동.
+    const where: Partial<Record<keyof Post, unknown>> = { id: postId };
     if (isPrivate) {
-      qb.andWhere(p.isPrivate.gte(0));
-      qb.andWhere(u.id.eq(anonymousId));
+      where.authorId = anonymousId;
     } else {
-      qb.andWhere(p.isPrivate.eq(false));
+      where.isPrivate = false;
     }
 
-    const item = await qb.getOneOrFail();
+    const item = await this.postRepository.findOneOrFail({
+      where: where as never,
+      relations: ['user', 'user.profile', 'category'],
+    });
 
-    // QB 는 OneToMany 를 중첩 로드하지 않으므로 2단계로 하이드레이션.
+    // find 의 relations 는 OneToMany(images)도 지원하지만, 원본과 동일하게
+    // postId 기준으로 직접 로드한다.
     item.images = await this.imageRepository.find({
       where: { postId: item.id },
     });
@@ -245,11 +248,7 @@ export class PostService {
     const size = pageSize || PaginationConfig.limit.numberPerPage;
     const safePage = !pageNumber || pageNumber < 1 ? 1 : pageNumber;
 
-    const qb = this.postRepository
-      .createQueryBuilder('post')
-      .leftJoinRelationAndSelect('post.user', 'user')
-      .leftJoinRelationAndSelect('post.category', 'category')
-      .leftJoinRelationAndSelect('user.profile', 'profile');
+    const qb = this.postRepository.createQueryBuilder('post');
 
     if (categoryId) {
       const descendants = await this.selectCategoryDescendants(categoryId);
@@ -257,7 +256,7 @@ export class PostService {
       qb.where(p.categoryId.in(ids));
     }
 
-    const rows = await qb
+    const pageRows = await qb
       .orderBy({ uploadDate: 'DESC' })
       .limit(size)
       .offset((safePage - 1) * size)
@@ -268,6 +267,11 @@ export class PostService {
       .createQueryBuilder('post')
       .getCount();
 
+    const rows = await this.hydrateRelations(pageRows, [
+      'user',
+      'user.profile',
+      'category',
+    ]);
     await this.attachImages(rows);
 
     const items = this.toPaginatable(rows, totalCount, safePage, size);
@@ -299,9 +303,6 @@ export class PostService {
 
     const qb = this.postRepository
       .createQueryBuilder('post')
-      .leftJoinRelationAndSelect('post.user', 'user')
-      .leftJoinRelationAndSelect('post.category', 'category')
-      .leftJoinRelationAndSelect('user.profile', 'profile')
       .where(p.isPrivate.eq(false));
 
     if (searchProperty === 'title') {
@@ -310,11 +311,17 @@ export class PostService {
       qb.andWhere(p.content.like(`${searchQuery}%`));
     }
 
-    const [rows, total] = await qb
+    const [pageRows, total] = await qb
       .orderBy({ uploadDate: 'DESC' })
       .limit(size)
       .offset((safePage - 1) * size)
       .getManyAndCount();
+
+    const rows = await this.hydrateRelations(pageRows, [
+      'user',
+      'user.profile',
+      'category',
+    ]);
 
     const items = this.toPaginatable(rows, total, safePage, size);
 
@@ -340,9 +347,6 @@ export class PostService {
 
     const qb = this.postRepository
       .createQueryBuilder('post')
-      .leftJoinRelationAndSelect('post.user', 'user')
-      .leftJoinRelationAndSelect('post.category', 'category')
-      .leftJoinRelationAndSelect('user.profile', 'profile')
       // 비공개 포스트는 조회하지 않습니다.
       .where(p.isPrivate.eq(false));
 
@@ -352,12 +356,17 @@ export class PostService {
       qb.andWhere(p.categoryId.in(ids));
     }
 
-    const [rows, total] = await qb
+    const [pageRows, total] = await qb
       .orderBy({ uploadDate: 'DESC' })
       .limit(size)
       .offset((safePage - 1) * size)
       .getManyAndCount();
 
+    const rows = await this.hydrateRelations(pageRows, [
+      'user',
+      'user.profile',
+      'category',
+    ]);
     await this.attachImages(rows);
 
     const items = this.toPaginatable(rows, total, safePage, size);
@@ -381,15 +390,37 @@ export class PostService {
     const size = PaginationConfig.limit.numberPerPage;
     const safePage = !pageNumber || pageNumber < 1 ? 1 : pageNumber;
 
-    const [rows, total] = await this.postRepository
+    const [pageRows, total] = await this.postRepository
       .createQueryBuilder('post')
-      .leftJoinRelationAndSelect('post.category', 'category')
       .where(p.authorId.eq(userId))
       .limit(size)
       .offset((safePage - 1) * size)
       .getManyAndCount();
 
+    const rows = await this.hydrateRelations(pageRows, ['category']);
+
     return this.toPaginatable(rows, total, safePage, size);
+  }
+
+  /**
+   * QB 의 joinAndSelect 는 중복 컬럼명이 루트 엔티티를 덮어쓰는 업스트림
+   * 이슈가 있어, 페이지 행을 find(relations) 로 다시 로드해 관계를
+   * 하이드레이션한다 (user.getUserList 에서 확립한 2단계 패턴).
+   */
+  private async hydrateRelations(
+    rows: Post[],
+    relations: string[],
+  ): Promise<Post[]> {
+    const ids = rows.map((e) => e.id);
+    if (!ids.length) {
+      return [];
+    }
+
+    return await this.postRepository.find({
+      where: { id: { in: ids } },
+      relations,
+      orderBy: { uploadDate: 'DESC' },
+    });
   }
 
   /**

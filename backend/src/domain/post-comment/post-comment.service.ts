@@ -34,11 +34,13 @@ export class PostCommentService {
     createCommentDto: CreateCommentDto,
     userId: number,
   ): Promise<PostComment> {
+    // pos/depth 명시: stingerloom save 는 미지정 컬럼을 NULL 로 INSERT 하므로
+    // DB 기본값(0)에 기대지 못한다.
     const comment: Partial<PostComment> = {
       postId: createCommentDto.postId,
       content: createCommentDto.content,
-      pos: createCommentDto.pos,
-      depth: createCommentDto.depth,
+      pos: createCommentDto.pos ?? 0,
+      depth: createCommentDto.depth ?? 0,
       parentId: createCommentDto.parentId,
       userId,
     };
@@ -77,14 +79,21 @@ export class PostCommentService {
       isExistParent = true;
     }
 
+    // save() 의 RETURNING 하이드레이션은 snake_case 컬럼 키를 그대로
+    // 돌려주므로(업스트림 이슈) PK 만 읽고 find 경로로 재조회한다.
     const result = await this.commentRepository.save(comment);
+    const savedId = (result as Partial<PostComment>).id!;
 
     if (!isExistParent) {
-      result.parentId = result.id;
-      return await this.commentRepository.save(result);
+      await this.commentRepository.updateMany(
+        { parentId: savedId },
+        { where: { id: savedId } },
+      );
     }
 
-    return result;
+    return await this.commentRepository.findOneOrFail({
+      where: { id: savedId },
+    });
   }
 
   private async createNodeWithDESC(
@@ -163,14 +172,24 @@ export class PostCommentService {
 
     const [rows, total] = await this.commentRepository
       .createQueryBuilder('comment')
-      .leftJoinRelationAndSelect('comment.user', 'user')
       .where(c.postId.eq(postId))
       .orderBy({ parentId: 'ASC', pos: 'ASC' })
       .limit(pageSize)
       .offset((safePage - 1) * pageSize)
       .getManyAndCount();
 
-    return this.toPaginatable(rows, total, safePage, pageSize);
+    // 관계 하이드레이션은 find(relations) 2단계 — QB 의 joinAndSelect 는
+    // 중복 컬럼명이 루트 엔티티를 덮어쓰는 업스트림 이슈가 있다.
+    const ids = rows.map((row) => row.id);
+    const entities = ids.length
+      ? await this.commentRepository.find({
+          where: { id: { in: ids } },
+          relations: ['user'],
+          orderBy: { parentId: 'ASC', pos: 'ASC' },
+        })
+      : [];
+
+    return this.toPaginatable(entities, total, safePage, pageSize);
   }
 
   /**

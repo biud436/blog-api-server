@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
   RelationColumn,
   UniqueIndex,
+  UpdateTimestamp,
 } from '@stingerloom/orm';
 import { Admin } from '../admin/admin.entity';
 import { ApiKey } from '../api-key/api-key.entity';
@@ -43,7 +44,7 @@ export class User {
   @CreateTimestamp()
   createdAt!: Date;
 
-  @CreateTimestamp()
+  @UpdateTimestamp()
   updatedAt!: Date;
 
   @OneToMany(() => Post, { mappedBy: 'user' })

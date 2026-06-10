@@ -32,11 +32,18 @@ export class UserService {
   async create(createUserDto: CreateUserDto, profile: Profile): Promise<User> {
     const password = await bcrypt.hash(createUserDto.password, 10);
 
-    return await this.userRepository.save({
+    const saved = await this.userRepository.save({
       username: createUserDto.username,
       password,
       profileId: profile.id,
+      // stingerloom save 는 미지정 컬럼을 NULL 로 INSERT 하므로 기본값(true) 명시
+      isValid: true,
     } as Partial<User>);
+
+    // save() 반환은 raw 컬럼 키(profile_id 등)라 find 경로로 재조회 (업스트림 이슈)
+    return await this.userRepository.findOneOrFail({
+      where: { id: (saved as Partial<User>).id },
+    });
   }
 
   async validateUser(
@@ -61,13 +68,23 @@ export class UserService {
   async findProfileByUsername(username: string): Promise<User | null> {
     const user = qAlias(User, 'user');
 
-    return await this.userRepository
+    const found = await this.userRepository
       .createQueryBuilder('user')
-      .innerJoinRelationAndSelect('user.profile', 'profile')
       .where(user.username.eq(username))
       .andWhere(user.isValid.eq(true))
       .whereHas('admins')
       .getOne();
+
+    if (!found) {
+      return null;
+    }
+
+    // 관계 하이드레이션은 find(relations) 2단계 — QB 의 joinAndSelect 는
+    // 중복 컬럼명이 루트 엔티티를 덮어쓰는 업스트림 이슈가 있다.
+    return await this.userRepository.findOne({
+      where: { id: found.id },
+      relations: ['profile'],
+    });
   }
 
   async getUserId(username: string): Promise<User> {
