@@ -36,6 +36,9 @@ export class Post {
   @Column({ type: 'text' })
   content!: string;
 
+  /** 컬럼이 아님 — afterLoad/withPreview 에서 markdown 제거 후 채워지는 파생 필드 */
+  previewContent?: string;
+
   @CreateTimestamp()
   uploadDate!: Date;
 

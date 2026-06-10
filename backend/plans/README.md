@@ -2,7 +2,7 @@
 
 ## 목표
 
-블로그 API 서버의 ORM을 TypeORM 0.3 에서 `@stingerloom/orm` 0.22 로 **점진적으로** 단일화한다.
+블로그 API 서버의 ORM을 TypeORM 0.3 에서 `@stingerloom/orm` 0.23 로 **점진적으로** 단일화한다.
 한 번에 바꾸지 않고, 두 ORM이 같은 DB를 바라보며 **공존**하는 상태에서 엔티티 단위로 옮긴다.
 
 ## 현재 구조 (공존)
@@ -69,6 +69,16 @@
 - [x] Phase 0 — stingerloom 연결 부트스트랩
 - [x] Phase 1 — leaf 엔티티 (domain 측 서비스/모듈 작성, AppModule 등록)
 - [x] Phase 2 — 단일 관계 엔티티 (트랜잭션 패턴 = `@Transactional()` 데코레이터 확정)
-- [ ] Phase 3 — 핵심 집합체
+- [x] Phase 3 — 핵심 집합체 (User 2026-05-31, PostComment/Post + subscriber 2026-06-10)
 - [ ] Phase 4 — Category
 - [ ] Phase 5 — TypeORM 제거 / 정리
+
+### 의존성 업그레이드 (2026-06-10)
+
+- `@stingerloom/orm` 0.22.0 → **0.23.0** (breaking change 없음).
+  - introspection MySQL EXTRA 누락 버그(cd30d50, PR #346) 정식 수정 포함 —
+    재생성 시 EXTRA 보충 우회 불필요.
+  - 주의: QB `paginate()` (#367) 는 v0.23.0 태그 **이후** 커밋이라 릴리스 미포함.
+    페이지네이션은 기존 관용구(`getManyAndCount` + 어댑터) 유지.
+- 0.23.0 의 d.ts 가 TS 5 문법(`const` 타입 파라미터)을 쓰므로
+  `typescript` 4.9.5 → **5.9.3**, `ts-patch` ^2 → **^3** 동반 업그레이드.

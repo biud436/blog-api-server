@@ -56,6 +56,8 @@ import { AdminModule as DomainAdminModule } from './domain/admin/admin.module';
 import { ImageModule as DomainImageModule } from './domain/image/image.module';
 import { ApiKeyModule as DomainApiKeyModule } from './domain/api-key/api-key.module';
 import { UserModule as DomainUserModule } from './domain/user/user.module';
+import { PostCommentModule as DomainPostCommentModule } from './domain/post-comment/post-comment.module';
+import { PostModule as DomainPostModule } from './domain/post/post.module';
 
 @Module({
   imports: [
@@ -125,6 +127,8 @@ import { UserModule as DomainUserModule } from './domain/user/user.module';
     DomainImageModule,
     DomainApiKeyModule,
     DomainUserModule,
+    DomainPostCommentModule,
+    DomainPostModule,
   ],
   controllers: [AppController],
   providers: [
