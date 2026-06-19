@@ -7,7 +7,7 @@ import {
   PaginationConfig,
   PaginationResult,
 } from '../../common/config/list-config';
-import { CreateUserDto } from '../../entities/user/dto/create-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { Profile } from '../profile/profile.entity';
 import { User } from './user.entity';
 

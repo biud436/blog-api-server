@@ -4,7 +4,7 @@ import { RssController } from './rss.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RSS_MODULE_OPTIONS } from './rss.constant';
 import { RssModuleOptions } from './interfaces/rss-option.interface';
-import { PostModule } from 'src/entities/post/post.module';
+import { PostModule } from 'src/domain/post/post.module';
 
 @Module({})
 export class RssModule {

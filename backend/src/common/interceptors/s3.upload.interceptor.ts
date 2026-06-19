@@ -16,7 +16,7 @@ import { transformException } from '@nestjs/platform-express/multer/multer/multe
 import { MULTER_MODULE_OPTIONS } from '@nestjs/platform-express/multer/files.constants';
 import { ConfigService } from '@nestjs/config';
 import multerS3 from 'multer-s3';
-import { ImageService } from '../../controllers/image/image.service';
+import { ImageService } from '../../domain/image/image.service';
 import { JwtPayload } from '../../controllers/auth/validator/response.dto';
 import { S3Client } from '@aws-sdk/client-s3';
 import { TEnvironmentFile } from '../config/my-config-service.type';

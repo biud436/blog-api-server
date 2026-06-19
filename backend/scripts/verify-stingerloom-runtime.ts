@@ -34,7 +34,7 @@ import { Post } from '../src/domain/post/post.entity';
 import { PostSubscriber } from '../src/domain/post/post.subscriber';
 import { Profile } from '../src/domain/profile/profile.entity';
 import { User } from '../src/domain/user/user.entity';
-import { CreateCommentDto } from '../src/entities/comment/dto/create-comment.dto';
+import { CreateCommentDto } from '../src/domain/post-comment/dto/create-comment.dto';
 
 dotenv.config({ path: `${__dirname}/../.env` });
 

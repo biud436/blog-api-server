@@ -15,8 +15,8 @@ import {
   InjectRepository,
 } from '@stingerloom/orm/nestjs';
 import { ChangeCategoryDto } from 'src/controllers/admin/dto/change-category.dto';
-import { CategoryDepthVO } from '../../entities/category/dto/category-depth.vo';
-import { MoveCategoryDto } from '../../entities/category/dto/move-category.dto';
+import { CategoryDepthVO } from './dto/category-depth.vo';
+import { MoveCategoryDto } from './dto/move-category.dto';
 import { Category } from './category.entity';
 
 /**

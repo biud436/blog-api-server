@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsString, Matches } from 'class-validator';
-import { CreateProfileDto } from 'src/entities/profile/dto/create-profile.dto';
+import { CreateProfileDto } from 'src/domain/profile/dto/create-profile.dto';
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace AuthRequest {

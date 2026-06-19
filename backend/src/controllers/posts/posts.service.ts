@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePostDto } from 'src/entities/post/dto/create-post.dto';
-import { UpdatePostDto } from 'src/entities/post/dto/update-post.dto';
-import { PostService } from 'src/entities/post/post.service';
+import { CreatePostDto } from 'src/domain/post/dto/create-post.dto';
+import { UpdatePostDto } from 'src/domain/post/dto/update-post.dto';
+import { PostService } from 'src/domain/post/post.service';
 import { RedisService } from 'src/common/micro-services/redis/redis.service';
 import { PostSearchProperty } from './types/post-search-type';
 import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
 import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
 import { NoPostException, NotPublicPostException } from 'src/common/exceptions';
-import { Transactional } from 'typeorm-transactional';
+import { Transactional } from '@stingerloom/orm';
 
 @Injectable()
 export class PostsService {

@@ -17,7 +17,7 @@ import {
   ApiNotebook,
   JwtGuard,
 } from 'src/common/decorators/swagger/api-notebook.decorator';
-import { CreateCommentDto } from 'src/entities/comment/dto/create-comment.dto';
+import { CreateCommentDto } from 'src/domain/post-comment/dto/create-comment.dto';
 import { CommentService } from './comment.service';
 
 @Controller('comment')

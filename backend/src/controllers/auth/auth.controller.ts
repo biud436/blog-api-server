@@ -10,7 +10,7 @@ import { Request, Response } from 'express';
 import { ApiTags } from '@nestjs/swagger';
 import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
 import { UserInfo } from 'src/common/decorators/authorization/user.decorator';
-import { User } from 'src/entities/user/entities/user.entity';
+import { User } from 'src/domain/user/user.entity';
 import { Throttle } from '@nestjs/throttler';
 import { LOGIN_INTERVAL } from 'src/common/config/throttle-config';
 import { AuthGuard } from '@nestjs/passport';

@@ -11,7 +11,7 @@ import {
   PaginationConfig,
   PaginationResult,
 } from '../../common/config/list-config';
-import { CreateCommentDto } from '../../entities/comment/dto/create-comment.dto';
+import { CreateCommentDto } from './dto/create-comment.dto';
 import { PostComment } from './post-comment.entity';
 
 type CommentOrder = 'ASC' | 'DESC';

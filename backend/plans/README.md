@@ -71,7 +71,10 @@
 - [x] Phase 2 — 단일 관계 엔티티 (트랜잭션 패턴 = `@Transactional()` 데코레이터 확정)
 - [x] Phase 3 — 핵심 집합체 (User 2026-05-31, PostComment/Post + subscriber 2026-06-10)
 - [x] Phase 4 — Category (2026-06-10, 커스텀 리포지토리 → 서비스 흡수 + em.query raw SQL)
-- [ ] Phase 5 — TypeORM 제거 / 정리
+- [x] Phase 5 — TypeORM 제거 / 정리 (2026-06-19, entities/* 삭제 + image 도메인 완전
+      포팅 + TypeORM 의존성 4종 제거 + 트랜잭션 stingerloom 전환. tsc/build 녹색,
+      부팅 DI 그래프 54모듈 0에러. 실 DB/Redis 런타임 검증은 사용자 환경 필요 —
+      [phase-5-cleanup.md](./phase-5-cleanup.md) 참조)
 
 ### 런타임 검증 (2026-06-10)
 

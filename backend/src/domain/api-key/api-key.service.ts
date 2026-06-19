@@ -11,9 +11,9 @@ import { CryptoUtil } from 'src/common/libs/crypto/CryptoUtil';
 import { DateTimeUtil } from 'src/common/libs/date/DateTimeUtil';
 import { Role } from 'src/common/decorators/authorization/role.enum';
 import { ScopeRoles } from 'src/common/decorators/api/x-api-scope.decorator';
-import { CreateApiKeyDto } from '../../entities/api-key/dto/create-api-key.dto';
-import { UpdateApiKeyDto } from '../../entities/api-key/dto/update-api-key.dto';
-import { GrantRoleDto } from '../../entities/api-key/dto/grant-role.dto';
+import { CreateApiKeyDto } from './dto/create-api-key.dto';
+import { UpdateApiKeyDto } from './dto/update-api-key.dto';
+import { GrantRoleDto } from './dto/grant-role.dto';
 import { ApiKey } from './api-key.entity';
 
 const EXPIRES_D_DAY = 30;

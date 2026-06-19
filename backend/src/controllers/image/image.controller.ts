@@ -19,7 +19,7 @@ import {
   ApiNotebook,
   JwtGuard,
 } from 'src/common/decorators/swagger/api-notebook.decorator';
-import { ImageService } from './image.service';
+import { ImageService } from 'src/domain/image/image.service';
 import {
   MulterS3File,
   S3FileInterceptor,
@@ -29,8 +29,8 @@ import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
 import { S3ImageUploadDto } from './dto/s3-image-upload.dto';
 import { UserId } from 'src/common/decorators/authorization/user-id.decorator';
 import { ImageCreateSvgCommandImpl } from './commands/image-create-svg.command';
-import { Image } from './entities/image.entity';
-import { Transactional } from 'typeorm-transactional';
+import { Image } from 'src/domain/image/image.entity';
+import { Transactional } from '@stingerloom/orm';
 
 @Controller('image')
 @ApiTags('Image')

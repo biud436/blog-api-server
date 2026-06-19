@@ -27,9 +27,9 @@ import {
   AnonymousId,
   IsPrivatePost,
 } from 'src/common/decorators/authorization/anonymous.decorator';
-import { CategoryService } from 'src/entities/category/category.service';
-import { CreatePostDto } from 'src/entities/post/dto/create-post.dto';
-import { UpdatePostDto } from 'src/entities/post/dto/update-post.dto';
+import { CategoryService } from 'src/domain/category/category.service';
+import { CreatePostDto } from 'src/domain/post/dto/create-post.dto';
+import { UpdatePostDto } from 'src/domain/post/dto/update-post.dto';
 import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
 import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
 import { PrivatePostGuard } from '../auth/guards/private-post.guard';

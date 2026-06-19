@@ -6,7 +6,7 @@ import {
   PaginationConfig,
   PaginationResult,
 } from '../../common/config/list-config';
-import { CreateConnectInfoDto } from '../../entities/connect-info/dto/create-connect-info.dto';
+import { CreateConnectInfoDto } from './dto/create-connect-info.dto';
 import { ConnectInfo } from './connect-info.entity';
 
 @Injectable()

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Image } from 'src/controllers/image/entities/image.entity';
+import { Image } from 'src/domain/image/image.entity';
 import { S3DeleteBucketCommand } from './s3.delete-bucket.command';
 
 @Injectable()

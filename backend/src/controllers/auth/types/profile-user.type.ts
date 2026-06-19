@@ -1,4 +1,4 @@
-import { User } from 'src/entities/user/entities/user.entity';
+import { User } from 'src/domain/user/user.entity';
 
 export type ProfileUser = {
   user: Pick<User, 'username'>;

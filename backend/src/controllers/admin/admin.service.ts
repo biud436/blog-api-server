@@ -3,13 +3,13 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { CategoryService } from 'src/entities/category/category.service';
-import { MoveCategoryDto } from 'src/entities/category/dto/move-category.dto';
+import { CategoryService } from 'src/domain/category/category.service';
+import { MoveCategoryDto } from 'src/domain/category/dto/move-category.dto';
 import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
 import { IResponsableData } from 'src/common/libs/response/interface/response.interface';
 import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
 import { ChangeCategoryDto } from './dto/change-category.dto';
-import { Transactional } from 'typeorm-transactional';
+import { Transactional } from '@stingerloom/orm';
 
 @Injectable()
 export class AdminService {

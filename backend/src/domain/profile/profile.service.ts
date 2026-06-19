@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { BaseRepository } from '@stingerloom/orm';
 import { InjectRepository } from '@stingerloom/orm/nestjs';
-import { CreateProfileDto } from '../../entities/profile/dto/create-profile.dto';
+import { CreateProfileDto } from './dto/create-profile.dto';
 import { Profile } from './profile.entity';
 
 @Injectable()

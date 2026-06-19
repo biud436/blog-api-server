@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import RSS from 'rss';
 import { RSS_MODULE_OPTIONS } from './rss.constant';
 import { RssModuleOptions } from './interfaces/rss-option.interface';
-import { PostService } from 'src/entities/post/post.service';
+import { PostService } from 'src/domain/post/post.service';
 import iconv from 'iconv-lite';
 
 @Injectable()

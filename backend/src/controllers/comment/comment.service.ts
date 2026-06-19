@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { Paginatable } from 'src/common/config/list-config';
 import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
 import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
-import { PostCommentService } from 'src/entities/comment/post-comment.service';
-import { CreateCommentDto } from 'src/entities/comment/dto/create-comment.dto';
-import { PostComment } from 'src/entities/comment/entities/post-comment.entity';
-import { Transactional } from 'typeorm-transactional';
+import { PostCommentService } from 'src/domain/post-comment/post-comment.service';
+import { CreateCommentDto } from 'src/domain/post-comment/dto/create-comment.dto';
+import { PostComment } from 'src/domain/post-comment/post-comment.entity';
+import { Transactional } from '@stingerloom/orm';
 
 @Injectable()
 export class CommentService {
