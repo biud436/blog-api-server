@@ -53,7 +53,7 @@ const RAW_RUNTIME_STATE =
           ["@nestjs/swagger", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:11.0.3"],\
           ["@nestjs/testing", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:11.0.5"],\
           ["@nestjs/throttler", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:6.4.0"],\
-          ["@stingerloom/orm", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:0.23.0"],\
+          ["@stingerloom/orm", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:1.0.0"],\
           ["@swc/cli", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:0.5.2"],\
           ["@swc/core", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:1.10.1"],\
           ["@types/bcrypt", "npm:5.0.0"],\
@@ -6651,20 +6651,20 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@stingerloom/orm", [\
-      ["npm:0.23.0", {\
-        "packageLocation": "./.yarn/cache/@stingerloom-orm-npm-0.23.0-883af1e270-496109ac60.zip/node_modules/@stingerloom/orm/",\
+      ["npm:1.0.0", {\
+        "packageLocation": "./.yarn/cache/@stingerloom-orm-npm-1.0.0-a7c174c5cb-cbbd987805.zip/node_modules/@stingerloom/orm/",\
         "packageDependencies": [\
-          ["@stingerloom/orm", "npm:0.23.0"]\
+          ["@stingerloom/orm", "npm:1.0.0"]\
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:0.23.0", {\
-        "packageLocation": "./.yarn/__virtual__/@stingerloom-orm-virtual-1b565c0b1e/0/cache/@stingerloom-orm-npm-0.23.0-883af1e270-496109ac60.zip/node_modules/@stingerloom/orm/",\
+      ["virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:1.0.0", {\
+        "packageLocation": "./.yarn/__virtual__/@stingerloom-orm-virtual-2e24510e23/0/cache/@stingerloom-orm-npm-1.0.0-a7c174c5cb-cbbd987805.zip/node_modules/@stingerloom/orm/",\
         "packageDependencies": [\
           ["@mrleebo/prisma-ast", null],\
           ["@nestjs/common", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:11.0.5"],\
           ["@nestjs/core", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:11.0.5"],\
-          ["@stingerloom/orm", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:0.23.0"],\
+          ["@stingerloom/orm", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:1.0.0"],\
           ["@types/better-sqlite3", null],\
           ["@types/class-transformer", null],\
           ["@types/fast-glob", null],\
@@ -9215,7 +9215,7 @@ const RAW_RUNTIME_STATE =
           ["@nestjs/swagger", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:11.0.3"],\
           ["@nestjs/testing", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:11.0.5"],\
           ["@nestjs/throttler", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:6.4.0"],\
-          ["@stingerloom/orm", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:0.23.0"],\
+          ["@stingerloom/orm", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:1.0.0"],\
           ["@swc/cli", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:0.5.2"],\
           ["@swc/core", "virtual:875ce0ad9b19b48e98edceabac067c17cd765a389d5eacad7291c6e98f75b6c3a1822ea031de43807a55a6584d73aad0c0fc4f80bbd7837ec8ff385b896eb23b#npm:1.10.1"],\
           ["@types/bcrypt", "npm:5.0.0"],\

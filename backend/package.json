@@ -42,7 +42,7 @@
         "@nestjs/serve-static": "^5.0.1",
         "@nestjs/swagger": "^11.0.3",
         "@nestjs/throttler": "^6.4.0",
-        "@stingerloom/orm": "^0.23.0",
+        "@stingerloom/orm": "^1.0.0",
         "@swc/cli": "^0.5.2",
         "@swc/core": "^1.10.1",
         "@types/bcrypt": "^5.0.0",
