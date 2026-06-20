@@ -13,7 +13,7 @@ This project is the blog server that is made with the server framework called ne
 In this directory named `backend` will finish off the features of our server by adding a lot of controllers, services, pipes of `Nest.js` for blog service.
 
 - Nest.js
-- TypeORM
+- @stingerloom/orm
 - MariaDB
 - Redis
 
