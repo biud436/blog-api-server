@@ -1,5 +1,5 @@
 import { ArgumentMetadata, Injectable, PipeTransform } from '@nestjs/common';
-import { UserService } from 'src/entities/user/user.service';
+import { UserService } from 'src/domain/user/user.service';
 import { ParseAnonymousIdPipe } from './parse-anonymous-id.pipe';
 
 @Injectable()

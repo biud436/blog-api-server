@@ -16,7 +16,7 @@ import {
   ApiNotebook,
   JwtGuard,
 } from 'src/common/decorators/swagger/api-notebook.decorator';
-import { MoveCategoryDto } from 'src/entities/category/dto/move-category.dto';
+import { MoveCategoryDto } from 'src/domain/category/dto/move-category.dto';
 import { AdminService } from './admin.service';
 import { ChangeCategoryDto } from './dto/change-category.dto';
 import { NewCategoryDto } from './dto/new-category.dto';

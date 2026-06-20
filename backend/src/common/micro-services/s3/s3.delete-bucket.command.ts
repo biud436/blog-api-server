@@ -1,7 +1,7 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TEnvironmentFile } from 'src/common/config/my-config-service.type';
-import { Image } from 'src/controllers/image/entities/image.entity';
+import { Image } from 'src/domain/image/image.entity';
 import { DeleteObjectsCommand, S3, S3Client } from '@aws-sdk/client-s3';
 
 export abstract class S3DeleteBucketCommand {

@@ -8,15 +8,15 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService, JwtSignOptions, JwtVerifyOptions } from '@nestjs/jwt';
 import { CookieOptions, Response } from 'express';
-import { AdminService } from 'src/entities/admin/admin.service';
-import { CreateUserDto } from 'src/entities/user/dto/create-user.dto';
-import { UserService } from 'src/entities/user/user.service';
-import { DataSource } from 'typeorm';
+import { AdminService } from 'src/domain/admin/admin.service';
+import { CreateUserDto } from 'src/domain/user/dto/create-user.dto';
+import { UserService } from 'src/domain/user/user.service';
+import { Transactional } from '@stingerloom/orm';
 import { AuthRequest } from './validator/request.dto';
 import { JwtPayload } from './validator/response.dto';
 import * as validator from 'class-validator';
 import { DownStreamInternalServerErrorException } from './validator/upstream.error';
-import { ProfileService } from 'src/entities/profile/profile.service';
+import { ProfileService } from 'src/domain/profile/profile.service';
 import { RedisService } from 'src/common/micro-services/redis/redis.service';
 import { CryptoUtil } from 'src/common/libs/crypto/CryptoUtil';
 import { MailService } from 'src/common/modules/mail/mail.service';
@@ -25,13 +25,13 @@ import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
 import { DateTimeUtil } from 'src/common/libs/date/DateTimeUtil';
 import { plainToClass } from 'class-transformer';
 import { LoginAuthorizationException } from './validator/error.dto';
-import { ApiKeyService } from 'src/entities/api-key/api-key.service';
-import { User } from 'src/entities/user/entities/user.entity';
+import { ApiKeyService } from 'src/domain/api-key/api-key.service';
+import { User } from 'src/domain/user/user.entity';
 import { Role } from 'src/common/decorators/authorization/role.enum';
 import { HttpService } from '@nestjs/axios';
 import { GithubUserData } from './validator/github.dto';
 import { AES256Provider } from 'src/common/modules/aes/aes-256.provider';
-import { ConnectInfoService } from 'src/entities/connect-info/connect-info.service';
+import { ConnectInfoService } from 'src/domain/connect-info/connect-info.service';
 import { GithubUser } from './strategies/github.strategy';
 import { I18nConfig } from './libs/i18n';
 import {
@@ -55,7 +55,6 @@ export class AuthService {
     private readonly redisService: RedisService,
     private readonly mailService: MailService,
     private readonly apiKeyService: ApiKeyService,
-    private readonly dataSource: DataSource,
     private readonly httpService: HttpService,
     private readonly aes256Provider: AES256Provider,
     private readonly connectInfoService: ConnectInfoService,
@@ -354,13 +353,8 @@ export class AuthService {
    * @param body
    * @returns
    */
+  @Transactional()
   async signUp(body: AuthRequest.RequestDto) {
-    const connection = this.dataSource;
-    const queryRunner = connection.createQueryRunner();
-
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-
     const KEY = `auth_code_ok:${body.email}`;
 
     try {
@@ -403,10 +397,7 @@ export class AuthService {
       };
 
       // 프로필 모델 저장
-      const profileModel = await this.profileService.addProfile(
-        profileDto,
-        queryRunner,
-      );
+      const profileModel = await this.profileService.addProfile(profileDto);
 
       if (!profileModel) {
         throw new DownStreamInternalServerErrorException(
@@ -415,11 +406,7 @@ export class AuthService {
       }
 
       // 유저 모델을 저장합니다.
-      const userModel = await this.userService.create(
-        userDto,
-        profileModel,
-        queryRunner,
-      );
+      const userModel = await this.userService.create(userDto, profileModel);
 
       if (!userModel) {
         throw new DownStreamInternalServerErrorException(
@@ -438,26 +425,18 @@ export class AuthService {
 
       const { password, ...safelyUserModel } = userModel;
 
-      await queryRunner.commitTransaction();
-
       return {
         user: safelyUserModel,
         profile: profileModel,
       };
     } catch (e: any) {
-      await queryRunner.rollbackTransaction();
-
-      // 레디스에 저장된 키를 제거합니다.
-      const deletedOK = await this.redisService.del(KEY);
-
+      // @Transactional() 이 예외 전파 시 자동으로 롤백한다.
       throw new InternalServerErrorException({
         message: e.message ?? I18nConfig.KOREAN.NOTIFY_FAILED_SIGNUP,
       });
     } finally {
       // 레디스에 저장된 키를 제거합니다.
-      const deletedOK = await this.redisService.del(KEY);
-
-      await queryRunner.release();
+      await this.redisService.del(KEY);
     }
   }
 

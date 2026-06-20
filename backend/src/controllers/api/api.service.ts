@@ -3,8 +3,8 @@ import { DeletePostException } from 'src/common/exceptions/delete-post.exception
 import { NotFoundPostException } from 'src/common/exceptions/not-found-post.exception';
 import { ResponseUtil } from 'src/common/libs/response/ResponseUtil';
 import { RESPONSE_MESSAGE } from 'src/common/libs/response/response';
-import { PostService } from 'src/entities/post/post.service';
-import { Transactional } from 'typeorm-transactional';
+import { PostService } from 'src/domain/post/post.service';
+import { Transactional } from '@stingerloom/orm';
 
 @Injectable()
 export class ApiService {

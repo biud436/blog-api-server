@@ -1,6 +1,6 @@
 import { AuthController } from 'src/controllers/auth/auth.controller';
 import { PostsController } from 'src/controllers/posts/posts.controller';
-import { CreatePostDto } from 'src/entities/post/dto/create-post.dto';
+import { CreatePostDto } from 'src/domain/post/dto/create-post.dto';
 
 /**
  * @author 어진석

@@ -1,8 +1,8 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { AdminController } from './admin.controller';
-import { CategoryModule } from 'src/entities/category/category.module';
-import { UserModule } from 'src/entities/user/user.module';
+import { CategoryModule } from 'src/domain/category/category.module';
+import { UserModule } from 'src/domain/user/user.module';
 
 @Module({
   imports: [CategoryModule, UserModule],

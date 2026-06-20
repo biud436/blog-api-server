@@ -23,10 +23,6 @@ import {
   ServerConfigFactory,
 } from './common/config/server-config';
 import { SlackLog } from './common/libs/logger/SlackLog';
-import {
-  StorageDriver,
-  initializeTransactionalContext,
-} from 'typeorm-transactional';
 
 export class NestBootstrapApplication extends EventEmitter {
   private static INSTANCE: NestBootstrapApplication;
@@ -91,8 +87,6 @@ export class NestBootstrapApplication extends EventEmitter {
    * 서버 시작
    */
   public async start(): Promise<void> {
-    initializeTransactionalContext({ storageDriver: StorageDriver.AUTO });
-
     if (this.isDelvelopment()) {
       this.emit('[debug]', '서버가 개발 모드에서 시작되었습니다');
     }
