@@ -12,8 +12,11 @@ import 'reflect-metadata';
  *   │   └── A1(3,4) depth2
  *   └── B(6,7) depth1
  *
- * DB 변형 메서드(addCategory/deleteNode/moveCategory)는 @Transactional
- * 컨텍스트가 필요해 런타임(DB 기동) 검증 대상으로 남긴다.
+ * selectTreeNodeList / getBreadcrumbs 는 타입드 쿼리 빌더
+ * (`repository.createQueryBuilder(...).getRawMany()`) 로 raw row 를 읽으므로,
+ * 빌더 체인을 스텁으로 두고 `getRawMany()` 결과만 주입해 트리 조립 로직만
+ * 검증한다. DB 변형 메서드(addCategory/deleteNode/moveCategory)는
+ * @Transactional 컨텍스트가 필요해 런타임(DB 기동) 검증 대상으로 남긴다.
  */
 describe('Domain CategoryService Unit Test', () => {
   const treeRows = [
@@ -24,19 +27,34 @@ describe('Domain CategoryService Unit Test', () => {
   ];
 
   let categoryService: CategoryService;
-  let emMock: {
-    query: jest.Mock<(...args: any[]) => Promise<any[]>>;
-  };
+  /** 다음 `getRawMany()` 호출이 돌려줄 raw row 목록. 테스트마다 주입한다. */
+  let rawResult: any[];
 
   beforeEach(() => {
-    emMock = {
-      query: jest
-        .fn<(...args: any[]) => Promise<any[]>>()
-        .mockResolvedValue(treeRows),
+    rawResult = treeRows;
+
+    // 체이닝 가능한 쿼리 빌더 스텁: 모든 빌더 메서드는 자신을 반환하고,
+    // getRawMany() 는 주입된 rawResult 를 돌려준다.
+    const qbStub: any = new Proxy(
+      {},
+      {
+        get(_t, prop) {
+          if (prop === 'getRawMany') {
+            return jest.fn(async () => rawResult);
+          }
+          // select/innerJoin/where/groupBy/addOrderBy/addSelectSubquery ...
+          return jest.fn(() => qbStub);
+        },
+      },
+    );
+
+    const repositoryMock = {
+      createQueryBuilder: jest.fn(() => qbStub),
     };
+
     categoryService = new CategoryService(
-      {} as never, // repository — 본 테스트의 코드 경로에서는 미사용
-      emMock as never,
+      repositoryMock as never,
+      {} as never, // EntityManager — 본 테스트의 코드 경로에서는 미사용
     );
   });
 
@@ -73,14 +91,12 @@ describe('Domain CategoryService Unit Test', () => {
     });
 
     it('MySQL 드라이버가 숫자를 문자열로 돌려줘도 트리를 만든다', async () => {
-      emMock.query.mockResolvedValue(
-        treeRows.map((row) => ({
-          ...row,
-          left: String(row.left),
-          right: String(row.right),
-          depth: String(row.depth),
-        })),
-      );
+      rawResult = treeRows.map((row) => ({
+        ...row,
+        left: String(row.left),
+        right: String(row.right),
+        depth: String(row.depth),
+      }));
 
       const tree = await categoryService.getTreeChildren(true);
 
@@ -89,7 +105,7 @@ describe('Domain CategoryService Unit Test', () => {
     });
 
     it('노드 목록이 비어 있으면 InternalServerErrorException', async () => {
-      emMock.query.mockResolvedValue([]);
+      rawResult = [];
 
       await expect(categoryService.getTreeChildren(true)).rejects.toThrow(
         '노드 목록을 찾을 수 없습니다',
@@ -113,11 +129,7 @@ describe('Domain CategoryService Unit Test', () => {
 
   describe('getBreadcrumbs', () => {
     it('조상 경로를 " > " 로 연결한다', async () => {
-      emMock.query.mockResolvedValue([
-        { name: 'root' },
-        { name: 'A' },
-        { name: 'A1' },
-      ]);
+      rawResult = [{ name: 'root' }, { name: 'A' }, { name: 'A1' }];
 
       const breadcrumbs = await categoryService.getBreadcrumbs('A1');
 
