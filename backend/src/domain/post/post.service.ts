@@ -18,6 +18,7 @@ import { UpdatePostDto } from './dto/update-post.dto';
 import { Category } from '../category/category.entity';
 import { Image } from '../image/image.entity';
 import { ImageService } from '../image/image.service';
+import { ProfileService } from '../profile/profile.service';
 import { Post } from './post.entity';
 
 @Injectable()
@@ -30,6 +31,7 @@ export class PostService {
     @InjectRepository(Category)
     private readonly categoryRepository: BaseRepository<Category>,
     private readonly imageService: ImageService,
+    private readonly profileService: ProfileService,
     private readonly redisService: RedisService,
     private readonly s3Service: S3Service,
   ) {}
@@ -115,7 +117,10 @@ export class PostService {
    * (기존 구현의 `updatedAt = CURRENT_TIMESTAMP` 와 동일).
    */
   @Transactional()
-  async updatePost(postId: number, updatePostDto: UpdatePostDto): Promise<Post> {
+  async updatePost(
+    postId: number,
+    updatePostDto: UpdatePostDto,
+  ): Promise<Post> {
     if (updatePostDto.title) {
       updatePostDto.title = encodeHtml(updatePostDto.title);
     }
@@ -224,8 +229,12 @@ export class PostService {
 
     const item = await this.postRepository.findOneOrFail({
       where: where as never,
-      relations: ['user', 'user.profile', 'category'],
+      relations: ['user', 'category'],
     });
+
+    // stingerloom 2.0: relations 의 중첩 경로('user.profile')는 InvalidQueryError.
+    // user 까지만 조인하고 profile 은 후속 쿼리로 붙인다.
+    await this.profileService.attachProfiles([item.user]);
 
     // find 의 relations 는 OneToMany(images)도 지원하지만, 원본과 동일하게
     // postId 기준으로 직접 로드한다.
@@ -267,11 +276,7 @@ export class PostService {
       .createQueryBuilder('post')
       .getCount();
 
-    const rows = await this.hydrateRelations(pageRows, [
-      'user',
-      'user.profile',
-      'category',
-    ]);
+    const rows = await this.hydrateRelations(pageRows, ['user', 'category']);
     await this.attachImages(rows);
 
     const items = this.toPaginatable(rows, totalCount, safePage, size);
@@ -317,11 +322,7 @@ export class PostService {
       .offset((safePage - 1) * size)
       .getManyAndCount();
 
-    const rows = await this.hydrateRelations(pageRows, [
-      'user',
-      'user.profile',
-      'category',
-    ]);
+    const rows = await this.hydrateRelations(pageRows, ['user', 'category']);
 
     const items = this.toPaginatable(rows, total, safePage, size);
 
@@ -362,11 +363,7 @@ export class PostService {
       .offset((safePage - 1) * size)
       .getManyAndCount();
 
-    const rows = await this.hydrateRelations(pageRows, [
-      'user',
-      'user.profile',
-      'category',
-    ]);
+    const rows = await this.hydrateRelations(pageRows, ['user', 'category']);
     await this.attachImages(rows);
 
     const items = this.toPaginatable(rows, total, safePage, size);
@@ -406,21 +403,31 @@ export class PostService {
    * QB 의 joinAndSelect 는 중복 컬럼명이 루트 엔티티를 덮어쓰는 업스트림
    * 이슈가 있어, 페이지 행을 find(relations) 로 다시 로드해 관계를
    * 하이드레이션한다 (user.getUserList 에서 확립한 2단계 패턴).
+   *
+   * stingerloom 2.0 부터 relations 는 단일 관계 프로퍼티명만 받는다
+   * (중첩 경로 'user.profile' 은 InvalidQueryError). user 를 로드했다면
+   * profile 은 ProfileService 로 한 번 더 조회해 붙인다.
    */
   private async hydrateRelations(
     rows: Post[],
-    relations: string[],
+    relations: Array<'user' | 'category' | 'images'>,
   ): Promise<Post[]> {
     const ids = rows.map((e) => e.id);
     if (!ids.length) {
       return [];
     }
 
-    return await this.postRepository.find({
+    const hydrated = await this.postRepository.find({
       where: { id: { in: ids } },
       relations,
       orderBy: { uploadDate: 'DESC' },
     });
+
+    if (relations.includes('user')) {
+      await this.profileService.attachProfiles(hydrated.map((e) => e.user));
+    }
+
+    return hydrated;
   }
 
   /**
