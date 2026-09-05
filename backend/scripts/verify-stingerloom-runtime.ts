@@ -7,6 +7,9 @@
  *     raw SQL(셀프 크로스 조인/GROUP BY/서브쿼리), @Transactional 경유 실행
  *   - PostComment: 댓글 트리 pos/depth 시프트, soft/hard delete, QB 조인 하이드레이션
  *   - PostSubscriber: afterLoad previewContent
+ *   - stingerloom 2.0 동작 변경: relations 중첩 경로 거부, 루트 관계 + 후속 쿼리
+ *     (ProfileService.attachProfiles) 하이드레이션, save() 미존재 PK 예외,
+ *     @CreateTimestamp Date 바인딩 round-trip
  *
  * 실행: corepack yarn ts-node --transpile-only -r tsconfig-paths/register \
  *         scripts/verify-stingerloom-runtime.ts
@@ -18,12 +21,20 @@ import { Module } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import * as mysql from 'mysql2/promise';
 import removeMarkdown from 'markdown-to-text';
-import { EntityManager, SnakeNamingStrategy } from '@stingerloom/orm';
+import {
+  EntityManager,
+  EntityNotFoundError,
+  InvalidQueryError,
+  SnakeNamingStrategy,
+} from '@stingerloom/orm';
 import {
   StingerloomOrmModule,
   getEntityManagerToken,
 } from '@stingerloom/orm/nestjs';
 import { STINGERLOOM_DOMAIN_ENTITIES } from '../src/domain';
+import { ApiKey } from '../src/domain/api-key/api-key.entity';
+import { ApiKeyModule } from '../src/domain/api-key/api-key.module';
+import { ApiKeyService } from '../src/domain/api-key/api-key.service';
 import { Category } from '../src/domain/category/category.entity';
 import { CategoryModule } from '../src/domain/category/category.module';
 import { CategoryService } from '../src/domain/category/category.service';
@@ -33,6 +44,8 @@ import { PostCommentService } from '../src/domain/post-comment/post-comment.serv
 import { Post } from '../src/domain/post/post.entity';
 import { PostSubscriber } from '../src/domain/post/post.subscriber';
 import { Profile } from '../src/domain/profile/profile.entity';
+import { ProfileModule } from '../src/domain/profile/profile.module';
+import { ProfileService } from '../src/domain/profile/profile.service';
 import { User } from '../src/domain/user/user.entity';
 import { CreateCommentDto } from '../src/domain/post-comment/dto/create-comment.dto';
 
@@ -64,6 +77,8 @@ function check(name: string, cond: boolean, detail?: string) {
     }),
     CategoryModule,
     PostCommentModule,
+    ProfileModule,
+    ApiKeyModule,
   ],
 })
 class VerifyModule {}
@@ -291,6 +306,85 @@ async function verifyPostComment(
   await postCommentService.deleteComment(post.id, c3.id, user.id);
   const hardDeleted = await em.findOne(PostComment, { where: { id: c3.id } });
   check('자식 없는 댓글: hard delete', hardDeleted === null || hardDeleted === undefined);
+
+  return { post, user, profile };
+}
+
+async function verifyOrm2Behaviors(
+  em: EntityManager,
+  profileService: ProfileService,
+  apiKeyService: ApiKeyService,
+  ctx: { post: Post; user: User; profile: Profile },
+) {
+  console.log('\n[stingerloom 2.0 — 동작 변경 검증]');
+
+  // 1) relations 의 중첩 경로는 InvalidQueryError (1.x 에서는 조용히 무시됨)
+  let nestedError: unknown;
+  try {
+    await em.find(Post, { relations: ['user', 'user.profile'] });
+  } catch (err) {
+    nestedError = err;
+  }
+  check(
+    "find({ relations: ['user', 'user.profile'] }) → InvalidQueryError",
+    nestedError instanceof InvalidQueryError,
+    String(nestedError),
+  );
+
+  // 2) 루트 관계만 로드 + ProfileService.attachProfiles 후속 쿼리
+  const [loaded] = await em.find(Post, {
+    where: { id: ctx.post.id },
+    relations: ['user'],
+  });
+  await profileService.attachProfiles([loaded?.user]);
+  check(
+    "relations: ['user'] + attachProfiles → user.profile.nickname",
+    loaded?.user?.profile?.nickname === 'verifier',
+    JSON.stringify(loaded?.user),
+  );
+
+  // 3) ApiKeyService.findOneById 가 user.profile 까지 채운다
+  const savedKey = await em.save(ApiKey, {
+    accessKey: 'verifyaccesskey',
+    scope: 'read',
+    isExpired: false,
+    expiresAt: new Date(Date.now() + 86_400_000),
+    userId: ctx.user.id,
+  } as Partial<ApiKey>);
+  const apiKey = await apiKeyService.findOneById(savedKey.id);
+  check(
+    'ApiKeyService.findOneById → user.username + user.profile.nickname',
+    apiKey.user?.username === 'verifier' &&
+      apiKey.user?.profile?.nickname === 'verifier',
+    JSON.stringify({ user: apiKey.user }),
+  );
+
+  // 4) save() 로 존재하지 않는 PK 를 갱신하면 EntityNotFoundError (1.x 는 조용히 성공)
+  let missingError: unknown;
+  try {
+    await em.save(Profile, {
+      id: 987654321,
+      email: 'missing@example.com',
+      nickname: 'missing',
+    } as Partial<Profile>);
+  } catch (err) {
+    missingError = err;
+  }
+  check(
+    'save() on missing PK → EntityNotFoundError',
+    missingError instanceof EntityNotFoundError,
+    String(missingError),
+  );
+
+  // 5) @CreateTimestamp 가 Date 로 바인딩되어 현재 시각으로 round-trip 된다
+  const reloaded = await em.findOne(Post, { where: { id: ctx.post.id } });
+  const uploadDate = reloaded?.uploadDate;
+  check(
+    '@CreateTimestamp Date 바인딩 round-trip (현재 시각 ±60s)',
+    uploadDate instanceof Date &&
+      Math.abs(Date.now() - uploadDate.getTime()) < 60_000,
+    String(uploadDate),
+  );
 }
 
 async function main() {
@@ -312,9 +406,12 @@ async function main() {
     const categoryService = app.get(CategoryService);
     const postCommentService = app.get(PostCommentService);
     const em = app.get<EntityManager>(getEntityManagerToken());
+    const profileService = app.get(ProfileService);
+    const apiKeyService = app.get(ApiKeyService);
 
     const { root } = await verifyCategoryTree(categoryService, em);
-    await verifyPostComment(postCommentService, em, root);
+    const ctx = await verifyPostComment(postCommentService, em, root);
+    await verifyOrm2Behaviors(em, profileService, apiKeyService, ctx);
   } finally {
     await app.close();
     await admin.query(`DROP DATABASE IF EXISTS ${VERIFY_DB}`);

@@ -4,6 +4,7 @@ import { MicroServicesModule } from 'src/common/micro-services/micro-services.mo
 import { Category } from '../category/category.entity';
 import { Image } from '../image/image.entity';
 import { ImageModule } from '../image/image.module';
+import { ProfileModule } from '../profile/profile.module';
 import { Post } from './post.entity';
 import { PostService } from './post.service';
 import { PostSubscriber } from './post.subscriber';
@@ -13,6 +14,7 @@ import { PostSubscriber } from './post.subscriber';
     StingerloomOrmModule.forFeature([Post, Image, Category]),
     MicroServicesModule,
     ImageModule,
+    ProfileModule,
   ],
   providers: [PostService, PostSubscriber],
   exports: [PostService],

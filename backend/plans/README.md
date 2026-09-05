@@ -110,3 +110,31 @@ TypeORM + stingerloom 동시 기동으로 "successfully started" 확인.
     페이지네이션은 기존 관용구(`getManyAndCount` + 어댑터) 유지.
 - 0.23.0 의 d.ts 가 TS 5 문법(`const` 타입 파라미터)을 쓰므로
   `typescript` 4.9.5 → **5.9.3**, `ts-patch` ^2 → **^3** 동반 업그레이드.
+
+### 의존성 업그레이드 (2026-09-05) — `@stingerloom/orm` 1.0.0 → **2.0.0**
+
+브랜치 `feature/stingerloom-orm-2`. 2.0 은 "조용히 틀리던 상태를 예외/경고로 바꾼"
+릴리스라 컴파일(tsc/nest build)은 수정 없이 녹색이었고, 런타임 동작 변경만 대응했다.
+(업스트림 가이드: `docs/upgrade-2.0.md`, CHANGELOG 2.0.0)
+
+- **relations 중첩 경로 거부 (실제 영향)** — `find({ relations: ['user', 'user.profile'] })`
+  가 `InvalidQueryError` 를 던진다. 업스트림 소스 주석대로 중첩 경로는 1.x 에서도
+  구현된 적이 없어 조용히 무시됐다(= `post.user.profile` 은 항상 undefined 였음.
+  위 "런타임 검증" 3번의 "중첩 `'user.profile'` 지원" 은 잘못된 기록). 프론트
+  (`blog-front` `PostHeader.tsx`, `PostService.getNickname`)와 RSS 가
+  `post.user.profile.nickname` 을 소비하므로, 업스트림 안내대로 루트 관계(`user`)만
+  로드하고 `ProfileService.attachProfiles()` 후속 쿼리 1회로 profile 을 붙인다.
+  적용: `PostService.hydrateRelations/findOne`, `ApiKeyService.findWithUserProfile`
+  (PostModule/ApiKeyModule 이 ProfileModule 을 import).
+- **점검 후 영향 없음**: 루트 barrel 큐레이션(사용 심볼 전부 공개 API), `save()` 미존재
+  PK → `EntityNotFoundError`(모든 save 가 INSERT 또는 findOneOrFail 후 UPDATE),
+  where/orderBy 식별자 검증(전부 프로퍼티명), 엔티티 스코프 검사(12개 전부 등록),
+  `take/limit: 0`(QB `.limit(size)` 만 사용, size 는 항상 > 0), 타임스탬프 Date 바인딩
+  (mysql2 기본 timezone=local 이라 기존 문자열 포맷과 동일 순간), NestJS 종료 시
+  풀 close(`enableShutdownHooks` 미사용 — 필요 시 도입 가능).
+- **런타임 검증**: `scripts/verify-stingerloom-runtime.ts` 에 "[stingerloom 2.0 —
+  동작 변경 검증]" 5건 추가 → **25/25 통과** (로컬 Docker MariaDB, 스크래치 DB).
+  중첩 경로 InvalidQueryError / `relations:['user']`+attachProfiles / ApiKeyService
+  user.profile / save 미존재 PK EntityNotFoundError / @CreateTimestamp round-trip.
+- 참고: 프로젝트 ESLint 7 + prettier 3 조합이 Node 23 에서 크래시
+  (`ERR_VM_DYNAMIC_IMPORT_CALLBACK_MISSING`) — 업그레이드와 무관한 기존 환경 이슈.
