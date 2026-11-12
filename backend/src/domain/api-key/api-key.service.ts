@@ -14,7 +14,6 @@ import { ScopeRoles } from 'src/common/decorators/api/x-api-scope.decorator';
 import { CreateApiKeyDto } from './dto/create-api-key.dto';
 import { UpdateApiKeyDto } from './dto/update-api-key.dto';
 import { GrantRoleDto } from './dto/grant-role.dto';
-import { ProfileService } from '../profile/profile.service';
 import { ApiKey } from './api-key.entity';
 
 const EXPIRES_D_DAY = 30;
@@ -24,7 +23,6 @@ export class ApiKeyService {
   constructor(
     @InjectRepository(ApiKey)
     private readonly apiKeyRepository: BaseRepository<ApiKey>,
-    private readonly profileService: ProfileService,
   ) {}
 
   @Cron(CronExpression.EVERY_DAY_AT_4AM)
@@ -86,17 +84,14 @@ export class ApiKeyService {
    * 관계 하이드레이션은 find(relations) 2단계 — QB 의 joinAndSelect 는
    * 중복 컬럼명이 루트 엔티티를 덮어쓰는 업스트림 이슈가 있다.
    *
-   * stingerloom 2.0 부터 relations 는 중첩 경로('user.profile')를
-   * InvalidQueryError 로 거부하므로 user 까지만 조인하고 profile 은
-   * ProfileService 로 한 번 더 조회해 붙인다.
+   * stingerloom 3.0 부터 relations 가 중첩 경로를 지원하므로
+   * 'user.profile' 로 profile 까지 함께 읽는다.
    */
   private async findWithUserProfile(id: number): Promise<ApiKey> {
-    const apiKey = await this.apiKeyRepository.findOneOrFail({
+    return await this.apiKeyRepository.findOneOrFail({
       where: { id },
-      relations: ['user'],
+      relations: ['user.profile'],
     });
-    await this.profileService.attachProfiles([apiKey.user]);
-    return apiKey;
   }
 
   async issueApiKey(id: number): Promise<ApiKey> {

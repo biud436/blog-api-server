@@ -18,7 +18,6 @@ import { UpdatePostDto } from './dto/update-post.dto';
 import { Category } from '../category/category.entity';
 import { Image } from '../image/image.entity';
 import { ImageService } from '../image/image.service';
-import { ProfileService } from '../profile/profile.service';
 import { Post } from './post.entity';
 
 @Injectable()
@@ -31,7 +30,6 @@ export class PostService {
     @InjectRepository(Category)
     private readonly categoryRepository: BaseRepository<Category>,
     private readonly imageService: ImageService,
-    private readonly profileService: ProfileService,
     private readonly redisService: RedisService,
     private readonly s3Service: S3Service,
   ) {}
@@ -229,12 +227,9 @@ export class PostService {
 
     const item = await this.postRepository.findOneOrFail({
       where: where as never,
-      relations: ['user', 'category'],
+      // stingerloom 3.0: relations 의 중첩 경로로 user.profile 까지 로드한다.
+      relations: ['user.profile', 'category'],
     });
-
-    // stingerloom 2.0: relations 의 중첩 경로('user.profile')는 InvalidQueryError.
-    // user 까지만 조인하고 profile 은 후속 쿼리로 붙인다.
-    await this.profileService.attachProfiles([item.user]);
 
     // find 의 relations 는 OneToMany(images)도 지원하지만, 원본과 동일하게
     // postId 기준으로 직접 로드한다.
@@ -404,9 +399,8 @@ export class PostService {
    * 이슈가 있어, 페이지 행을 find(relations) 로 다시 로드해 관계를
    * 하이드레이션한다 (user.getUserList 에서 확립한 2단계 패턴).
    *
-   * stingerloom 2.0 부터 relations 는 단일 관계 프로퍼티명만 받는다
-   * (중첩 경로 'user.profile' 은 InvalidQueryError). user 를 로드했다면
-   * profile 은 ProfileService 로 한 번 더 조회해 붙인다.
+   * stingerloom 3.0 부터 relations 가 중첩 경로를 지원하므로, user 를
+   * 로드할 때는 'user.profile' 로 profile 까지 함께 읽는다.
    */
   private async hydrateRelations(
     rows: Post[],
@@ -417,17 +411,13 @@ export class PostService {
       return [];
     }
 
-    const hydrated = await this.postRepository.find({
+    return await this.postRepository.find({
       where: { id: { in: ids } },
-      relations,
+      relations: relations.map((name) =>
+        name === 'user' ? 'user.profile' : name,
+      ),
       orderBy: { uploadDate: 'DESC' },
     });
-
-    if (relations.includes('user')) {
-      await this.profileService.attachProfiles(hydrated.map((e) => e.user));
-    }
-
-    return hydrated;
   }
 
   /**
