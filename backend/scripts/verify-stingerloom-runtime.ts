@@ -7,9 +7,9 @@
  *     raw SQL(셀프 크로스 조인/GROUP BY/서브쿼리), @Transactional 경유 실행
  *   - PostComment: 댓글 트리 pos/depth 시프트, soft/hard delete, QB 조인 하이드레이션
  *   - PostSubscriber: afterLoad previewContent
- *   - stingerloom 2.0 동작 변경: relations 중첩 경로 거부, 루트 관계 + 후속 쿼리
- *     (ProfileService.attachProfiles) 하이드레이션, save() 미존재 PK 예외,
- *     @CreateTimestamp Date 바인딩 round-trip
+ *   - stingerloom 2.0/3.0 동작 변경: relations 중첩 경로 로드(3.0), 오타 관계명
+ *     거부, save() 미존재 PK 예외, @CreateTimestamp Date 바인딩 round-trip,
+ *     undefined 조건 단일 행 조회 거부(3.0)
  *
  * 실행: corepack yarn ts-node --transpile-only -r tsconfig-paths/register \
  *         scripts/verify-stingerloom-runtime.ts
@@ -44,8 +44,6 @@ import { PostCommentService } from '../src/domain/post-comment/post-comment.serv
 import { Post } from '../src/domain/post/post.entity';
 import { PostSubscriber } from '../src/domain/post/post.subscriber';
 import { Profile } from '../src/domain/profile/profile.entity';
-import { ProfileModule } from '../src/domain/profile/profile.module';
-import { ProfileService } from '../src/domain/profile/profile.service';
 import { User } from '../src/domain/user/user.entity';
 import { CreateCommentDto } from '../src/domain/post-comment/dto/create-comment.dto';
 
@@ -77,7 +75,6 @@ function check(name: string, cond: boolean, detail?: string) {
     }),
     CategoryModule,
     PostCommentModule,
-    ProfileModule,
     ApiKeyModule,
   ],
 })
@@ -312,35 +309,48 @@ async function verifyPostComment(
 
 async function verifyOrm2Behaviors(
   em: EntityManager,
-  profileService: ProfileService,
   apiKeyService: ApiKeyService,
   ctx: { post: Post; user: User; profile: Profile },
 ) {
-  console.log('\n[stingerloom 2.0 — 동작 변경 검증]');
+  console.log('\n[stingerloom 2.0 / 3.0 — 동작 변경 검증]');
 
-  // 1) relations 의 중첩 경로는 InvalidQueryError (1.x 에서는 조용히 무시됨)
-  let nestedError: unknown;
-  try {
-    await em.find(Post, { relations: ['user', 'user.profile'] });
-  } catch (err) {
-    nestedError = err;
-  }
-  check(
-    "find({ relations: ['user', 'user.profile'] }) → InvalidQueryError",
-    nestedError instanceof InvalidQueryError,
-    String(nestedError),
-  );
-
-  // 2) 루트 관계만 로드 + ProfileService.attachProfiles 후속 쿼리
+  // 1) 3.0: relations 의 중첩 경로가 실제로 로드된다 (2.x 는 InvalidQueryError)
   const [loaded] = await em.find(Post, {
     where: { id: ctx.post.id },
-    relations: ['user'],
+    relations: ['user.profile', 'category'],
   });
-  await profileService.attachProfiles([loaded?.user]);
   check(
-    "relations: ['user'] + attachProfiles → user.profile.nickname",
-    loaded?.user?.profile?.nickname === 'verifier',
+    "relations: ['user.profile'] → user.username + user.profile.nickname",
+    loaded?.user?.username === 'verifier' &&
+      loaded?.user?.profile?.nickname === 'verifier',
     JSON.stringify(loaded?.user),
+  );
+
+  // 2) 존재하지 않는 관계명은 여전히 InvalidQueryError
+  let typoError: unknown;
+  try {
+    await em.find(Post, { relations: ['user.profil'] as never });
+  } catch (err) {
+    typoError = err;
+  }
+  check(
+    "find({ relations: ['user.profil'] }) → InvalidQueryError",
+    typoError instanceof InvalidQueryError,
+    String(typoError),
+  );
+
+  // 2-1) 3.0: 단일 행 조회의 where 값이 undefined 면 InvalidQueryError
+  //      (2.x 는 조건이 빠져 아무 행이나 읽었다)
+  let undefinedError: unknown;
+  try {
+    await em.findOne(Post, { where: { id: undefined as never } });
+  } catch (err) {
+    undefinedError = err;
+  }
+  check(
+    'findOne({ where: { id: undefined } }) → InvalidQueryError',
+    undefinedError instanceof InvalidQueryError,
+    String(undefinedError),
   );
 
   // 3) ApiKeyService.findOneById 가 user.profile 까지 채운다
@@ -406,12 +416,11 @@ async function main() {
     const categoryService = app.get(CategoryService);
     const postCommentService = app.get(PostCommentService);
     const em = app.get<EntityManager>(getEntityManagerToken());
-    const profileService = app.get(ProfileService);
     const apiKeyService = app.get(ApiKeyService);
 
     const { root } = await verifyCategoryTree(categoryService, em);
     const ctx = await verifyPostComment(postCommentService, em, root);
-    await verifyOrm2Behaviors(em, profileService, apiKeyService, ctx);
+    await verifyOrm2Behaviors(em, apiKeyService, ctx);
   } finally {
     await app.close();
     await admin.query(`DROP DATABASE IF EXISTS ${VERIFY_DB}`);

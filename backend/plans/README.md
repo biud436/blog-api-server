@@ -138,3 +138,29 @@ TypeORM + stingerloom 동시 기동으로 "successfully started" 확인.
   user.profile / save 미존재 PK EntityNotFoundError / @CreateTimestamp round-trip.
 - 참고: 프로젝트 ESLint 7 + prettier 3 조합이 Node 23 에서 크래시
   (`ERR_VM_DYNAMIC_IMPORT_CALLBACK_MISSING`) — 업그레이드와 무관한 기존 환경 이슈.
+
+### 의존성 업그레이드 (2026-11-12) — `@stingerloom/orm` 2.0.0 → **3.0.0**
+
+브랜치 `feature/stingerloom-orm-3` (이슈 #46). 3.0 도 "조용히 틀리던 자리를 예외/경고로"
+바꾸는 릴리스이고, 여기에 `select` 결과 타입 좁히기와 **relations 중첩 경로 지원**이
+더해졌다. 컴파일(tsc/nest build)은 수정 없이 녹색.
+(업스트림 가이드: `docs/upgrade-3.0.md`, CHANGELOG 3.0.0)
+
+- **relations 중첩 경로 지원 (우회 제거)** — 2.0 에서 `InvalidQueryError` 였던
+  `relations: ['user.profile']` 이 3.0 에서 실제로 로드된다. 2.0 대응으로 넣었던
+  `ProfileService.attachProfiles()` / `findByIds()` 후속 쿼리를 삭제하고
+  `PostService.findOne/hydrateRelations`, `ApiKeyService.findWithUserProfile` 이
+  중첩 경로를 쓰도록 되돌렸다. PostModule/ApiKeyModule 의 ProfileModule import 도 제거.
+  응답 형태(`post.user.profile.nickname`)는 동일 — 프론트 수정 불필요.
+- **점검 후 영향 없음**: `select`/`em.pipe()`/`clear()`/`upsert`/`getCursor`/`bigint`
+  컬럼/배열 `@Column`/`defineEntity` 미사용. `createQueryBuilder` 는 전부 alias 지정.
+  register 옵션은 알려진 키만 사용(`INVALID_CONFIG` 없음), 관계 대상 12개 전부 등록
+  (`SCHEMA_ERROR` 없음). 단일 행 조회의 `undefined` 조건 거부 — where 값은 전부
+  파이프/DTO 를 거친 값이고 비공개 글 조회의 `anonymousId` 는 항상 number(기본 0).
+  after 이벤트 변경 — 서브스크라이버는 `afterLoad` 만 사용.
+- **새 경고 `unknownWriteKeys`** (기본 warn): save 페이로드에 컬럼이 아닌 키가 있으면
+  로그를 남긴다. 검증·부팅 스모크 중 도메인 서비스 경로에서는 발생하지 않았다.
+- **런타임 검증**: verify 스크립트 **26/26 통과** — 2.0 의 중첩 경로 거부 검증을
+  "중첩 경로 로드" 로 교체하고, 오타 관계명 거부 / `findOne({ where: { id: undefined } })`
+  거부 2건 추가. 스크래치 DB 로 전체 앱 부팅 후 `/posts`, `/posts/:id`(공개 200 /
+  비공개 403), `/posts/search`, `/posts/categories`, `/comment/:postId`, `/rss` 확인.

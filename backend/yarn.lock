@@ -5045,9 +5045,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stingerloom/orm@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@stingerloom/orm@npm:2.0.0"
+"@stingerloom/orm@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@stingerloom/orm@npm:3.0.0"
   dependencies:
     sql-template-tag: "npm:^4.1.0"
   peerDependencies:
@@ -5080,7 +5080,7 @@ __metadata:
   bin:
     stingerloom: dist/migration/cli-entry.js
     stingerloom-prisma-import: dist/integration/prisma-import/cli.js
-  checksum: 10/c42a84c38a8c09f616b72e041287fa60b1106687854931cbd43d31aa8821a2d0ae02671ed6d76eb5ff49c11da0a208c0056f9f1fd0ab6d7eeeebf46069149eac
+  checksum: 10/5c34ca2dece86eaf1f3dc698dc675350e516a1e02531a2211b3efec7817779e50f152817fd3d8ffdd3ff2e087c8c034c5a3d77ec4591843318055a28786210fd
   languageName: node
   linkType: hard
 
@@ -7177,7 +7177,7 @@ __metadata:
     "@nestjs/swagger": "npm:^11.0.3"
     "@nestjs/testing": "npm:^11.0.5"
     "@nestjs/throttler": "npm:^6.4.0"
-    "@stingerloom/orm": "npm:^2.0.0"
+    "@stingerloom/orm": "npm:^3.0.0"
     "@swc/cli": "npm:^0.5.2"
     "@swc/core": "npm:^1.10.1"
     "@types/bcrypt": "npm:^5.0.0"
