@@ -24,15 +24,9 @@ export interface GithubUser {
 export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
   constructor(configService: ConfigService) {
     super({
-      clientID: configService.getOrThrow('GITHUB_CLIENT_ID', {
-        infer: true,
-      }),
-      clientSecret: configService.getOrThrow('GITHUB_CLIENT_SECRET', {
-        infer: true,
-      }),
-      callbackURL: configService.getOrThrow('GITHUB_CALLBACK_URL', {
-        infer: true,
-      }),
+      clientID: configService.getOrThrow<string>('GITHUB_CLIENT_ID'),
+      clientSecret: configService.getOrThrow<string>('GITHUB_CLIENT_SECRET'),
+      callbackURL: configService.getOrThrow<string>('GITHUB_CALLBACK_URL'),
       scope: ['user', 'public_profile'],
     });
   }

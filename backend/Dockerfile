@@ -1,4 +1,4 @@
-FROM node:22.23.4-alpine as builder
+FROM node:24.22.3-alpine as builder
 ENV NODE_ENV production
 
 RUN apk --no-cache add --virtual .builds-deps build-base python3
@@ -12,7 +12,7 @@ COPY . .
 RUN yarn install
 RUN yarn build
 
-FROM node:22.23.4-alpine
+FROM node:24.22.3-alpine
 
 WORKDIR /app
 
@@ -25,6 +25,8 @@ COPY --from=builder /usr/src/app/views /app/views
 
 # Yarn Berry 적용
 COPY --from=builder /usr/src/app/.pnp.cjs /app/.pnp.cjs
+# NestJS 12 는 ESM 전용 패키지라 PnP ESM 로더가 없으면 ERR_MODULE_NOT_FOUND 로 부팅에 실패한다.
+COPY --from=builder /usr/src/app/.pnp.loader.mjs /app/.pnp.loader.mjs
 COPY --from=builder /usr/src/app/.yarnrc.yml /app/.yarnrc.yml
 COPY --from=builder /usr/src/app/.yarn /app/.yarn
 COPY --from=builder /usr/src/app/package.json /app/package.json
