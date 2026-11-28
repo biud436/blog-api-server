@@ -1,2 +1,6 @@
 node_modules
 npm-debug.log
+# 호스트 OS 용 네이티브 빌드 산출물이 이미지에 섞이지 않게 한다 (CI 의 깨끗한 체크아웃과 동일 조건)
+.yarn/unplugged
+.yarn/install-state.gz
+dist

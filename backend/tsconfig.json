@@ -7,15 +7,18 @@
         "experimentalDecorators": true,
         "allowSyntheticDefaultImports": true,
         "target": "es2017",
+        "lib": ["esnext"],
         "sourceMap": true,
         "outDir": "./dist",
-        "baseUrl": "./",
+        "rootDir": "./",
         "incremental": true,
         "skipLibCheck": true,
         "resolveJsonModule": true,
         "paths": {
-            "@app/env": ["libs/env/src"],
-            "@app/env/*": ["libs/env/src/*"]
+            "src/*": ["./src/*"],
+            "test/*": ["./test/*"],
+            "@app/env": ["./libs/env/src"],
+            "@app/env/*": ["./libs/env/src/*"]
         },
         "typeRoots": ["./node_modules/@types", "./types"],
         "strict": true,
